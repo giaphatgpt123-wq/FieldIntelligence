@@ -19,7 +19,7 @@ class EmergencyJournalStore(private val db:EmergencyDatabase){
   if(last!=null && entry.revision<last.revision) return@withTransaction AppendResult.Rejected("REVISION_REGRESSION")
   if(last!=null && entry.monotonicTimeMs<last.monotonicTime) return@withTransaction AppendResult.Rejected("MONOTONIC_TIME_REGRESSION")
   if(entry.revision<incident.revision) return@withTransaction AppendResult.Rejected("INCIDENT_REVISION_REGRESSION")
-  dao.insertEvent(IncidentEventEntity(
+  val advanced=dao.advanceRevision(entry.incidentId,entry.revision)\n  if(advanced!=1) return@withTransaction AppendResult.Rejected("INCIDENT_REVISION_UPDATE_FAILED")\n  dao.insertEvent(IncidentEventEntity(
    eventId=entry.incidentId+":"+entry.sequence, incidentId=entry.incidentId,
    sequence=entry.sequence, revision=entry.revision, eventType=entry.eventType,
    payloadHash=entry.payloadHash, wallTime=entry.wallTimeMs, monotonicTime=entry.monotonicTimeMs
