@@ -9,7 +9,8 @@ import androidx.room.*
  @Insert suspend fun insertIncident(v:IncidentEntity)
  @Insert suspend fun insertEvent(v:IncidentEventEntity)
  @Insert suspend fun insertLocation(v:LocationSnapshotEntity)
- @Query("SELECT * FROM incident WHERE incidentId=:id") suspend fun incident(id:String):IncidentEntity?\n @Query("UPDATE incident SET revision=:revision WHERE incidentId=:id AND revision<=:revision") suspend fun advanceRevision(id:String,revision:Long):Int
+ @Query("SELECT * FROM incident WHERE incidentId=:id") suspend fun incident(id:String):IncidentEntity?
+ @Query("UPDATE incident SET revision=:revision WHERE incidentId=:id AND revision<=:revision") suspend fun advanceRevision(id:String,revision:Long):Int
  @Query("SELECT * FROM incident WHERE state != 'CLOSED' ORDER BY startedMonotonicTime DESC LIMIT 1") suspend fun activeIncident():IncidentEntity?
  @Query("SELECT * FROM incident_event WHERE incidentId=:id ORDER BY sequence ASC") suspend fun events(id:String):List<IncidentEventEntity>
  @Query("SELECT * FROM location_snapshot WHERE incidentId=:id ORDER BY monotonicTime DESC LIMIT 1") suspend fun latestLocation(id:String):LocationSnapshotEntity?
