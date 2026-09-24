@@ -13,6 +13,7 @@ import androidx.room.*
  @Query("UPDATE incident SET revision=:revision WHERE incidentId=:id AND revision<=:revision") suspend fun advanceRevision(id:String,revision:Long):Int
  @Query("SELECT * FROM incident WHERE state != 'CLOSED' ORDER BY startedMonotonicTime DESC LIMIT 1") suspend fun activeIncident():IncidentEntity?
  @Query("SELECT * FROM incident_event WHERE incidentId=:id ORDER BY sequence ASC") suspend fun events(id:String):List<IncidentEventEntity>
+ @Query("SELECT * FROM incident_event WHERE incidentId=:id ORDER BY sequence DESC LIMIT 1") suspend fun lastEvent(id:String):IncidentEventEntity?
  @Query("SELECT * FROM location_snapshot WHERE incidentId=:id ORDER BY monotonicTime DESC LIMIT 1") suspend fun latestLocation(id:String):LocationSnapshotEntity?
 }
 @Database(entities=[IncidentEntity::class,IncidentEventEntity::class,LocationSnapshotEntity::class], version=1, exportSchema=true) abstract class EmergencyDatabase:RoomDatabase(){ abstract fun emergencyDao():EmergencyDao }
