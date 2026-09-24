@@ -1,19 +1,17 @@
 # Field Intelligence — P0 Emergency Core
-New Android project scaffold based on the locked V13.0 architecture.
 
-Implemented scaffold:
-- :domain:emergency — protocol graph, validator, deterministic runner
-- :data:emergency — initial Room emergency.db entities/DAO
-- :feature:emergency — minimal one-hand emergency UI
-- :app — launcher using the selected official survival logo
-- unit-test fixtures for valid and revoked protocol graphs
+Ứng dụng Android offline-first cho thực địa, sinh tồn và sự cố.
 
-Not yet implemented/verified:
-- complete Room schema and migrations
-- journal/checkpoint/recovery
-- GNSS health + last reliable position
-- Active/LKG/Golden signed protocol packs
-- communication/handover
-- authoritative medical protocol content
-- fault injection/device tests
-- APK build (Gradle/Android SDK build environment not available in this runtime)
+## P0 hiện có
+- `:domain:emergency`: Protocol Graph, Validator, deterministic Protocol Runner.
+- `:data:emergency`: Room `emergency.db` nền tảng.
+- `:feature:emergency`: giao diện Emergency tối giản.
+- `:app`: Android launcher.
+- Unit-test fixtures cho protocol hợp lệ và protocol bị thu hồi.
+- GitHub Actions: test + build Debug APK + lưu artifact.
+
+## Nguyên tắc an toàn
+Emergency Core độc lập với AI nhận dạng. Protocol y khoa thực tế chỉ được kích hoạt sau khi có nguồn có thẩm quyền, version, review và validation. Recognition failure không được làm Emergency failure.
+
+## Trạng thái
+Source P0 đã tạo. CI sẽ xác nhận khả năng biên dịch; chưa được xem là FIELD-READY cho đến khi vượt kiểm thử thiết bị, recovery, GNSS, Golden Pack và fault injection.
