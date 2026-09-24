@@ -12,8 +12,8 @@ class CrashRecoveryCoordinator(private val startup:StartupRecovery,private val c
    val r=snapshot.recovery as RecoveryState.Conflict
    return CrashRecoveryResult(snapshot,ReconcileResult.Conflict(incident.incidentId,r.reason))
   }
-  return CrashRecoveryResult(snapshot,null)
+  val result=RecoveryReconciler().reconcile(checkpoints.read(),snapshot.journalEntries)
+  return CrashRecoveryResult(snapshot,result)
  }
- fun reconcile(checkpoint:RecoveryCheckpoint?, entries:List<IncidentJournalEntry>):ReconcileResult = RecoveryReconciler().reconcile(checkpoint,entries)
  fun checkpoint():RecoveryCheckpoint? = checkpoints.read()
 }
