@@ -12,14 +12,15 @@ class FileRecoveryCheckpointStore(private val directory:File){
   val payload=listOf("1",v.incidentId,v.lastSequence.toString(),v.lastRevision.toString(),v.monotonicTimeMs.toString()).joinToString("\t")
   return try {
    FileOutputStream(tmp,false).use { out -> out.write(payload.toByteArray(Charsets.UTF_8)); out.flush(); out.fd.sync() }
-   if(file.exists() && !file.delete()) return false
-   tmp.renameTo(file)
+   if(file.exists() && !file.delete()) false else tmp.renameTo(file)
   } catch(_:Exception){ tmp.delete(); false }
  }
- fun read():RecoveryCheckpoint? = try {
-  if(!file.exists()) return null
-  val p=file.readText(Charsets.UTF_8).split("\t")
-  if(p.size!=5 || p[0]!="1") return null
-  RecoveryCheckpoint(p[1],p[2].toLong(),p[3].toLong(),p[4].toLong())
- } catch(_:Exception){ null }
+ fun read():RecoveryCheckpoint? {
+  return try {
+   if(!file.exists()) null else {
+    val p=file.readText(Charsets.UTF_8).split("\t")
+    if(p.size!=5 || p[0]!="1") null else RecoveryCheckpoint(p[1],p[2].toLong(),p[3].toLong(),p[4].toLong())
+   }
+  } catch(_:Exception){ null }
+ }
 }
