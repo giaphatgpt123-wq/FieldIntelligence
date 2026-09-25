@@ -17,8 +17,8 @@ android {
         applicationId = "vn.fieldintel.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 7
-        versionName = "0.3.2-observations-pilot"
+        versionCode = 8
+        versionName = "0.4.0-ui-shell"
         manifestPlaceholders["appLabel"] = "VN Sinh tồn"
     }
     signingConfigs {
