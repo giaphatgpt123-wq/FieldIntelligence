@@ -70,10 +70,21 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
    AppSection.EMERGENCY->{StatusCard("🚨 SỰ CỐ","Emergency Core • ưu tiên offline");listOf("SƠ CỨU VẾT THƯƠNG","BỊ RẮN CẮN","CÔN TRÙNG ĐỐT","NGỘ ĐỘC","MẤT PHƯƠNG HƯỚNG","TAI NẠN TRÊN BIỂN").forEach{Action(it)}}
    AppSection.PREP->{StatusCard("🎒 Chuẩn bị hành trình","Trang phục • thiết bị • thuốc • thực phẩm");Action("CHECKLIST CHUYẾN ĐI")}
    AppSection.LIBRARY->{StatusCard("📚 Thư viện offline","Taxonomy • morphology • evidence");Action("THỰC VẬT");Action("ĐỘNG VẬT");Action("CÔN TRÙNG");Action("NẤM")}
-   AppSection.TRAINING->{StatusCard("🎓 LEARN MODE","Tình huống mô phỏng và kiểm tra kiến thức");Action("BẮT ĐẦU HUẤN LUYỆN")}
+   AppSection.TRAINING->{StatusCard("🎓 LEARN MODE","Tình huống mô phỏng và kiểm tra kiến thức");Action("BẮT ĐẦU HUẤN LUYỆN");UpdateSettingsPanel(mapPackAvailable,mapPackFiles,mapPackBytes)}
   }
  }}
 }
+@Composable fun UpdateSettingsPanel(mapPackAvailable:Boolean,mapPackFiles:Int,mapPackBytes:Long,onCheck:()->Unit={},onRollback:()->Unit={}){
+ Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(20.dp)){Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+  Text("CẬP NHẬT DỮ LIỆU",fontWeight=FontWeight.Bold)
+  Text(if(mapPackAvailable) "Bản đồ offline: "+mapPackFiles+" tệp • "+(mapPackBytes/1024/1024)+" MB" else "Bản đồ offline: chưa có dữ liệu")
+  Text("Bản đồ • thư viện khoa học • nội dung sinh tồn có thể cập nhật độc lập với APK.",style=MaterialTheme.typography.bodySmall)
+  Button(onClick=onCheck,modifier=Modifier.fillMaxWidth()){Text("KIỂM TRA CẬP NHẬT")}
+  OutlinedButton(onClick=onRollback,modifier=Modifier.fillMaxWidth()){Text("KHÔI PHỤC GÓI TRƯỚC")}
+  Text("Gói mới chỉ được kích hoạt sau khi kiểm tra phiên bản, kích thước và SHA-256.",style=MaterialTheme.typography.labelSmall)
+ }}
+}
+
 @Composable private fun StatusCard(title:String,text:String){Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(20.dp)){Column(Modifier.padding(18.dp)){Text(title,fontWeight=FontWeight.Bold);Spacer(Modifier.height(6.dp));Text(text)}}}
 @Composable private fun Action(text:String){Button(onClick={},modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(text)}}
 @Composable fun TrackBackCompass(bearing:Double?,offTrackM:Double,breadcrumbCount:Int){
