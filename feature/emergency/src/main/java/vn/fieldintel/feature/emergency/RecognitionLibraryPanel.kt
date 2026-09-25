@@ -1,6 +1,10 @@
 package vn.fieldintel.feature.emergency
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -10,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RecognitionPanel(imageStatus: String, onPickImage: () -> Unit, onCameraImage: () -> Unit) {
+fun RecognitionPanel(imageStatus: String, preview: Bitmap?, onPickImage: () -> Unit, onCameraImage: () -> Unit) {
     Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("ẢNH KHẢO SÁT", fontWeight = FontWeight.Bold)
@@ -18,6 +22,7 @@ fun RecognitionPanel(imageStatus: String, onPickImage: () -> Unit, onCameraImage
             Button(onClick = onCameraImage, modifier = Modifier.fillMaxWidth()) { Text("Chụp ảnh") }
             OutlinedButton(onClick = onPickImage, modifier = Modifier.fillMaxWidth()) { Text("Chọn ảnh từ máy") }
             Text(imageStatus)
+            if (preview != null) Image(bitmap = preview.asImageBitmap(), contentDescription = "Ảnh được chọn để đối chiếu thủ công", modifier = Modifier.fillMaxWidth().heightIn(max = 280.dp), contentScale = ContentScale.Fit)
             Text("KẾT QUẢ: CHƯA XÁC ĐỊNH", fontWeight = FontWeight.Bold)
             Text("Không suy ra tên loài, tính ăn được hay cách xử trí từ ảnh. Tra cứu thư viện theo tên chỉ để tham khảo nguồn phân loại.")
         }
