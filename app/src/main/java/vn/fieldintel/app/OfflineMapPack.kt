@@ -48,9 +48,9 @@ class OfflineMapPack(private val context: Context) {
         if (root.exists()) bootstrapAssetsIfNeeded()
     }
 
-    private fun bootstrapAssetsIfNeeded() {
-        if (File(context.filesDir, "updates/active/current.pack").exists() ||
-            File(context.filesDir, "updates/map-swap-pending").exists()) return
+    private fun bootstrapAssetsIfNeeded(force: Boolean = false) {
+        if (!force && (File(context.filesDir, "updates/active/current.pack").exists() ||
+            File(context.filesDir, "updates/map-swap-pending").exists())) return
         val assetDir = "offline-map"
         val names = runCatching { context.assets.list(assetDir)?.toList().orEmpty() }.getOrDefault(emptyList())
         names.filter { it.endsWith(".region", true) || it.endsWith(".points", true) || it.endsWith(".lines", true) || it.endsWith(".polygons", true) }
@@ -207,7 +207,7 @@ class OfflineMapPack(private val context: Context) {
     fun restoreBundledMap(): OfflineMapPackState {
         root.deleteRecursively()
         root.mkdirs()
-        bootstrapAssetsIfNeeded()
+        bootstrapAssetsIfNeeded(force = true)
         return state().also { require(it.available) { "Không thể khôi phục bản đồ đi kèm" } }
     }
 
