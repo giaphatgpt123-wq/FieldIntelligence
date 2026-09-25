@@ -3,6 +3,9 @@ package vn.fieldintel.app
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,17 +43,25 @@ class MainActivity:ComponentActivity(){
  private var mapCredit by mutableStateOf<String?>(null)
  private var mapCoverage by mutableStateOf<String?>(null)
  private var imageStatus by mutableStateOf("Chưa chọn ảnh. Kết quả: CHƯA XÁC ĐỊNH.")
+ private var imagePreview by mutableStateOf<Bitmap?>(null)
  private var listener:android.location.LocationListener?=null
  private val sessionPrefs by lazy { getSharedPreferences("field-session", MODE_PRIVATE) }
- private val selectPhoto=registerForActivityResult(ActivityResultContracts.GetContent()) { uri -> if(uri!=null) imageStatus="Đã nhận ảnh từ thư viện trên máy. Chưa phân tích tự động; kết quả: CHƯA XÁC ĐỊNH." }
- private val takePhoto=registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap -> if(bitmap!=null) imageStatus="Đã nhận ảnh chụp thử. Chưa phân tích tự động; kết quả: CHƯA XÁC ĐỊNH." }
+ private val selectPhoto=registerForActivityResult(ActivityResultContracts.GetContent()) { uri -> if(uri!=null) { imagePreview=readPreview(uri); imageStatus=if(imagePreview!=null) "Đã chọn ảnh; xem mẫu bên dưới. Chưa phân tích tự động." else "Không thể mở ảnh này; hãy chọn ảnh khác." } }
+ private val takePhoto=registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap -> if(bitmap!=null) { imagePreview=bitmap; imageStatus="Đã chụp ảnh; xem mẫu bên dưới. Chưa phân tích tự động." } }
+ private fun readPreview(uri:Uri):Bitmap? = runCatching {
+  val bounds=BitmapFactory.Options().apply { inJustDecodeBounds=true }
+  contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it,null,bounds) }
+  require(bounds.outWidth>0 && bounds.outHeight>0)
+  val options=BitmapFactory.Options().apply { inSampleSize=generateSequence(1) { it*2 }.first { sample -> maxOf(bounds.outWidth,bounds.outHeight)/sample<=1024 }; inPreferredConfig=Bitmap.Config.RGB_565 }
+  contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it,null,options) }
+ }.getOrNull()
  private val permission=registerForActivityResult(ActivityResultContracts.RequestPermission()){granted->if(granted) startGnss()}
  override fun onCreate(savedInstanceState:Bundle?){
   super.onCreate(savedInstanceState)
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
   location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); recoverMapSwapIfNeeded(); mapPackState=mapPack.state(); loadMapRegion(mapPack.regions().firstOrNull()); mapCoverage=if(mapPackState.available) "Đang hiển thị vùng bản đồ đã nạp; chờ GPS để xác định vị trí." else null; tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,mapCredit,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ rollbackDataUpdate() },mapCoverage,imageStatus,{selectPhoto.launch("image/*")},{takePhoto.launch(null)}) }
+  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,mapCredit,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ rollbackDataUpdate() },mapCoverage,imageStatus,imagePreview,{selectPhoto.launch("image/*")},{takePhoto.launch(null)}) }
  }
  override fun onStart(){ super.onStart(); if(::location.isInitialized && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() }
  override fun onStop(){ listener?.let{location.stop(it)}; listener=null; super.onStop() }
