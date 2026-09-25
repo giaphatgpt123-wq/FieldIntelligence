@@ -10,7 +10,7 @@ data class TrackSummary(val points:Int,val distanceM:Double,val startedAt:Long?,
 class FieldTrackStore(context:Context){
  private val file=File(context.filesDir,"field-track.tsv")
  fun clear(){ if(file.exists()) file.delete() }
- fun append(fix:FieldFix){ file.appendText(listOf(fix.latitude,fix.longitude,fix.accuracyM,fix.timeMs).joinToString("\t")+"\n") }
+ fun append(fix:FieldFix):Boolean {\n  if(fix.accuracyM<=0f || fix.accuracyM>50f) return false\n  val previous=load().lastOrNull()\n  if(previous!=null){\n   val dt=fix.timeMs-previous.timeMs\n   if(dt<=0L) return false\n   val d=distance(previous,TrackPoint(fix.latitude,fix.longitude,fix.accuracyM,fix.timeMs))\n   val speed=d/(dt/1000.0)\n   if(speed>15.0) return false\n  }\n  return try{ file.appendText(listOf(fix.latitude,fix.longitude,fix.accuracyM,fix.timeMs).joinToString("\t")+"\n");true }catch(_:Exception){false}\n }
  fun load():List<TrackPoint> = if(!file.exists()) emptyList() else file.readLines().mapNotNull{line->
   val p=line.split("\t"); if(p.size!=4) null else try{TrackPoint(p[0].toDouble(),p[1].toDouble(),p[2].toFloat(),p[3].toLong())}catch(_:Exception){null}
  }
