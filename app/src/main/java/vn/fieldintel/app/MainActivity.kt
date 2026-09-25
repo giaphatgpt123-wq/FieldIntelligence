@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import vn.fieldintel.feature.emergency.EmergencyScreen
+import vn.fieldintel.feature.emergency.FieldPositionUi
 
 class MainActivity:ComponentActivity(){
  private var latestFix by mutableStateOf<FieldFix?>(null)
@@ -22,7 +23,7 @@ class MainActivity:ComponentActivity(){
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
   location=FieldLocationController(this)
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-  setContent { EmergencyScreen() }
+  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)}) }
  }
  private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it} }
  override fun onDestroy(){ listener?.let{location.stop(it)}; super.onDestroy() }
