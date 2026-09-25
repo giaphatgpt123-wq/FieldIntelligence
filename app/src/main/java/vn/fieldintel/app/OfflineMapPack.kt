@@ -176,6 +176,7 @@ class OfflineMapPack(private val context: Context) {
                     if (geometry.exists()) MapRecordValidator.validate(region, geometry)
                 }
             }
+            require(root.exists() || !backup.exists()) { "Chưa khôi phục được bản đồ cũ" }
             backup.deleteRecursively()
             var swapStarted = false
             try {
