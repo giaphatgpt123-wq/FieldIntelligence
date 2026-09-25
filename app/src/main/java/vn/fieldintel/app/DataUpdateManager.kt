@@ -6,6 +6,8 @@ import java.io.File
 import java.security.MessageDigest
 import java.net.HttpURLConnection
 import java.net.URL
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 data class DataUpdateManifest(
     val version: Int,
@@ -114,9 +116,9 @@ class DataUpdateManager(private val context: Context) {
             }
             // A failed rename must leave current.pack intact.
             if (current.exists()) {
-                require(oldReady.renameTo(old)) { "Không lưu được gói trước" }
+                atomicReplace(oldReady, old)
             }
-            require(next.renameTo(current)) { "Không thay được gói đang hoạt động" }
+            atomicReplace(next, current)
             DataUpdateResult(true, "Đã kích hoạt")
         } finally {
             next.delete()
@@ -150,10 +152,14 @@ class DataUpdateManager(private val context: Context) {
         try {
             old.copyTo(ready, overwrite = true)
             require(ready.length() == old.length()) { "Không sao chép đủ gói khôi phục" }
-            require(ready.renameTo(File(active, "current.pack"))) { "Không thay được gói đang hoạt động" }
+            atomicReplace(ready, File(active, "current.pack"))
             DataUpdateResult(true, "Đã khôi phục")
         } finally { ready.delete() }
     }.getOrElse { DataUpdateResult(false, "Khôi phục thất bại: ${it.message}") }
+
+    private fun atomicReplace(source: File, target: File) {
+        Files.move(source.toPath(), target.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+    }
 
     private fun sha256(file: File): String {
         val digest = MessageDigest.getInstance("SHA-256")
