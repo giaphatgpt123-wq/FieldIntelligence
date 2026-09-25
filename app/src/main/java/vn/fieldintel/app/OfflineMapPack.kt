@@ -2,6 +2,7 @@ package vn.fieldintel.app
 
 import android.content.Context
 import java.io.File
+import java.util.zip.ZipInputStream
 
 data class OfflineMapPackState(
     val available: Boolean,
@@ -113,6 +114,44 @@ class OfflineMapPack(private val context: Context) {
             }
             points.takeIf { it.size >= 2 }
         }
+    }
+
+    fun installUpdatePackage(packageFile: File): OfflineMapPackState {
+        val incoming = File(context.filesDir, "offline-map-incoming")
+        val backup = File(context.filesDir, "offline-map-backup")
+        incoming.deleteRecursively(); incoming.mkdirs()
+        try {
+            ZipInputStream(packageFile.inputStream().buffered()).use { zip ->
+                while (true) {
+                    val entry = zip.nextEntry ?: break
+                    if (entry.isDirectory) continue
+                    val name = File(entry.name).name
+                    val allowed = name.endsWith(".region", true) || name.endsWith(".points", true) ||
+                        name.endsWith(".lines", true) || name.endsWith(".polygons", true)
+                    if (!allowed || name != entry.name) continue
+                    File(incoming, name).outputStream().use { zip.copyTo(it) }
+                }
+            }
+            val regionFiles = incoming.listFiles()?.filter { it.extension.equals("region", true) }.orEmpty()
+            require(regionFiles.isNotEmpty()) { "Gói không có region hợp lệ" }
+            require(regionFiles.all { parseRegion(it) != null }) { "Region metadata không hợp lệ" }
+            backup.deleteRecursively()
+            if (root.exists() && !root.renameTo(backup)) {
+                root.copyRecursively(backup, overwrite = true); root.deleteRecursively()
+            }
+            if (!incoming.renameTo(root)) {
+                incoming.copyRecursively(root, overwrite = true); incoming.deleteRecursively()
+            }
+            backup.deleteRecursively()
+        } catch (e: Exception) {
+            root.deleteRecursively()
+            if (backup.exists()) {
+                if (!backup.renameTo(root)) { backup.copyRecursively(root, overwrite = true); backup.deleteRecursively() }
+            } else root.mkdirs()
+            incoming.deleteRecursively()
+            throw e
+        }
+        return state()
     }
 
     fun rootPath(): String = root.absolutePath
