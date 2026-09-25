@@ -1,0 +1,15 @@
+{
+  "source": "dist/osm-pilot/region.osm",
+  "sourceSha256": "257a89398d273df2bb57415fc999337092a744e81dade599545465b3e6496f38",
+  "bounds": [
+    10.33,
+    105.57,
+    10.44,
+    105.68
+  ],
+  "roadSegments": 1328,
+  "vertices": 10192,
+  "license": "ODbL 1.0",
+  "attribution": "\u00a9 OpenStreetMap contributors",
+  "status": "PILOT_ONLY_NOT_FOR_NAVIGATION"
+}
