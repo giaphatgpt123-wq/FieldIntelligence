@@ -66,27 +66,30 @@ class MainActivity:ComponentActivity(){
   return state
  }
 
- fun checkConfiguredDataUpdate(appVersionCode:Int=1){
+ fun checkConfiguredDataUpdate(){
   if(!UpdateConfig.configured){updateStatus="Nguồn cập nhật chưa được cấu hình";return}
-  applyDataUpdate(UpdateConfig.MANIFEST_URL,UpdateConfig.PACKAGE_URL,appVersionCode)
+  applyDataUpdate(UpdateConfig.MANIFEST_URL,UpdateConfig.PACKAGE_URL)
  }
 
- fun applyDataUpdate(manifestUrl:String,packageUrl:String,appVersionCode:Int=1){
-  lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO){
-   val result=runCatching{
-    updateStatus="Đang kiểm tra cập nhật…"
-    val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
-    updateStatus="Đang tải và xác minh…"
-    val downloaded=updates.download(packageUrl,manifest,appVersionCode)
-    if(!downloaded.applied) error(downloaded.message)
-    val activated=updates.activateVersion(manifest.version)
-    if(!activated.applied) error(activated.message)
-    val active=updates.activePackage()?:error("Không tìm thấy gói active")
+ fun applyDataUpdate(manifestUrl:String,packageUrl:String){
+  lifecycleScope.launch{
+   updateStatus="Đang kiểm tra cập nhật…"
+   val result=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
+    runCatching{
+     val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
+     val downloaded=updates.download(packageUrl,manifest,BuildConfig.VERSION_CODE)
+     if(!downloaded.applied) error(downloaded.message)
+     val activated=updates.activateVersion(manifest.version)
+     if(!activated.applied) error(activated.message)
+     updates.activePackage()?:error("Không tìm thấy gói active")
+    }
+   }
+   result.onSuccess{active->
     updateStatus="Đang cài bản đồ…"
-    installOfflineMapUpdate(active)
-    "Cập nhật thành công • dữ liệu đã nạp lại"
-   }.getOrElse{"Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
-   updateStatus=result
+    runCatching{installOfflineMapUpdate(active)}
+     .onSuccess{updateStatus="Cập nhật thành công • dữ liệu đã nạp lại"}
+     .onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
+   }.onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
   }
  }
 
