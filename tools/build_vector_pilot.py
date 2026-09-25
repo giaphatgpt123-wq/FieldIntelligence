@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import xml.etree.ElementTree as ET
 import zipfile
 
@@ -30,7 +31,7 @@ def file_sha256(path: Path) -> str:
 
 def build(source: Path, destination: Path, region_id: str, bounds: tuple[float, float, float, float], version: int) -> dict:
     min_lat, min_lon, max_lat, max_lon = bounds
-    if not region_id or not all(c.islower() or c.isdigit() or c in "-_" for c in region_id):
+    if not re.fullmatch(r"[a-z0-9_-]+", region_id):
         raise ValueError("region_id must use lowercase letters, digits, '-' or '_'")
     if not (-90 <= min_lat < max_lat <= 90 and -180 <= min_lon < max_lon <= 180):
         raise ValueError("Invalid bounds")
@@ -42,7 +43,11 @@ def build(source: Path, destination: Path, region_id: str, bounds: tuple[float, 
     places: list[str] = []
     vertices = 0
     saw_way = False
-    for _, element in ET.iterparse(source, events=("end",)):
+    events = ET.iterparse(source, events=("start", "end"))
+    _, document = next(events)
+    for event, element in events:
+        if event != "end":
+            continue
         if element.tag == "node":
             if saw_way:
                 raise ValueError("OSM XML must list nodes before ways")
@@ -71,7 +76,7 @@ def build(source: Path, destination: Path, region_id: str, bounds: tuple[float, 
                     elif not segment or segment[-1] != coordinate:
                         segment.append(coordinate)
         if element.tag in {"node", "way", "relation"}:
-            element.clear()
+            document.clear()
 
     if not lines:
         raise ValueError("No complete road segments within bounds")
