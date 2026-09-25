@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "schemaVersion": 1,
+  "minAppVersionCode": 1,
+  "packageName": "vn.fieldintel.app",
+  "sha256": "REPLACE_WITH_PACKAGE_SHA256",
+  "sizeBytes": 0,
+  "type": "offline-data",
+  "notes": "Manifest template for map, scientific library and survival content updates"
+}
