@@ -54,7 +54,7 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
 
 @Composable private fun BottomBar(){NavigationBar{NavigationBarItem(true,{},icon={Text("⌂")},label={Text("Trang chủ")});NavigationBarItem(false,{},icon={Text("🗺")},label={Text("Bản đồ")});NavigationBarItem(false,{},icon={Text("◎")},label={Text("Quét")});NavigationBarItem(false,{},icon={Text("▣")},label={Text("Lưu trữ")});NavigationBarItem(false,{},icon={Text("⚙")},label={Text("Cài đặt")})}}
 
-@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={}){
+@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={}){
  var confirmClear by remember { mutableStateOf(false) }
  val trackState = when { recording -> TrackSessionUiState.RECORDING; trackCount == 0 -> TrackSessionUiState.IDLE; trackStartedAt != null -> TrackSessionUiState.PAUSED; else -> TrackSessionUiState.FINISHED }
  Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
@@ -78,7 +78,8 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
  Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(20.dp)){Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
   Text("CẬP NHẬT DỮ LIỆU",fontWeight=FontWeight.Bold)
   Text(if(mapPackAvailable) "Bản đồ offline: "+mapPackFiles+" tệp • "+(mapPackBytes/1024/1024)+" MB" else "Bản đồ offline: chưa có dữ liệu")
-  Text("Bản đồ • thư viện khoa học • nội dung sinh tồn có thể cập nhật độc lập với APK.",style=MaterialTheme.typography.bodySmall)\n  Text("Trạng thái: "+status,style=MaterialTheme.typography.bodySmall)
+  Text("Bản đồ • thư viện khoa học • nội dung sinh tồn có thể cập nhật độc lập với APK.",style=MaterialTheme.typography.bodySmall)
+  Text("Trạng thái: "+status,style=MaterialTheme.typography.bodySmall)
   Button(onClick=onCheck,modifier=Modifier.fillMaxWidth()){Text("KIỂM TRA CẬP NHẬT")}
   OutlinedButton(onClick=onRollback,modifier=Modifier.fillMaxWidth()){Text("KHÔI PHỤC GÓI TRƯỚC")}
   Text("Gói mới chỉ được kích hoạt sau khi kiểm tra phiên bản, kích thước và SHA-256.",style=MaterialTheme.typography.labelSmall)
