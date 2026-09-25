@@ -2,6 +2,8 @@ package vn.fieldintel.app
 
 import android.content.Context
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.zip.ZipInputStream
 
 data class OfflineMapPackState(
@@ -171,26 +173,17 @@ class OfflineMapPack(private val context: Context) {
             var swapStarted = false
             try {
                 if (root.exists()) {
-                    if (!root.renameTo(backup)) {
-                        root.copyRecursively(backup, overwrite = true)
-                        root.deleteRecursively()
-                    }
+                    Files.move(root.toPath(), backup.toPath(), StandardCopyOption.ATOMIC_MOVE)
                 }
                 swapStarted = true
-                if (!incoming.renameTo(root)) {
-                    incoming.copyRecursively(root, overwrite = true)
-                    incoming.deleteRecursively()
-                }
+                Files.move(incoming.toPath(), root.toPath(), StandardCopyOption.ATOMIC_MOVE)
                 require(state().available) { "Gói bản đồ sau cài đặt không khả dụng" }
                 backup.deleteRecursively()
             } catch (swapError: Exception) {
                 if (swapStarted) {
                     root.deleteRecursively()
                     if (backup.exists()) {
-                        if (!backup.renameTo(root)) {
-                            backup.copyRecursively(root, overwrite = true)
-                            backup.deleteRecursively()
-                        }
+                        Files.move(backup.toPath(), root.toPath(), StandardCopyOption.ATOMIC_MOVE)
                     } else root.mkdirs()
                 }
                 throw swapError
