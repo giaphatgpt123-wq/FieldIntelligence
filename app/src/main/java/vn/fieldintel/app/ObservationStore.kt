@@ -42,7 +42,7 @@ class ObservationStore(private val context: Context) {
             val existing = if (index.exists()) JSONArray(index.readText()) else JSONArray()
             val newest = if (existing.length() > 0) existing.getJSONObject(0) else null
             val now = System.currentTimeMillis()
-            if (newest != null && newest.optString("note") == clean && newest.optString("sha256") == digest && now - newest.optLong("createdAt") in 0..120_000) {
+            if (newest != null && newest.optString("note") == clean && newest.optString("sha256") == digest && now - newest.optLong("createdAt") in 0L..120_000L) {
                 photoTemp.delete()
                 return load().first { it.id == newest.getString("id") }
             }
