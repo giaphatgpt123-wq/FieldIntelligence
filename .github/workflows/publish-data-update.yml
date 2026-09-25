@@ -19,6 +19,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      DATA_VERSION: ${{ inputs.version || github.run_number }}
     steps:
       - uses: actions/checkout@v4
 
@@ -27,7 +29,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist/update
-          [[ "${{ inputs.version || github.run_number }}" =~ ^[1-9][0-9]*$ ]] || { echo "Version must be a positive integer"; exit 1; }
+          [[ "$DATA_VERSION" =~ ^[1-9][0-9]*$ ]] || { echo "Version must be a positive integer"; exit 1; }
           cd app/src/main/assets/offline-map
           zip -j "../../../../../dist/update/offline-map.pack" *.region *.points *.lines *.polygons 2>/dev/null || zip -j "../../../../../dist/update/offline-map.pack" *.region *.points *.lines
 
@@ -40,7 +42,7 @@ jobs:
           SIZE=$(stat -c%s "$FILE")
           cat > dist/update/manifest.json <<EOF
           {
-            "version": ${{ inputs.version || github.run_number }},
+            "version": $DATA_VERSION,
             "schemaVersion": 1,
             "minAppVersionCode": 1,
             "packageName": "vn.fieldintel.app",
