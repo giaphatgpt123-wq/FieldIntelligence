@@ -40,6 +40,7 @@ class OfflineMapPack(private val context: Context) {
     init { bootstrapAssetsIfNeeded() }
 
     private fun bootstrapAssetsIfNeeded() {
+        if (root.listFiles()?.any { it.isFile && it.extension.equals("region", true) } == true) return
         val assetDir = "offline-map"
         val names = runCatching { context.assets.list(assetDir)?.toList().orEmpty() }.getOrDefault(emptyList())
         names.filter { it.endsWith(".region", true) || it.endsWith(".points", true) || it.endsWith(".lines", true) || it.endsWith(".polygons", true) }
