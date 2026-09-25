@@ -18,11 +18,11 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
 
 data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracyM:Float)
 
-@Composable fun EmergencyScreen(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,onToggleTrack:()->Unit={}){ FieldIntelligenceHome(position,recording,trackCount,onToggleTrack) }
+@Composable fun EmergencyScreen(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,onToggleTrack:()->Unit={}){ FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,onToggleTrack) }
 
-@Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,onToggleTrack:()->Unit={}){
+@Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,onToggleTrack:()->Unit={}){
  var selected by remember{mutableStateOf<AppSection?>(null)}
- if(selected!=null){SectionScreen(selected!!,position,recording,trackCount,onToggleTrack){selected=null};return}
+ if(selected!=null){SectionScreen(selected!!,position,recording,trackCount,trackDistanceM,trackStartedAt,onToggleTrack){selected=null};return}
  Scaffold(bottomBar={BottomBar()}){pad->
   Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
    Text("VN SINH TỒN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
@@ -42,14 +42,14 @@ data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracy
 
 @Composable private fun BottomBar(){NavigationBar{NavigationBarItem(true,{},icon={Text("⌂")},label={Text("Trang chủ")});NavigationBarItem(false,{},icon={Text("🗺")},label={Text("Bản đồ")});NavigationBarItem(false,{},icon={Text("◎")},label={Text("Quét")});NavigationBarItem(false,{},icon={Text("▣")},label={Text("Lưu trữ")});NavigationBarItem(false,{},icon={Text("⚙")},label={Text("Cài đặt")})}}
 
-@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,onToggleTrack:()->Unit={},onBack:()->Unit){
+@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,onToggleTrack:()->Unit={},onBack:()->Unit){
  Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
   Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
   Text(section.subtitle)
   when(section){
    AppSection.FIELD->{
     val status=if(position==null) "Đang chờ tín hiệu vệ tinh" else "%.5f, %.5f  •  ±%.0f m".format(position.latitude,position.longitude,position.accuracyM)
-    StatusCard("📍 Vị trí hiện tại",status);StatusCard("🥾 Hành trình",if(recording) "ĐANG GHI • $trackCount điểm" else "$trackCount điểm đã lưu");Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(if(recording) "■  DỪNG GHI" else "▶  GHI HÀNH TRÌNH")};Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
+    StatusCard("📍 Vị trí hiện tại",status);StatusCard("🥾 Hành trình",if(recording) "ĐANG GHI • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km" else "$trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km");Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(if(recording) "■  DỪNG GHI" else "▶  GHI HÀNH TRÌNH")};Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
    }
    AppSection.RECOGNITION->{StatusCard("🌿 Nhận dạng sinh học","Thực vật • động vật • côn trùng • nấm");Action("📷  CHỤP / CHỌN ẢNH");Text("Kết quả UNKNOWN luôn được phép khi bằng chứng chưa đủ.")}
    AppSection.SURVIVAL->{StatusCard("🧭 Hướng dẫn thực địa","Tìm nước • trú ẩn • lửa • định hướng");Action("TÌM NƯỚC");Action("LỀU TRẠI & TRÚ ẨN");Action("KỸ NĂNG SINH TỒN")}
