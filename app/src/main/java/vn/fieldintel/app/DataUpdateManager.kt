@@ -4,6 +4,8 @@ import android.content.Context
 import org.json.JSONObject
 import java.io.File
 import java.security.MessageDigest
+import java.net.HttpURLConnection
+import java.net.URL
 
 data class DataUpdateManifest(
     val version: Int,
@@ -40,6 +42,40 @@ class DataUpdateManager(private val context: Context) {
         if (file.length() != manifest.sizeBytes) return DataUpdateResult(false, "Sai kích thước")
         if (sha256(file) != manifest.sha256) return DataUpdateResult(false, "SHA-256 không khớp")
         return DataUpdateResult(true, "Gói hợp lệ")
+    }
+
+    fun fetchText(url: String, connectTimeoutMs: Int = 10000, readTimeoutMs: Int = 15000): String {
+        require(url.startsWith("https://")) { "Chỉ cho phép HTTPS" }
+        val connection = URL(url).openConnection() as HttpURLConnection
+        return try {
+            connection.connectTimeout = connectTimeoutMs
+            connection.readTimeout = readTimeoutMs
+            connection.instanceFollowRedirects = false
+            connection.requestMethod = "GET"
+            connection.connect()
+            require(connection.responseCode in 200..299) { "HTTP ${connection.responseCode}" }
+            connection.inputStream.bufferedReader().use { it.readText() }
+        } finally { connection.disconnect() }
+    }
+
+    fun download(url: String, manifest: DataUpdateManifest, appVersionCode: Int): DataUpdateResult {
+        if (!url.startsWith("https://")) return DataUpdateResult(false, "Chỉ cho phép HTTPS")
+        val target = File(staging, "data-${manifest.version}.download")
+        return runCatching {
+            val connection = URL(url).openConnection() as HttpURLConnection
+            try {
+                connection.connectTimeout = 10000
+                connection.readTimeout = 30000
+                connection.instanceFollowRedirects = false
+                connection.requestMethod = "GET"
+                connection.connect()
+                if (connection.responseCode !in 200..299) error("HTTP ${connection.responseCode}")
+                connection.inputStream.use { input -> target.outputStream().use { output -> input.copyTo(output) } }
+            } finally { connection.disconnect() }
+            val verified = verify(target, manifest, appVersionCode)
+            if (!verified.applied) { target.delete(); verified }
+            else { stage(target, manifest); target.delete(); DataUpdateResult(true, "Đã tải và xác minh") }
+        }.getOrElse { target.delete(); DataUpdateResult(false, "Tải thất bại: ${it.message}") }
     }
 
     fun stage(source: File, manifest: DataUpdateManifest): File {
