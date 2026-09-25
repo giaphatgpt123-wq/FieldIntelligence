@@ -32,7 +32,7 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, saveStatus:String, o
             if (preview != null) Image(bitmap = preview.asImageBitmap(), contentDescription = "Ảnh được chọn để đối chiếu thủ công", modifier = Modifier.fillMaxWidth().heightIn(max = 280.dp), contentScale = ContentScale.Fit)
             if (preview != null) {
                 OutlinedTextField(value = note, onValueChange = { note = it.take(500) }, label = { Text("Ghi chú mẫu, địa điểm hoặc đặc điểm nhìn thấy") }, modifier = Modifier.fillMaxWidth())
-                Button(onClick = { onSaveObservation(note); note = "" }, enabled = note.isNotBlank(), modifier = Modifier.fillMaxWidth()) { Text("Lưu ghi nhận offline") }
+                Button(onClick = { onSaveObservation(note) }, enabled = note.isNotBlank(), modifier = Modifier.fillMaxWidth()) { Text("Lưu ghi nhận offline") }
                 if(saveStatus.isNotBlank()) Text(saveStatus)
             }
             Text("KẾT QUẢ: CHƯA XÁC ĐỊNH", fontWeight = FontWeight.Bold)
