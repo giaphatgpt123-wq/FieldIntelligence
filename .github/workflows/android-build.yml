@@ -29,6 +29,9 @@ jobs:
         with:
           gradle-version: "8.9"
 
+      - name: OSM pilot converter tests
+        run: python3 -m unittest discover -s tools -p 'test_*.py'
+
       - name: Unit tests
         run: gradle --no-daemon test
 
