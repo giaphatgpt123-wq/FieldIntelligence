@@ -71,6 +71,29 @@ data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracy
  Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp)){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){Text("DẪU VẾT QUAY LẠI",fontWeight=FontWeight.Bold);Canvas(Modifier.fillMaxWidth().height(150.dp)){val cx=size.width/2f;val cy=size.height/2f;val r=minOf(size.width,size.height)*0.38f;drawCircle(Color(0xFFE4EEE7),r,Offset(cx,cy));for(i in 0 until minOf(breadcrumbCount,12)){val a=Math.toRadians((i*30.0)-90.0);val rr=r*(0.25f+0.055f*i);drawCircle(Color(0xFF2E6B4E),5f,Offset(cx+(cos(a)*rr).toFloat(),cy+(sin(a)*rr).toFloat()))};if(bearing!=null){val a=Math.toRadians(bearing-90.0);drawLine(Color(0xFF163C2B),Offset(cx,cy),Offset(cx+(cos(a)*r*0.9).toFloat(),cy+(sin(a)*r*0.9).toFloat()),10f)}};Text(if(bearing==null)"Chưa đủ dữ liệu định hướng" else "Hướng kế tiếp ${bearing.toInt()}° • lệch ${offTrackM.toInt()} m")}}
 }
 
-@Composable fun BreadcrumbMap(position:FieldPositionUi?,points:List<FieldPositionUi>){
- Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp)){Column(Modifier.padding(16.dp)){Text("BẢN ĐỒ DẤU VẾT OFFLINE",fontWeight=FontWeight.Bold);Canvas(Modifier.fillMaxWidth().height(220.dp)){if(points.size>1){val all=if(position==null) points else points+position;val minLat=all.minOf{it.latitude};val maxLat=all.maxOf{it.latitude};val minLon=all.minOf{it.longitude};val maxLon=all.maxOf{it.longitude};fun x(lon:Double)=((lon-minLon)/(maxLon-minLon).coerceAtLeast(0.000001)*size.width).toFloat();fun y(lat:Double)=(size.height-((lat-minLat)/(maxLat-minLat).coerceAtLeast(0.000001)*size.height)).toFloat();for(i in 1 until points.size)drawLine(Color(0xFF2E6B4E),Offset(x(points[i-1].longitude),y(points[i-1].latitude)),Offset(x(points[i].longitude),y(points[i].latitude)),6f);position?.let{drawCircle(Color(0xFF163C2B),10f,Offset(x(it.longitude),y(it.latitude)))}}};Text(if(points.size<2)"Chưa đủ điểm để vẽ đường đã đi" else "${points.size} mốc breadcrumb • hiển thị không cần Internet")}}
+@Composable
+fun BreadcrumbMap(position: FieldPositionUi?, points: List<FieldPositionUi>) {
+    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("BẢN ĐỒ DẤU VẾT OFFLINE", fontWeight = FontWeight.Bold)
+            Canvas(Modifier.fillMaxWidth().height(220.dp)) {
+                if (points.size > 1) {
+                    val all = if (position == null) points else points + position
+                    val minLat = all.minOf { it.latitude }
+                    val maxLat = all.maxOf { it.latitude }
+                    val minLon = all.minOf { it.longitude }
+                    val maxLon = all.maxOf { it.longitude }
+                    val latSpan = (maxLat - minLat).coerceAtLeast(0.000001)
+                    val lonSpan = (maxLon - minLon).coerceAtLeast(0.000001)
+                    fun mapX(lon: Double): Float = ((lon - minLon) / lonSpan * size.width).toFloat()
+                    fun mapY(lat: Double): Float = (size.height - ((lat - minLat) / latSpan * size.height)).toFloat()
+                    for (i in 1 until points.size) {
+                        drawLine(Color(0xFF2E6B4E), Offset(mapX(points[i-1].longitude), mapY(points[i-1].latitude)), Offset(mapX(points[i].longitude), mapY(points[i].latitude)), 6f)
+                    }
+                    position?.let { drawCircle(Color(0xFF163C2B), 10f, Offset(mapX(it.longitude), mapY(it.latitude))) }
+                }
+            }
+            Text(if (points.size < 2) "Chưa đủ điểm để vẽ đường đã đi" else "${points.size} mốc breadcrumb • hiển thị không cần Internet")
+        }
+    }
 }
