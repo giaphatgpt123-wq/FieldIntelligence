@@ -123,18 +123,20 @@ class OfflineMapPack(private val context: Context) {
         try {
             ZipInputStream(packageFile.inputStream().buffered()).use { zip ->
                 var entryCount = 0
+                val seenNames = mutableSetOf<String>()
                 var totalBytes = 0L
                 val maxEntries = 256
                 val maxTotalBytes = 64L * 1024L * 1024L
                 val maxEntryBytes = 16L * 1024L * 1024L
                 while (true) {
                     val entry = zip.nextEntry ?: break
-                    if (entry.isDirectory) continue
+                    require(++entryCount <= maxEntries) { "Gói bản đồ có quá nhiều mục" }
+                    require(!entry.isDirectory) { "Gói bản đồ chứa thư mục không được hỗ trợ" }
                     val name = File(entry.name).name
                     val allowed = name.endsWith(".region", true) || name.endsWith(".points", true) ||
                         name.endsWith(".lines", true) || name.endsWith(".polygons", true)
-                    if (!allowed || name != entry.name) continue
-                    require(++entryCount <= maxEntries) { "Gói bản đồ có quá nhiều tệp" }
+                    require(allowed && name == entry.name && name.matches(Regex("[a-z0-9_-]+\\.(region|points|lines|polygons)"))) { "Tên tệp bản đồ không hợp lệ" }
+                    require(seenNames.add(name.lowercase())) { "Trùng tên tệp bản đồ" }
                     val target = File(incoming, name)
                     target.outputStream().use { out ->
                         val buffer = ByteArray(8192)
@@ -154,6 +156,16 @@ class OfflineMapPack(private val context: Context) {
             val regionFiles = incoming.listFiles()?.filter { it.extension.equals("region", true) }.orEmpty()
             require(regionFiles.isNotEmpty()) { "Gói không có region hợp lệ" }
             require(regionFiles.all { parseRegion(it) != null }) { "Region metadata không hợp lệ" }
+            val regionNames = regionFiles.map { it.nameWithoutExtension }.toSet()
+            require(incoming.listFiles().orEmpty().all { it.extension == "region" || it.nameWithoutExtension in regionNames }) { "Hình học không thuộc vùng bản đồ" }
+            regionFiles.forEach { file ->
+                val region = parseRegion(file) ?: error("Region metadata không hợp lệ")
+                require(region.id == file.nameWithoutExtension) { "Region ID khác tên tệp" }
+                listOf("points", "lines", "polygons").forEach { extension ->
+                    val geometry = File(incoming, "${region.id}.$extension")
+                    if (geometry.exists()) MapRecordValidator.validate(region, geometry)
+                }
+            }
             backup.deleteRecursively()
             var swapStarted = false
             try {
@@ -220,6 +232,35 @@ class OfflineMapPack(private val context: Context) {
         )
         } catch (_: Exception) {
             null
+        }
+    }
+}
+internal object MapRecordValidator {
+    fun validate(region: OfflineMapRegion, file: File) {
+        file.forEachLine { raw ->
+            require(raw.isNotBlank()) { "Bản đồ có dòng trống" }
+            val coordinates = if (file.extension == "points") {
+                val parts = raw.split("\t", limit = 3)
+                require(parts.size >= 2 && parts[0].isNotBlank() && parts[1].isNotBlank()) { "Điểm không hợp lệ" }
+                listOf(parts[0] to parts[1])
+            } else {
+                val tokens = raw.split(";")
+                val minimum = if (file.extension == "polygons") 3 else 2
+                require(tokens.size >= minimum) { "Đường hoặc vùng thiếu tọa độ" }
+                tokens.map { token ->
+                    val pair = token.trim().split(",")
+                    require(pair.size == 2) { "Tọa độ hình học không hợp lệ" }
+                    pair[0].trim() to pair[1].trim()
+                }
+            }
+            coordinates.forEach { (latText, lonText) ->
+                val lat = latText.toDoubleOrNull()
+                val lon = lonText.toDoubleOrNull()
+                require(lat != null && lon != null && lat.isFinite() && lon.isFinite() &&
+                    lat in -90.0..90.0 && lon in -180.0..180.0 && region.contains(lat, lon)) {
+                    "Tọa độ nằm ngoài vùng hoặc không hợp lệ"
+                }
+            }
         }
     }
 }
