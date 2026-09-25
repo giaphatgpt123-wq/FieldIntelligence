@@ -19,15 +19,17 @@ class MainActivity:ComponentActivity(){
  private lateinit var tracks:FieldTrackStore
  private var recording by mutableStateOf(false)
  private var trackCount by mutableIntStateOf(0)
+ private var trackDistanceM by mutableDoubleStateOf(0.0)
+ private var trackStartedAt by mutableStateOf<Long?>(null)
  private var listener:android.location.LocationListener?=null
  private val permission=registerForActivityResult(ActivityResultContracts.RequestPermission()){granted->if(granted) startGnss()}
  override fun onCreate(savedInstanceState:Bundle?){
   super.onCreate(savedInstanceState)
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
-  location=FieldLocationController(this); tracks=FieldTrackStore(this); trackCount=tracks.load().size
+  location=FieldLocationController(this); tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,{recording=!recording}) }
+  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording }) }
  }
- private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;if(recording && tracks.append(it)){trackCount++}} }
+ private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;if(recording && tracks.append(it)){val s=tracks.summary();trackCount=s.points;trackDistanceM=s.distanceM;trackStartedAt=s.startedAt}} }
  override fun onDestroy(){ listener?.let{location.stop(it)};super.onDestroy() }
 }
