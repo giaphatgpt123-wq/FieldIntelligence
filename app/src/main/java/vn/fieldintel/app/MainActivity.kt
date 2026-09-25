@@ -79,14 +79,17 @@ class MainActivity:ComponentActivity(){
      val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
      val downloaded=updates.download(packageUrl,manifest,packageManager.getPackageInfo(packageName,0).longVersionCode.toInt())
      if(!downloaded.applied) error(downloaded.message)
-     val activated=updates.activateVersion(manifest.version)
-     if(!activated.applied) error(activated.message)
-     updates.activePackage()?:error("Không tìm thấy gói active")
+     updates.stagedPackage(manifest.version)?:error("Không tìm thấy gói đã xác minh")
     }
    }
    result.onSuccess{active->
     updateStatus="Đang cài bản đồ…"
-    runCatching{installOfflineMapUpdate(active)}
+    runCatching{
+     installOfflineMapUpdate(active)
+     val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
+     val activated=updates.activateVersion(manifest.version)
+     if(!activated.applied) error(activated.message)
+    }
      .onSuccess{updateStatus="Cập nhật thành công • dữ liệu đã nạp lại"}
      .onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
    }.onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
