@@ -37,6 +37,10 @@ class DataUpdateManager(private val context: Context) {
     }
 
     fun verify(file: File, manifest: DataUpdateManifest, appVersionCode: Int): DataUpdateResult {
+        if (manifest.version <= 0) return DataUpdateResult(false, "Version không hợp lệ")
+        if (manifest.schemaVersion != 1) return DataUpdateResult(false, "Schema dữ liệu không được hỗ trợ")
+        if (manifest.sizeBytes <= 0 || manifest.sizeBytes > 64L * 1024L * 1024L) return DataUpdateResult(false, "Kích thước manifest không hợp lệ")
+        if (!manifest.sha256.matches(Regex("^[0-9a-f]{64}$"))) return DataUpdateResult(false, "SHA-256 manifest không hợp lệ")
         if (manifest.packageName != context.packageName) return DataUpdateResult(false, "Sai package")
         if (manifest.minAppVersionCode > appVersionCode) return DataUpdateResult(false, "Cần cập nhật ứng dụng")
         if (file.length() != manifest.sizeBytes) return DataUpdateResult(false, "Sai kích thước")
@@ -70,7 +74,19 @@ class DataUpdateManager(private val context: Context) {
                 connection.requestMethod = "GET"
                 connection.connect()
                 if (connection.responseCode !in 200..299) error("HTTP ${connection.responseCode}")
-                connection.inputStream.use { input -> target.outputStream().use { output -> input.copyTo(output) } }
+                connection.inputStream.use { input ->
+                    target.outputStream().use { output ->
+                        val buffer = ByteArray(64 * 1024)
+                        var total = 0L
+                        while (true) {
+                            val n = input.read(buffer)
+                            if (n <= 0) break
+                            total += n
+                            if (total > manifest.sizeBytes || total > 64L * 1024L * 1024L) error("Dữ liệu tải vượt kích thước khai báo")
+                            output.write(buffer, 0, n)
+                        }
+                    }
+                }
             } finally { connection.disconnect() }
             val verified = verify(target, manifest, appVersionCode)
             if (!verified.applied) { target.delete(); verified }
