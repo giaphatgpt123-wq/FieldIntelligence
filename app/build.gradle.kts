@@ -1,8 +1,14 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+val pilotSigningFile = layout.buildDirectory.file("pilot-test-signing.p12").get().asFile
+pilotSigningFile.parentFile.mkdirs()
+pilotSigningFile.writeBytes(Base64.getDecoder().decode(file("pilot-test-signing.p12.b64").readText().trim()))
 
 android {
     namespace = "vn.fieldintel.app"
@@ -11,15 +17,25 @@ android {
         applicationId = "vn.fieldintel.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.2.0-osm-pilot"
+        versionCode = 3
+        versionName = "0.2.1-osm-pilot"
         manifestPlaceholders["appLabel"] = "VN Sinh tồn"
+    }
+    signingConfigs {
+        create("pilotDebug") {
+            storeFile = pilotSigningFile
+            storePassword = "pilot-test-only"
+            keyAlias = "pilot-debug"
+            keyPassword = "pilot-test-only"
+            storeType = "pkcs12"
+        }
     }
     buildTypes {
         getByName("debug") {
-            applicationIdSuffix = ".pilot"
+            applicationIdSuffix = ".osmtest"
+            signingConfig = signingConfigs.getByName("pilotDebug")
             versionNameSuffix = "-test"
-            manifestPlaceholders["appLabel"] = "VN Sinh tồn thử nghiệm"
+            manifestPlaceholders["appLabel"] = "VN Sinh tồn OSM thử nghiệm"
         }
     }
     compileOptions {
