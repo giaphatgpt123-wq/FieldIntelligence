@@ -24,7 +24,7 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
  FIELD("Thực địa","🗺️","GPS • hành trình • ghi nhận"), RECOGNITION("Nhận dạng","🌿","Camera • bằng chứng • phân biệt"),
  SURVIVAL("Sinh tồn","🔥","Nước • trú ẩn • định hướng"), EMERGENCY("Sự cố","SOS","Xử lý tình huống khẩn cấp"),
  PREP("Chuẩn bị","🎒","Trang bị • thuốc • checklist"), LIBRARY("Thư viện","📚","Tra cứu khoa học offline"),
- TRAINING("Huấn luyện","🎓","Học • mô phỏng • kiểm tra")
+ TRAINING("Huấn luyện","🎓","Học • mô phỏng • kiểm tra"), SETTINGS("Cài đặt","⚙","Cập nhật dữ liệu")
 }
 
 data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracyM:Float)
@@ -36,8 +36,8 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
 
 @Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={}){
  var selected by remember{mutableStateOf<AppSection?>(null)}
- if(selected!=null){SectionScreen(section=selected!!,position=position,recording=recording,trackCount=trackCount,trackDistanceM=trackDistanceM,trackStartedAt=trackStartedAt,trackBackRemainingM=trackBackRemainingM,trackBackBearingDeg=trackBackBearingDeg,offTrackM=offTrackM,breadcrumbCount=breadcrumbCount,breadcrumb=breadcrumb,mapPackAvailable=mapPackAvailable,mapPackFiles=mapPackFiles,mapPackBytes=mapPackBytes,mapPoints=mapPoints,mapLines=mapLines,mapPolygons=mapPolygons,onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,onBack={selected=null});return}
- Scaffold(bottomBar={BottomBar()}){pad->
+ if(selected!=null){SectionScreen(section=selected!!,position=position,recording=recording,trackCount=trackCount,trackDistanceM=trackDistanceM,trackStartedAt=trackStartedAt,trackBackRemainingM=trackBackRemainingM,trackBackBearingDeg=trackBackBearingDeg,offTrackM=offTrackM,breadcrumbCount=breadcrumbCount,breadcrumb=breadcrumb,mapPackAvailable=mapPackAvailable,mapPackFiles=mapPackFiles,mapPackBytes=mapPackBytes,mapPoints=mapPoints,mapLines=mapLines,mapPolygons=mapPolygons,onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,onBack={selected=null},onSelect={selected=it});return}
+ Scaffold(bottomBar={BottomBar(onSelect={selected=it},current=selected)}){pad->
   Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
    Text("VN SINH TỒN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
    Text("Khám phá • Nhận biết • Sinh tồn an toàn",style=MaterialTheme.typography.bodyMedium)
@@ -54,12 +54,12 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
  Card(onClick={onOpen(s)},modifier=modifier.height(126.dp),shape=RoundedCornerShape(22.dp)){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.SpaceBetween){Text(s.icon,style=MaterialTheme.typography.headlineMedium);Text(s.label,fontWeight=FontWeight.Bold);Text(s.subtitle,style=MaterialTheme.typography.labelSmall)}}
 }
 
-@Composable private fun BottomBar(){NavigationBar{NavigationBarItem(true,{},icon={Text("⌂")},label={Text("Trang chủ")});NavigationBarItem(false,{},icon={Text("🗺")},label={Text("Bản đồ")});NavigationBarItem(false,{},icon={Text("◎")},label={Text("Quét")});NavigationBarItem(false,{},icon={Text("▣")},label={Text("Lưu trữ")});NavigationBarItem(false,{},icon={Text("⚙")},label={Text("Cài đặt")})}}
+@Composable private fun BottomBar(current:AppSection?,onSelect:(AppSection?)->Unit){NavigationBar{listOf<Triple<AppSection?,String,String>>(Triple(null,"⌂","Trang chủ"),Triple(AppSection.FIELD,"🗺","Bản đồ"),Triple(AppSection.RECOGNITION,"◎","Quét"),Triple(AppSection.LIBRARY,"▣","Lưu trữ"),Triple(AppSection.SETTINGS,"⚙","Cài đặt")).forEach{(section,icon,label)->NavigationBarItem(current==section,{onSelect(section)},icon={Text(icon)},label={Text(label)})}}}
 
-@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={}){
+@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},onSelect:(AppSection?)->Unit={}){
  var confirmClear by remember { mutableStateOf(false) }
  val trackState = when { recording -> TrackSessionUiState.RECORDING; trackCount == 0 -> TrackSessionUiState.IDLE; trackStartedAt != null -> TrackSessionUiState.PAUSED; else -> TrackSessionUiState.FINISHED }
- Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
+ Scaffold(bottomBar={BottomBar(current=section,onSelect=onSelect)}){pad->Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
   Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
   Text(section.subtitle)
   when(section){
@@ -72,7 +72,8 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
    AppSection.EMERGENCY->{StatusCard("🚨 SỰ CỐ","Emergency Core • ưu tiên offline");listOf("SƠ CỨU VẾT THƯƠNG","BỊ RẮN CẮN","CÔN TRÙNG ĐỐT","NGỘ ĐỘC","MẤT PHƯƠNG HƯỚNG","TAI NẠN TRÊN BIỂN").forEach{Action(it)}}
    AppSection.PREP->{StatusCard("🎒 Chuẩn bị hành trình","Trang phục • thiết bị • thuốc • thực phẩm");Action("CHECKLIST CHUYẾN ĐI")}
    AppSection.LIBRARY->{StatusCard("📚 Thư viện offline","Taxonomy • morphology • evidence");Action("THỰC VẬT");Action("ĐỘNG VẬT");Action("CÔN TRÙNG");Action("NẤM")}
-   AppSection.TRAINING->{StatusCard("🎓 LEARN MODE","Tình huống mô phỏng và kiểm tra kiến thức");Action("BẮT ĐẦU HUẤN LUYỆN");UpdateSettingsPanel(mapPackAvailable,mapPackFiles,mapPackBytes,updateStatus,onCheckUpdate,onRollbackUpdate)}
+   AppSection.TRAINING->{StatusCard("🎓 LEARN MODE","Tình huống mô phỏng và kiểm tra kiến thức");Action("BẮT ĐẦU HUẤN LUYỆN")}
+   AppSection.SETTINGS->{UpdateSettingsPanel(mapPackAvailable,mapPackFiles,mapPackBytes,updateStatus,onCheckUpdate,onRollbackUpdate)}
   }
  }}
 }
