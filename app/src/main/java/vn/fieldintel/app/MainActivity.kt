@@ -66,6 +66,11 @@ class MainActivity:ComponentActivity(){
   return state
  }
 
+ fun checkConfiguredDataUpdate(appVersionCode:Int=1){
+  if(!UpdateConfig.configured){updateStatus="Nguồn cập nhật chưa được cấu hình";return}
+  applyDataUpdate(UpdateConfig.MANIFEST_URL,UpdateConfig.PACKAGE_URL,appVersionCode)
+ }
+
  fun applyDataUpdate(manifestUrl:String,packageUrl:String,appVersionCode:Int=1){
   lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO){
    val result=runCatching{
