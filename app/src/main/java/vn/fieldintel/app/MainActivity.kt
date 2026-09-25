@@ -25,6 +25,7 @@ class MainActivity:ComponentActivity(){
  private lateinit var mapPack:OfflineMapPack
  private lateinit var updates:DataUpdateManager
  private var updateStatus by mutableStateOf("Sẵn sàng")
+ private var updateBusy=false
  private var activeMapRegionId:String?=null
  private var recording by mutableStateOf(false)
  private var trackSessionState by mutableStateOf(TrackSessionState.IDLE)
@@ -81,53 +82,70 @@ class MainActivity:ComponentActivity(){
  }
 
  private fun rollbackDataUpdate(){
+  if(updateBusy) return
   val old=updates.previousPackage()
   if(old==null){updateStatus="Không có bản để khôi phục";return}
-  val current=updates.activePackage()
-  updateStatus=runCatching{
-   updates.markMapSwapPending()
-   installOfflineMapUpdate(old)
-   val restored=updates.rollback()
-   if(!restored.applied) error(restored.message)
-   updates.finishMapSwap()
-   "Đã khôi phục bản đồ và gói dữ liệu"
-  }.getOrElse{failure->
-   if(current!=null) runCatching{installOfflineMapUpdate(current);updates.finishMapSwap()}
-   "Khôi phục thất bại • ${failure.message?:"không rõ lỗi"}"
+  updateBusy=true
+  lifecycleScope.launch{
+   updateStatus="Đang khôi phục bản đồ…"
+   try {
+    val outcome=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
+     val current=updates.activePackage()
+     runCatching{
+      updates.markMapSwapPending()
+      mapPack.installUpdatePackage(old)
+      val restored=updates.rollback()
+      if(!restored.applied) error(restored.message)
+      updates.finishMapSwap()
+      "Đã khôi phục bản đồ và gói dữ liệu"
+     }.getOrElse{failure->
+      val recovered=runCatching{
+       if(current!=null) mapPack.installUpdatePackage(current) else mapPack.restoreBundledMap()
+       updates.finishMapSwap()
+      }
+      if(recovered.isSuccess) "Khôi phục thất bại • ${failure.message?:"không rõ lỗi"}"
+      else "Khôi phục thất bại; bản đồ cần khôi phục • ${recovered.exceptionOrNull()?.message}"
+     }
+    }
+    reloadOfflineMap()
+    updateStatus=outcome
+   } finally {updateBusy=false}
   }
  }
 
  fun applyDataUpdate(manifestUrl:String,packageUrl:String){
+  if(updateBusy) return
+  updateBusy=true
   lifecycleScope.launch{
    updateStatus="Đang kiểm tra cập nhật…"
-   val result=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
-    runCatching{
-     val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
-     val downloaded=updates.download(packageUrl,manifest,packageManager.getPackageInfo(packageName,0).longVersionCode.toInt())
-     if(!downloaded.applied) error(downloaded.message)
-     manifest.version to (updates.stagedPackage(manifest.version)?:error("Không tìm thấy gói đã xác minh"))
-    }
-   }
-   result.onSuccess{(version,staged)->
-    updateStatus="Đang cài bản đồ…"
-    val current=updates.activePackage()
-    runCatching{
-     updates.markMapSwapPending()
-     installOfflineMapUpdate(staged)
-     val activated=updates.activateVersion(version)
-     if(!activated.applied) error(activated.message)
-     updates.finishMapSwap()
-    }.onSuccess{updateStatus="Cập nhật thành công • dữ liệu đã nạp lại"}
-     .onFailure{failure->
-      val restored=runCatching{
-       if(current!=null) installOfflineMapUpdate(current)
-       else mapPack.restoreBundledMap()
+   try {
+    val outcome=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
+     runCatching{
+      val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
+      val downloaded=updates.download(packageUrl,manifest,packageManager.getPackageInfo(packageName,0).longVersionCode.toInt())
+      if(!downloaded.applied) error(downloaded.message)
+      val staged=updates.stagedPackage(manifest.version)?:error("Không tìm thấy gói đã xác minh")
+      val current=updates.activePackage()
+      try {
+       updates.markMapSwapPending()
+       mapPack.installUpdatePackage(staged)
+       val activated=updates.activateVersion(manifest.version)
+       if(!activated.applied) error(activated.message)
        updates.finishMapSwap()
+       "Cập nhật thành công • dữ liệu đã nạp lại"
+      } catch(failure:Exception){
+       val recovered=runCatching{
+        if(current!=null) mapPack.installUpdatePackage(current) else mapPack.restoreBundledMap()
+        updates.finishMapSwap()
+       }
+       if(recovered.isSuccess) "Cập nhật thất bại • ${failure.message?:"không rõ lỗi"}"
+       else "Cập nhật thất bại; bản đồ cần khôi phục • ${recovered.exceptionOrNull()?.message}"
       }
-      updateStatus=if(restored.isSuccess) "Cập nhật thất bại • ${failure.message?:"không rõ lỗi"}"
-       else "Cập nhật thất bại; không thể khôi phục bản đồ • ${restored.exceptionOrNull()?.message}"
-     }
-   }.onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
+     }.getOrElse { "Cập nhật thất bại • "+(it.message?:"không rõ lỗi") }
+    }
+    reloadOfflineMap()
+    updateStatus=outcome
+   } finally {updateBusy=false}
   }
  }
 
