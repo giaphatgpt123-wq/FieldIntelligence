@@ -23,7 +23,7 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
  if(selected!=null){SectionScreen(selected!!){selected=null};return}
  Scaffold(bottomBar={BottomBar()}){pad->
   Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
-   Text("FIELD INTELLIGENCE",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
+   Text("VN SINH TỒN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
    Text("Khám phá • Nhận biết • Sinh tồn an toàn",style=MaterialTheme.typography.bodyMedium)
    Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp)){Column(Modifier.padding(18.dp)){Text("🧭  SẴN SÀNG THỰC ĐỊA",fontWeight=FontWeight.Bold);Text("Offline Core sẵn sàng • GPS đang kiểm tra")}}
    Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)){FeatureCard(AppSection.FIELD,Modifier.weight(1f)){selected=it};FeatureCard(AppSection.RECOGNITION,Modifier.weight(1f)){selected=it}}
