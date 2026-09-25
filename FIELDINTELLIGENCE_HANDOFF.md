@@ -177,3 +177,11 @@ When returning from Work to Chat, update this file with:
 - verified behavior
 - unresolved failures/risks
 - exact NEXT ACTION.
+
+## Work continuation — 2026-09-25
+- HEAD before work: e7d80b346ffc12e12375c2675f8436dd5032308c; Android Build #141 completed success. Builds #139 and #140 also completed success.
+- Code HEAD after work: d8fb1369b49a8487068c8957d2c474eb21c2c545. Android Build #144: in progress at last check; do not claim PASS yet. https://github.com/giaphatgpt123-wq/FieldIntelligence/actions/runs/36095311907
+- Files changed: DataUpdateManager.kt, OfflineMapPack.kt, MainActivity.kt.
+- Update flow now retains one fetched manifest/version; failed activation attempts to reinstall the prior active map package, or bundled map when no active package existed. Rollback installs the previous map before switching package metadata, with recovery attempt on error.
+- CI is a build check, not an on-device map-render verification. Private release URL, hardcoded package filename and test-vector basemap remain unresolved.
+- NEXT ACTION: check Build #144 conclusion and logs; fix failures. Then harden map/package transaction against process interruption and validate geometry records and duplicate ZIP entries before swap. Recheck CI and device map rendering.
