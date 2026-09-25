@@ -16,7 +16,9 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
  TRAINING("Huấn luyện","🎓","Học • mô phỏng • kiểm tra")
 }
 
-data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracyM:Float)\n\n@Composable fun EmergencyScreen(position:FieldPositionUi?=null){ FieldIntelligenceHome(position) }
+data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracyM:Float)
+
+@Composable fun EmergencyScreen(position:FieldPositionUi?=null){ FieldIntelligenceHome(position) }
 
 @Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null){
  var selected by remember{mutableStateOf<AppSection?>(null)}
@@ -45,7 +47,10 @@ data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracy
   Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
   Text(section.subtitle)
   when(section){
-   AppSection.FIELD->{\n    val status=if(position==null) "Đang chờ tín hiệu vệ tinh" else "%.5f, %.5f  •  ±%.0f m".format(position.latitude,position.longitude,position.accuracyM)\n    StatusCard("📍 Vị trí hiện tại",status);Action("▶  GHI HÀNH TRÌNH");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")\n   }
+   AppSection.FIELD->{
+    val status=if(position==null) "Đang chờ tín hiệu vệ tinh" else "%.5f, %.5f  •  ±%.0f m".format(position.latitude,position.longitude,position.accuracyM)
+    StatusCard("📍 Vị trí hiện tại",status);Action("▶  GHI HÀNH TRÌNH");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
+   }
    AppSection.RECOGNITION->{StatusCard("🌿 Nhận dạng sinh học","Thực vật • động vật • côn trùng • nấm");Action("📷  CHỤP / CHỌN ẢNH");Text("Kết quả UNKNOWN luôn được phép khi bằng chứng chưa đủ.")}
    AppSection.SURVIVAL->{StatusCard("🧭 Hướng dẫn thực địa","Tìm nước • trú ẩn • lửa • định hướng");Action("TÌM NƯỚC");Action("LỀU TRẠI & TRÚ ẨN");Action("KỸ NĂNG SINH TỒN")}
    AppSection.EMERGENCY->{StatusCard("🚨 SỰ CỐ","Emergency Core • ưu tiên offline");listOf("SƠ CỨU VẾT THƯƠNG","BỊ RẮN CẮN","CÔN TRÙNG ĐỐT","NGỘ ĐỘC","MẤT PHƯƠNG HƯỚNG","TAI NẠN TRÊN BIỂN").forEach{Action(it)}}
