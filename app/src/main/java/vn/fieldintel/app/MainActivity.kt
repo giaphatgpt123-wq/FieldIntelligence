@@ -47,5 +47,22 @@ class MainActivity:ComponentActivity(){
  override fun onStart(){ super.onStart(); if(::location.isInitialized && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() }
  override fun onStop(){ listener?.let{location.stop(it)}; listener=null; super.onStop() }
  private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;val region=mapPack.regionFor(it.latitude,it.longitude);if(region?.id!=activeMapRegionId){activeMapRegionId=region?.id;mapPoints=region?.let{r->mapPack.features(r).map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)}}?:emptyList();mapLines=region?.let{r->mapPack.lines(r).map{line->OfflineMapLineUi(line.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList();mapPolygons=region?.let{r->mapPack.polygons(r).map{poly->OfflineMapPolygonUi(poly.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()};trackBack=TrackBack.state(tracks.load(),it);if(recording && tracks.append(it)){val s=tracks.summary();trackCount=s.points;trackDistanceM=s.distanceM;trackStartedAt=s.startedAt}} }
+ private fun reloadOfflineMap(){
+  mapPackState=mapPack.state()
+  val fix=latestFix
+  if(fix==null){activeMapRegionId=null;mapPoints=emptyList();mapLines=emptyList();mapPolygons=emptyList();return}
+  val region=mapPack.regionFor(fix.latitude,fix.longitude)
+  activeMapRegionId=region?.id
+  mapPoints=region?.let{r->mapPack.features(r).map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)}}?:emptyList()
+  mapLines=region?.let{r->mapPack.lines(r).map{line->OfflineMapLineUi(line.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()
+  mapPolygons=region?.let{r->mapPack.polygons(r).map{poly->OfflineMapPolygonUi(poly.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()
+ }
+
+ fun installOfflineMapUpdate(packageFile:java.io.File):OfflineMapPackState{
+  val state=mapPack.installUpdatePackage(packageFile)
+  reloadOfflineMap()
+  return state
+ }
+
  override fun onDestroy(){ listener?.let{location.stop(it)};listener=null;super.onDestroy() }
 }
