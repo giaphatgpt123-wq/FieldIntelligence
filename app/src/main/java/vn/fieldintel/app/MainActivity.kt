@@ -67,7 +67,7 @@ class MainActivity:ComponentActivity(){
  }
 
  fun checkConfiguredDataUpdate(){
-  if(!UpdateConfig.configured){updateStatus="Nguồn cập nhật chưa được cấu hình";return}
+  if(!UpdateConfig.configured){updateStatus="Kênh cập nhật nằm trong repo riêng tư; ứng dụng chưa thể tải gói. Cần nguồn dữ liệu riêng không yêu cầu đăng nhập.";return}
   applyDataUpdate(UpdateConfig.MANIFEST_URL,UpdateConfig.PACKAGE_URL)
  }
 
