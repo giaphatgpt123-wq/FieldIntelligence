@@ -108,6 +108,9 @@ class DataUpdateManager(private val context: Context) {
         DataUpdateResult(true, "Đã kích hoạt")
     }.getOrElse { DataUpdateResult(false, "Kích hoạt thất bại: ${it.message}") }
 
+    fun stagedPackage(version: Int): File? =
+        File(staging, "data-${version}.pack").takeIf { it.exists() }
+
     fun activateVersion(version: Int): DataUpdateResult {
         val staged = File(staging, "data-${version}.pack")
         if (!staged.exists()) return DataUpdateResult(false, "Không tìm thấy gói đã xác minh")
