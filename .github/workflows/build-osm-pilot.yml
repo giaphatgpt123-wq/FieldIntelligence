@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   pilot:
@@ -40,3 +40,21 @@ jobs:
             dist/osm-pilot/output/*
             dist/osm-pilot/source.sha256
           retention-days: 7
+
+      - name: Commit reviewed pilot files to private branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B pilot/osm-105-10
+          unzip -j dist/osm-pilot/output/offline-map.pack -d app/src/main/assets/offline-map
+          rm app/src/main/assets/offline-map/mekong-south.region \
+             app/src/main/assets/offline-map/mekong-south.lines \
+             app/src/main/assets/offline-map/mekong-south.points
+          mkdir -p docs/osm-provenance
+          cp dist/osm-pilot/output/provenance.json docs/osm-provenance/osm-pilot-105-10.json
+          cp dist/osm-pilot/source.sha256 docs/osm-provenance/source.sha256
+          git add app/src/main/assets/offline-map docs/osm-provenance
+          git commit -m "Bundle reviewed OSM pilot for local map test"
+          git push --force-with-lease origin HEAD:refs/heads/pilot/osm-105-10
