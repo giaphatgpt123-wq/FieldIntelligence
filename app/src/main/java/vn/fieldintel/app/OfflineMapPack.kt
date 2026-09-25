@@ -52,7 +52,8 @@ class OfflineMapPack(context: Context) {
 
     fun rootPath(): String = root.absolutePath
 
-    private fun parseRegion(file: File): OfflineMapRegion? = try {
+    private fun parseRegion(file: File): OfflineMapRegion? {
+        return try {
         val values = file.readLines()
             .mapNotNull { line ->
                 val split = line.split("=", limit = 2)
@@ -71,5 +72,8 @@ class OfflineMapPack(context: Context) {
             minLat = minLat, minLon = minLon, maxLat = maxLat, maxLon = maxLon,
             sourceFile = file
         )
-    } catch (_: Exception) { null }
+        } catch (_: Exception) {
+            null
+        }
+    }
 }
