@@ -53,6 +53,10 @@ class OfflineMapPack(private val context: Context) {
             File(context.filesDir, "updates/map-swap-pending").exists())) return
         val assetDir = "offline-map"
         val names = runCatching { context.assets.list(assetDir)?.toList().orEmpty() }.getOrDefault(emptyList())
+        if (names.any { it.startsWith("osm-pilot-") }) {
+            listOf("mekong-south.region", "mekong-south.lines", "mekong-south.points", "mekong-south.polygons")
+                .forEach { File(root, it).delete() }
+        }
         names.filter { it.endsWith(".region", true) || it.endsWith(".points", true) || it.endsWith(".lines", true) || it.endsWith(".polygons", true) }
             .forEach { name ->
                 val target = File(root, name)
