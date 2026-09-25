@@ -28,18 +28,18 @@ jobs:
           set -euo pipefail
           mkdir -p dist/update
           cd app/src/main/assets/offline-map
-          zip -j "../../../../../dist/update/offline-map-${{ inputs.version }}.pack" *.region *.points *.lines *.polygons 2>/dev/null || zip -j "../../../../../dist/update/offline-map-${{ inputs.version }}.pack" *.region *.points *.lines
+          zip -j "../../../../../dist/update/offline-map-${{ inputs.version || github.run_number }}.pack" *.region *.points *.lines *.polygons 2>/dev/null || zip -j "../../../../../dist/update/offline-map-${{ inputs.version || github.run_number }}.pack" *.region *.points *.lines
 
       - name: Generate manifest
         shell: bash
         run: |
           set -euo pipefail
-          FILE="dist/update/offline-map-${{ inputs.version }}.pack"
+          FILE="dist/update/offline-map-${{ inputs.version || github.run_number }}.pack"
           SHA=$(sha256sum "$FILE" | awk '{print $1}')
           SIZE=$(stat -c%s "$FILE")
           cat > dist/update/manifest.json <<EOF
           {
-            "version": ${{ inputs.version }},
+            "version": ${{ inputs.version || github.run_number }},
             "schemaVersion": 1,
             "minAppVersionCode": 1,
             "packageName": "vn.fieldintel.app",
@@ -57,4 +57,4 @@ jobs:
           make_latest: false
           files: |
             dist/update/manifest.json
-            dist/update/offline-map-${{ inputs.version }}.pack
+            dist/update/offline-map-${{ inputs.version || github.run_number }}.pack
