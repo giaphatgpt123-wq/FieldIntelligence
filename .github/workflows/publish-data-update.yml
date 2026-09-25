@@ -27,14 +27,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist/update
+          [[ "${{ inputs.version || github.run_number }}" =~ ^[1-9][0-9]*$ ]] || { echo "Version must be a positive integer"; exit 1; }
           cd app/src/main/assets/offline-map
-          zip -j "../../../../../dist/update/offline-map-${{ inputs.version || github.run_number }}.pack" *.region *.points *.lines *.polygons 2>/dev/null || zip -j "../../../../../dist/update/offline-map-${{ inputs.version || github.run_number }}.pack" *.region *.points *.lines
+          zip -j "../../../../../dist/update/offline-map.pack" *.region *.points *.lines *.polygons 2>/dev/null || zip -j "../../../../../dist/update/offline-map.pack" *.region *.points *.lines
 
       - name: Generate manifest
         shell: bash
         run: |
           set -euo pipefail
-          FILE="dist/update/offline-map-${{ inputs.version || github.run_number }}.pack"
+          FILE="dist/update/offline-map.pack"
           SHA=$(sha256sum "$FILE" | awk '{print $1}')
           SIZE=$(stat -c%s "$FILE")
           cat > dist/update/manifest.json <<EOF
@@ -57,4 +58,4 @@ jobs:
           make_latest: false
           files: |
             dist/update/manifest.json
-            dist/update/offline-map-${{ inputs.version || github.run_number }}.pack
+            dist/update/offline-map.pack
