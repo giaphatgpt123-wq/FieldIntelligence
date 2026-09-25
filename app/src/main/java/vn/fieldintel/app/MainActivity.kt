@@ -44,7 +44,7 @@ class MainActivity:ComponentActivity(){
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
   location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); mapPackState=mapPack.state(); tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ val r=updates.rollback(); updateStatus=r.message; if(r.applied){ updates.activePackage()?.let{ installOfflineMapUpdate(it) } } }) }
+  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ rollbackDataUpdate() }) }
  }
  override fun onStart(){ super.onStart(); if(::location.isInitialized && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() }
  override fun onStop(){ listener?.let{location.stop(it)}; listener=null; super.onStop() }
@@ -71,6 +71,21 @@ class MainActivity:ComponentActivity(){
   applyDataUpdate(UpdateConfig.MANIFEST_URL,UpdateConfig.PACKAGE_URL)
  }
 
+ private fun rollbackDataUpdate(){
+  val old=updates.previousPackage()
+  if(old==null){updateStatus="Không có bản để khôi phục";return}
+  val current=updates.activePackage()
+  updateStatus=runCatching{
+   installOfflineMapUpdate(old)
+   val restored=updates.rollback()
+   if(!restored.applied) error(restored.message)
+   "Đã khôi phục bản đồ và gói dữ liệu"
+  }.getOrElse{failure->
+   if(current!=null) runCatching{installOfflineMapUpdate(current)}
+   "Khôi phục thất bại • ${failure.message?:"không rõ lỗi"}"
+  }
+ }
+
  fun applyDataUpdate(manifestUrl:String,packageUrl:String){
   lifecycleScope.launch{
    updateStatus="Đang kiểm tra cập nhật…"
@@ -79,19 +94,25 @@ class MainActivity:ComponentActivity(){
      val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
      val downloaded=updates.download(packageUrl,manifest,packageManager.getPackageInfo(packageName,0).longVersionCode.toInt())
      if(!downloaded.applied) error(downloaded.message)
-     updates.stagedPackage(manifest.version)?:error("Không tìm thấy gói đã xác minh")
+     manifest.version to (updates.stagedPackage(manifest.version)?:error("Không tìm thấy gói đã xác minh"))
     }
    }
-   result.onSuccess{active->
+   result.onSuccess{(version,staged)->
     updateStatus="Đang cài bản đồ…"
+    val current=updates.activePackage()
     runCatching{
-     installOfflineMapUpdate(active)
-     val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
-     val activated=updates.activateVersion(manifest.version)
+     installOfflineMapUpdate(staged)
+     val activated=updates.activateVersion(version)
      if(!activated.applied) error(activated.message)
-    }
-     .onSuccess{updateStatus="Cập nhật thành công • dữ liệu đã nạp lại"}
-     .onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
+    }.onSuccess{updateStatus="Cập nhật thành công • dữ liệu đã nạp lại"}
+     .onFailure{failure->
+      val restored=runCatching{
+       if(current!=null) installOfflineMapUpdate(current)
+       else mapPack.restoreBundledMap()
+      }
+      updateStatus=if(restored.isSuccess) "Cập nhật thất bại • ${failure.message?:"không rõ lỗi"}"
+       else "Cập nhật thất bại; không thể khôi phục bản đồ • ${restored.exceptionOrNull()?.message}"
+     }
    }.onFailure{updateStatus="Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
   }
  }
