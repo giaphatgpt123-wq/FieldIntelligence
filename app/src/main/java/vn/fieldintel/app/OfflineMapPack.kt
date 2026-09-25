@@ -189,6 +189,13 @@ class OfflineMapPack(private val context: Context) {
         return state()
     }
 
+    fun restoreBundledMap(): OfflineMapPackState {
+        root.deleteRecursively()
+        root.mkdirs()
+        bootstrapAssetsIfNeeded()
+        return state().also { require(it.available) { "Không thể khôi phục bản đồ đi kèm" } }
+    }
+
     fun rootPath(): String = root.absolutePath
 
     private fun parseRegion(file: File): OfflineMapRegion? {
