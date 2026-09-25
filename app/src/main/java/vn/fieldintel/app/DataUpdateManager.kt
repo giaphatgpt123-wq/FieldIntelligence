@@ -1,0 +1,78 @@
+package vn.fieldintel.app
+
+import android.content.Context
+import org.json.JSONObject
+import java.io.File
+import java.security.MessageDigest
+
+data class DataUpdateManifest(
+    val version: Int,
+    val schemaVersion: Int,
+    val minAppVersionCode: Int,
+    val packageName: String,
+    val sha256: String,
+    val sizeBytes: Long
+)
+
+data class DataUpdateResult(val applied: Boolean, val message: String)
+
+class DataUpdateManager(private val context: Context) {
+    private val root = File(context.filesDir, "updates").apply { mkdirs() }
+    private val staging = File(root, "staging").apply { mkdirs() }
+    private val active = File(root, "active").apply { mkdirs() }
+    private val previous = File(root, "previous").apply { mkdirs() }
+
+    fun parseManifest(json: String): DataUpdateManifest {
+        val o = JSONObject(json)
+        return DataUpdateManifest(
+            version = o.getInt("version"),
+            schemaVersion = o.getInt("schemaVersion"),
+            minAppVersionCode = o.getInt("minAppVersionCode"),
+            packageName = o.getString("packageName"),
+            sha256 = o.getString("sha256").lowercase(),
+            sizeBytes = o.getLong("sizeBytes")
+        )
+    }
+
+    fun verify(file: File, manifest: DataUpdateManifest, appVersionCode: Int): DataUpdateResult {
+        if (manifest.packageName != context.packageName) return DataUpdateResult(false, "Sai package")
+        if (manifest.minAppVersionCode > appVersionCode) return DataUpdateResult(false, "Cần cập nhật ứng dụng")
+        if (file.length() != manifest.sizeBytes) return DataUpdateResult(false, "Sai kích thước")
+        if (sha256(file) != manifest.sha256) return DataUpdateResult(false, "SHA-256 không khớp")
+        return DataUpdateResult(true, "Gói hợp lệ")
+    }
+
+    fun stage(source: File, manifest: DataUpdateManifest): File {
+        val target = File(staging, "data-${manifest.version}.pack")
+        source.copyTo(target, overwrite = true)
+        return target
+    }
+
+    fun activate(staged: File): DataUpdateResult = runCatching {
+        previous.deleteRecursively(); previous.mkdirs()
+        active.listFiles()?.forEach { it.copyTo(File(previous, it.name), overwrite = true) }
+        active.deleteRecursively(); active.mkdirs()
+        staged.copyTo(File(active, "current.pack"), overwrite = true)
+        DataUpdateResult(true, "Đã kích hoạt")
+    }.getOrElse { DataUpdateResult(false, "Kích hoạt thất bại: ${it.message}") }
+
+    fun rollback(): DataUpdateResult = runCatching {
+        val old = File(previous, "current.pack")
+        if (!old.exists()) return DataUpdateResult(false, "Không có bản để khôi phục")
+        old.copyTo(File(active, "current.pack"), overwrite = true)
+        DataUpdateResult(true, "Đã khôi phục")
+    }.getOrElse { DataUpdateResult(false, "Khôi phục thất bại: ${it.message}") }
+
+    private fun sha256(file: File): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        file.inputStream().use { input ->
+            val buffer = ByteArray(64 * 1024)
+            while (true) {
+                val n = input.read(buffer)
+                if (n <= 0) break
+                digest.update(buffer, 0, n)
+            }
+        }
+        return digest.digest().joinToString("") { "%02x".format(it) }
+    }
+}
