@@ -2,6 +2,8 @@ package vn.fieldintel.feature.emergency
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.geometry.Offset
@@ -36,7 +38,7 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
  var selected by remember{mutableStateOf<AppSection?>(null)}
  if(selected!=null){SectionScreen(section=selected!!,position=position,recording=recording,trackCount=trackCount,trackDistanceM=trackDistanceM,trackStartedAt=trackStartedAt,trackBackRemainingM=trackBackRemainingM,trackBackBearingDeg=trackBackBearingDeg,offTrackM=offTrackM,breadcrumbCount=breadcrumbCount,breadcrumb=breadcrumb,mapPackAvailable=mapPackAvailable,mapPackFiles=mapPackFiles,mapPackBytes=mapPackBytes,mapPoints=mapPoints,mapLines=mapLines,mapPolygons=mapPolygons,onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,onBack={selected=null});return}
  Scaffold(bottomBar={BottomBar()}){pad->
-  Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
+  Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
    Text("VN SINH TỒN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
    Text("Khám phá • Nhận biết • Sinh tồn an toàn",style=MaterialTheme.typography.bodyMedium)
    Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp)){Column(Modifier.padding(18.dp)){Text("🧭  SẴN SÀNG THỰC ĐỊA",fontWeight=FontWeight.Bold);Text("Offline Core sẵn sàng • GPS đang kiểm tra")}}
@@ -57,7 +59,7 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
 @Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={}){
  var confirmClear by remember { mutableStateOf(false) }
  val trackState = when { recording -> TrackSessionUiState.RECORDING; trackCount == 0 -> TrackSessionUiState.IDLE; trackStartedAt != null -> TrackSessionUiState.PAUSED; else -> TrackSessionUiState.FINISHED }
- Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
+ Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
   Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
   Text(section.subtitle)
   when(section){
@@ -78,7 +80,7 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
  Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(20.dp)){Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
   Text("CẬP NHẬT DỮ LIỆU",fontWeight=FontWeight.Bold)
   Text(if(mapPackAvailable) "Bản đồ offline: "+mapPackFiles+" tệp • "+(mapPackBytes/1024/1024)+" MB" else "Bản đồ offline: chưa có dữ liệu")
-  Text("Bản đồ • thư viện khoa học • nội dung sinh tồn có thể cập nhật độc lập với APK.",style=MaterialTheme.typography.bodySmall)
+  Text("Hiện chỉ hỗ trợ cập nhật dữ liệu bản đồ; kênh thư viện khoa học và nội dung sinh tồn chưa được tích hợp.",style=MaterialTheme.typography.bodySmall)
   Text("Trạng thái: "+status,style=MaterialTheme.typography.bodySmall)
   Button(onClick=onCheck,modifier=Modifier.fillMaxWidth()){Text("KIỂM TRA CẬP NHẬT")}
   OutlinedButton(onClick=onRollback,modifier=Modifier.fillMaxWidth()){Text("KHÔI PHỤC GÓI TRƯỚC")}
