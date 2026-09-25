@@ -1,6 +1,9 @@
 package vn.fieldintel.feature.emergency
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -49,7 +52,7 @@ data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracy
   when(section){
    AppSection.FIELD->{
     val status=if(position==null) "Đang chờ tín hiệu vệ tinh" else "%.5f, %.5f  •  ±%.0f m".format(position.latitude,position.longitude,position.accuracyM)
-    StatusCard("📍 Vị trí hiện tại",status);StatusCard("🥾 Hành trình",if(recording) "ĐANG GHI • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km" else "$trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km");Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(if(recording) "■  DỪNG GHI" else "▶  GHI HÀNH TRÌNH")};StatusCard("↩ TrackBack",if(trackBackBearingDeg==null) "Chưa đủ dữ liệu quay lại" else "${String.format("%.2f",trackBackRemainingM/1000.0)} km còn lại • hướng ${trackBackBearingDeg.toInt()}° • $breadcrumbCount mốc\nLệch dấu vết ${offTrackM.toInt()} m${if(offTrackM>50) " • CẢNH BÁO LỆCH TUYẾN" else ""}\nBám dấu vết cũ không bảo đảm điều kiện đường hiện tại.");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
+    StatusCard("📍 Vị trí hiện tại",status);StatusCard("🥾 Hành trình",if(recording) "ĐANG GHI • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km" else "$trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km");Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(if(recording) "■  DỪNG GHI" else "▶  GHI HÀNH TRÌNH")};TrackBackCompass(trackBackBearingDeg,offTrackM,breadcrumbCount);StatusCard("↩ TrackBack",if(trackBackBearingDeg==null) "Chưa đủ dữ liệu quay lại" else "${String.format("%.2f",trackBackRemainingM/1000.0)} km còn lại • hướng ${trackBackBearingDeg.toInt()}° • $breadcrumbCount mốc\nLệch dấu vết ${offTrackM.toInt()} m${if(offTrackM>50) " • CẢNH BÁO LỆCH TUYẾN" else ""}\nBám dấu vết cũ không bảo đảm điều kiện đường hiện tại.");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
    }
    AppSection.RECOGNITION->{StatusCard("🌿 Nhận dạng sinh học","Thực vật • động vật • côn trùng • nấm");Action("📷  CHỤP / CHỌN ẢNH");Text("Kết quả UNKNOWN luôn được phép khi bằng chứng chưa đủ.")}
    AppSection.SURVIVAL->{StatusCard("🧭 Hướng dẫn thực địa","Tìm nước • trú ẩn • lửa • định hướng");Action("TÌM NƯỚC");Action("LỀU TRẠI & TRÚ ẨN");Action("KỸ NĂNG SINH TỒN")}
@@ -62,3 +65,6 @@ data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracy
 }
 @Composable private fun StatusCard(title:String,text:String){Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(20.dp)){Column(Modifier.padding(18.dp)){Text(title,fontWeight=FontWeight.Bold);Spacer(Modifier.height(6.dp));Text(text)}}}
 @Composable private fun Action(text:String){Button(onClick={},modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(text)}}
+@Composable fun TrackBackCompass(bearing:Double?,offTrackM:Double,breadcrumbCount:Int){
+ Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp)){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){Text("DẪU VẾT QUAY LẠI",fontWeight=FontWeight.Bold);Canvas(Modifier.fillMaxWidth().height(150.dp)){val cx=size.width/2f;val cy=size.height/2f;val r=minOf(size.width,size.height)*0.38f;drawCircle(Color(0xFFE4EEE7),r,Offset(cx,cy));for(i in 0 until minOf(breadcrumbCount,12)){val a=Math.toRadians((i*30.0)-90.0);val rr=r*(0.25f+0.055f*i);drawCircle(Color(0xFF2E6B4E),5f,Offset(cx+(cos(a)*rr).toFloat(),cy+(sin(a)*rr).toFloat()))};if(bearing!=null){val a=Math.toRadians(bearing-90.0);drawLine(Color(0xFF163C2B),Offset(cx,cy),Offset(cx+(cos(a)*r*0.9).toFloat(),cy+(sin(a)*r*0.9).toFloat()),10f)}};Text(if(bearing==null)"Chưa đủ dữ liệu định hướng" else "Hướng kế tiếp ${bearing.toInt()}° • lệch ${offTrackM.toInt()} m")}}
+}
