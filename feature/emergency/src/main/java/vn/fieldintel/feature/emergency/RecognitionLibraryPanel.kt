@@ -1,6 +1,10 @@
 package vn.fieldintel.feature.emergency
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.asImageBitmap
@@ -13,8 +17,11 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+data class ObservationUi(val id:String,val note:String,val createdAt:Long,val photoPath:String)
+
 @Composable
-fun RecognitionPanel(imageStatus: String, preview: Bitmap?, onPickImage: () -> Unit, onCameraImage: () -> Unit) {
+fun RecognitionPanel(imageStatus: String, preview: Bitmap?, saveStatus:String, onPickImage: () -> Unit, onCameraImage: () -> Unit, onSaveObservation:(String)->Unit) {
+    var note by remember { mutableStateOf("") }
     Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("ẢNH KHẢO SÁT", fontWeight = FontWeight.Bold)
@@ -23,6 +30,11 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, onPickImage: () -> U
             OutlinedButton(onClick = onPickImage, modifier = Modifier.fillMaxWidth()) { Text("Chọn ảnh từ máy") }
             Text(imageStatus)
             if (preview != null) Image(bitmap = preview.asImageBitmap(), contentDescription = "Ảnh được chọn để đối chiếu thủ công", modifier = Modifier.fillMaxWidth().heightIn(max = 280.dp), contentScale = ContentScale.Fit)
+            if (preview != null) {
+                OutlinedTextField(value = note, onValueChange = { note = it.take(500) }, label = { Text("Ghi chú mẫu, địa điểm hoặc đặc điểm nhìn thấy") }, modifier = Modifier.fillMaxWidth())
+                Button(onClick = { onSaveObservation(note); note = "" }, enabled = note.isNotBlank(), modifier = Modifier.fillMaxWidth()) { Text("Lưu ghi nhận offline") }
+                if(saveStatus.isNotBlank()) Text(saveStatus)
+            }
             Text("KẾT QUẢ: CHƯA XÁC ĐỊNH", fontWeight = FontWeight.Bold)
             Text("Không suy ra tên loài, tính ăn được hay cách xử trí từ ảnh. Tra cứu thư viện theo tên chỉ để tham khảo nguồn phân loại.")
         }
@@ -30,7 +42,33 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, onPickImage: () -> U
 }
 
 @Composable
-fun SpeciesLibraryPanel() {
+fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList()) {
+    var selectedObservation by remember { mutableStateOf<String?>(null) }
+    val observation = observations.firstOrNull { it.id == selectedObservation }
+    if(observation != null) {
+        TextButton(onClick = { selectedObservation = null }) { Text("← Ghi nhận của tôi") }
+        Text(observation.note, style = MaterialTheme.typography.headlineSmall)
+        val thumbnail = remember(observation.photoPath) {
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeFile(observation.photoPath, bounds)
+            val options = BitmapFactory.Options().apply { inSampleSize = generateSequence(1) { it * 2 }.first { s -> maxOf(bounds.outWidth, bounds.outHeight) / s <= 512 } }
+            BitmapFactory.decodeFile(observation.photoPath, options)
+        }
+        if(thumbnail != null) Image(thumbnail.asImageBitmap(), "Ảnh ghi nhận offline", Modifier.fillMaxWidth().heightIn(max = 300.dp), contentScale = ContentScale.Fit)
+        Text("CHƯA XÁC ĐỊNH • ghi chú của người dùng, chưa được xác minh")
+        return
+    }
+    Text("GHI NHẬN CỦA TÔI • lưu trong máy", fontWeight = FontWeight.Bold)
+    if(observations.isEmpty()) Text("Chưa lưu mẫu quan sát.")
+    observations.take(20).forEach { record ->
+        Card(onClick = { selectedObservation = record.id }, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(12.dp)) {
+                Text(record.note)
+                Text(SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date(record.createdAt)) + " • CHƯA XÁC ĐỊNH")
+            }
+        }
+    }
+    HorizontalDivider()
     var query by remember { mutableStateOf("") }
     var group by remember { mutableStateOf("Tất cả") }
     var selectedId by remember { mutableStateOf<String?>(null) }
