@@ -1,0 +1,42 @@
+name: Build Private OSM Map Pilot
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/build-osm-pilot.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install regional extractor
+        run: sudo apt-get update && sudo apt-get install -y osmium-tool
+      - name: Download Vietnam OSM and generate bounded private pilot
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/osm-pilot
+          curl --fail --location --retry 3 --connect-timeout 30 --max-time 900 \
+            https://download.geofabrik.de/asia/vietnam-latest.osm.pbf -o dist/osm-pilot/vietnam.osm.pbf
+          sha256sum dist/osm-pilot/vietnam.osm.pbf > dist/osm-pilot/source.sha256
+          osmium extract -b 105.57,10.33,105.68,10.44 dist/osm-pilot/vietnam.osm.pbf \
+            -o dist/osm-pilot/region.osm.pbf
+          osmium cat dist/osm-pilot/region.osm.pbf -o dist/osm-pilot/region.osm
+          python3 tools/build_vector_pilot.py dist/osm-pilot/region.osm dist/osm-pilot/output \
+            --id osm-pilot-105-10 --bbox 10.33,105.57,10.44,105.68 --version 1
+          unzip -l dist/osm-pilot/output/offline-map.pack
+          python3 -m unittest discover -s tools -p 'test_*.py'
+      - name: Upload private review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: osm-pilot-review
+          path: |
+            dist/osm-pilot/output/*
+            dist/osm-pilot/source.sha256
+          retention-days: 7
