@@ -55,8 +55,7 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
  var confirmClear by remember { mutableStateOf(false) }
  val trackState = when { recording -> TrackSessionUiState.RECORDING; trackCount == 0 -> TrackSessionUiState.IDLE; trackStartedAt != null -> TrackSessionUiState.PAUSED; else -> TrackSessionUiState.FINISHED }
  Scaffold(containerColor=androidx.compose.ui.graphics.Color.Transparent,bottomBar={FieldBottomBar(current=section,onSelect=onSelect)}){pad->Column(Modifier.fillMaxSize().background(FieldBackground).padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
-  Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
-  Text(section.subtitle)
+  FieldSectionBanner(section,onBack)
   when(section){
    AppSection.FIELD->{
     val mapSize=if(mapPackBytes<1024) "$mapPackBytes B" else "${mapPackBytes/1024} KB"
