@@ -107,7 +107,8 @@ fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionU
             Text("SƠ ĐỒ VECTOR OFFLINE", fontWeight = FontWeight.Bold)
             Text("Sơ đồ vector chưa có địa hình hoặc chỉ dẫn. Không dùng để dẫn đường.", style = MaterialTheme.typography.bodySmall)
             Canvas(Modifier.fillMaxWidth().height(220.dp).pointerInput(Unit) { detectTransformGestures { _, pan, gestureZoom, _ -> zoom = (zoom * gestureZoom).coerceIn(1f, 8f); if (kotlin.math.abs(gestureZoom - 1f) < 0.001f && (pan.x != 0f || pan.y != 0f)) followGps = false; if (!followGps) { panX += pan.x; panY += pan.y } } }) {
-                val coords = breadcrumb.map { it.latitude to it.longitude } + mapPoints.map { it.latitude to it.longitude } + mapLines.flatMap { line -> line.points.map { it.latitude to it.longitude } } + mapPolygons.flatMap { polygon -> polygon.points.map { it.latitude to it.longitude } } + listOfNotNull(position?.let { it.latitude to it.longitude })
+                val mapCoords = mapPoints.map { it.latitude to it.longitude } + mapLines.flatMap { line -> line.points.map { it.latitude to it.longitude } } + mapPolygons.flatMap { polygon -> polygon.points.map { it.latitude to it.longitude } }
+                val coords = if (mapCoords.isNotEmpty()) mapCoords else breadcrumb.map { it.latitude to it.longitude } + listOfNotNull(position?.let { it.latitude to it.longitude })
                 if (coords.isNotEmpty()) {
                     val minLat = coords.minOf { it.first }; val maxLat = coords.maxOf { it.first }
                     val minLon = coords.minOf { it.second }; val maxLon = coords.maxOf { it.second }
@@ -119,8 +120,9 @@ fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionU
                     val scale = minOf(size.width.toDouble() / projectedWidth, size.height.toDouble() / projectedHeight) * 0.9
                     fun baseX(lon: Double) = size.width.toDouble() / 2.0 + (lon - midLon) * longitudeScale * scale
                     fun baseY(lat: Double) = size.height.toDouble() / 2.0 - (lat - midLat) * scale
-                    val gpsBaseX = position?.let { baseX(it.longitude) }
-                    val gpsBaseY = position?.let { baseY(it.latitude) }
+                    val gpsInMap = position != null && (mapCoords.isEmpty() || (position.latitude in minLat..maxLat && position.longitude in minLon..maxLon))
+                    val gpsBaseX = position?.takeIf { gpsInMap }?.let { baseX(it.longitude) }
+                    val gpsBaseY = position?.takeIf { gpsInMap }?.let { baseY(it.latitude) }
                     val followX = if (followGps && gpsBaseX != null) (size.width.toDouble() / 2.0 - ((gpsBaseX - size.width.toDouble() / 2.0) * zoom.toDouble() + size.width.toDouble() / 2.0)) else panX.toDouble()
                     val followY = if (followGps && gpsBaseY != null) (size.height.toDouble() / 2.0 - ((gpsBaseY - size.height.toDouble() / 2.0) * zoom.toDouble() + size.height.toDouble() / 2.0)) else panY.toDouble()
                     fun x(lon: Double) = (((baseX(lon) - size.width.toDouble() / 2.0) * zoom) + size.width.toDouble() / 2.0 + followX).toFloat()
@@ -129,10 +131,10 @@ fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionU
                     mapLines.forEach { line -> for (i in 1 until line.points.size) { val a=line.points[i-1]; val b=line.points[i]; drawLine(Color(0xFF607D68),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),4f) } }
                     mapPoints.forEach { drawCircle(Color(0xFF6A8F74), 6f, Offset(x(it.longitude), y(it.latitude))) }
                     for (i in 1 until breadcrumb.size) drawLine(Color(0xFF2E6B4E), Offset(x(breadcrumb[i-1].longitude), y(breadcrumb[i-1].latitude)), Offset(x(breadcrumb[i].longitude), y(breadcrumb[i].latitude)), 6f)
-                    position?.let { drawCircle(Color(0xFF163C2B), 10f, Offset(x(it.longitude), y(it.latitude))) }
+                    position?.takeIf { gpsInMap }?.let { drawCircle(Color(0xFF163C2B), 10f, Offset(x(it.longitude), y(it.latitude))) }
                 }
             }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Zoom ${String.format("%.1f", zoom)}× • ${if (followGps) "Theo GPS" else "Tự do"}"); TextButton(onClick = { followGps = true; panX = 0f; panY = 0f }) { Text("Vị trí hiện tại") }; TextButton(onClick = { zoom = 1f; panX = 0f; panY = 0f; followGps = true }) { Text("Căn lại") } }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Zoom ${String.format("%.1f", zoom)}× • ${if (followGps && position != null) "Theo GPS" else "Tự do"}"); TextButton(onClick = { followGps = true; panX = 0f; panY = 0f }) { Text("Vị trí hiện tại") }; TextButton(onClick = { zoom = 1f; panX = 0f; panY = 0f; followGps = true }) { Text("Căn lại") } }
             Text("${mapPoints.size} điểm • ${mapLines.size} đường • ${mapPolygons.size} vùng • ${breadcrumb.size} mốc hành trình • offline")
         }
     }
