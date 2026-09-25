@@ -44,8 +44,9 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, saveStatus:String, o
 @Composable
 fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteObservation:(String)->Unit={}) {
     var confirmDelete by remember { mutableStateOf<String?>(null) }
-    if(confirmDelete != null) AlertDialog(onDismissRequest={confirmDelete=null},title={Text("Xóa ghi nhận?")},text={Text("Ảnh và ghi chú sẽ bị xóa khỏi ứng dụng trên máy này.")},confirmButton={TextButton(onClick={val id=confirmDelete;confirmDelete=null;if(id!=null){onDeleteObservation(id);selectedObservation=null}}){Text("XÓA")}},dismissButton={TextButton(onClick={confirmDelete=null}){Text("HỦY")}})
+
     var selectedObservation by remember { mutableStateOf<String?>(null) }
+    if(confirmDelete != null) AlertDialog(onDismissRequest={confirmDelete=null},title={Text("Xóa ghi nhận?")},text={Text("Ảnh và ghi chú sẽ bị xóa khỏi ứng dụng trên máy này.")},confirmButton={TextButton(onClick={val id=confirmDelete;confirmDelete=null;if(id!=null){onDeleteObservation(id);selectedObservation=null}}){Text("XÓA")}},dismissButton={TextButton(onClick={confirmDelete=null}){Text("HỦY")}})
     val observation = observations.firstOrNull { it.id == selectedObservation }
     if(observation != null) {
         TextButton(onClick = { selectedObservation = null }) { Text("← Ghi nhận của tôi") }
