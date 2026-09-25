@@ -2,6 +2,8 @@ package vn.fieldintel.feature.emergency
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import kotlin.math.cos
@@ -76,17 +78,20 @@ data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
 
 @Composable
 fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionUi>, mapPoints: List<OfflineMapPointUi>, mapLines: List<OfflineMapLineUi>, mapPolygons: List<OfflineMapPolygonUi>) {
+    var zoom by remember { mutableFloatStateOf(1f) }
+    var panX by remember { mutableFloatStateOf(0f) }
+    var panY by remember { mutableFloatStateOf(0f) }
     Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("BẢN ĐỒ THỰC ĐỊA OFFLINE", fontWeight = FontWeight.Bold)
-            Canvas(Modifier.fillMaxWidth().height(220.dp)) {
+            Canvas(Modifier.fillMaxWidth().height(220.dp).pointerInput(Unit) { detectTransformGestures { _, pan, gestureZoom, _ -> zoom = (zoom * gestureZoom).coerceIn(1f, 8f); panX += pan.x; panY += pan.y } }) {
                 val coords = breadcrumb.map { it.latitude to it.longitude } + mapPoints.map { it.latitude to it.longitude } + mapLines.flatMap { line -> line.points.map { it.latitude to it.longitude } } + mapPolygons.flatMap { polygon -> polygon.points.map { it.latitude to it.longitude } } + listOfNotNull(position?.let { it.latitude to it.longitude })
                 if (coords.isNotEmpty()) {
                     val minLat = coords.minOf { it.first }; val maxLat = coords.maxOf { it.first }
                     val minLon = coords.minOf { it.second }; val maxLon = coords.maxOf { it.second }
                     val latSpan = (maxLat - minLat).coerceAtLeast(0.000001); val lonSpan = (maxLon - minLon).coerceAtLeast(0.000001)
-                    fun x(lon: Double) = ((lon - minLon) / lonSpan * size.width).toFloat()
-                    fun y(lat: Double) = (size.height - (lat - minLat) / latSpan * size.height).toFloat()
+                    fun x(lon: Double) = ((((lon - minLon) / lonSpan * size.width - size.width / 2f) * zoom) + size.width / 2f + panX).toFloat()
+                    fun y(lat: Double) = ((((size.height - (lat - minLat) / latSpan * size.height) - size.height / 2f) * zoom) + size.height / 2f + panY).toFloat()
                     mapPolygons.forEach { polygon -> if (polygon.points.size >= 3) { for (i in polygon.points.indices) { val a=polygon.points[i]; val b=polygon.points[(i+1)%polygon.points.size]; drawLine(Color(0xFF9BB8A5),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),3f) } } }
                     mapLines.forEach { line -> for (i in 1 until line.points.size) { val a=line.points[i-1]; val b=line.points[i]; drawLine(Color(0xFF607D68),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),4f) } }
                     mapPoints.forEach { drawCircle(Color(0xFF6A8F74), 6f, Offset(x(it.longitude), y(it.latitude))) }
@@ -94,6 +99,7 @@ fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionU
                     position?.let { drawCircle(Color(0xFF163C2B), 10f, Offset(x(it.longitude), y(it.latitude))) }
                 }
             }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Zoom ${String.format("%.1f", zoom)}×"); TextButton(onClick = { zoom = 1f; panX = 0f; panY = 0f }) { Text("Căn lại") } }
             Text("${mapPoints.size} điểm • ${mapLines.size} đường • ${mapPolygons.size} vùng • ${breadcrumb.size} mốc hành trình • offline")
         }
     }
