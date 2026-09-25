@@ -23,10 +23,12 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
 
 data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracyM:Float)
 data class OfflineMapPointUi(val latitude:Double,val longitude:Double,val label:String?=null)
+data class OfflineMapLineUi(val points:List<OfflineMapPointUi>)
+data class OfflineMapPolygonUi(val points:List<OfflineMapPointUi>)
 
-@Composable fun EmergencyScreen(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),onToggleTrack:()->Unit={}){ FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,onToggleTrack) }
+@Composable fun EmergencyScreen(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onToggleTrack:()->Unit={}){ FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,onToggleTrack) }
 
-@Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),onToggleTrack:()->Unit={}){
+@Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onToggleTrack:()->Unit={}){
  var selected by remember{mutableStateOf<AppSection?>(null)}
  if(selected!=null){SectionScreen(section=selected!!,position=position,recording=recording,trackCount=trackCount,trackDistanceM=trackDistanceM,trackStartedAt=trackStartedAt,trackBackRemainingM=trackBackRemainingM,trackBackBearingDeg=trackBackBearingDeg,onToggleTrack=onToggleTrack,onBack={selected=null});return}
  Scaffold(bottomBar={BottomBar()}){pad->
@@ -48,14 +50,14 @@ data class OfflineMapPointUi(val latitude:Double,val longitude:Double,val label:
 
 @Composable private fun BottomBar(){NavigationBar{NavigationBarItem(true,{},icon={Text("⌂")},label={Text("Trang chủ")});NavigationBarItem(false,{},icon={Text("🗺")},label={Text("Bản đồ")});NavigationBarItem(false,{},icon={Text("◎")},label={Text("Quét")});NavigationBarItem(false,{},icon={Text("▣")},label={Text("Lưu trữ")});NavigationBarItem(false,{},icon={Text("⚙")},label={Text("Cài đặt")})}}
 
-@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={}){
+@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,offTrackM:Double=0.0,breadcrumbCount:Int=0,breadcrumb:List<FieldPositionUi> = emptyList(),mapPackAvailable:Boolean=false,mapPackFiles:Int=0,mapPackBytes:Long=0,mapPoints:List<OfflineMapPointUi> = emptyList(),mapLines:List<OfflineMapLineUi> = emptyList(),mapPolygons:List<OfflineMapPolygonUi> = emptyList(),onBack:()->Unit,onToggleTrack:()->Unit={}){
  Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
   Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
   Text(section.subtitle)
   when(section){
    AppSection.FIELD->{
     val status=if(position==null) "Đang chờ tín hiệu vệ tinh" else "%.5f, %.5f  •  ±%.0f m".format(position.latitude,position.longitude,position.accuracyM)
-    StatusCard("📍 Vị trí hiện tại",status);StatusCard("🥾 Hành trình",if(recording) "ĐANG GHI • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km" else "$trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km");Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(if(recording) "■  DỪNG GHI" else "▶  GHI HÀNH TRÌNH")};StatusCard("🗺 Nền bản đồ offline",if(mapPackAvailable) "Đã nạp • $mapPackFiles tệp • ${mapPackBytes/1024/1024} MB" else "Chưa có map pack • breadcrumb vẫn hoạt động");OfflineMapCanvas(position,breadcrumb,mapPoints);TrackBackCompass(trackBackBearingDeg,offTrackM,breadcrumbCount);StatusCard("↩ TrackBack",if(trackBackBearingDeg==null) "Chưa đủ dữ liệu quay lại" else "${String.format("%.2f",trackBackRemainingM/1000.0)} km còn lại • hướng ${trackBackBearingDeg.toInt()}° • $breadcrumbCount mốc\nLệch dấu vết ${offTrackM.toInt()} m${if(offTrackM>50) " • CẢNH BÁO LỆCH TUYẾN" else ""}\nBám dấu vết cũ không bảo đảm điều kiện đường hiện tại.");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
+    StatusCard("📍 Vị trí hiện tại",status);StatusCard("🥾 Hành trình",if(recording) "ĐANG GHI • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km" else "$trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km");Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(16.dp)){Text(if(recording) "■  DỪNG GHI" else "▶  GHI HÀNH TRÌNH")};StatusCard("🗺 Nền bản đồ offline",if(mapPackAvailable) "Đã nạp • $mapPackFiles tệp • ${mapPackBytes/1024/1024} MB" else "Chưa có map pack • breadcrumb vẫn hoạt động");OfflineMapCanvas(position,breadcrumb,mapPoints,mapLines,mapPolygons);TrackBackCompass(trackBackBearingDeg,offTrackM,breadcrumbCount);StatusCard("↩ TrackBack",if(trackBackBearingDeg==null) "Chưa đủ dữ liệu quay lại" else "${String.format("%.2f",trackBackRemainingM/1000.0)} km còn lại • hướng ${trackBackBearingDeg.toInt()}° • $breadcrumbCount mốc\nLệch dấu vết ${offTrackM.toInt()} m${if(offTrackM>50) " • CẢNH BÁO LỆCH TUYẾN" else ""}\nBám dấu vết cũ không bảo đảm điều kiện đường hiện tại.");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")
    }
    AppSection.RECOGNITION->{StatusCard("🌿 Nhận dạng sinh học","Thực vật • động vật • côn trùng • nấm");Action("📷  CHỤP / CHỌN ẢNH");Text("Kết quả UNKNOWN luôn được phép khi bằng chứng chưa đủ.")}
    AppSection.SURVIVAL->{StatusCard("🧭 Hướng dẫn thực địa","Tìm nước • trú ẩn • lửa • định hướng");Action("TÌM NƯỚC");Action("LỀU TRẠI & TRÚ ẨN");Action("KỸ NĂNG SINH TỒN")}
@@ -73,24 +75,26 @@ data class OfflineMapPointUi(val latitude:Double,val longitude:Double,val label:
 }
 
 @Composable
-fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionUi>, mapPoints: List<OfflineMapPointUi>) {
+fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionUi>, mapPoints: List<OfflineMapPointUi>, mapLines: List<OfflineMapLineUi>, mapPolygons: List<OfflineMapPolygonUi>) {
     Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(22.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("BẢN ĐỒ THỰC ĐỊA OFFLINE", fontWeight = FontWeight.Bold)
             Canvas(Modifier.fillMaxWidth().height(220.dp)) {
-                val coords = breadcrumb.map { it.latitude to it.longitude } + mapPoints.map { it.latitude to it.longitude } + listOfNotNull(position?.let { it.latitude to it.longitude })
+                val coords = breadcrumb.map { it.latitude to it.longitude } + mapPoints.map { it.latitude to it.longitude } + mapLines.flatMap { line -> line.points.map { it.latitude to it.longitude } } + mapPolygons.flatMap { polygon -> polygon.points.map { it.latitude to it.longitude } } + listOfNotNull(position?.let { it.latitude to it.longitude })
                 if (coords.isNotEmpty()) {
                     val minLat = coords.minOf { it.first }; val maxLat = coords.maxOf { it.first }
                     val minLon = coords.minOf { it.second }; val maxLon = coords.maxOf { it.second }
                     val latSpan = (maxLat - minLat).coerceAtLeast(0.000001); val lonSpan = (maxLon - minLon).coerceAtLeast(0.000001)
                     fun x(lon: Double) = ((lon - minLon) / lonSpan * size.width).toFloat()
                     fun y(lat: Double) = (size.height - (lat - minLat) / latSpan * size.height).toFloat()
+                    mapPolygons.forEach { polygon -> if (polygon.points.size >= 3) { for (i in polygon.points.indices) { val a=polygon.points[i]; val b=polygon.points[(i+1)%polygon.points.size]; drawLine(Color(0xFF9BB8A5),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),3f) } } }
+                    mapLines.forEach { line -> for (i in 1 until line.points.size) { val a=line.points[i-1]; val b=line.points[i]; drawLine(Color(0xFF607D68),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),4f) } }
                     mapPoints.forEach { drawCircle(Color(0xFF6A8F74), 6f, Offset(x(it.longitude), y(it.latitude))) }
                     for (i in 1 until breadcrumb.size) drawLine(Color(0xFF2E6B4E), Offset(x(breadcrumb[i-1].longitude), y(breadcrumb[i-1].latitude)), Offset(x(breadcrumb[i].longitude), y(breadcrumb[i].latitude)), 6f)
                     position?.let { drawCircle(Color(0xFF163C2B), 10f, Offset(x(it.longitude), y(it.latitude))) }
                 }
             }
-            Text("${mapPoints.size} điểm nền • ${breadcrumb.size} mốc hành trình • offline")
+            Text("${mapPoints.size} điểm • ${mapLines.size} đường • ${mapPolygons.size} vùng • ${breadcrumb.size} mốc hành trình • offline")
         }
     }
 }
