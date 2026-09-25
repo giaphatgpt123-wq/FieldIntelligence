@@ -22,7 +22,7 @@ data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracy
 
 @Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null,recording:Boolean=false,trackCount:Int=0,trackDistanceM:Double=0.0,trackStartedAt:Long?=null,trackBackRemainingM:Double=0.0,trackBackBearingDeg:Double?=null,onToggleTrack:()->Unit={}){
  var selected by remember{mutableStateOf<AppSection?>(null)}
- if(selected!=null){SectionScreen(selected!!,position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,onToggleTrack){selected=null};return}
+ if(selected!=null){SectionScreen(section=selected!!,position=position,recording=recording,trackCount=trackCount,trackDistanceM=trackDistanceM,trackStartedAt=trackStartedAt,trackBackRemainingM=trackBackRemainingM,trackBackBearingDeg=trackBackBearingDeg,onToggleTrack=onToggleTrack,onBack={selected=null});return}
  Scaffold(bottomBar={BottomBar()}){pad->
   Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
    Text("VN SINH TỒN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
