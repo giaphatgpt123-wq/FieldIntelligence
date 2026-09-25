@@ -16,11 +16,11 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
  TRAINING("Huấn luyện","🎓","Học • mô phỏng • kiểm tra")
 }
 
-@Composable fun EmergencyScreen(){ FieldIntelligenceHome() }
+data class FieldPositionUi(val latitude:Double,val longitude:Double,val accuracyM:Float)\n\n@Composable fun EmergencyScreen(position:FieldPositionUi?=null){ FieldIntelligenceHome(position) }
 
-@Composable fun FieldIntelligenceHome(){
+@Composable fun FieldIntelligenceHome(position:FieldPositionUi?=null){
  var selected by remember{mutableStateOf<AppSection?>(null)}
- if(selected!=null){SectionScreen(selected!!){selected=null};return}
+ if(selected!=null){SectionScreen(selected!!,position){selected=null};return}
  Scaffold(bottomBar={BottomBar()}){pad->
   Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
    Text("VN SINH TỒN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold)
@@ -40,12 +40,12 @@ enum class AppSection(val label:String,val icon:String,val subtitle:String){
 
 @Composable private fun BottomBar(){NavigationBar{NavigationBarItem(true,{},icon={Text("⌂")},label={Text("Trang chủ")});NavigationBarItem(false,{},icon={Text("🗺")},label={Text("Bản đồ")});NavigationBarItem(false,{},icon={Text("◎")},label={Text("Quét")});NavigationBarItem(false,{},icon={Text("▣")},label={Text("Lưu trữ")});NavigationBarItem(false,{},icon={Text("⚙")},label={Text("Cài đặt")})}}
 
-@Composable fun SectionScreen(section:AppSection,onBack:()->Unit){
+@Composable fun SectionScreen(section:AppSection,position:FieldPositionUi?=null,onBack:()->Unit){
  Scaffold(bottomBar={BottomBar()}){pad->Column(Modifier.fillMaxSize().padding(pad).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
   Row(verticalAlignment=Alignment.CenterVertically){TextButton(onClick=onBack){Text("←")};Text(section.icon+"  "+section.label,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold)}
   Text(section.subtitle)
   when(section){
-   AppSection.FIELD->{StatusCard("📍 Vị trí hiện tại","Đang chờ dữ liệu GNSS thực");Action("▶  GHI HÀNH TRÌNH");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")}
+   AppSection.FIELD->{\n    val status=if(position==null) "Đang chờ tín hiệu vệ tinh" else "%.5f, %.5f  •  ±%.0f m".format(position.latitude,position.longitude,position.accuracyM)\n    StatusCard("📍 Vị trí hiện tại",status);Action("▶  GHI HÀNH TRÌNH");Action("📌  ĐÁNH DẤU VỊ TRÍ");Action("📏  ĐO KHOẢNG CÁCH")\n   }
    AppSection.RECOGNITION->{StatusCard("🌿 Nhận dạng sinh học","Thực vật • động vật • côn trùng • nấm");Action("📷  CHỤP / CHỌN ẢNH");Text("Kết quả UNKNOWN luôn được phép khi bằng chứng chưa đủ.")}
    AppSection.SURVIVAL->{StatusCard("🧭 Hướng dẫn thực địa","Tìm nước • trú ẩn • lửa • định hướng");Action("TÌM NƯỚC");Action("LỀU TRẠI & TRÚ ẨN");Action("KỸ NĂNG SINH TỒN")}
    AppSection.EMERGENCY->{StatusCard("🚨 SỰ CỐ","Emergency Core • ưu tiên offline");listOf("SƠ CỨU VẾT THƯƠNG","BỊ RẮN CẮN","CÔN TRÙNG ĐỐT","NGỘ ĐỘC","MẤT PHƯƠNG HƯỚNG","TAI NẠN TRÊN BIỂN").forEach{Action(it)}}
