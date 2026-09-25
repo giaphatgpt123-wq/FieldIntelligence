@@ -185,3 +185,11 @@ When returning from Work to Chat, update this file with:
 - Update flow now retains one fetched manifest/version; failed activation attempts to reinstall the prior active map package, or bundled map when no active package existed. Rollback installs the previous map before switching package metadata, with recovery attempt on error.
 - CI is a build check, not an on-device map-render verification. Private release URL, hardcoded package filename and test-vector basemap remain unresolved.
 - NEXT ACTION: check Build #144 conclusion and logs; fix failures. Then harden map/package transaction against process interruption and validate geometry records and duplicate ZIP entries before swap. Recheck CI and device map rendering.
+
+## Work audit and upgrade — 2026-09-25
+- Pre-handoff code HEAD a31af6a64b0f3494c2532e77a19a32e233b1df48. Android P0 Build #149 completed success: https://github.com/giaphatgpt123-wq/FieldIntelligence/actions/runs/36095840971. Earlier #146–#148 completed success.
+- Changed OfflineMapPack.kt and OfflineMapPackTest.kt: strict ZIP entry names, duplicate rejection, line/polygon minimum points, finite/bounded coordinate validation before swap, reject orphan geometry. Installed map no longer receives bundled bootstrap sample files on restart.
+- Changed EmergencyScreen.kt: scrollable Field screen exposes previously clipped map; data update copy now states scientific library/content updater is not yet implemented.
+- CI verifies unit tests and debug APK build; on-device map visibility and update interruption recovery remain unverified.
+- Known blockers: bundled Mekong vectors are test data only; private GitHub release cannot serve unauthenticated APK; package URL points to fixed offline-map-2.pack; app bottom navigation and several feature actions are placeholders; no production recognition model/library pipeline.
+- NEXT ACTION: verify map visibility on a device with the latest APK; provide safe public data-only host or backend by explicit authorization, then replace fixed package URL with manifest-derived safe asset location. Make map/package transaction crash recoverable, add a device/instrumentation test for install and rollback, and replace placeholder navigation/actions incrementally.
