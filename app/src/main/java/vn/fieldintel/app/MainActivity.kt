@@ -16,6 +16,8 @@ import vn.fieldintel.feature.emergency.FieldPositionUi
 class MainActivity:ComponentActivity(){
  private var latestFix by mutableStateOf<FieldFix?>(null)
  private lateinit var location:FieldLocationController
+ private lateinit var tracks:FieldTrackStore
+ private var recording=false
  private lateinit var track:TrackRecorder
  private var listener:android.location.LocationListener?=null
  private val permission=registerForActivityResult(ActivityResultContracts.RequestPermission()){granted->if(granted) startGnss()}
@@ -23,6 +25,7 @@ class MainActivity:ComponentActivity(){
   super.onCreate(savedInstanceState)
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
   location=FieldLocationController(this)
+  tracks=FieldTrackStore(this)
   track=TrackRecorder(this)
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
   setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)}) }
