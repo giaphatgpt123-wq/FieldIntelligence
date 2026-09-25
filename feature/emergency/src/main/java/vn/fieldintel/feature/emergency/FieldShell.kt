@@ -126,3 +126,29 @@ fun FieldBottomBar(current: AppSection?, onSelect: (AppSection?) -> Unit) {
         }
     }
 }
+
+@Composable
+fun FieldSectionBanner(section: AppSection, onBack: () -> Unit) {
+    val tone = when(section) {
+        AppSection.FIELD -> Color(0xFF225744)
+        AppSection.RECOGNITION -> Color(0xFF275841)
+        AppSection.SURVIVAL -> Color(0xFF68412C)
+        AppSection.EMERGENCY -> Color(0xFF753438)
+        AppSection.PREP -> Color(0xFF404A83)
+        AppSection.LIBRARY -> Color(0xFF245774)
+        else -> Color(0xFF365A63)
+    }
+    Card(shape = RoundedCornerShape(22.dp), modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = tone)) {
+        Column(Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(tone, Color(0xFF0D2930)))).padding(12.dp)) {
+            TextButton(onClick = onBack) { Text("←  Trang chủ") }
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.padding(horizontal = 8.dp)) {
+                Text(section.icon, style = MaterialTheme.typography.displaySmall)
+                Column {
+                    Text(section.label, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    Text(section.subtitle, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+        }
+    }
+}
