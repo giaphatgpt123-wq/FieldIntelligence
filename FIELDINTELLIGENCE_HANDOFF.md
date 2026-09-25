@@ -193,3 +193,9 @@ When returning from Work to Chat, update this file with:
 - CI verifies unit tests and debug APK build; on-device map visibility and update interruption recovery remain unverified.
 - Known blockers: bundled Mekong vectors are test data only; private GitHub release cannot serve unauthenticated APK; package URL points to fixed offline-map-2.pack; app bottom navigation and several feature actions are placeholders; no production recognition model/library pipeline.
 - NEXT ACTION: verify map visibility on a device with the latest APK; provide safe public data-only host or backend by explicit authorization, then replace fixed package URL with manifest-derived safe asset location. Make map/package transaction crash recoverable, add a device/instrumentation test for install and rollback, and replace placeholder navigation/actions incrementally.
+
+## Continuation — navigation and private update channel
+- Code HEAD 271f9f73ceac809185878fd13111e0d9e9d15095 (prior to this handoff edit). Android P0 Build #151 for navigation passed; CI for later commits pending at this checkpoint.
+- EmergencyScreen.kt: bottom tabs now open Home, Field, Recognition, Library and Settings; update controls moved from Training to Settings. Buttons without implemented actions show unavailable rather than silently doing nothing.
+- UpdateConfig.kt and MainActivity.kt: private repository release endpoint is disabled for unauthenticated APK, with a direct status explanation. Existing HTTPS URLs remain placeholders until a safe data-only endpoint is supplied. No repository access token is embedded.
+- NEXT ACTION: check latest CI on this handoff HEAD; fix failures. Establish an approved public data-only distribution endpoint or authenticated backend, then use stable package naming/manifest URL, validate redirects and resume update integration. Device check still needed for map visibility and navigation.
