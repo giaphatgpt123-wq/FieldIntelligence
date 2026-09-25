@@ -11,6 +11,12 @@ data class OfflineMapPackState(
     val valid: Boolean = true
 )
 
+data class OfflineMapFeature(
+    val latitude: Double,
+    val longitude: Double,
+    val label: String? = null
+)
+
 data class OfflineMapRegion(
     val id: String,
     val name: String,
@@ -49,6 +55,20 @@ class OfflineMapPack(context: Context) {
         regions().filter { it.contains(lat, lon) }.minByOrNull {
             (it.maxLat - it.minLat) * (it.maxLon - it.minLon)
         }
+
+    fun features(region: OfflineMapRegion): List<OfflineMapFeature> {
+        val featureFile = File(region.sourceFile.parentFile, region.id + ".points")
+        if (!featureFile.exists()) return emptyList()
+        return featureFile.readLines().mapNotNull { line ->
+            val parts = line.split("\t", limit = 3)
+            if (parts.size < 2) return@mapNotNull null
+            val lat = parts[0].toDoubleOrNull() ?: return@mapNotNull null
+            val lon = parts[1].toDoubleOrNull() ?: return@mapNotNull null
+            if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return@mapNotNull null
+            if (!region.contains(lat, lon)) return@mapNotNull null
+            OfflineMapFeature(lat, lon, parts.getOrNull(2)?.takeIf { it.isNotBlank() })
+        }
+    }
 
     fun rootPath(): String = root.absolutePath
 
