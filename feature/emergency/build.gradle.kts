@@ -18,4 +18,5 @@ android {
 dependencies {
     implementation(project(":domain:emergency"))
     implementation("androidx.compose.material3:material3:1.3.1")
+    testImplementation("junit:junit:4.13.2")
 }
