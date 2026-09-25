@@ -122,6 +122,11 @@ class OfflineMapPack(private val context: Context) {
         incoming.deleteRecursively(); incoming.mkdirs()
         try {
             ZipInputStream(packageFile.inputStream().buffered()).use { zip ->
+                var entryCount = 0
+                var totalBytes = 0L
+                val maxEntries = 256
+                val maxTotalBytes = 64L * 1024L * 1024L
+                val maxEntryBytes = 16L * 1024L * 1024L
                 while (true) {
                     val entry = zip.nextEntry ?: break
                     if (entry.isDirectory) continue
@@ -129,7 +134,21 @@ class OfflineMapPack(private val context: Context) {
                     val allowed = name.endsWith(".region", true) || name.endsWith(".points", true) ||
                         name.endsWith(".lines", true) || name.endsWith(".polygons", true)
                     if (!allowed || name != entry.name) continue
-                    File(incoming, name).outputStream().use { zip.copyTo(it) }
+                    require(++entryCount <= maxEntries) { "Gói bản đồ có quá nhiều tệp" }
+                    val target = File(incoming, name)
+                    target.outputStream().use { out ->
+                        val buffer = ByteArray(8192)
+                        var entryBytes = 0L
+                        while (true) {
+                            val read = zip.read(buffer)
+                            if (read <= 0) break
+                            entryBytes += read
+                            totalBytes += read
+                            require(entryBytes <= maxEntryBytes) { "Tệp bản đồ vượt giới hạn kích thước" }
+                            require(totalBytes <= maxTotalBytes) { "Gói bản đồ vượt giới hạn giải nén" }
+                            out.write(buffer, 0, read)
+                        }
+                    }
                 }
             }
             val regionFiles = incoming.listFiles()?.filter { it.extension.equals("region", true) }.orEmpty()
