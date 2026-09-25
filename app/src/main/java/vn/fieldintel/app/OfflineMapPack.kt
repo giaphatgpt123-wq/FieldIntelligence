@@ -136,18 +136,34 @@ class OfflineMapPack(private val context: Context) {
             require(regionFiles.isNotEmpty()) { "Gói không có region hợp lệ" }
             require(regionFiles.all { parseRegion(it) != null }) { "Region metadata không hợp lệ" }
             backup.deleteRecursively()
-            if (root.exists() && !root.renameTo(backup)) {
-                root.copyRecursively(backup, overwrite = true); root.deleteRecursively()
+            var swapStarted = false
+            try {
+                if (root.exists()) {
+                    if (!root.renameTo(backup)) {
+                        root.copyRecursively(backup, overwrite = true)
+                        root.deleteRecursively()
+                    }
+                }
+                swapStarted = true
+                if (!incoming.renameTo(root)) {
+                    incoming.copyRecursively(root, overwrite = true)
+                    incoming.deleteRecursively()
+                }
+                require(state().available) { "Gói bản đồ sau cài đặt không khả dụng" }
+                backup.deleteRecursively()
+            } catch (swapError: Exception) {
+                if (swapStarted) {
+                    root.deleteRecursively()
+                    if (backup.exists()) {
+                        if (!backup.renameTo(root)) {
+                            backup.copyRecursively(root, overwrite = true)
+                            backup.deleteRecursively()
+                        }
+                    } else root.mkdirs()
+                }
+                throw swapError
             }
-            if (!incoming.renameTo(root)) {
-                incoming.copyRecursively(root, overwrite = true); incoming.deleteRecursively()
-            }
-            backup.deleteRecursively()
         } catch (e: Exception) {
-            root.deleteRecursively()
-            if (backup.exists()) {
-                if (!backup.renameTo(root)) { backup.copyRecursively(root, overwrite = true); backup.deleteRecursively() }
-            } else root.mkdirs()
             incoming.deleteRecursively()
             throw e
         }
