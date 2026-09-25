@@ -33,8 +33,31 @@ data class OfflineMapRegion(
         lat in minLat..maxLat && lon in minLon..maxLon
 }
 
-class OfflineMapPack(context: Context) {
+class OfflineMapPack(private val context: Context) {
     private val root = File(context.filesDir, "offline-map").apply { mkdirs() }
+
+    init { bootstrapAssetsIfNeeded() }
+
+    private fun bootstrapAssetsIfNeeded() {
+        val assetDir = "offline-map"
+        val names = runCatching { context.assets.list(assetDir)?.toList().orEmpty() }.getOrDefault(emptyList())
+        names.filter { it.endsWith(".region", true) || it.endsWith(".points", true) || it.endsWith(".lines", true) || it.endsWith(".polygons", true) }
+            .forEach { name ->
+                val target = File(root, name)
+                if (!target.exists() || target.length() == 0L) {
+                    val temp = File(root, "$name.tmp")
+                    runCatching {
+                        context.assets.open("$assetDir/$name").use { input ->
+                            temp.outputStream().use { output -> input.copyTo(output) }
+                        }
+                        if (!temp.renameTo(target)) {
+                            temp.copyTo(target, overwrite = true)
+                            temp.delete()
+                        }
+                    }.onFailure { temp.delete() }
+                }
+            }
+    }
 
     fun regions(): List<OfflineMapRegion> = root.walkTopDown()
         .filter { it.isFile && it.extension.equals("region", ignoreCase = true) }
