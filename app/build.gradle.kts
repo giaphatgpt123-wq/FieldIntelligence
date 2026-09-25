@@ -11,8 +11,16 @@ android {
         applicationId = "vn.fieldintel.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0-p0"
+        versionCode = 2
+        versionName = "0.2.0-osm-pilot"
+        manifestPlaceholders["appLabel"] = "VN Sinh tồn"
+    }
+    buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".pilot"
+            versionNameSuffix = "-test"
+            manifestPlaceholders["appLabel"] = "VN Sinh tồn thử nghiệm"
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
