@@ -1,6 +1,11 @@
 name: Publish Data Update
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/src/main/assets/offline-map/**"
   workflow_dispatch:
     inputs:
       version:
