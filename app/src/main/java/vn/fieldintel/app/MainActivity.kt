@@ -23,6 +23,8 @@ class MainActivity:ComponentActivity(){
  private lateinit var location:FieldLocationController
  private lateinit var tracks:FieldTrackStore
  private lateinit var mapPack:OfflineMapPack
+ private lateinit var updates:DataUpdateManager
+ private var updateStatus by mutableStateOf("Sẵn sàng")
  private var activeMapRegionId:String?=null
  private var recording by mutableStateOf(false)
  private var trackSessionState by mutableStateOf(TrackSessionState.IDLE)
@@ -40,7 +42,7 @@ class MainActivity:ComponentActivity(){
  override fun onCreate(savedInstanceState:Bundle?){
   super.onCreate(savedInstanceState)
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
-  location=FieldLocationController(this); mapPack=OfflineMapPack(this); mapPackState=mapPack.state(); tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
+  location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); mapPackState=mapPack.state(); tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
   setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() }) }
  }
@@ -62,6 +64,25 @@ class MainActivity:ComponentActivity(){
   val state=mapPack.installUpdatePackage(packageFile)
   reloadOfflineMap()
   return state
+ }
+
+ fun applyDataUpdate(manifestUrl:String,packageUrl:String,appVersionCode:Int=1){
+  lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO){
+   val result=runCatching{
+    updateStatus="Đang kiểm tra cập nhật…"
+    val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
+    updateStatus="Đang tải và xác minh…"
+    val downloaded=updates.download(packageUrl,manifest,appVersionCode)
+    if(!downloaded.applied) error(downloaded.message)
+    val activated=updates.activateVersion(manifest.version)
+    if(!activated.applied) error(activated.message)
+    val active=updates.activePackage()?:error("Không tìm thấy gói active")
+    updateStatus="Đang cài bản đồ…"
+    installOfflineMapUpdate(active)
+    "Cập nhật thành công • dữ liệu đã nạp lại"
+   }.getOrElse{"Cập nhật thất bại • "+(it.message?:"không rõ lỗi")}
+   updateStatus=result
+  }
  }
 
  override fun onDestroy(){ listener?.let{location.stop(it)};listener=null;super.onDestroy() }
