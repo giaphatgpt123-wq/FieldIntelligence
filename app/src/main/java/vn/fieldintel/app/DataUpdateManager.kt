@@ -117,6 +117,8 @@ class DataUpdateManager(private val context: Context) {
         return activate(staged)
     }
 
+    fun previousPackage(): File? = File(previous, "current.pack").takeIf { it.exists() }
+
     fun activePackage(): File? = File(active, "current.pack").takeIf { it.exists() }
 
     fun rollback(): DataUpdateResult = runCatching {
