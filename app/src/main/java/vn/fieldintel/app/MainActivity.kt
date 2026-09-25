@@ -77,7 +77,7 @@ class MainActivity:ComponentActivity(){
    val result=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
     runCatching{
      val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
-     val downloaded=updates.download(packageUrl,manifest,BuildConfig.VERSION_CODE)
+     val downloaded=updates.download(packageUrl,manifest,packageManager.getPackageInfo(packageName,0).longVersionCode.toInt())
      if(!downloaded.applied) error(downloaded.message)
      val activated=updates.activateVersion(manifest.version)
      if(!activated.applied) error(activated.message)
