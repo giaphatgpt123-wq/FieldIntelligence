@@ -17,6 +17,9 @@ data class OfflineMapFeature(
     val label: String? = null
 )
 
+data class OfflineMapLine(val points: List<OfflineMapFeature>, val label: String? = null)
+data class OfflineMapPolygon(val points: List<OfflineMapFeature>, val label: String? = null)
+
 data class OfflineMapRegion(
     val id: String,
     val name: String,
@@ -67,6 +70,25 @@ class OfflineMapPack(context: Context) {
             if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return@mapNotNull null
             if (!region.contains(lat, lon)) return@mapNotNull null
             OfflineMapFeature(lat, lon, parts.getOrNull(2)?.takeIf { it.isNotBlank() })
+        }
+    }
+
+    fun lines(region: OfflineMapRegion): List<OfflineMapLine> = parseGeometry(File(region.sourceFile.parentFile, region.id + ".lines"), region).map { OfflineMapLine(it) }
+
+    fun polygons(region: OfflineMapRegion): List<OfflineMapPolygon> = parseGeometry(File(region.sourceFile.parentFile, region.id + ".polygons"), region).filter { it.size >= 3 }.map { OfflineMapPolygon(it) }
+
+    private fun parseGeometry(file: File, region: OfflineMapRegion): List<List<OfflineMapFeature>> {
+        if (!file.exists()) return emptyList()
+        return file.readLines().mapNotNull { line ->
+            val points = line.split(";").mapNotNull { token ->
+                val pair = token.trim().split(",", limit = 2)
+                if (pair.size != 2) return@mapNotNull null
+                val lat = pair[0].toDoubleOrNull() ?: return@mapNotNull null
+                val lon = pair[1].toDoubleOrNull() ?: return@mapNotNull null
+                if (!region.contains(lat, lon)) return@mapNotNull null
+                OfflineMapFeature(lat, lon)
+            }
+            points.takeIf { it.size >= 2 }
         }
     }
 
