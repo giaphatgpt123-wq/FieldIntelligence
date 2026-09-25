@@ -101,11 +101,27 @@ class DataUpdateManager(private val context: Context) {
     }
 
     fun activate(staged: File): DataUpdateResult = runCatching {
-        previous.deleteRecursively(); previous.mkdirs()
-        active.listFiles()?.forEach { it.copyTo(File(previous, it.name), overwrite = true) }
-        active.deleteRecursively(); active.mkdirs()
-        staged.copyTo(File(active, "current.pack"), overwrite = true)
-        DataUpdateResult(true, "Đã kích hoạt")
+        val current = File(active, "current.pack")
+        val old = File(previous, "current.pack")
+        val next = File(active, "next.pack")
+        val oldReady = File(previous, "previous-ready.pack")
+        try {
+            staged.copyTo(next, overwrite = true)
+            require(next.length() == staged.length()) { "Không sao chép đủ gói mới" }
+            if (current.exists()) {
+                current.copyTo(oldReady, overwrite = true)
+                require(oldReady.length() == current.length()) { "Không sao chép đủ gói cũ" }
+            }
+            // A failed rename must leave current.pack intact.
+            if (current.exists()) {
+                require(oldReady.renameTo(old)) { "Không lưu được gói trước" }
+            }
+            require(next.renameTo(current)) { "Không thay được gói đang hoạt động" }
+            DataUpdateResult(true, "Đã kích hoạt")
+        } finally {
+            next.delete()
+            oldReady.delete()
+        }
     }.getOrElse { DataUpdateResult(false, "Kích hoạt thất bại: ${it.message}") }
 
     fun stagedPackage(version: Int): File? =
@@ -117,6 +133,12 @@ class DataUpdateManager(private val context: Context) {
         return activate(staged)
     }
 
+    private val pendingMapSwap = File(root, "map-swap-pending")
+
+    fun markMapSwapPending() { pendingMapSwap.writeText("pending") }
+    fun needsMapRecovery(): Boolean = pendingMapSwap.exists()
+    fun finishMapSwap() { require(!pendingMapSwap.exists() || pendingMapSwap.delete()) { "Không thể xóa dấu khôi phục bản đồ" } }
+
     fun previousPackage(): File? = File(previous, "current.pack").takeIf { it.exists() }
 
     fun activePackage(): File? = File(active, "current.pack").takeIf { it.exists() }
@@ -124,8 +146,13 @@ class DataUpdateManager(private val context: Context) {
     fun rollback(): DataUpdateResult = runCatching {
         val old = File(previous, "current.pack")
         if (!old.exists()) return DataUpdateResult(false, "Không có bản để khôi phục")
-        old.copyTo(File(active, "current.pack"), overwrite = true)
-        DataUpdateResult(true, "Đã khôi phục")
+        val ready = File(active, "rollback-ready.pack")
+        try {
+            old.copyTo(ready, overwrite = true)
+            require(ready.length() == old.length()) { "Không sao chép đủ gói khôi phục" }
+            require(ready.renameTo(File(active, "current.pack"))) { "Không thay được gói đang hoạt động" }
+            DataUpdateResult(true, "Đã khôi phục")
+        } finally { ready.delete() }
     }.getOrElse { DataUpdateResult(false, "Khôi phục thất bại: ${it.message}") }
 
     private fun sha256(file: File): String {
