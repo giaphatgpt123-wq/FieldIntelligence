@@ -37,9 +37,16 @@ data class OfflineMapRegion(
 }
 
 class OfflineMapPack(private val context: Context) {
-    private val root = File(context.filesDir, "offline-map").apply { mkdirs() }
+    private val root = File(context.filesDir, "offline-map")
+    private val interruptedBackup = File(context.filesDir, "offline-map-backup")
 
-    init { bootstrapAssetsIfNeeded() }
+    init {
+        if (!root.exists() && interruptedBackup.exists()) {
+            runCatching { Files.move(interruptedBackup.toPath(), root.toPath(), StandardCopyOption.ATOMIC_MOVE) }
+        }
+        if (!root.exists() && !interruptedBackup.exists()) root.mkdirs()
+        if (root.exists()) bootstrapAssetsIfNeeded()
+    }
 
     private fun bootstrapAssetsIfNeeded() {
         if (root.listFiles()?.any { it.isFile && it.extension.equals("region", true) } == true) return
