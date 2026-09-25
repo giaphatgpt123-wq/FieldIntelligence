@@ -38,6 +38,7 @@ class MainActivity:ComponentActivity(){
  private var mapLines by mutableStateOf(emptyList<OfflineMapLineUi>())
  private var mapPolygons by mutableStateOf(emptyList<OfflineMapPolygonUi>())
  private var mapCredit by mutableStateOf<String?>(null)
+ private var mapCoverage by mutableStateOf<String?>(null)
  private var listener:android.location.LocationListener?=null
  private val sessionPrefs by lazy { getSharedPreferences("field-session", MODE_PRIVATE) }
  private val permission=registerForActivityResult(ActivityResultContracts.RequestPermission()){granted->if(granted) startGnss()}
@@ -46,21 +47,30 @@ class MainActivity:ComponentActivity(){
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
   location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); recoverMapSwapIfNeeded(); mapPackState=mapPack.state(); tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,mapCredit,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ rollbackDataUpdate() }) }
+  setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,mapCredit,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ rollbackDataUpdate() },mapCoverage) }
  }
  override fun onStart(){ super.onStart(); if(::location.isInitialized && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() }
  override fun onStop(){ listener?.let{location.stop(it)}; listener=null; super.onStop() }
- private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;val region=mapPack.regionFor(it.latitude,it.longitude);if(region?.id!=activeMapRegionId){activeMapRegionId=region?.id;mapCredit=if(region?.id?.startsWith("osm-")==true) "© OpenStreetMap contributors • ODbL 1.0" else null;mapPoints=region?.let{r->mapPack.features(r).map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)}}?:emptyList();mapLines=region?.let{r->mapPack.lines(r).map{line->OfflineMapLineUi(line.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList();mapPolygons=region?.let{r->mapPack.polygons(r).map{poly->OfflineMapPolygonUi(poly.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()};trackBack=TrackBack.state(tracks.load(),it);if(recording && tracks.append(it)){val s=tracks.summary();trackCount=s.points;trackDistanceM=s.distanceM;trackStartedAt=s.startedAt}} }
+ private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;val region=mapPack.regionFor(it.latitude,it.longitude);if(region?.id!=activeMapRegionId){activeMapRegionId=region?.id;mapCoverage=coverageDescription(region);mapCredit=if(region?.id?.startsWith("osm-")==true) "© OpenStreetMap contributors • ODbL 1.0" else null;mapPoints=region?.let{r->mapPack.features(r).map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)}}?:emptyList();mapLines=region?.let{r->mapPack.lines(r).map{line->OfflineMapLineUi(line.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList();mapPolygons=region?.let{r->mapPack.polygons(r).map{poly->OfflineMapPolygonUi(poly.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()};trackBack=TrackBack.state(tracks.load(),it);if(recording && tracks.append(it)){val s=tracks.summary();trackCount=s.points;trackDistanceM=s.distanceM;trackStartedAt=s.startedAt}} }
  private fun reloadOfflineMap(){
   mapPackState=mapPack.state()
   val fix=latestFix
-  if(fix==null){activeMapRegionId=null;mapCredit=null;mapPoints=emptyList();mapLines=emptyList();mapPolygons=emptyList();return}
+  if(fix==null){activeMapRegionId=null;mapCoverage=null;mapCredit=null;mapPoints=emptyList();mapLines=emptyList();mapPolygons=emptyList();return}
   val region=mapPack.regionFor(fix.latitude,fix.longitude)
   activeMapRegionId=region?.id
+  mapCoverage=coverageDescription(region)
   mapCredit=if(region?.id?.startsWith("osm-")==true) "© OpenStreetMap contributors • ODbL 1.0" else null
   mapPoints=region?.let{r->mapPack.features(r).map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)}}?:emptyList()
   mapLines=region?.let{r->mapPack.lines(r).map{line->OfflineMapLineUi(line.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()
   mapPolygons=region?.let{r->mapPack.polygons(r).map{poly->OfflineMapPolygonUi(poly.points.map{p->OfflineMapPointUi(p.latitude,p.longitude,p.label)})}}?:emptyList()
+ }
+
+ private fun coverageDescription(region:OfflineMapRegion?):String {
+  if(region!=null) return "Trong vùng ${region.name}: %.5f–%.5f°B, %.5f–%.5f°Đ".format(region.minLat,region.maxLat,region.minLon,region.maxLon)
+  val regions=mapPack.regions()
+  if(regions.isEmpty()) return "Không có vùng bản đồ hợp lệ trong gói."
+  val bounds=regions.take(2).joinToString("; ") { "%.5f–%.5f°B, %.5f–%.5f°Đ".format(it.minLat,it.maxLat,it.minLon,it.maxLon) }
+  return "GPS ngoài vùng bản đồ đã nạp ($bounds). ${regions.size} vùng khả dụng; chưa có đường tại tọa độ hiện tại."
  }
 
  fun installOfflineMapUpdate(packageFile:java.io.File):OfflineMapPackState{
