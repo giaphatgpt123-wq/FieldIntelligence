@@ -28,6 +28,6 @@ class MainActivity:ComponentActivity(){
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
   setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,{recording=!recording}) }
  }
- private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;if(recording){tracks.append(it);trackCount=tracks.load().size}} }
+ private fun startGnss(){ if(listener==null) listener=location.start{latestFix=it;if(recording && tracks.append(it)){trackCount++}} }
  override fun onDestroy(){ listener?.let{location.stop(it)};super.onDestroy() }
 }
