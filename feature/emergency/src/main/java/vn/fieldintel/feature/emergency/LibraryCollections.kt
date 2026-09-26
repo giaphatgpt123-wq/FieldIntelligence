@@ -86,6 +86,13 @@ object LibraryCollections {
             recordIds = setOf("apis-cerana", "aedes-aegypti", "vespa-tropica")
         ),
         LibraryCollection(
+            id = "freshwater-fish",
+            label = "Cá nước ngọt",
+            icon = "🐟",
+            subtitle = "20 hồ sơ tên loài • một số loài chịu nước lợ",
+            recordIds = FreshwaterFishCatalog.records.mapTo(linkedSetOf()) { it.id }
+        ),
+        LibraryCollection(
             id = "animals",
             label = "Động vật",
             icon = "🐾",
