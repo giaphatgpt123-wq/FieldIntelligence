@@ -133,6 +133,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     var selectedObservation by remember { mutableStateOf<String?>(null) }
     var query by remember { mutableStateOf("") }
     var group by remember { mutableStateOf("Tất cả") }
+    var selectedCollectionId by remember { mutableStateOf<String?>(null) }
     var selectedId by remember { mutableStateOf<String?>(null) }
 
     if(confirmDelete != null) AlertDialog(
@@ -159,47 +160,78 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         return
     }
 
-    val starterResults = remember(query, group) { SpeciesCatalog.search(query, group) }
-    val externalResults = remember(query, group, storeStatus.installed) {
-        if (storeStatus.installed && query.trim().length >= 2) store.search(query, group, 80) else emptyList()
+    val selectedCollection = LibraryCollections.byId(selectedCollectionId)
+    val curatedResults = remember(selectedCollectionId, query) {
+        selectedCollectionId?.let { id ->
+            val needle = query.trim().lowercase(Locale.ROOT)
+            LibraryCollections.recordsFor(id).filter { record ->
+                needle.isBlank() || record.vietnameseName.lowercase(Locale.ROOT).contains(needle) || record.scientificName.lowercase(Locale.ROOT).contains(needle)
+            }
+        }.orEmpty()
     }
-    val results = if (externalResults.isNotEmpty()) externalResults else starterResults
+    val starterResults = remember(query, group) { SpeciesCatalog.search(query, group) }
+    val externalResults = remember(query, group, storeStatus.installed, selectedCollectionId) {
+        if (selectedCollectionId == null && storeStatus.installed && query.trim().length >= 2) store.search(query, group, 80) else emptyList()
+    }
+    val results = when {
+        selectedCollection != null -> curatedResults
+        externalResults.isNotEmpty() -> externalResults
+        else -> starterResults
+    }
     val totalCount = if (storeStatus.installed && storeStatus.recordCount > 0) storeStatus.recordCount else SpeciesCatalog.records.size.toLong()
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         LibraryHero(totalCount, storeStatus, observations.size)
-        LibraryGroupGrid(group) { group = it }
+        LibraryGroupGrid(group) {
+            group = it
+            selectedCollectionId = null
+        }
+        LibraryCollectionGrid(selectedCollectionId) { id ->
+            selectedCollectionId = if (selectedCollectionId == id) null else id
+            group = "Tất cả"
+            query = ""
+        }
 
         Card(Modifier.fillMaxWidth(), shape=RoundedCornerShape(26.dp), colors=CardDefaults.cardColors(containerColor=Color(0xFF0C272C)), border=BorderStroke(1.dp, Color(0x3345E58C))) {
             Column(Modifier.padding(16.dp), verticalArrangement=Arrangement.spacedBy(12.dp)) {
                 Row(verticalAlignment=Alignment.CenterVertically) {
-                    Text("TRA CỨU KHOA HỌC", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleLarge)
-                    Spacer(Modifier.weight(1f))
+                    Column(Modifier.weight(1f)) {
+                        Text(if(selectedCollection==null) "TRA CỨU KHOA HỌC" else selectedCollection.label.uppercase(Locale.ROOT), fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleLarge)
+                        if(selectedCollection!=null) Text(selectedCollection.subtitle, color=FieldColors.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
+                    }
                     Surface(shape=RoundedCornerShape(999.dp), color=if(storeStatus.installed) Color(0x263EEA91) else Color(0x332F3436)) {
-                        Text(if(storeStatus.installed) "DATABASE READY" else "STARTER DATA", Modifier.padding(horizontal=10.dp,vertical=6.dp), color=if(storeStatus.installed) FieldColors.primary else FieldColors.onSurfaceVariant, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.labelSmall)
+                        Text(if(selectedCollection!=null) "CURATED" else if(storeStatus.installed) "DATABASE READY" else "STARTER DATA", Modifier.padding(horizontal=10.dp,vertical=6.dp), color=if(storeStatus.installed || selectedCollection!=null) FieldColors.primary else FieldColors.onSurfaceVariant, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.labelSmall)
                     }
                 }
                 OutlinedTextField(
                     value=query, onValueChange={query=it.take(120)},
-                    label={Text(if(storeStatus.installed) "Tên khoa học (ít nhất 2 ký tự)" else "Tên Việt hoặc tên khoa học")},
+                    label={Text(if(selectedCollection!=null) "Lọc trong bộ sưu tập" else if(storeStatus.installed) "Tên khoa học (ít nhất 2 ký tự)" else "Tên Việt hoặc tên khoa học")},
                     leadingIcon={Text("⌕", style=MaterialTheme.typography.headlineSmall)},
                     modifier=Modifier.fillMaxWidth().heightIn(min=60.dp), singleLine=true, shape=RoundedCornerShape(20.dp)
                 )
                 Text(
-                    if(storeStatus.installed) "Đang dùng gói WFO ${storeStatus.sourceVersion.ifBlank { "offline" }} • ${formatCount(storeStatus.recordCount)} hồ sơ taxonomy"
-                    else "Chưa cài gói SQLite khoa học lớn • đang dùng ${SpeciesCatalog.records.size} hồ sơ lõi trong APK",
+                    when {
+                        selectedCollection!=null -> "${selectedCollection.recordIds.size} hồ sơ lõi đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
+                        storeStatus.installed -> "Đang dùng gói WFO ${storeStatus.sourceVersion.ifBlank { "offline" }} • ${formatCount(storeStatus.recordCount)} hồ sơ taxonomy"
+                        else -> "Chưa cài gói SQLite khoa học lớn • đang dùng ${SpeciesCatalog.records.size} hồ sơ lõi trong APK"
+                    },
                     color=FieldColors.onSurfaceVariant, style=MaterialTheme.typography.bodySmall
                 )
             }
         }
 
-        if(query.isBlank() && storeStatus.installed) {
-            SafetyBanner("Nhập tên khoa học để tra trong ${formatCount(storeStatus.recordCount)} hồ sơ. CSDL lớn không tự liệt kê toàn bộ để tránh tải nặng giao diện.")
-        } else if(results.isEmpty()) {
-            SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy trong dữ liệu không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
-        } else {
-            Text("KẾT QUẢ • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
-            results.take(80).forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
+        when {
+            selectedCollection != null && results.isEmpty() -> SafetyBanner("${selectedCollection.label}: chưa có hồ sơ đủ điều kiện trong bộ dữ liệu hiện tại. Ứng dụng không tự gắn nhãn y khoa/độc tính chỉ từ taxonomy.")
+            selectedCollection != null -> {
+                Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
+                results.forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
+            }
+            query.isBlank() && storeStatus.installed -> SafetyBanner("Nhập tên khoa học để tra trong ${formatCount(storeStatus.recordCount)} hồ sơ. CSDL lớn không tự liệt kê toàn bộ để tránh tải nặng giao diện.")
+            results.isEmpty() -> SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy trong dữ liệu không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
+            else -> {
+                Text("KẾT QUẢ • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
+                results.take(80).forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
+            }
         }
 
         HorizontalDivider()
@@ -248,7 +280,7 @@ private fun MetricBox(value:String,label:String,modifier:Modifier=Modifier){
 @Composable
 private fun LibraryGroupGrid(selected:String,onSelect:(String)->Unit){
     val items=listOf(
-        Triple("Tất cả","◈","Tất cả nguồn"), Triple("Thực vật","🌿","Cây • cỏ • dược liệu"), Triple("Động vật","🐾","Động vật hoang dã"),
+        Triple("Tất cả","◈","Tất cả nguồn"), Triple("Thực vật","🌿","Cây • cỏ • taxonomy"), Triple("Động vật","🐾","Động vật hoang dã"),
         Triple("Côn trùng","🐝","Côn trùng • chân khớp"), Triple("Nấm","🍄","Nấm • taxonomy"))
     Text("PHÂN LOẠI NHANH",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
     items.chunked(2).forEach { row ->
@@ -256,6 +288,27 @@ private fun LibraryGroupGrid(selected:String,onSelect:(String)->Unit){
             row.forEach { (name,icon,subtitle) ->
                 Card(onClick={onSelect(name)},modifier=Modifier.weight(1f).heightIn(min=112.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=if(selected==name) Color(0xFF17473E) else Color(0xFF102C33)),border=BorderStroke(1.dp,if(selected==name) Color(0x7745E58C) else Color.White.copy(alpha=.06f))) {
                     Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){Text(icon,style=MaterialTheme.typography.headlineMedium);Text(name,fontWeight=FontWeight.Black);Text(subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant)}
+                }
+            }
+            if(row.size==1) Spacer(Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun LibraryCollectionGrid(selectedId:String?,onSelect:(String)->Unit){
+    Text("BỘ SƯU TẬP CHUYÊN SÂU",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
+    Text("Nhãn chuyên sâu chỉ lấy từ lớp dữ liệu đã được gắn rõ; taxonomy toàn cầu không tự suy ra công dụng hoặc độc tính.",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+    LibraryCollections.items.chunked(2).forEach { row ->
+        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+            row.forEach { item ->
+                val selected=selectedId==item.id
+                Card(onClick={onSelect(item.id)},modifier=Modifier.weight(1f).heightIn(min=124.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=if(selected) Color(0xFF3B3725) else Color(0xFF102C33)),border=BorderStroke(1.dp,if(selected) Color(0x88FFC857) else Color.White.copy(alpha=.06f))) {
+                    Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){
+                        Row(verticalAlignment=Alignment.CenterVertically){Text(item.icon,style=MaterialTheme.typography.headlineMedium);Spacer(Modifier.weight(1f));Surface(shape=RoundedCornerShape(999.dp),color=Color(0x221FFFFFF)){Text(item.recordIds.size.toString(),Modifier.padding(horizontal=8.dp,vertical=4.dp),fontWeight=FontWeight.Black,color=if(item.recordIds.isEmpty()) Color(0xFFFFC857) else FieldColors.primary)}}
+                        Text(item.label,fontWeight=FontWeight.Black)
+                        Text(item.subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant,maxLines=2)
+                    }
                 }
             }
             if(row.size==1) Spacer(Modifier.weight(1f))
@@ -281,12 +334,18 @@ private fun SpeciesResultCard(record:SpeciesRecord,onClick:()->Unit){
 
 @Composable
 private fun SpeciesDetailCard(selected:SpeciesRecord,uriHandler:androidx.compose.ui.platform.UriHandler){
+    val collections=remember(selected.id){LibraryCollections.items.filter{selected.id in it.recordIds}}
     Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(28.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33)),border=BorderStroke(1.dp,Color(0x3345E58C))){
         Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
             Surface(shape=RoundedCornerShape(20.dp),color=Color(0x2245E58C)){Text(groupIcon(selected.group),Modifier.padding(16.dp),style=MaterialTheme.typography.headlineLarge)}
             Text(selected.vietnameseName,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Black)
             Text(selected.scientificName,fontWeight=FontWeight.Bold,color=FieldColors.primary,style=MaterialTheme.typography.titleMedium)
             Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){InfoChip(selected.group);InfoChip("TAXONOMY")}
+            if(collections.isNotEmpty()) {
+                Text("BỘ SƯU TẬP",fontWeight=FontWeight.Black)
+                collections.chunked(2).forEach{row->Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){row.forEach{InfoChip(it.label)}}}
+                Text("Các nhãn trên dùng để điều hướng thư viện, không phải bằng chứng về công dụng, ăn được hoặc độc tính.",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+            }
             HorizontalDivider()
             Text("NGUỒN KHOA HỌC",fontWeight=FontWeight.Black)
             Text(selected.sourceName,fontWeight=FontWeight.Bold)
