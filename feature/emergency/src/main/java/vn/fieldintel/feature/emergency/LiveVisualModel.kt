@@ -96,7 +96,7 @@ object LiveVisualTargetMatcher {
         val requestedScientific = normalize(target.scientificName.orEmpty())
 
         return when {
-            requestedScientific.isNotBlank() && scientific.isNotBlank() -> requestedScientific == scientific
+            requestedScientific.isNotBlank() -> scientific.isNotBlank() && requestedScientific == scientific
             q == label -> true
             q == scientific -> true
             else -> false
