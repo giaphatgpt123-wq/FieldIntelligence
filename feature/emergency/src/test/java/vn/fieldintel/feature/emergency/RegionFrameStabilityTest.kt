@@ -52,4 +52,13 @@ class RegionFrameStabilityTest {
         assertFalse(gate.shouldCapture(3_200_000_000L, frame(3_200_000_000L, 90)))
         assertTrue(gate.shouldCapture(3_500_000_000L, frame(3_500_000_000L, 90)))
     }
+
+    @Test
+    fun ineligibleRecognitionDoesNotConsumeCaptureCooldown() {
+        val gate = RegionFrameStabilityGate(stableFramesRequired = 2, minimumIntervalNanos = 2_000_000_000L)
+
+        assertFalse(gate.shouldCapture(1_000_000_000L, frame(1_000_000_000L, 90), captureEligible = false))
+        assertFalse(gate.shouldCapture(1_300_000_000L, frame(1_300_000_000L, 90), captureEligible = false))
+        assertTrue(gate.shouldCapture(1_600_000_000L, frame(1_600_000_000L, 90), captureEligible = true))
+    }
 }
