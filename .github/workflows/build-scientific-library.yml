@@ -87,7 +87,7 @@ jobs:
           db.close()
           assert integrity == 'ok', integrity
           assert row_count == p['recordCount'], (row_count, p['recordCount'])
-          assert meta['scope'] == 'taxonomy-only'
+          assert meta['scope'] == 'taxonomy-media-occurrence'
           assert meta['medicalClaimsIncluded'] is False
 
           evidence_db = sqlite3.connect('build/scientific-library/specialist-evidence.sqlite')
@@ -113,7 +113,7 @@ jobs:
           root = 'build/scientific-library'
           files = []
           for name, schema, scope in [
-              ('wfo-taxonomy.sqlite', 1, 'taxonomy-only'),
+              ('wfo-taxonomy.sqlite', 2, 'taxonomy-media-occurrence'),
               ('specialist-evidence.sqlite', 2, 'specialist-evidence-only'),
           ]:
               path = os.path.join(root, name)
@@ -171,7 +171,7 @@ jobs:
           root = 'build/mobile-library'
           files = []
           for name, schema, scope in [
-              ('wfo-taxonomy.sqlite', 1, 'taxonomy-only'),
+              ('wfo-taxonomy.sqlite', 2, 'taxonomy-media-occurrence'),
               ('specialist-evidence.sqlite', 2, 'specialist-evidence-only'),
           ]:
               path = os.path.join(root, name)
