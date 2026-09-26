@@ -48,7 +48,7 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, saveStatus:String, o
                     }
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
-                        Text("QUÉT NHẬN DẠNG", fontWeight = FontWeight.Black, style = MaterialTheme.typography.titleLarge)
+                        Text("QUÉT NHẬN DẠNG", fontWeight = FontWeight.Black, style = MaterialTheme.typography.titleLarge, color = Color.White)
                         Text("Chụp rõ mẫu vật • lưu bằng chứng offline", color = FieldColors.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
                     }
                     Surface(shape = RoundedCornerShape(999.dp), color = Color(0xFF123A35), border = BorderStroke(1.dp, Color(0x5545E58C))) {
@@ -72,7 +72,7 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, saveStatus:String, o
                                 Surface(shape = CircleShape, color = Color(0x1F45E58C), border = BorderStroke(1.dp, Color(0x5545E58C))) {
                                     Box(Modifier.size(92.dp), contentAlignment = Alignment.Center) { Text("◎", style = MaterialTheme.typography.displayMedium, color = FieldColors.primary) }
                                 }
-                                Text("Đưa mẫu vật vào khung", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
+                                Text("Đưa mẫu vật vào khung", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = Color.White)
                                 Text("Giữ máy ổn định • đủ sáng • chụp thêm góc khác khi cần", color = Color.White.copy(alpha=.78f), textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 34.dp))
                             }
                         }
@@ -106,7 +106,7 @@ fun RecognitionPanel(imageStatus: String, preview: Bitmap?, saveStatus:String, o
                     Surface(shape = RoundedCornerShape(10.dp), color = Color(0x3324E98A)) { Text("KẾT QUẢ", Modifier.padding(horizontal=10.dp,vertical=6.dp), color=FieldColors.primary, fontWeight=FontWeight.Bold) }
                     Spacer(Modifier.weight(1f)); Text("CHƯA XÁC ĐỊNH", color=Color(0xFFFFD166), fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
                 }
-                Text("Chưa có mô hình nhận dạng ảnh đã được kiểm chứng trong bản hiện tại.", fontWeight=FontWeight.Bold)
+                Text("Chưa có mô hình nhận dạng ảnh đã được kiểm chứng trong bản hiện tại.", fontWeight=FontWeight.Bold, color=Color.White)
                 Text("Ảnh này chỉ được dùng làm bằng chứng thực địa và đối chiếu thủ công. Ứng dụng không tự suy ra tên loài, tính ăn được, độc tính hoặc xử trí y khoa.", color=FieldColors.onSurfaceVariant)
             }
         }
