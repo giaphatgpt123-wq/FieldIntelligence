@@ -47,7 +47,9 @@ fun EmergencyScreen(
  saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},onOpenRegionScan:()->Unit={}
 ){
  MaterialTheme(colorScheme=FieldColors){
+  CompositionLocalProvider(LocalContentColor provides Color.White) {
   FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onToggleTrack,onFinishTrack,onClearTrack,updateStatus,onCheckUpdate,onRollbackUpdate,mapCoverage,imageStatus,imagePreview,onPickImage,onCameraImage,observations,saveStatus,onSaveObservation,onDeleteObservation,onOpenRegionScan)
+  }
  }
 }
 
@@ -186,7 +188,7 @@ private fun TrainingPanel(){
 
 @Composable
 private fun SectionIntroCard(icon:String,title:String,subtitle:String,accent:Color){
- Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(26.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))){
+ Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(26.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31),contentColor=Color.White)){
   Box(Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(accent.copy(alpha=.20f),Color.Transparent)))){
    Row(Modifier.padding(18.dp),verticalAlignment=Alignment.CenterVertically){
     Surface(shape=RoundedCornerShape(18.dp),color=accent.copy(alpha=.16f)){Box(Modifier.size(58.dp),contentAlignment=Alignment.Center){Text(icon,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Black,color=Color.White)}}
@@ -198,7 +200,7 @@ private fun SectionIntroCard(icon:String,title:String,subtitle:String,accent:Col
 
 @Composable
 private fun SectionTile(icon:String,title:String,subtitle:String,accent:Color,modifier:Modifier=Modifier){
- Card(onClick={},enabled=false,modifier=modifier.heightIn(min=126.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(disabledContainerColor=Color(0xFF112E35),disabledContentColor=Color.White)){
+ Card(onClick={},enabled=false,modifier=modifier.heightIn(min=126.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(disabledContainerColor=Color(0xFF112E35),disabledContentColor=Color.White,contentColor=Color.White)){
   Column(Modifier.fillMaxSize().padding(15.dp),verticalArrangement=Arrangement.SpaceBetween){
    Surface(shape=CircleShape,color=accent.copy(alpha=.14f)){Box(Modifier.size(44.dp),contentAlignment=Alignment.Center){Text(icon,style=MaterialTheme.typography.titleLarge)}}
    Column{Text(title,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Spacer(Modifier.height(3.dp));Text(subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant)}
@@ -208,22 +210,21 @@ private fun SectionTile(icon:String,title:String,subtitle:String,accent:Color,mo
 
 @Composable
 private fun EmergencyRow(icon:String,title:String,subtitle:String){
- Surface(modifier=Modifier.fillMaxWidth().heightIn(min=78.dp),shape=RoundedCornerShape(20.dp),color=Color(0xFF172B31),border=androidx.compose.foundation.BorderStroke(1.dp,Color(0x33FF7C84))){
+ Surface(modifier=Modifier.fillMaxWidth().heightIn(min=78.dp),shape=RoundedCornerShape(20.dp),color=Color(0xFF172B31),contentColor=Color.White,border=androidx.compose.foundation.BorderStroke(1.dp,Color(0x33FF7C84))){
   Row(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalAlignment=Alignment.CenterVertically){
    Surface(shape=CircleShape,color=Color(0x22FF7C84)){Box(Modifier.size(48.dp),contentAlignment=Alignment.Center){Text(icon,style=MaterialTheme.typography.titleLarge)}}
-   Spacer(Modifier.width(13.dp));Column(Modifier.weight(1f)){Text(title,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Text(subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant)}
-   Text("›",style=MaterialTheme.typography.headlineMedium,color=Color(0xFFFF9AA0))
+   Spacer(Modifier.width(13.dp));Column(Modifier.weight(1f)){Text(title,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium,color=Color.White);Text(subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant);Text("Chưa có hướng dẫn đã kiểm chứng",style=MaterialTheme.typography.labelSmall,color=Color(0xFFFFD166))}
   }
  }
 }
 
 @Composable
 private fun ChecklistRow(icon:String,title:String,subtitle:String,priority:Boolean){
- Surface(modifier=Modifier.fillMaxWidth().heightIn(min=76.dp),shape=RoundedCornerShape(20.dp),color=Color(0xFF142D36)){
+ Surface(modifier=Modifier.fillMaxWidth().heightIn(min=76.dp),shape=RoundedCornerShape(20.dp),color=Color(0xFF142D36),contentColor=Color.White){
   Row(Modifier.fillMaxWidth().padding(14.dp),verticalAlignment=Alignment.CenterVertically){
    Surface(shape=RoundedCornerShape(16.dp),color=Color(0x22B9ABFF)){Box(Modifier.size(48.dp),contentAlignment=Alignment.Center){Text(icon,style=MaterialTheme.typography.titleLarge)}}
    Spacer(Modifier.width(13.dp));Column(Modifier.weight(1f)){Row(verticalAlignment=Alignment.CenterVertically){Text(title,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);if(priority){Spacer(Modifier.width(8.dp));Surface(shape=RoundedCornerShape(999.dp),color=Color(0x22FFD166)){Text("ƯU TIÊN",Modifier.padding(horizontal=8.dp,vertical=3.dp),style=MaterialTheme.typography.labelSmall,color=Color(0xFFFFD166),fontWeight=FontWeight.Bold)}}};Text(subtitle,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)}
-   Text("□",style=MaterialTheme.typography.headlineSmall,color=Color(0xFFB9ABFF))
+   Text("•",style=MaterialTheme.typography.headlineSmall,color=Color(0xFFB9ABFF))
   }
  }
 }
@@ -236,7 +237,7 @@ private fun SafetyNote(text:String){
 }
 
 @Composable private fun FieldPositionPanel(position:FieldPositionUi?){
- Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102F35))){
+ Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102F35),contentColor=Color.White)){
   Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
    Row(verticalAlignment=Alignment.CenterVertically){Surface(shape=CircleShape,color=Color(0x2245E58C)){Text("📍",Modifier.padding(12.dp),style=MaterialTheme.typography.headlineSmall)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f)){Text("VỊ TRÍ HIỆN TẠI",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Text(if(position==null)"Đang chờ tín hiệu vệ tinh" else "GPS đã khóa vị trí",color=if(position==null) Color(0xFFFFC857) else FieldColors.primary,style=MaterialTheme.typography.bodyMedium)}}
    if(position!=null){Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){FieldMetricChip("Vĩ độ","%.5f".format(position.latitude),Modifier.weight(1f));FieldMetricChip("Kinh độ","%.5f".format(position.longitude),Modifier.weight(1f));FieldMetricChip("Sai số","±%.0f m".format(position.accuracyM),Modifier.weight(1f))}} else Text("Hãy ra khu vực thoáng để nhận tín hiệu tốt hơn. Các dữ liệu offline vẫn sử dụng được.",color=FieldColors.onSurfaceVariant)
@@ -244,12 +245,12 @@ private fun SafetyNote(text:String){
  }
 }
 
-@Composable private fun FieldMetricChip(label:String,value:String,modifier:Modifier=Modifier){Surface(modifier=modifier,shape=RoundedCornerShape(16.dp),color=Color(0xFF173D43)){Column(Modifier.padding(horizontal=10.dp,vertical=11.dp),horizontalAlignment=Alignment.CenterHorizontally){Text(label,style=MaterialTheme.typography.labelSmall,color=FieldColors.onSurfaceVariant);Text(value,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.bodyMedium)}}}
+@Composable private fun FieldMetricChip(label:String,value:String,modifier:Modifier=Modifier){Surface(modifier=modifier,shape=RoundedCornerShape(16.dp),color=Color(0xFF173D43),contentColor=Color.White){Column(Modifier.padding(horizontal=10.dp,vertical=11.dp),horizontalAlignment=Alignment.CenterHorizontally){Text(label,style=MaterialTheme.typography.labelSmall,color=FieldColors.onSurfaceVariant);Text(value,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.bodyMedium,color=Color.White)}}}
 
-@Composable private fun FieldInfoCard(icon:String,title:String,text:String,accent:Color){Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))){Row(Modifier.padding(16.dp),verticalAlignment=Alignment.Top){Surface(shape=CircleShape,color=accent.copy(alpha=.14f)){Text(icon,Modifier.padding(11.dp),style=MaterialTheme.typography.titleLarge)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f)){Text(title,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Spacer(Modifier.height(4.dp));Text(text,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodyMedium)}}}}
+@Composable private fun FieldInfoCard(icon:String,title:String,text:String,accent:Color){Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))){Row(Modifier.padding(16.dp),verticalAlignment=Alignment.Top){Surface(shape=CircleShape,color=accent.copy(alpha=.14f)){Text(icon,Modifier.padding(11.dp),style=MaterialTheme.typography.titleLarge)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f)){Text(title,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium,color=Color.White);Spacer(Modifier.height(4.dp));Text(text,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodyMedium)}}}}
 
 @Composable private fun FieldTrackPanel(trackState:TrackSessionUiState,recording:Boolean,trackCount:Int,trackDistanceM:Double,onToggleTrack:()->Unit,onFinishTrack:()->Unit,onClear:()->Unit){
- Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){Row(verticalAlignment=Alignment.CenterVertically){Text("🥾",style=MaterialTheme.typography.headlineSmall);Spacer(Modifier.width(10.dp));Column(Modifier.weight(1f)){Text("HÀNH TRÌNH",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Text("${trackState.name} • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km",color=FieldColors.onSurfaceVariant)}};Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth().heightIn(min=62.dp),shape=RoundedCornerShape(18.dp)){Text(if(recording) "■  DỪNG GHI HÀNH TRÌNH" else "▶  BẮT ĐẦU GHI HÀNH TRÌNH",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleSmall)};Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)){OutlinedButton(onClick=onFinishTrack,enabled=trackCount>0,modifier=Modifier.weight(1f).heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text("✓ KẾT THÚC",fontWeight=FontWeight.Bold)};OutlinedButton(onClick=onClear,enabled=trackCount>0,modifier=Modifier.weight(1f).heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text("🗑 XÓA",fontWeight=FontWeight.Bold)}}}}
+ Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){Row(verticalAlignment=Alignment.CenterVertically){Text("🥾",style=MaterialTheme.typography.headlineSmall);Spacer(Modifier.width(10.dp));Column(Modifier.weight(1f)){Text("HÀNH TRÌNH",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium,color=Color.White);Text("${trackState.name} • $trackCount điểm • ${String.format("%.2f",trackDistanceM/1000.0)} km",color=FieldColors.onSurfaceVariant)}};Button(onClick=onToggleTrack,modifier=Modifier.fillMaxWidth().heightIn(min=62.dp),shape=RoundedCornerShape(18.dp)){Text(if(recording) "■  DỪNG GHI HÀNH TRÌNH" else "▶  BẮT ĐẦU GHI HÀNH TRÌNH",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleSmall)};Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)){OutlinedButton(onClick=onFinishTrack,enabled=trackCount>0,modifier=Modifier.weight(1f).heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text("✓ KẾT THÚC",fontWeight=FontWeight.Bold)};OutlinedButton(onClick=onClear,enabled=trackCount>0,modifier=Modifier.weight(1f).heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text("🗑 XÓA",fontWeight=FontWeight.Bold)}}}}
 }
 
 @Composable private fun LargeFieldAction(icon:String,label:String,modifier:Modifier=Modifier){Button(onClick={},enabled=false,modifier=modifier.heightIn(min=68.dp),shape=RoundedCornerShape(18.dp),contentPadding=PaddingValues(horizontal=12.dp,vertical=10.dp)){Column(horizontalAlignment=Alignment.CenterHorizontally){Text(icon,style=MaterialTheme.typography.titleLarge);Text(label,style=MaterialTheme.typography.labelLarge,fontWeight=FontWeight.Bold)}}}
@@ -257,9 +258,9 @@ private fun SafetyNote(text:String){
 @Composable fun UpdateSettingsPanel(mapPackAvailable:Boolean,mapPackFiles:Int,mapPackBytes:Long,status:String="Sẵn sàng",onCheck:()->Unit={},onRollback:()->Unit={}){
  SectionIntroCard("⚙","CẬP NHẬT DỮ LIỆU","Kiểm tra, kích hoạt và khôi phục gói dữ liệu an toàn.",Color(0xFF8CCBFF))
  Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))){Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-  Row(verticalAlignment=Alignment.CenterVertically){Text("🗺️",style=MaterialTheme.typography.headlineSmall);Spacer(Modifier.width(10.dp));Column(Modifier.weight(1f)){Text("Bản đồ offline",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Text(if(mapPackAvailable) "$mapPackFiles tệp • ${mapPackBytes/1024/1024} MB" else "Chưa có dữ liệu",color=if(mapPackAvailable) FieldColors.primary else Color(0xFFFFC857))}}
+  Row(verticalAlignment=Alignment.CenterVertically){Text("🗺️",style=MaterialTheme.typography.headlineSmall);Spacer(Modifier.width(10.dp));Column(Modifier.weight(1f)){Text("Bản đồ offline",fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium,color=Color.White);Text(if(mapPackAvailable) "$mapPackFiles tệp • ${mapPackBytes/1024/1024} MB" else "Chưa có dữ liệu",color=if(mapPackAvailable) FieldColors.primary else Color(0xFFFFC857))}}
   HorizontalDivider(color=Color.White.copy(alpha=.08f))
-  Text("Trạng thái",style=MaterialTheme.typography.labelMedium,color=FieldColors.onSurfaceVariant);Text(status,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.bodyLarge)
+  Text("Trạng thái",style=MaterialTheme.typography.labelMedium,color=FieldColors.onSurfaceVariant);Text(status,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.bodyLarge,color=Color.White)
   Button(onClick=onCheck,modifier=Modifier.fillMaxWidth().heightIn(min=60.dp),shape=RoundedCornerShape(18.dp)){Text("↻  KIỂM TRA CẬP NHẬT",fontWeight=FontWeight.ExtraBold)}
   OutlinedButton(onClick=onRollback,modifier=Modifier.fillMaxWidth().heightIn(min=58.dp),shape=RoundedCornerShape(18.dp)){Text("↩  KHÔI PHỤC GÓI TRƯỚC",fontWeight=FontWeight.Bold)}
  }}
