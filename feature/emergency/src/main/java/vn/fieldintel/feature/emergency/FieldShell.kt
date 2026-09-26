@@ -26,17 +26,17 @@ val FieldColors = darkColorScheme(
     primary = Color(0xFF52E99A),
     onPrimary = Color(0xFF022A1B),
     secondary = Color(0xFFA9E2D0),
-    background = Color(0xFF06191E),
+    background = Color(0xFF19434A),
     onBackground = Color(0xFFF6FBF8),
-    surface = Color(0xFF102B32),
+    surface = Color(0xFF24545C),
     onSurface = Color(0xFFF6FBF8),
-    surfaceVariant = Color(0xFF193740),
+    surfaceVariant = Color(0xFF31656B),
     onSurfaceVariant = Color(0xFFD5E6E0),
     outline = Color(0xFF6A8587)
 )
 
 val FieldBackground = Brush.verticalGradient(
-    listOf(Color(0xFF06191E), Color(0xFF071E23), Color(0xFF051418))
+    listOf(Color(0xFF316D74), Color(0xFF20545B), Color(0xFF19434A))
 )
 
 private data class HomeTileStyle(
@@ -53,17 +53,6 @@ private fun tileStyle(section: AppSection): HomeTileStyle = when (section) {
     AppSection.EMERGENCY -> HomeTileStyle(Color(0xFFD47A72), Color(0xFF9D454D), Color(0xFF5C2630), Color(0xFFFF9A93))
     AppSection.PREP -> HomeTileStyle(Color(0xFF8E84C9), Color(0xFF62589B), Color(0xFF383461), Color(0xFFD2C9FF))
     else -> HomeTileStyle(Color(0xFF62A0C6), Color(0xFF2F7099), Color(0xFF174764), Color(0xFFA5DAFF))
-}
-
-private fun sectionGlyph(section: AppSection): String = when (section) {
-    AppSection.FIELD -> "⌖"
-    AppSection.RECOGNITION -> "◎"
-    AppSection.SURVIVAL -> "△"
-    AppSection.EMERGENCY -> "SOS"
-    AppSection.PREP -> "✓"
-    AppSection.LIBRARY -> "▤"
-    AppSection.TRAINING -> "◇"
-    AppSection.SETTINGS -> "⚙"
 }
 
 @Composable
@@ -85,8 +74,8 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
                         listOf(
                             Color.Transparent,
                             Color(0x22040F11),
-                            Color(0xB805171A),
-                            Color(0xF205171A)
+                            Color(0x8505171A),
+                            Color(0xDD05171A)
                         )
                     )
                 )
@@ -234,7 +223,7 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
         ) {
             Surface(shape = RoundedCornerShape(18.dp), color = Color(0x2252E99A)) {
                 Box(Modifier.size(56.dp), contentAlignment = Alignment.Center) {
-                    Text(sectionGlyph(AppSection.TRAINING), style = MaterialTheme.typography.headlineSmall, color = FieldColors.primary, fontWeight = FontWeight.Black)
+                    FieldIcon(AppSection.TRAINING, Modifier.size(31.dp), FieldColors.primary)
                 }
             }
             Spacer(Modifier.width(14.dp))
@@ -254,7 +243,7 @@ private fun ScenicHero() {
     Canvas(
         Modifier.fillMaxSize().background(
             Brush.verticalGradient(
-                listOf(Color(0xFF93CEDA), Color(0xFF4A8086), Color(0xFF285B53), Color(0xFF12362F))
+                listOf(Color(0xFFB5E5EC), Color(0xFF79BCC3), Color(0xFF4A8D80), Color(0xFF225B4B))
             )
         )
     ) {
@@ -340,12 +329,7 @@ private fun DemoHomeTile(section: AppSection, modifier: Modifier = Modifier, onC
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     Surface(shape = RoundedCornerShape(17.dp), color = Color(0x65041317), border = BorderStroke(1.dp, Color.White.copy(alpha = .11f))) {
                         Box(Modifier.size(52.dp), contentAlignment = Alignment.Center) {
-                            Text(
-                                sectionGlyph(section),
-                                style = if (section == AppSection.EMERGENCY) MaterialTheme.typography.titleSmall else MaterialTheme.typography.headlineSmall,
-                                color = Color.White,
-                                fontWeight = FontWeight.Black
-                            )
+                            FieldIcon(section, Modifier.size(30.dp), Color.White)
                         }
                     }
                     Surface(shape = CircleShape, color = Color(0x44041317)) {
@@ -366,28 +350,28 @@ private fun DemoHomeTile(section: AppSection, modifier: Modifier = Modifier, onC
 @Composable
 fun FieldBottomBar(current: AppSection?, onSelect: (AppSection?) -> Unit) {
     Surface(
-        color = Color(0xF2081D22),
+        color = Color(0xFFF0FAF6),
         shadowElevation = 18.dp,
         tonalElevation = 2.dp,
-        border = BorderStroke(1.dp, Color.White.copy(alpha = .07f))
+        border = BorderStroke(1.dp, Color(0xFFB5D8D0))
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().navigationBarsPadding().height(96.dp).padding(horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            BottomItem("⌂", "Trang chủ", current == null, false) { onSelect(null) }
-            BottomItem("⌖", "Bản đồ", current == AppSection.FIELD, false) { onSelect(AppSection.FIELD) }
-            BottomItem("◎", "Quét", current == AppSection.RECOGNITION, true) { onSelect(AppSection.RECOGNITION) }
-            BottomItem("▤", "Lưu trữ", current == AppSection.LIBRARY, false) { onSelect(AppSection.LIBRARY) }
-            BottomItem("⚙", "Cài đặt", current == AppSection.SETTINGS, false) { onSelect(AppSection.SETTINGS) }
+            BottomItem(null, "Trang chủ", current == null, false) { onSelect(null) }
+            BottomItem(AppSection.FIELD, "Bản đồ", current == AppSection.FIELD, false) { onSelect(AppSection.FIELD) }
+            BottomItem(AppSection.RECOGNITION, "Quét", current == AppSection.RECOGNITION, true) { onSelect(AppSection.RECOGNITION) }
+            BottomItem(AppSection.LIBRARY, "Lưu trữ", current == AppSection.LIBRARY, false) { onSelect(AppSection.LIBRARY) }
+            BottomItem(AppSection.SETTINGS, "Cài đặt", current == AppSection.SETTINGS, false) { onSelect(AppSection.SETTINGS) }
         }
     }
 }
 
 @Composable
 private fun RowScope.BottomItem(
-    icon: String,
+    icon: AppSection?,
     label: String,
     selected: Boolean,
     emphasized: Boolean,
@@ -403,23 +387,18 @@ private fun RowScope.BottomItem(
                 shape = CircleShape,
                 color = when {
                     emphasized -> FieldColors.primary
-                    selected -> Color(0x2B52E99A)
+                    selected -> Color(0xFFCEEDE0)
                     else -> Color.Transparent
                 },
                 border = when {
-                    emphasized -> BorderStroke(4.dp, Color(0xFF0B2C2C))
+                    emphasized -> BorderStroke(3.dp, Color(0xFF9EE1BE))
                     selected -> BorderStroke(1.dp, Color(0x5552E99A))
                     else -> null
                 },
                 shadowElevation = if (emphasized) 10.dp else 0.dp
             ) {
                 Box(Modifier.size(if (emphasized) 64.dp else 46.dp), contentAlignment = Alignment.Center) {
-                    Text(
-                        icon,
-                        style = if (emphasized) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge,
-                        color = if (emphasized) FieldColors.onPrimary else if (selected) FieldColors.primary else FieldColors.onSurfaceVariant,
-                        fontWeight = FontWeight.Black
-                    )
+                    FieldIcon(icon, Modifier.size(if (emphasized) 29.dp else 25.dp), if (emphasized) FieldColors.onPrimary else Color(0xFF1D575A))
                 }
             }
             Spacer(Modifier.height(3.dp))
@@ -427,7 +406,7 @@ private fun RowScope.BottomItem(
                 label,
                 style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
-                color = if (selected || emphasized) FieldColors.primary else FieldColors.onSurfaceVariant,
+                color = Color(0xFF15474B),
                 fontWeight = if (selected || emphasized) FontWeight.ExtraBold else FontWeight.Medium
             )
         }
@@ -487,12 +466,7 @@ fun FieldSectionBanner(section: AppSection, onBack: () -> Unit) {
                 ) {
                     Surface(shape = RoundedCornerShape(20.dp), color = Color(0x26000000), border = BorderStroke(1.dp, Color.White.copy(alpha = .08f))) {
                         Box(Modifier.size(66.dp), contentAlignment = Alignment.Center) {
-                            Text(
-                                sectionGlyph(section),
-                                style = if (section == AppSection.EMERGENCY) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium,
-                                color = Color.White,
-                                fontWeight = FontWeight.Black
-                            )
+                            FieldIcon(section, Modifier.size(38.dp), Color.White)
                         }
                     }
                     Column(Modifier.weight(1f)) {
