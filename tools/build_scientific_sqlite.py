@@ -189,6 +189,13 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
         source_meta = {}
         if source_meta_path and source_meta_path.is_file():
             source_meta = json.loads(source_meta_path.read_text(encoding="utf-8"))
+        fish_taxa = db.execute("SELECT COUNT(*) FROM taxon WHERE library_group = ?", ("Cá nước ngọt",)).fetchone()[0]
+        fish_with_media = db.execute("""SELECT COUNT(*) FROM taxon t
+            WHERE t.library_group = ? AND EXISTS (
+                SELECT 1 FROM species_media m
+                WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id
+            )""", ("Cá nước ngọt",)).fetchone()[0]
+        fish_pending_media = fish_taxa - fish_with_media
         meta = {
             "schemaVersion": SCHEMA_VERSION,
             "recordCount": count,
@@ -199,6 +206,10 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
             "sourceLicense": source_meta.get("license", ""),
             "scope": "taxonomy-media-occurrence",
             "mediaRecordCount": media_count,\n            "recordsWithMedia": db.execute("SELECT COUNT(DISTINCT source_id || char(31) || source_record_id) FROM species_media").fetchone()[0],
+            "fishTaxa": fish_taxa,
+            "fishWithMedia": fish_with_media,
+            "fishPendingMedia": fish_pending_media,
+            "fishPublishRule": "requires-at-least-one-licensed-media",
             "vernacularNameCount": vernacular_count,
             "occurrenceSummaryCount": occurrence_count,
             "medicalClaimsIncluded": False,
