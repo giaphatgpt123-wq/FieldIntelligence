@@ -1,6 +1,13 @@
 name: Build Scientific Library
 
 on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "tools/fetch_wfo_backbone.py"
+      - "tools/test_fetch_wfo_backbone.py"
+      - "tools/full_scientific_sources.json"
+      - ".github/workflows/build-scientific-library.yml"
   workflow_dispatch:
   schedule:
     - cron: "17 2 * * 1"
