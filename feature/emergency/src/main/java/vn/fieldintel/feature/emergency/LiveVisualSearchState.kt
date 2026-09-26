@@ -53,17 +53,23 @@ data class LiveVisualSearchUiState(
 object LiveVisualSearchReducer {
     fun start(target: LiveVisualSearchTarget, modelReady: Boolean): LiveVisualSearchUiState {
         require(target.isValid) { "Mục tiêu tìm kiếm phải có ít nhất 2 ký tự" }
+        val resolvedTarget = if (target.speciesId == null && target.scientificName == null) {
+            LiveVisualTargetResolver.resolveStarter(target.query)
+        } else {
+            target
+        }
+        val targetMessage = resolvedTarget.scientificName?.let { " Mục tiêu chuẩn hóa: $it." }.orEmpty()
         return if (modelReady) {
             LiveVisualSearchUiState(
                 phase = LiveVisualSearchPhase.SCANNING,
-                target = target,
-                message = "Đang quét môi trường xung quanh. Lia camera chậm và giữ đủ sáng."
+                target = resolvedTarget,
+                message = "Đang quét môi trường xung quanh. Lia camera chậm và giữ đủ sáng.$targetMessage"
             )
         } else {
             LiveVisualSearchUiState(
                 phase = LiveVisualSearchPhase.MODEL_NOT_READY,
-                target = target,
-                message = "Camera có thể quét trực tiếp, nhưng mô hình nhận dạng đã kiểm chứng chưa được cài. Không tạo kết quả giả."
+                target = resolvedTarget,
+                message = "Camera có thể quét trực tiếp, nhưng mô hình nhận dạng đã kiểm chứng chưa được cài. Không tạo kết quả giả.$targetMessage"
             )
         }
     }
