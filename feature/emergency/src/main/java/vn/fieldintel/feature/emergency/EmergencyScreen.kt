@@ -44,11 +44,11 @@ fun EmergencyScreen(
  mapCredit:String?=null,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",
  onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},mapCoverage:String?=null,imageStatus:String="Chưa chọn ảnh",
  imagePreview:android.graphics.Bitmap?=null,onPickImage:()->Unit={},onCameraImage:()->Unit={},observations:List<ObservationUi> = emptyList(),
- saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},onOpenRegionScan:()->Unit={}
+ saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={}
 ){
  MaterialTheme(colorScheme=FieldColors){
   CompositionLocalProvider(LocalContentColor provides Color.White) {
-  FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onToggleTrack,onFinishTrack,onClearTrack,updateStatus,onCheckUpdate,onRollbackUpdate,mapCoverage,imageStatus,imagePreview,onPickImage,onCameraImage,observations,saveStatus,onSaveObservation,onDeleteObservation,onOpenRegionScan)
+  FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onToggleTrack,onFinishTrack,onClearTrack,updateStatus,onCheckUpdate,onRollbackUpdate,mapCoverage,imageStatus,imagePreview,onPickImage,onCameraImage,observations,saveStatus,onSaveObservation,onDeleteObservation)
   }
  }
 }
@@ -62,16 +62,16 @@ fun FieldIntelligenceHome(
  mapCredit:String?=null,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",
  onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},mapCoverage:String?=null,imageStatus:String="Chưa chọn ảnh",
  imagePreview:android.graphics.Bitmap?=null,onPickImage:()->Unit={},onCameraImage:()->Unit={},observations:List<ObservationUi> = emptyList(),
- saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},onOpenRegionScan:()->Unit={}
+ saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={}
 ){
  var selected by remember{mutableStateOf<AppSection?>(null)}
  if(selected!=null){
-  SectionScreen(selected!!,position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onBack={selected=null},onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,mapCoverage=mapCoverage,imageStatus=imageStatus,imagePreview=imagePreview,onPickImage=onPickImage,onCameraImage=onCameraImage,observations=observations,saveStatus=saveStatus,onSaveObservation=onSaveObservation,onDeleteObservation=onDeleteObservation,onOpenRegionScan=onOpenRegionScan,onSelect={if(it==AppSection.RECOGNITION) onOpenRegionScan() else selected=it})
+  SectionScreen(selected!!,position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onBack={selected=null},onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,mapCoverage=mapCoverage,imageStatus=imageStatus,imagePreview=imagePreview,onPickImage=onPickImage,onCameraImage=onCameraImage,observations=observations,saveStatus=saveStatus,onSaveObservation=onSaveObservation,onDeleteObservation=onDeleteObservation,onSelect={selected=it})
   return
  }
- Scaffold(containerColor=Color.Transparent,bottomBar={FieldBottomBar(onSelect={if(it==AppSection.RECOGNITION) onOpenRegionScan() else selected=it},current=selected)}){pad->
+ Scaffold(containerColor=Color.Transparent,bottomBar={FieldBottomBar(onSelect={selected=it},current=selected)}){pad->
   Column(Modifier.fillMaxSize().background(FieldBackground).padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
-   FieldHomePanel(position){if(it==AppSection.RECOGNITION) onOpenRegionScan() else selected=it}
+   FieldHomePanel(position){selected=it}
   }
  }
 }
@@ -95,10 +95,9 @@ fun SectionScreen(
  updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},mapCoverage:String?=null,
  imageStatus:String="Chưa chọn ảnh",imagePreview:android.graphics.Bitmap?=null,onPickImage:()->Unit={},onCameraImage:()->Unit={},
  observations:List<ObservationUi> = emptyList(),saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},
- onSelect:(AppSection?)->Unit={},onOpenRegionScan:()->Unit={}
+ onSelect:(AppSection?)->Unit={}
 ){
  var confirmClear by remember { mutableStateOf(false) }
- var liveSearchMode by remember(section) { mutableStateOf(false) }
  val trackState = when { recording -> TrackSessionUiState.RECORDING; trackCount == 0 -> TrackSessionUiState.IDLE; trackStartedAt != null -> TrackSessionUiState.PAUSED; else -> TrackSessionUiState.FINISHED }
  Scaffold(containerColor=Color.Transparent,bottomBar={FieldBottomBar(current=section,onSelect=onSelect)}){pad->
   Column(Modifier.fillMaxSize().background(FieldBackground).padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
@@ -119,11 +118,10 @@ fun SectionScreen(
      Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)){LargeFieldAction("📌","Đánh dấu",Modifier.weight(1f));LargeFieldAction("📏","Đo khoảng cách",Modifier.weight(1f))}
     }
     AppSection.RECOGNITION->{
-     Button(onClick=onOpenRegionScan,modifier=Modifier.fillMaxWidth().heightIn(min=64.dp)){Text("MỞ CAMERA QUÉT VÙNG",fontWeight=FontWeight.Bold)}
-     RecognitionPanel(imageStatus,imagePreview,saveStatus,onPickImage,onCameraImage,onSaveObservation)
+     RecognitionWorkspacePanel()
      OutlinedButton(onClick={onSelect(AppSection.LIBRARY)},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp)){Text("Xem ghi nhận trong Thư viện")}
     }
-    AppSection.SURVIVAL->{SurvivalPanel()}
+        AppSection.SURVIVAL->{SurvivalPanel()}
     AppSection.EMERGENCY->{EmergencyPanel()}
     AppSection.PREP->{PreparationPanel()}
     AppSection.LIBRARY->{SpeciesLibraryPanel(observations,onDeleteObservation)}
