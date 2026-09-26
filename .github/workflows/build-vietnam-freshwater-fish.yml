@@ -11,6 +11,20 @@ on:
       - "data/scientific/freshwater_fish_vietnam_ingestion.json"
       - ".github/workflows/build-vietnam-freshwater-fish.yml"
   workflow_dispatch:
+    inputs:
+      gbif_dwca_url:
+        description: 'HTTPS URL to a prepared GBIF Darwin Core Archive for Vietnam freshwater fish'
+        required: false
+        type: string
+      gbif_download_doi:
+        description: 'GBIF download DOI, e.g. 10.15468/dl.xxxxxx'
+        required: false
+        type: string
+      gbif_publisher:
+        description: 'Dataset/download publisher attribution'
+        required: false
+        default: 'GBIF Secretariat and contributing publishers'
+        type: string
 
 permissions:
   contents: read
@@ -84,6 +98,58 @@ jobs:
           open('build/fish/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
           print(report)
           PY
+
+
+      - name: Build real GBIF fish pack when an audited DwC-A is supplied
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
+        env:
+          GBIF_DWCA_URL: ${{ inputs.gbif_dwca_url }}
+          GBIF_DOWNLOAD_DOI: ${{ inputs.gbif_download_doi }}
+          GBIF_PUBLISHER: ${{ inputs.gbif_publisher }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$GBIF_DWCA_URL" in https://*) ;; *) echo "DwC-A URL must use HTTPS"; exit 1;; esac
+          test -n "$GBIF_DOWNLOAD_DOI"
+          mkdir -p build/fish-real/dwca
+          curl --fail --location --retry 3 --max-time 600 "$GBIF_DWCA_URL" -o build/fish-real/gbif.zip
+          unzip -t build/fish-real/gbif.zip >/dev/null
+          unzip -q build/fish-real/gbif.zip -d build/fish-real/dwca
+          occurrence="$(find build/fish-real/dwca -type f \( -name occurrence.txt -o -name occurrences.txt \) | head -1)"
+          multimedia="$(find build/fish-real/dwca -type f -name multimedia.txt | head -1 || true)"
+          test -s "$occurrence"
+          args=(--input "$occurrence" --output build/fish-real/fish.ndjson.gz --metadata build/fish-real/fish.meta.json --dataset-doi "$GBIF_DOWNLOAD_DOI" --publisher "$GBIF_PUBLISHER" --license CC-BY-4.0)
+          if [ -n "$multimedia" ]; then args+=(--multimedia "$multimedia"); fi
+          python3 tools/build_gbif_library.py "${args[@]}"
+          python3 tools/build_scientific_sqlite.py --input build/fish-real/fish.ndjson.gz --source-meta build/fish-real/fish.meta.json --output build/fish-real/fish.sqlite
+          python3 - <<'PY'
+          import json, sqlite3
+          db=sqlite3.connect('build/fish-real/fish.sqlite')
+          meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
+          fish_taxa=meta.get('fishTaxa',0)
+          fish_with_media=meta.get('fishWithMedia',0)
+          fish_pending=meta.get('fishPendingMedia',0)
+          valid_media=db.execute("""select count(*) from species_media m join taxon t using(source_id,source_record_id) where t.library_group='Cá nước ngọt'""").fetchone()[0]
+          fish_with_2plus=db.execute("""select count(*) from (select t.source_id,t.source_record_id,count(m.media_identifier) n from taxon t join species_media m using(source_id,source_record_id) where t.library_group='Cá nước ngọt' group by t.source_id,t.source_record_id having n>=2)""").fetchone()[0]
+          report={'fishTaxa':fish_taxa,'fishWithMedia':fish_with_media,'fishWith2PlusMedia':fish_with_2plus,'fishPendingMedia':fish_pending,'validMedia':valid_media,'integrity':db.execute('pragma integrity_check').fetchone()[0]}
+          db.close()
+          assert report['fishTaxa'] > 0, report
+          assert report['integrity']=='ok', report
+          open('build/fish-real/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
+          print(report)
+          PY
+
+      - name: Upload real fish ingestion report
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: FieldIntelligence-freshwater-fish-real
+          path: |
+            build/fish-real/fish.sqlite
+            build/fish-real/fish.meta.json
+            build/fish-real/ingestion-report.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Upload validated fish ingestion fixture
         uses: actions/upload-artifact@v4
