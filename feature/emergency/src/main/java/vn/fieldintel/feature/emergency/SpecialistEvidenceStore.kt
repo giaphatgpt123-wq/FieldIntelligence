@@ -39,45 +39,16 @@ class SpecialistEvidenceStore(context: Context) {
 
     fun forSpecies(speciesId: String, limit: Int = 100): List<SpecialistEvidenceRecord> {
         if (!databaseFile.isFile || speciesId.isBlank()) return emptyList()
-        val safeLimit = limit.coerceIn(1, 200)
-        return runCatching {
-            openReadOnly().use { db ->
-                requireSchema(db)
-                db.rawQuery(
-                    """
-                    SELECT evidence_id, species_id, domain, evidence_class, title, statement,
-                           plant_part, source_name, source_url, source_record, scope_note
-                    FROM evidence
-                    WHERE species_id = ?
-                    ORDER BY domain, evidence_id
-                    LIMIT $safeLimit
-                    """.trimIndent(),
-                    arrayOf(speciesId)
-                ).use { cursor ->
-                    buildList {
-                        while (cursor.moveToNext()) {
-                            val domain = runCatching { EvidenceDomain.valueOf(cursor.getString(2)) }.getOrNull() ?: continue
-                            val evidenceClass = runCatching { EvidenceClass.valueOf(cursor.getString(3)) }.getOrNull() ?: continue
-                            add(
-                                SpecialistEvidenceRecord(
-                                    id = cursor.getString(0),
-                                    speciesId = cursor.getString(1),
-                                    domain = domain,
-                                    evidenceClass = evidenceClass,
-                                    title = cursor.getString(4),
-                                    statement = cursor.getString(5),
-                                    plantPart = cursor.getString(6),
-                                    sourceName = cursor.getString(7),
-                                    sourceUrl = cursor.getString(8),
-                                    sourceRecord = cursor.getString(9),
-                                    scopeNote = cursor.getString(10)
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        }.getOrElse { emptyList() }
+        return queryEvidence("species_id = ?", arrayOf(speciesId), limit)
+    }
+
+    fun forScientificName(scientificName: String, limit: Int = 100): List<SpecialistEvidenceRecord> {
+        if (!databaseFile.isFile || scientificName.isBlank()) return emptyList()
+        return queryEvidence(
+            "scientific_name_search = ?",
+            arrayOf(scientificName.trim().lowercase()),
+            limit
+        )
     }
 
     fun speciesIdsFor(domain: EvidenceDomain, limit: Int = 5000): Set<String> {
@@ -104,6 +75,49 @@ class SpecialistEvidenceStore(context: Context) {
                 }
             }
         }.getOrElse { emptySet() }
+    }
+
+    private fun queryEvidence(where: String, args: Array<String>, limit: Int): List<SpecialistEvidenceRecord> {
+        val safeLimit = limit.coerceIn(1, 200)
+        return runCatching {
+            openReadOnly().use { db ->
+                requireSchema(db)
+                db.rawQuery(
+                    """
+                    SELECT evidence_id, species_id, scientific_name, domain, evidence_class,
+                           title, statement, plant_part, source_name, source_url, source_record, scope_note
+                    FROM evidence
+                    WHERE $where
+                    ORDER BY domain, evidence_id
+                    LIMIT $safeLimit
+                    """.trimIndent(),
+                    args
+                ).use { cursor ->
+                    buildList {
+                        while (cursor.moveToNext()) {
+                            val domain = runCatching { EvidenceDomain.valueOf(cursor.getString(3)) }.getOrNull() ?: continue
+                            val evidenceClass = runCatching { EvidenceClass.valueOf(cursor.getString(4)) }.getOrNull() ?: continue
+                            add(
+                                SpecialistEvidenceRecord(
+                                    id = cursor.getString(0),
+                                    speciesId = cursor.getString(1),
+                                    scientificName = cursor.getString(2),
+                                    domain = domain,
+                                    evidenceClass = evidenceClass,
+                                    title = cursor.getString(5),
+                                    statement = cursor.getString(6),
+                                    plantPart = cursor.getString(7),
+                                    sourceName = cursor.getString(8),
+                                    sourceUrl = cursor.getString(9),
+                                    sourceRecord = cursor.getString(10),
+                                    scopeNote = cursor.getString(11)
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }.getOrElse { emptyList() }
     }
 
     private fun openReadOnly(): SQLiteDatabase = SQLiteDatabase.openDatabase(
@@ -145,6 +159,6 @@ class SpecialistEvidenceStore(context: Context) {
     companion object {
         const val DIRECTORY_NAME = "scientific-library"
         const val DATABASE_NAME = "specialist-evidence.sqlite"
-        private const val SUPPORTED_SCHEMA_VERSION = 1
+        private const val SUPPORTED_SCHEMA_VERSION = 2
     }
 }
