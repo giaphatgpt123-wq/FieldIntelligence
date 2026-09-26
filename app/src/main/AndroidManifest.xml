@@ -20,6 +20,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LiveVisualSearchActivity" android:exported="false" android:label="Quét vùng thực tế" />
     </application>
 </manifest>
