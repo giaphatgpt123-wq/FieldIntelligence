@@ -204,11 +204,22 @@ fun VisualDetection.regionVerificationProgress(): Pair<Int, Int>? {
     return hits to required
 }
 
-/** Decorates any installed visual runner with multi-frame stabilization for region scanning. */
+/**
+ * Decorates any installed visual runner with multi-frame stabilization for region scanning.
+ *
+ * Expensive model inference is adaptively paced between 250 and 500 ms. When a frame arrives before
+ * the next model slot, the last stabilized output is returned without calling stabilizer.update(),
+ * so cached detections never count as additional verification hits. This reduces CPU/GPU duty cycle
+ * without manufacturing stability from repeated cached results.
+ */
 class StableRegionVisualModelRunner(
     private val delegate: LiveVisualModelRunner,
     private val stabilizer: RegionDetectionStabilizer = RegionDetectionStabilizer()
 ) : LiveVisualModelRunner, AutoCloseable {
+    private var lastInferenceTimestampNanos = Long.MIN_VALUE
+    private var inferenceIntervalNanos = RegionInferencePacer.MIN_INTERVAL_NANOS
+    private var cachedStableOutput: List<VisualDetection> = emptyList()
+
     override fun status(): VisualModelStatus = delegate.status()
 
     override fun detect(
@@ -216,13 +227,39 @@ class StableRegionVisualModelRunner(
         target: LiveVisualSearchTarget
     ): List<VisualDetection> = delegate.detect(frame, target)
 
-    override fun scanRegion(frame: LiveVisualFrameData): List<VisualDetection> =
-        stabilizer.update(delegate.scanRegion(frame))
+    @Synchronized
+    override fun scanRegion(frame: LiveVisualFrameData): List<VisualDetection> {
+        if (
+            !RegionInferencePacer.shouldRun(
+                frameTimestampNanos = frame.timestampNanos,
+                lastInferenceTimestampNanos = lastInferenceTimestampNanos,
+                intervalNanos = inferenceIntervalNanos
+            )
+        ) {
+            return cachedStableOutput
+        }
 
-    fun reset() = stabilizer.reset()
+        val started = System.nanoTime()
+        val raw = delegate.scanRegion(frame)
+        val output = stabilizer.update(raw)
+        val duration = (System.nanoTime() - started).coerceAtLeast(0L)
+
+        lastInferenceTimestampNanos = frame.timestampNanos
+        inferenceIntervalNanos = RegionInferencePacer.nextIntervalNanos(duration, output)
+        cachedStableOutput = output
+        return output
+    }
+
+    @Synchronized
+    fun reset() {
+        stabilizer.reset()
+        lastInferenceTimestampNanos = Long.MIN_VALUE
+        inferenceIntervalNanos = RegionInferencePacer.MIN_INTERVAL_NANOS
+        cachedStableOutput = emptyList()
+    }
 
     override fun close() {
-        stabilizer.reset()
+        reset()
         (delegate as? AutoCloseable)?.close()
     }
 }
