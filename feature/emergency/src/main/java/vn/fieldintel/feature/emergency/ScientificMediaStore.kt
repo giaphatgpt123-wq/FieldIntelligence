@@ -20,6 +20,27 @@ class ScientificMediaStore(context: Context) {
         ScientificLibraryStore.DATABASE_NAME
     )
 
+    fun localMediaRecordIds(): Set<String> {
+        if (!databaseFile.isFile || databaseFile.length() <= 0L) return emptySet()
+        return runCatching {
+            SQLiteDatabase.openDatabase(
+                databaseFile.absolutePath,
+                null,
+                SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
+            ).use { db ->
+                if (!hasLocalMediaTables(db)) return@use emptySet()
+                db.rawQuery(
+                    "SELECT DISTINCT source_id,source_record_id FROM species_media_local",
+                    null
+                ).use { cursor ->
+                    buildSet {
+                        while (cursor.moveToNext()) add("$ID_PREFIX${cursor.getString(0)}|${cursor.getString(1)}")
+                    }
+                }
+            }
+        }.getOrElse { emptySet() }
+    }
+
     fun fishWithLocalMediaCount(): Long {
         if (!databaseFile.isFile || databaseFile.length() <= 0L) return 0L
         return runCatching {
