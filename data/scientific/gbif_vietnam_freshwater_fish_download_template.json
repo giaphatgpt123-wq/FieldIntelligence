@@ -1,0 +1,33 @@
+{
+  "notificationAddresses": [
+    "REPLACE_WITH_GBIF_ACCOUNT_EMAIL"
+  ],
+  "sendNotification": true,
+  "format": "DWCA",
+  "checklistKey": "7ddf754f-d193-4cc9-b351-99906754a03b",
+  "predicate": {
+    "type": "and",
+    "predicates": [
+      {
+        "type": "equals",
+        "key": "COUNTRY",
+        "value": "VN"
+      },
+      {
+        "type": "equals",
+        "key": "MEDIA_TYPE",
+        "value": "StillImage"
+      },
+      {
+        "type": "equals",
+        "key": "OCCURRENCE_STATUS",
+        "value": "PRESENT"
+      }
+    ]
+  },
+  "notes": [
+    "Template intentionally does not hard-code a fish taxon key: reconcile the curated Vietnam freshwater checklist to current COL XR taxon IDs first.",
+    "GBIF download creation requires authenticated GBIF credentials; never commit credentials to this repository.",
+    "DWCA is required because the ingestion pipeline consumes occurrence.txt and multimedia.txt."
+  ]
+}
