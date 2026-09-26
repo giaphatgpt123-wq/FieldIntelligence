@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,19 +38,15 @@ val FieldBackground = Brush.verticalGradient(
     listOf(Color(0xFF08252C), Color(0xFF06171C), Color(0xFF0B2026))
 )
 
-private data class HomeTileStyle(
-    val top: Color,
-    val bottom: Color,
-    val accent: Color
-)
+private data class HomeTileStyle(val top: Color, val bottom: Color, val accent: Color)
 
 private fun tileStyle(section: AppSection): HomeTileStyle = when (section) {
-    AppSection.FIELD -> HomeTileStyle(Color(0xFF15573D), Color(0xFF0D392A), Color(0xFF52E592))
-    AppSection.RECOGNITION -> HomeTileStyle(Color(0xFF176B76), Color(0xFF10444E), Color(0xFF6FE6E7))
-    AppSection.SURVIVAL -> HomeTileStyle(Color(0xFF8A532C), Color(0xFF57321E), Color(0xFFFFB45F))
-    AppSection.EMERGENCY -> HomeTileStyle(Color(0xFF98434C), Color(0xFF5D2930), Color(0xFFFF7C84))
-    AppSection.PREP -> HomeTileStyle(Color(0xFF5C5595), Color(0xFF373364), Color(0xFFB9ABFF))
-    else -> HomeTileStyle(Color(0xFF246394), Color(0xFF173D61), Color(0xFF8CCBFF))
+    AppSection.FIELD -> HomeTileStyle(Color(0xFF176244), Color(0xFF0C3A29), Color(0xFF58EE9B))
+    AppSection.RECOGNITION -> HomeTileStyle(Color(0xFF197381), Color(0xFF104A55), Color(0xFF79EEF0))
+    AppSection.SURVIVAL -> HomeTileStyle(Color(0xFF945D33), Color(0xFF5B351F), Color(0xFFFFBD72))
+    AppSection.EMERGENCY -> HomeTileStyle(Color(0xFFA64A53), Color(0xFF602A31), Color(0xFFFF8990))
+    AppSection.PREP -> HomeTileStyle(Color(0xFF655EA3), Color(0xFF3A356A), Color(0xFFC4B8FF))
+    else -> HomeTileStyle(Color(0xFF2A6FA4), Color(0xFF173F64), Color(0xFF99D3FF))
 }
 
 @Composable
@@ -64,63 +59,51 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
         colors = CardDefaults.cardColors(containerColor = Color(0xFF12363A)),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Box(Modifier.fillMaxWidth().height(318.dp)) {
+        Box(Modifier.fillMaxWidth().height(326.dp)) {
             Canvas(
                 Modifier
                     .fillMaxSize()
                     .background(
                         Brush.verticalGradient(
-                            listOf(
-                                Color(0xFF74B5C6),
-                                Color(0xFF315F69),
-                                Color(0xFF173F3B),
-                                Color(0xFF0B2926)
-                            )
+                            listOf(Color(0xFF86C4D3), Color(0xFF3C7078), Color(0xFF214B45), Color(0xFF0B2926))
                         )
                     )
             ) {
-                // Distant mist band
-                drawRect(
-                    brush = Brush.verticalGradient(
-                        listOf(Color(0x55FFFFFF), Color.Transparent)
-                    ),
-                    topLeft = Offset.Zero,
-                    size = size.copy(height = size.height * .42f)
-                )
+                drawCircle(Color(0x55F8F3C2), radius = 34f, center = Offset(size.width * .78f, size.height * .18f))
 
                 val far = Path().apply {
-                    moveTo(0f, size.height * .57f)
-                    lineTo(size.width * .18f, size.height * .29f)
+                    moveTo(0f, size.height * .58f)
+                    lineTo(size.width * .18f, size.height * .31f)
                     lineTo(size.width * .34f, size.height * .50f)
-                    lineTo(size.width * .54f, size.height * .22f)
-                    lineTo(size.width * .70f, size.height * .43f)
-                    lineTo(size.width * .82f, size.height * .31f)
+                    lineTo(size.width * .54f, size.height * .23f)
+                    lineTo(size.width * .70f, size.height * .44f)
+                    lineTo(size.width * .84f, size.height * .32f)
                     lineTo(size.width, size.height * .58f)
                     lineTo(size.width, size.height)
                     lineTo(0f, size.height)
                     close()
                 }
-                drawPath(far, Color(0xFF3F6E68))
+                drawPath(far, Color(0xFF47776F))
 
                 val mid = Path().apply {
-                    moveTo(0f, size.height * .69f)
+                    moveTo(0f, size.height * .70f)
                     lineTo(size.width * .25f, size.height * .45f)
-                    lineTo(size.width * .43f, size.height * .62f)
+                    lineTo(size.width * .43f, size.height * .63f)
                     lineTo(size.width * .66f, size.height * .39f)
-                    lineTo(size.width * .83f, size.height * .58f)
-                    lineTo(size.width, size.height * .48f)
+                    lineTo(size.width * .83f, size.height * .59f)
+                    lineTo(size.width, size.height * .49f)
                     lineTo(size.width, size.height)
                     lineTo(0f, size.height)
                     close()
                 }
-                drawPath(mid, Color(0xFF234F46))
+                drawPath(mid, Color(0xFF27564B))
 
                 val near = Path().apply {
-                    moveTo(0f, size.height * .82f)
-                    lineTo(size.width * .28f, size.height * .59f)
-                    lineTo(size.width * .48f, size.height * .75f)
-                    lineTo(size.width * .74f, size.height * .51f)
-                    lineTo(size.width, size.height * .74f)
+                    moveTo(0f, size.height * .83f)
+                    lineTo(size.width * .28f, size.height * .60f)
+                    lineTo(size.width * .48f, size.height * .76f)
+                    lineTo(size.width * .74f, size.height * .52f)
+                    lineTo(size.width, size.height * .75f)
                     lineTo(size.width, size.height)
                     lineTo(0f, size.height)
                     close()
@@ -128,57 +111,34 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
                 drawPath(near, Color(0xFF123A31))
 
                 val river = Path().apply {
-                    moveTo(size.width * .27f, size.height)
-                    cubicTo(
-                        size.width * .60f,
-                        size.height * .82f,
-                        size.width * .38f,
-                        size.height * .72f,
-                        size.width * .67f,
-                        size.height * .56f
-                    )
+                    moveTo(size.width * .25f, size.height)
+                    cubicTo(size.width * .60f, size.height * .82f, size.width * .39f, size.height * .72f, size.width * .68f, size.height * .56f)
                 }
-                drawPath(
-                    river,
-                    Color(0xFF77D8E4),
-                    style = androidx.compose.ui.graphics.drawscope.Stroke(width = 12f)
-                )
+                drawPath(river, Color(0xFF78DCE8), style = androidx.compose.ui.graphics.drawscope.Stroke(width = 14f))
             }
 
             Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color(0x16051418),
-                                Color(0x26061718),
-                                Color(0xB805171A),
-                                Color(0xF005171A)
-                            )
-                        )
+                Modifier.fillMaxSize().background(
+                    Brush.verticalGradient(
+                        listOf(Color(0x12051418), Color(0x26061718), Color(0xA805171A), Color(0xF005171A))
                     )
+                )
             )
 
             Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 22.dp, vertical = 20.dp),
+                Modifier.fillMaxSize().padding(horizontal = 22.dp, vertical = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Surface(
                     shape = CircleShape,
                     color = Color(0xD910382F),
-                    border = BorderStroke(1.dp, Color(0x663FEA91))
+                    border = BorderStroke(1.dp, Color(0x773FEA91)),
+                    shadowElevation = 8.dp
                 ) {
-                    Box(Modifier.size(94.dp), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(100.dp), contentAlignment = Alignment.Center) {
                         if (logoId != 0) {
-                            Image(
-                                painterResource(logoId),
-                                "Biểu trưng la bàn núi rừng sông",
-                                Modifier.size(78.dp)
-                            )
+                            Image(painterResource(logoId), "Biểu trưng la bàn núi rừng sông", Modifier.size(82.dp))
                         } else {
                             Text("🧭", style = MaterialTheme.typography.displayMedium)
                         }
@@ -202,26 +162,20 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
                 Spacer(Modifier.height(16.dp))
 
                 Surface(
-                    color = Color(0xD90A2C2D),
+                    color = Color(0xDF0A2C2D),
                     shape = RoundedCornerShape(18.dp),
-                    border = BorderStroke(1.dp, Color(0x335DE9A3))
+                    border = BorderStroke(1.dp, Color(0x445DE9A3))
                 ) {
                     Row(
-                        Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                        Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(9.dp)
                     ) {
                         Text(if (position == null) "○" else "●", color = if (position == null) Color(0xFFFFD166) else FieldColors.primary)
                         Text(
-                            if (position == null)
-                                "GPS đang chờ tín hiệu • vẫn dùng được dữ liệu offline"
-                            else
-                                "GPS %.5f, %.5f  •  ±%.0f m".format(
-                                    position.latitude,
-                                    position.longitude,
-                                    position.accuracyM
-                                ),
-                            style = MaterialTheme.typography.labelMedium,
+                            if (position == null) "GPS đang chờ tín hiệu • dữ liệu offline vẫn sẵn sàng"
+                            else "GPS %.5f, %.5f  •  ±%.0f m".format(position.latitude, position.longitude, position.accuracyM),
+                            style = MaterialTheme.typography.bodySmall,
                             color = Color(0xFFF0F7F4)
                         )
                     }
@@ -236,24 +190,15 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            Text(
-                "CHỌN CHỨC NĂNG",
-                fontWeight = FontWeight.ExtraBold,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.White
-            )
-            Text(
-                "Truy cập nhanh công cụ ngoài thực địa",
-                style = MaterialTheme.typography.bodySmall,
-                color = FieldColors.onSurfaceVariant
-            )
+            Text("CHỌN CHỨC NĂNG", fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleMedium, color = Color.White)
+            Text("Công cụ chính ngoài thực địa", style = MaterialTheme.typography.bodySmall, color = FieldColors.onSurfaceVariant)
         }
         Surface(shape = RoundedCornerShape(999.dp), color = Color(0x1A45E58C)) {
             Text(
                 "OFFLINE FIRST",
-                modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                modifier = Modifier.padding(horizontal = 11.dp, vertical = 6.dp),
                 color = FieldColors.primary,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -268,45 +213,22 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
                 val style = tileStyle(section)
                 Card(
                     onClick = { onSelect(section) },
-                    modifier = Modifier.weight(1f).height(126.dp),
-                    shape = RoundedCornerShape(22.dp),
+                    modifier = Modifier.weight(1f).height(138.dp),
+                    shape = RoundedCornerShape(23.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                    border = BorderStroke(1.dp, style.accent.copy(alpha = .20f))
+                    border = BorderStroke(1.dp, style.accent.copy(alpha = .28f))
                 ) {
                     Box(
-                        Modifier
-                            .fillMaxSize()
-                            .background(Brush.verticalGradient(listOf(style.top, style.bottom)))
-                            .padding(12.dp)
+                        Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(style.top, style.bottom))).padding(13.dp)
                     ) {
-                        Surface(
-                            modifier = Modifier.align(Alignment.TopStart),
-                            shape = RoundedCornerShape(14.dp),
-                            color = Color(0x22000000)
-                        ) {
-                            Text(
-                                section.icon,
-                                modifier = Modifier.padding(horizontal = 9.dp, vertical = 7.dp),
-                                style = MaterialTheme.typography.headlineSmall
-                            )
+                        Surface(shape = RoundedCornerShape(15.dp), color = Color(0x26000000)) {
+                            Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                                Text(section.icon, style = MaterialTheme.typography.headlineSmall)
+                            }
                         }
-
-                        Column(
-                            modifier = Modifier.align(Alignment.BottomStart),
-                            verticalArrangement = Arrangement.spacedBy(3.dp)
-                        ) {
-                            Text(
-                                section.label,
-                                fontWeight = FontWeight.ExtraBold,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = Color.White
-                            )
-                            Text(
-                                section.subtitle,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = Color.White.copy(alpha = .76f),
-                                maxLines = 1
-                            )
+                        Column(Modifier.align(Alignment.BottomStart), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(section.label, fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleSmall, color = Color.White)
+                            Text(section.subtitle, style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = .80f), maxLines = 1)
                         }
                     }
                 }
@@ -316,24 +238,24 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
 
     Surface(
         onClick = { onSelect(AppSection.TRAINING) },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 68.dp),
         shape = RoundedCornerShape(20.dp),
         color = Color(0xFF12333A),
-        border = BorderStroke(1.dp, Color(0x553EDB86))
+        border = BorderStroke(1.dp, Color(0x663EDB86))
     ) {
         Row(
-            Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
+            Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(shape = CircleShape, color = Color(0x223EDB86)) {
-                Text("🎓", Modifier.padding(9.dp))
+                Box(Modifier.size(44.dp), contentAlignment = Alignment.Center) { Text("🎓") }
             }
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text("Huấn luyện", fontWeight = FontWeight.Bold, color = Color.White)
-                Text("Tình huống mô phỏng và kiểm tra kỹ năng", style = MaterialTheme.typography.bodySmall, color = FieldColors.onSurfaceVariant)
+                Text("Huấn luyện", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, color = Color.White)
+                Text("Mô phỏng tình huống và kiểm tra kỹ năng", style = MaterialTheme.typography.bodySmall, color = FieldColors.onSurfaceVariant)
             }
-            Text("›", style = MaterialTheme.typography.headlineSmall, color = FieldColors.primary)
+            Text("›", style = MaterialTheme.typography.headlineMedium, color = FieldColors.primary)
         }
     }
 }
@@ -342,31 +264,26 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
 fun FieldBottomBar(current: AppSection?, onSelect: (AppSection?) -> Unit) {
     Surface(
         color = Color(0xFF081F25),
-        shadowElevation = 12.dp,
+        shadowElevation = 14.dp,
         tonalElevation = 2.dp,
-        border = BorderStroke(1.dp, Color(0x2215E58D))
+        border = BorderStroke(1.dp, Color(0x3315E58D))
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .height(76.dp)
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding().height(88.dp).padding(horizontal = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            BottomItem(null, "⌂", "Trang chủ", current == null, false) { onSelect(null) }
-            BottomItem(AppSection.FIELD, "▣", "Bản đồ", current == AppSection.FIELD, false) { onSelect(AppSection.FIELD) }
-            BottomItem(AppSection.RECOGNITION, "◎", "Quét", current == AppSection.RECOGNITION, true) { onSelect(AppSection.RECOGNITION) }
-            BottomItem(AppSection.LIBRARY, "▤", "Lưu trữ", current == AppSection.LIBRARY, false) { onSelect(AppSection.LIBRARY) }
-            BottomItem(AppSection.SETTINGS, "⚙", "Cài đặt", current == AppSection.SETTINGS, false) { onSelect(AppSection.SETTINGS) }
+            BottomItem("⌂", "Trang chủ", current == null, false) { onSelect(null) }
+            BottomItem("▣", "Bản đồ", current == AppSection.FIELD, false) { onSelect(AppSection.FIELD) }
+            BottomItem("◎", "Quét", current == AppSection.RECOGNITION, true) { onSelect(AppSection.RECOGNITION) }
+            BottomItem("▤", "Lưu trữ", current == AppSection.LIBRARY, false) { onSelect(AppSection.LIBRARY) }
+            BottomItem("⚙", "Cài đặt", current == AppSection.SETTINGS, false) { onSelect(AppSection.SETTINGS) }
         }
     }
 }
 
 @Composable
 private fun RowScope.BottomItem(
-    section: AppSection?,
     icon: String,
     label: String,
     selected: Boolean,
@@ -375,34 +292,35 @@ private fun RowScope.BottomItem(
 ) {
     TextButton(
         onClick = onClick,
-        modifier = Modifier.weight(1f),
-        contentPadding = PaddingValues(2.dp)
+        modifier = Modifier.weight(1f).heightIn(min = 64.dp),
+        contentPadding = PaddingValues(horizontal = 2.dp, vertical = 4.dp)
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Surface(
                 shape = CircleShape,
                 color = when {
                     emphasized -> FieldColors.primary
-                    selected -> Color(0x263FEA91)
+                    selected -> Color(0x303FEA91)
                     else -> Color.Transparent
                 },
-                border = if (emphasized) BorderStroke(3.dp, Color(0xFF0C3434)) else null
+                border = if (emphasized) BorderStroke(3.dp, Color(0xFF0C3434)) else null,
+                shadowElevation = if (emphasized) 8.dp else 0.dp
             ) {
                 Box(
-                    modifier = Modifier.size(if (emphasized) 48.dp else 34.dp),
+                    modifier = Modifier.size(if (emphasized) 58.dp else 44.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         icon,
-                        style = if (emphasized) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.titleLarge,
+                        style = if (emphasized) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.headlineSmall,
                         color = if (emphasized) FieldColors.onPrimary else if (selected) FieldColors.primary else FieldColors.onSurfaceVariant
                     )
                 }
             }
-            if (!emphasized) Spacer(Modifier.height(3.dp))
+            Spacer(Modifier.height(2.dp))
             Text(
                 label,
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
                 color = if (selected || emphasized) FieldColors.primary else FieldColors.onSurfaceVariant,
                 fontWeight = if (selected || emphasized) FontWeight.Bold else FontWeight.Medium
@@ -414,41 +332,65 @@ private fun RowScope.BottomItem(
 @Composable
 fun FieldSectionBanner(section: AppSection, onBack: () -> Unit) {
     val tone = when (section) {
-        AppSection.FIELD -> Color(0xFF1C5540)
-        AppSection.RECOGNITION -> Color(0xFF245E52)
-        AppSection.SURVIVAL -> Color(0xFF765038)
-        AppSection.EMERGENCY -> Color(0xFF7F3A40)
-        AppSection.PREP -> Color(0xFF454D86)
-        AppSection.LIBRARY -> Color(0xFF275D7D)
+        AppSection.FIELD -> Color(0xFF1C5C43)
+        AppSection.RECOGNITION -> Color(0xFF24675B)
+        AppSection.SURVIVAL -> Color(0xFF7A5239)
+        AppSection.EMERGENCY -> Color(0xFF843D43)
+        AppSection.PREP -> Color(0xFF494F8E)
+        AppSection.LIBRARY -> Color(0xFF296485)
         else -> Color(0xFF365A63)
     }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(26.dp),
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = tone),
-        border = BorderStroke(1.dp, Color.White.copy(alpha = .08f))
+        border = BorderStroke(1.dp, Color.White.copy(alpha = .10f))
     ) {
         Column(
-            Modifier
-                .fillMaxWidth()
-                .background(Brush.horizontalGradient(listOf(tone, Color(0xFF0B272D))))
-                .padding(14.dp)
+            Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(tone, Color(0xFF0B272D)))).padding(14.dp)
         ) {
-            TextButton(onClick = onBack, contentPadding = PaddingValues(horizontal = 2.dp)) {
-                Text("←  Trang chủ", color = Color.White.copy(alpha = .86f))
+            Surface(
+                onClick = onBack,
+                modifier = Modifier.heightIn(min = 56.dp),
+                shape = RoundedCornerShape(18.dp),
+                color = Color(0x25000000),
+                border = BorderStroke(1.dp, Color.White.copy(alpha = .12f))
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 7.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(shape = CircleShape, color = Color(0x28FFFFFF)) {
+                        Box(Modifier.size(44.dp), contentAlignment = Alignment.Center) {
+                            Text("←", style = MaterialTheme.typography.headlineSmall, color = Color.White, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    Spacer(Modifier.width(11.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text("Quay lại", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text("Về Trang chủ", style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = .72f))
+                    }
+                    Text("⌂", style = MaterialTheme.typography.titleLarge, color = Color.White.copy(alpha = .78f))
+                }
             }
+
+            Spacer(Modifier.height(14.dp))
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
             ) {
-                Surface(shape = RoundedCornerShape(18.dp), color = Color(0x22000000)) {
-                    Text(section.icon, Modifier.padding(12.dp), style = MaterialTheme.typography.headlineMedium)
+                Surface(shape = RoundedCornerShape(20.dp), color = Color(0x26000000)) {
+                    Box(Modifier.size(62.dp), contentAlignment = Alignment.Center) {
+                        Text(section.icon, style = MaterialTheme.typography.headlineMedium)
+                    }
                 }
-                Column {
+                Column(Modifier.weight(1f)) {
                     Text(section.label, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold, color = Color.White)
-                    Text(section.subtitle, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = .78f))
+                    Spacer(Modifier.height(2.dp))
+                    Text(section.subtitle, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = .82f))
                 }
             }
             Spacer(Modifier.height(6.dp))
