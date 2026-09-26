@@ -26,14 +26,14 @@ jobs:
       - name: Run ingestion tests
         run: python3 -m unittest discover -s tools -p 'test_*.py'
 
-      - name: Download official WFO Taxonomic Backbone
+      - name: Download official WFO June 2026 snapshot
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build/scientific-library
           curl --fail --location --retry 3 --retry-delay 5 \
             --output build/scientific-library/WFO_Backbone.zip \
-            https://files.worldfloraonline.org/files/WFO_Backbone/_WFOCompleteBackbone/WFO_Backbone.zip
+            'https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1'
           unzip -t build/scientific-library/WFO_Backbone.zip >/dev/null
 
       - name: Normalize complete WFO taxonomy
@@ -55,6 +55,8 @@ jobs:
           assert p['sourceId'] == 'wfo-taxonomic-backbone'
           assert p['license'] == 'CC0-1.0'
           assert p['scope'] == 'taxonomy-only'
+          assert p['version'] == '2026-06'
+          assert p['versionDoi'] == '10.5281/zenodo.20782718'
           assert p['recordCount'] > 100000, p['recordCount']
           print(p)
           PY
