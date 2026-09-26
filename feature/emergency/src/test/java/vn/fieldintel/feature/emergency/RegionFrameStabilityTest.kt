@@ -5,10 +5,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RegionFrameStabilityTest {
-    private fun frame(timestamp: Long, luma: Int): LiveVisualFrameData {
+    private fun frame(timestamp: Long, baseLuma: Int, textured: Boolean = true): LiveVisualFrameData {
         val width = 24
         val height = 24
-        val y = ByteArray(width * height) { luma.toByte() }
+        val y = ByteArray(width * height) { index ->
+            val row = index / width
+            val col = index % width
+            val detail = if (textured) ((row / 2 + col / 2) % 2) * 18 - 9 else 0
+            (baseLuma + detail).coerceIn(0, 255).toByte()
+        }
         val uv = ByteArray(width * height / 4) { 128.toByte() }
         return LiveVisualFrameData(
             timestampNanos = timestamp,
@@ -60,5 +65,26 @@ class RegionFrameStabilityTest {
         assertFalse(gate.shouldCapture(1_000_000_000L, frame(1_000_000_000L, 90), captureEligible = false))
         assertFalse(gate.shouldCapture(1_300_000_000L, frame(1_300_000_000L, 90), captureEligible = false))
         assertTrue(gate.shouldCapture(1_600_000_000L, frame(1_600_000_000L, 90), captureEligible = true))
+    }
+
+    @Test
+    fun blurredSceneDoesNotAutoCaptureOrConsumeCooldown() {
+        val gate = RegionFrameStabilityGate(stableFramesRequired = 2, minimumIntervalNanos = 2_000_000_000L)
+
+        assertFalse(gate.shouldCapture(1_000_000_000L, frame(1_000_000_000L, 100, textured = false)))
+        assertFalse(gate.shouldCapture(1_300_000_000L, frame(1_300_000_000L, 100, textured = false)))
+        assertFalse(gate.assess(frame(1_300_000_000L, 100, textured = false)).acceptable)
+
+        assertFalse(gate.shouldCapture(1_600_000_000L, frame(1_600_000_000L, 100)))
+        assertTrue(gate.shouldCapture(1_900_000_000L, frame(1_900_000_000L, 100)))
+    }
+
+    @Test
+    fun poorExposureIsRejected() {
+        val gate = RegionFrameStabilityGate(stableFramesRequired = 2)
+        assertTrue(gate.assess(frame(1L, 10)).tooDark)
+        assertTrue(gate.assess(frame(2L, 245)).tooBright)
+        assertFalse(gate.shouldCapture(1_000_000_000L, frame(1_000_000_000L, 10)))
+        assertFalse(gate.shouldCapture(1_300_000_000L, frame(1_300_000_000L, 10)))
     }
 }
