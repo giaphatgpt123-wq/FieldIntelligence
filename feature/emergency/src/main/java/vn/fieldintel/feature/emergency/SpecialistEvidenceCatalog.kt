@@ -124,6 +124,19 @@ object SpecialistEvidenceCatalog {
             sourceUrl = "https://www.cdc.gov/chemical-emergencies/chemical-fact-sheets/ricin.html",
             sourceRecord = "Ricin Chemical Fact Sheet",
             scopeNote = "Cảnh báo độc chất ở hạt; không dùng bản ghi này để nhận dạng cây ngoài thực địa hoặc suy ra mức phơi nhiễm của một ca cụ thể."
+        ),
+        SpecialistEvidenceRecord(
+            id = "cdc-abrus-precatorius-abrin",
+            speciesId = "abrus-precatorius",
+            domain = EvidenceDomain.TOXICOLOGY,
+            evidenceClass = EvidenceClass.PUBLIC_HEALTH_TOXICOLOGY,
+            title = "Abrin trong hạt Abrus precatorius",
+            statement = "CDC xác nhận abrin là độc chất tự nhiên có nguồn từ hạt rosary pea/jequirity pea; NIOSH liên kết độc chất này trực tiếp với hạt Abrus precatorius.",
+            plantPart = "Hạt",
+            sourceName = "U.S. Centers for Disease Control and Prevention / NIOSH",
+            sourceUrl = "https://www.cdc.gov/chemical-emergencies/chemical-fact-sheets/abrin.html",
+            sourceRecord = "Abrin Chemical Fact Sheet; NIOSH Emergency Response Safety and Health Database",
+            scopeNote = "Chỉ xác nhận nguy cơ độc chất gắn với hạt và abrin; không dùng bản ghi này để ước lượng liều phơi nhiễm, tiên lượng ca bệnh hoặc nhận dạng cây từ ảnh."
         )
     )
 
