@@ -94,11 +94,23 @@ object LibraryCollections {
         )
     )
 
-    /** Reading this property from Compose observes the runtime evidence snapshot. */
+    /** Reading this property from Compose observes the runtime evidence snapshot and state. */
     val items: List<LibraryCollection>
-        get() = baseItems.map { item ->
-            val runtime = item.evidenceDomain?.let { LibraryCollectionRuntime.recordsFor(item.id) }
-            if (runtime == null) item else item.copy(recordIds = runtime.mapTo(linkedSetOf()) { it.id })
+        get() {
+            val runtimeState = LibraryCollectionRuntime.state
+            return baseItems.map { item ->
+                if (item.evidenceDomain == null) return@map item
+
+                val runtime = LibraryCollectionRuntime.recordsFor(item.id)
+                val statusLabel = when (runtimeState) {
+                    LibraryCollectionRuntimeState.IDLE -> "CHỜ KHỞI TẠO"
+                    LibraryCollectionRuntimeState.LOADING -> "ĐANG NẠP SQLITE"
+                    LibraryCollectionRuntimeState.SQLITE_READY -> "SQLITE READY"
+                    LibraryCollectionRuntimeState.FALLBACK -> "FALLBACK BỘ LÕI"
+                }
+                val withStatus = item.copy(subtitle = "${item.subtitle} • $statusLabel")
+                if (runtime == null) withStatus else withStatus.copy(recordIds = runtime.mapTo(linkedSetOf()) { it.id })
+            }
         }
 
     fun byId(id: String?): LibraryCollection? = items.firstOrNull { it.id == id }
