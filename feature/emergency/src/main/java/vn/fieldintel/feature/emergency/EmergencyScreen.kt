@@ -96,6 +96,7 @@ fun SectionScreen(
  onSelect:(AppSection?)->Unit={}
 ){
  var confirmClear by remember { mutableStateOf(false) }
+ var liveSearchMode by remember(section) { mutableStateOf(false) }
  val trackState = when { recording -> TrackSessionUiState.RECORDING; trackCount == 0 -> TrackSessionUiState.IDLE; trackStartedAt != null -> TrackSessionUiState.PAUSED; else -> TrackSessionUiState.FINISHED }
  Scaffold(containerColor=Color.Transparent,bottomBar={FieldBottomBar(current=section,onSelect=onSelect)}){pad->
   Column(Modifier.fillMaxSize().background(FieldBackground).padding(pad).verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(14.dp)){
@@ -115,7 +116,18 @@ fun SectionScreen(
      FieldInfoCard("↩","TrackBack",if(trackBackBearingDeg==null) "Chưa đủ dữ liệu quay lại" else "${String.format("%.2f",trackBackRemainingM/1000.0)} km còn lại • hướng ${trackBackBearingDeg.toInt()}° • $breadcrumbCount mốc\nLệch dấu vết ${offTrackM.toInt()} m${if(offTrackM>50) " • CẢNH BÁO LỆCH TUYẾN" else ""}\nBám dấu vết cũ không bảo đảm điều kiện đường hiện tại.",if(offTrackM>50) Color(0xFFFF8A80) else Color(0xFF78DCE8))
      Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)){LargeFieldAction("📌","Đánh dấu",Modifier.weight(1f));LargeFieldAction("📏","Đo khoảng cách",Modifier.weight(1f))}
     }
-    AppSection.RECOGNITION->{RecognitionPanel(imageStatus,imagePreview,saveStatus,onPickImage,onCameraImage,onSaveObservation);OutlinedButton(onClick={onSelect(AppSection.LIBRARY)},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp)){Text("Xem ghi nhận trong Thư viện")}}
+    AppSection.RECOGNITION->{
+     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){
+      Button(onClick={liveSearchMode=true},modifier=Modifier.weight(1f).heightIn(min=56.dp),enabled=!liveSearchMode){Text("◎ TÌM THỰC TẾ",fontWeight=FontWeight.Bold)}
+      OutlinedButton(onClick={liveSearchMode=false},modifier=Modifier.weight(1f).heightIn(min=56.dp),enabled=liveSearchMode){Text("ẢNH / GHI NHẬN",fontWeight=FontWeight.Bold)}
+     }
+     if(liveSearchMode){
+      LiveVisualSearchPanel(modelReady=false)
+     }else{
+      RecognitionPanel(imageStatus,imagePreview,saveStatus,onPickImage,onCameraImage,onSaveObservation)
+     }
+     OutlinedButton(onClick={onSelect(AppSection.LIBRARY)},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp)){Text("Xem ghi nhận trong Thư viện")}
+    }
     AppSection.SURVIVAL->{SurvivalPanel()}
     AppSection.EMERGENCY->{EmergencyPanel()}
     AppSection.PREP->{PreparationPanel()}
