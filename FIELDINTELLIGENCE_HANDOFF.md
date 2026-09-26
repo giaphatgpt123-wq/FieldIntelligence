@@ -286,3 +286,10 @@ When returning from Work to Chat, update this file with:
 - This is layout/visual hierarchy work only: no satellite basemap, species classifier, high-confidence identification or source-backed safety labels were added. The demo photo backgrounds and counts are illustrative, not shipped as purported app data.
 - Android P0 Build #240 completed success for code commit 0e45f167efaa1751c5df106f545c83f79635d736: https://github.com/giaphatgpt123-wq/FieldIntelligence/actions/runs/36159046826. Artifact package `.osmtest` and bundled OSM data verified; APK SHA-256 2c480b7a8fbad9f9203911337e5b4dd40ce04bdbd78758a9f6501636f161bfb0. Device layout and regressions unverified.
 - NEXT ACTION: install the UI-frame APK on the existing `.osmtest` app, inspect home, field, recognition, library, other section headers and bottom bar at phone width; verify observations retained. Resolve any actual clipping/contrast issue from screenshots, then implement visual assets and real data workflows screen by screen.
+
+## Continuation — AF/AE capture gate, 2026-09-26
+- Code HEAD 1dc2d988d84135fa4890ece669b7ec09709c6d62; Android P0 Build run 36239290661 completed success.
+- CameraAdjustmentGate blocks auto-capture immediately after tap focus, waits for AF completion or 1.5 s timeout, then allows 350 ms for exposure settling. Focus callbacks from earlier taps cannot unlock a new tap.
+- Camera UI shows ĐANG LẤY NÉT, ĐANG CÂN SÁNG, SẴN SÀNG. Camera stop/rebind resets the gate. Existing frame quality and stable-region gates still apply.
+- Unit tests cover tap blocking, timeout, stale callbacks, reset and stable quality frames after settling. CI builds the APK but AF/AE timing and focus results still require on-device checking.
+- NEXT ACTION: test tap focus and auto-capture under low light and moving scenes on device; inspect exposure timing, then tune with device evidence. Continue thermal/inference work after this verification.
