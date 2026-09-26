@@ -86,6 +86,44 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
             finally:
                 db.close()
 
+    def test_persists_multiple_media_and_rejects_unlicensed_media(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "fish-multi.ndjson.gz"
+            output = root / "fish-multi.sqlite"
+            row = {
+                "sourceId": "gbif", "sourceRecordId": "fish-multi-1",
+                "scientificName": "Channa striata", "taxonomicStatus": "Accepted",
+                "kingdom": "Animalia", "class": "Actinopterygii",
+                "libraryGroup": "Cá nước ngọt",
+                "mediaItems": [
+                    {"identifier": "https://example.org/1.jpg", "mediaType": "StillImage",
+                     "creator": "A", "license": "CC-BY-4.0"},
+                    {"identifier": "https://example.org/2.jpg", "mediaType": "StillImage",
+                     "creator": "B", "license": "CC0-1.0"},
+                    {"identifier": "https://example.org/3.jpg", "mediaType": "StillImage",
+                     "creator": "Unknown", "license": ""},
+                ],
+                "provenance": {"authority": "GBIF", "license": "CC-BY-4.0",
+                               "scope": "taxonomy-occurrence-and-media-metadata"}
+            }
+            with gzip.open(source, "wt", encoding="utf-8") as handle:
+                handle.write(json.dumps(row) + "\n")
+            result = module.build(source, output)
+            self.assertEqual(2, result["mediaRecordCount"])
+            self.assertEqual(1, result["recordsWithMedia"])
+            db = sqlite3.connect(output)
+            try:
+                media = db.execute(
+                    "SELECT media_identifier,media_license FROM species_media ORDER BY media_identifier"
+                ).fetchall()
+                self.assertEqual([
+                    ("https://example.org/1.jpg", "CC-BY-4.0"),
+                    ("https://example.org/2.jpg", "CC0-1.0"),
+                ], media)
+            finally:
+                db.close()
+
     def test_rejects_count_mismatch_via_primary_key_replacement(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
