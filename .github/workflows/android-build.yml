@@ -69,7 +69,7 @@ jobs:
               assert count == 38100, count
               assert db.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
           files = []
-          for name, version, scope in [('wfo-taxonomy.sqlite', 1, 'taxonomy-only'), ('specialist-evidence.sqlite', 2, 'specialist-evidence-only')]:
+          for name, version, scope in [('wfo-taxonomy.sqlite', 2, 'taxonomy-media-occurrence'), ('specialist-evidence.sqlite', 2, 'specialist-evidence-only')]:
               path = root / name
               files.append(dict(name=name, sha256=hashlib.sha256(path.read_bytes()).hexdigest(), sizeBytes=path.stat().st_size, schemaVersion=version, scope=scope))
           manifest = dict(manifestVersion=1, bundle='FieldIntelligence-WFO-mobile-selected-genera', files=files)
