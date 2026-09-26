@@ -81,7 +81,7 @@ class MainActivity:ComponentActivity(){
   mapCredit=if(region?.id?.startsWith("osm-")==true) "© OpenStreetMap contributors • ODbL 1.0" else null
   mapPoints=region?.let { r -> mapPack.features(r).map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) } } ?: emptyList()
   mapLines=region?.let { r -> mapPack.lines(r).map { line -> OfflineMapLineUi(line.points.map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) }) } } ?: emptyList()
-  mapPolygons=region?.let { r -> mapPack.polygons(r).map { poly -> OfflineMapPolygonUi(poly.points.map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) }) } ?: emptyList()
+  mapPolygons=region?.let { r -> mapPack.polygons(r).map { poly -> OfflineMapPolygonUi(poly.points.map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) }) } } ?: emptyList()
  }
  private fun startGnss(){ if(listener==null) listener=location.start { fix ->
   latestFix=fix
@@ -129,9 +129,7 @@ class MainActivity:ComponentActivity(){
   scientificImportBusy=true
   lifecycleScope.launch{
    updateStatus="Đang kiểm tra integrity, schema, scope và số lượng hồ sơ…"
-   val outcome=withContext(Dispatchers.IO){
-    runCatching { scientificImporter.importBundle(uri) }
-   }
+   val outcome=withContext(Dispatchers.IO){runCatching { scientificImporter.importBundle(uri) }}
    if(outcome.isSuccess){
     ScientificLibraryStore(applicationContext).refreshAfterImport()
     updateStatus=outcome.getOrThrow().message+" • mở Thư viện để tra cứu"
