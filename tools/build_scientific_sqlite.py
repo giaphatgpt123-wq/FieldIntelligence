@@ -14,6 +14,12 @@ import sqlite3
 from pathlib import Path
 
 SCHEMA_VERSION = 2
+REUSABLE_MEDIA_LICENSES = {
+    "CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
+    "https://creativecommons.org/publicdomain/zero/1.0/",
+    "https://creativecommons.org/licenses/by/4.0/",
+    "https://creativecommons.org/licenses/by-nc/4.0/",
+}
 
 
 def open_text(path: Path):
@@ -86,6 +92,7 @@ def create_schema(db: sqlite3.Connection) -> None:
 def row_from_record(record: dict) -> tuple:
     provenance = record.get("provenance") or {}
     scientific = str(record.get("scientificName") or "").strip()
+    source_doi = str(provenance.get("versionDoi") or provenance.get("datasetDoi") or "").strip()
     return (
         str(record.get("sourceId") or "").strip(),
         str(record.get("sourceRecordId") or "").strip(),
@@ -105,7 +112,7 @@ def row_from_record(record: dict) -> tuple:
         str(provenance.get("license") or "").strip(),
         str(provenance.get("scope") or "").strip(),
         str(provenance.get("version") or "").strip(),
-        str(provenance.get("versionDoi") or "").strip(),
+        source_doi,
     )
 
 
@@ -127,6 +134,7 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
         count = 0
         accepted = 0
         media_count = 0
+        rejected_media_count = 0
         vernacular_count = 0
         occurrence_count = 0
         batch = []
@@ -146,15 +154,9 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
                     media_items = [record.get("media") or {}]
                 for media in media_items:
                     media_identifier = str(media.get("identifier") or "").strip()
-                    if not media_identifier:
-                        continue
                     media_license = str(media.get("license") or "").strip()
-                    # A media URL without an explicit reusable licence is not eligible
-                    # for the offline scientific library.
-                    if media_license not in {"CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
-                                             "https://creativecommons.org/publicdomain/zero/1.0/",
-                                             "https://creativecommons.org/licenses/by/4.0/",
-                                             "https://creativecommons.org/licenses/by-nc/4.0/"}:
+                    if not media_identifier or media_license not in REUSABLE_MEDIA_LICENSES:
+                        rejected_media_count += 1
                         continue
                     db.execute("""INSERT OR IGNORE INTO species_media
                         (source_id,source_record_id,media_identifier,media_type,references_url,title,description,creator,rights_holder,media_license)
@@ -196,6 +198,14 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
                 SELECT 1 FROM species_media m
                 WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id
             )""", ("Cá nước ngọt",)).fetchone()[0]
+        fish_with_2plus_media = db.execute("""SELECT COUNT(*) FROM (
+            SELECT t.source_id, t.source_record_id
+            FROM taxon t JOIN species_media m
+              ON m.source_id=t.source_id AND m.source_record_id=t.source_record_id
+            WHERE t.library_group = ?
+            GROUP BY t.source_id, t.source_record_id
+            HAVING COUNT(m.media_identifier) >= 2
+        )""", ("Cá nước ngọt",)).fetchone()[0]
         fish_pending_media = fish_taxa - fish_with_media
         meta = {
             "schemaVersion": SCHEMA_VERSION,
@@ -203,13 +213,15 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
             "acceptedRecordCount": accepted,
             "sourceId": source_meta.get("sourceId", ""),
             "sourceVersion": source_meta.get("version", ""),
-            "sourceDoi": source_meta.get("versionDoi", ""),
+            "sourceDoi": source_meta.get("versionDoi") or source_meta.get("datasetDoi", ""),
             "sourceLicense": source_meta.get("license", ""),
             "scope": "taxonomy-media-occurrence",
             "mediaRecordCount": media_count,
+            "rejectedMediaCount": rejected_media_count,
             "recordsWithMedia": db.execute("SELECT COUNT(DISTINCT source_id || char(31) || source_record_id) FROM species_media").fetchone()[0],
             "fishTaxa": fish_taxa,
             "fishWithMedia": fish_with_media,
+            "fishWith2PlusMedia": fish_with_2plus_media,
             "fishPendingMedia": fish_pending_media,
             "fishPublishRule": "requires-at-least-one-licensed-media",
             "vernacularNameCount": vernacular_count,
