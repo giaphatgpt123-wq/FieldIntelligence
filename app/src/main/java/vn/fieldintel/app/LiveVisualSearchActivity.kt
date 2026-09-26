@@ -122,7 +122,7 @@ class LiveVisualSearchActivity : ComponentActivity() {
                     if (mode == "LIVE") {
                         RegionScanAutoCapturePanel(runner = runner)
                     } else {
-                        StillImageRecognitionPanel()
+                        StillImageRecognitionPanel(modelGeneration = runnerGeneration)
                     }
                 }
             }
