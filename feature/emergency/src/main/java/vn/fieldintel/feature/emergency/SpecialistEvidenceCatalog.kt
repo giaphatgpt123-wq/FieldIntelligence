@@ -9,7 +9,8 @@ enum class EvidenceDomain {
 enum class EvidenceClass {
     OFFICIAL_LISTING,
     REGULATORY_MONOGRAPH,
-    PUBLIC_HEALTH_TOXICOLOGY
+    PUBLIC_HEALTH_TOXICOLOGY,
+    BOTANICAL_HAZARD_PROFILE
 }
 
 data class SpecialistEvidenceRecord(
@@ -137,6 +138,19 @@ object SpecialistEvidenceCatalog {
             sourceUrl = "https://www.cdc.gov/chemical-emergencies/chemical-fact-sheets/abrin.html",
             sourceRecord = "Abrin Chemical Fact Sheet; NIOSH Emergency Response Safety and Health Database",
             scopeNote = "Chỉ xác nhận nguy cơ độc chất gắn với hạt và abrin; không dùng bản ghi này để ước lượng liều phơi nhiễm, tiên lượng ca bệnh hoặc nhận dạng cây từ ảnh."
+        ),
+        SpecialistEvidenceRecord(
+            id = "kew-nerium-oleander-hazard-profile",
+            speciesId = "nerium-oleander",
+            domain = EvidenceDomain.TOXICOLOGY,
+            evidenceClass = EvidenceClass.BOTANICAL_HAZARD_PROFILE,
+            title = "Nerium oleander — hồ sơ nguy cơ thực vật",
+            statement = "Kew Species Profiles cảnh báo mọi bộ phận của Nerium oleander cực độc nếu ăn; nhựa cây có thể gây viêm da và cần tránh hít khói khi đốt cây.",
+            plantPart = "Toàn cây; nhựa; khói khi đốt",
+            sourceName = "Royal Botanic Gardens, Kew — Plants of the World Online / Kew Species Profiles",
+            sourceUrl = "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:80460-1/general-information",
+            sourceRecord = "Kew Species Profile — Hazards",
+            scopeNote = "Cảnh báo nguy cơ theo hồ sơ thực vật của Kew; không dùng để suy ra mức phơi nhiễm, tiên lượng, xử trí cá nhân hay xác minh cây từ ảnh."
         )
     )
 
