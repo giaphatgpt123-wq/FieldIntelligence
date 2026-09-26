@@ -172,12 +172,8 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     val externalResults = if (externalSearchRequested) store.search(query, group, 80) else emptyList()
     val externalSearching = externalSearchRequested && store.isSearching(query, group, 80)
     val externalSearchCompleted = externalSearchRequested && store.isSearchCompleted(query, group, 80)
-    val results = when {
-        selectedCollection != null -> curatedResults
-        externalSearchRequested -> externalResults
-        storeStatus.installed -> emptyList()
-        else -> starterResults
-    }
+    val results = if (selectedCollection != null) curatedResults else
+        (starterResults + externalResults).distinctBy { it.scientificName.lowercase(Locale.ROOT) }
     val totalCount = if (storeStatus.installed && storeStatus.recordCount > 0) storeStatus.recordCount else SpeciesCatalog.records.size.toLong()
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -205,7 +201,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                 }
                 OutlinedTextField(
                     value=query, onValueChange={query=it.take(120)},
-                    label={Text(if(selectedCollection!=null) "Lọc trong bộ sưu tập" else if(storeStatus.installed) "Tên khoa học (ít nhất 2 ký tự)" else "Tên Việt hoặc tên khoa học")},
+                    label={Text(if(selectedCollection!=null) "Lọc trong bộ sưu tập" else if(storeStatus.installed) "Tên Việt hoặc tên khoa học (WFO từ 2 ký tự)" else "Tên Việt hoặc tên khoa học")},
                     leadingIcon={Text("⌕", style=MaterialTheme.typography.headlineSmall)},
                     modifier=Modifier.fillMaxWidth().heightIn(min=60.dp), singleLine=true, shape=RoundedCornerShape(20.dp)
                 )
