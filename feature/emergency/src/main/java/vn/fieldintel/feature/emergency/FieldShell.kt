@@ -398,7 +398,7 @@ private fun RowScope.BottomItem(
                 shadowElevation = if (emphasized) 10.dp else 0.dp
             ) {
                 Box(Modifier.size(if (emphasized) 64.dp else 46.dp), contentAlignment = Alignment.Center) {
-                    FieldIcon(icon, Modifier.size(if (emphasized) 29.dp else 25.dp), if (emphasized) FieldColors.onPrimary else Color(0xFF1D575A))
+                    FieldIcon(icon, Modifier.size(if (emphasized) 34.dp else 29.dp), if (emphasized) FieldColors.onPrimary else Color(0xFF1D575A), navigation = true)
                 }
             }
             Spacer(Modifier.height(3.dp))
