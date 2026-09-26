@@ -27,10 +27,10 @@ jobs:
             exit 0
           fi
           mkdir -p dist
-          gh run download "${SOURCE_RUN}" --repo "${GITHUB_REPOSITORY}" --name FieldIntelligence-P0-debug --dir dist
-          test -s dist/app-debug.apk
-          unzip -t dist/app-debug.apk >/dev/null
-          unzip -p dist/app-debug.apk assets/scientific-library/FieldIntelligence-WFO-mobile.zip > dist/scientific-library.zip
+          gh run download "${SOURCE_RUN}" --repo "${GITHUB_REPOSITORY}" --name FieldIntelligence-main-release --dir dist
+          test -s dist/app-release.apk
+          unzip -t dist/app-release.apk >/dev/null
+          unzip -p dist/app-release.apk assets/scientific-library/FieldIntelligence-WFO-mobile.zip > dist/scientific-library.zip
           python3 - <<'PY'
           import json, sqlite3, tempfile, zipfile
           from pathlib import Path
@@ -45,7 +45,7 @@ jobs:
                       assert db.execute('SELECT COUNT(*) FROM taxon').fetchone()[0] == 38100
           PY
           short_sha="${SOURCE_SHA:0:12}"
-          mv dist/app-debug.apk "dist/FieldIntelligence-${short_sha}.apk"
+          mv dist/app-release.apk "dist/FieldIntelligence-${short_sha}.apk"
           if gh release view "fieldintel-${short_sha}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
             echo "Release already exists."
             exit 0
@@ -54,5 +54,4 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --target "${SOURCE_SHA}" \
             --title "FieldIntelligence - bản cập nhật ${short_sha}" \
-            --notes "APK debug đã qua CI; tích hợp thư viện WFO tự nạp. Tính năng nhận dạng loài từ ảnh vẫn cần model đã kiểm chứng." \
-            --prerelease
+            --notes "APK bản chính đã qua CI; gồm thư viện WFO tự nạp và danh mục cá nước ngọt. Nhận dạng loài bằng ảnh cần model đã kiểm chứng." \
