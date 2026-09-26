@@ -112,6 +112,11 @@ class VisualModelImportManager(context: Context) {
         val expectedSha = meta.getString("sha256").lowercase(Locale.ROOT)
         require(expectedSha.matches(Regex("[0-9a-f]{64}"))) { "SHA-256 $label trong manifest không hợp lệ" }
         require(sha256(file) == expectedSha) { "SHA-256 $label không khớp manifest" }
+        val header = ByteArray(8)
+        file.inputStream().use { stream -> require(stream.read(header) == header.size) { "$label quá ngắn" } }
+        require(header.copyOfRange(4, 8).contentEquals("TFL3".toByteArray(Charsets.US_ASCII))) {
+            "$label không phải tệp TensorFlow Lite hợp lệ"
+        }
     }
 
     private fun extractBundle(input: InputStream, staging: File) {
