@@ -54,4 +54,4 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --target "${SOURCE_SHA}" \
             --title "FieldIntelligence - bản cập nhật ${short_sha}" \
-            --notes "APK bản chính đã qua CI; gồm thư viện WFO tự nạp và danh mục cá nước ngọt. Nhận dạng loài bằng ảnh cần model đã kiểm chứng." \
+            --notes "APK bản chính đã qua CI; gồm thư viện WFO tự nạp và danh mục cá nước ngọt. Nhận dạng loài bằng ảnh cần model đã kiểm chứng."
