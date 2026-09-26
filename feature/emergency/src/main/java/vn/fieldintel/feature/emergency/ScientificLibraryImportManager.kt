@@ -117,7 +117,7 @@ class ScientificLibraryImportManager(private val context: Context) {
     private fun parseManifest(text: String): Map<PackType, ManifestEntry> {
         val root = JSONObject(text)
         require(root.optInt("manifestVersion", -1) == 1) { "Manifest version không được hỗ trợ" }
-        require(root.optString("bundle") == EXPECTED_BUNDLE_NAME) { "Tên scientific bundle không hợp lệ" }
+        require(root.optString("bundle") in ACCEPTED_BUNDLE_NAMES) { "Tên scientific bundle không hợp lệ" }
         val files = root.optJSONArray("files") ?: error("Manifest thiếu danh sách files")
         val entries = mutableMapOf<PackType, ManifestEntry>()
         for (index in 0 until files.length()) {
@@ -356,7 +356,10 @@ class ScientificLibraryImportManager(private val context: Context) {
 
     companion object {
         private const val MANIFEST_NAME = "scientific-library.manifest.json"
-        private const val EXPECTED_BUNDLE_NAME = "FieldIntelligence-WFO-scientific-library"
+        private val ACCEPTED_BUNDLE_NAMES = setOf(
+            "FieldIntelligence-WFO-scientific-library",
+            "FieldIntelligence-WFO-mobile-selected-genera"
+        )
         private const val MAX_ZIP_ENTRIES = 32
         private const val MAX_MANIFEST_BYTES = 64 * 1024
         private val SHA256_REGEX = Regex("^[0-9a-f]{64}$")
