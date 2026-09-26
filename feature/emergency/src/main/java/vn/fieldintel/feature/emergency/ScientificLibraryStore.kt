@@ -93,6 +93,21 @@ class ScientificLibraryStore(context: Context) {
         return liveStatus
     }
 
+    /** Call after an atomic pack replacement so stale searches and collection snapshots are cleared. */
+    fun refreshAfterImport() {
+        synchronized(searchLock) {
+            activeSearchJob?.cancel()
+            activeSearchJob = null
+            activeSearchKey = null
+            searchResults.clear()
+            searchStates.clear()
+        }
+        recordCache.clear()
+        pendingIdLoads.clear()
+        refreshStatusAsync()
+        LibraryCollectionRuntime.bind(appContext, this)
+    }
+
     internal fun isInstalledBlocking(): Boolean = readStatusBlocking().installed
 
     /**
@@ -282,8 +297,10 @@ class ScientificLibraryStore(context: Context) {
             buildSet { while (cursor.moveToNext()) add(cursor.getString(0)) }
         }
         require(table == setOf("meta", "taxon")) { "Scientific library schema is incomplete" }
-        val schemaVersion = readMeta(db)["schemaVersion"]?.trimJsonString()?.toIntOrNull()
+        val meta = readMeta(db)
+        val schemaVersion = meta["schemaVersion"]?.trimJsonString()?.toIntOrNull()
         require(schemaVersion == SUPPORTED_SCHEMA_VERSION) { "Unsupported scientific library schema: $schemaVersion" }
+        require(meta["scope"]?.trimJsonString() == "taxonomy-only") { "Unexpected scientific library scope" }
     }
 
     private fun readMeta(db: SQLiteDatabase): Map<String, String> = db.rawQuery(
