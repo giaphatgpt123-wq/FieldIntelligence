@@ -12,20 +12,31 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun SpecialistEvidencePanel(speciesId: String) {
-    val records = SpecialistEvidenceCatalog.forSpecies(speciesId)
-    if (records.isEmpty()) return
+    val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
+    val store = remember(context) { SpecialistEvidenceStore(context.applicationContext) }
+    val packStatus = remember(speciesId) { store.status() }
+    val packRecords = remember(speciesId) { store.forSpecies(speciesId) }
+    val records = if (packRecords.isNotEmpty()) packRecords else SpecialistEvidenceCatalog.forSpecies(speciesId)
+    if (records.isEmpty()) return
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("BẰNG CHỨNG CHUYÊN NGÀNH", fontWeight = FontWeight.Black)
+        Text(
+            if (packRecords.isNotEmpty()) "Nguồn dữ liệu: gói evidence offline • ${packStatus.recordCount} hồ sơ"
+            else "Nguồn dữ liệu: bộ lõi đã kiểm duyệt trong ứng dụng",
+            color = FieldColors.onSurfaceVariant
+        )
         records.forEach { record ->
             val accent = when (record.domain) {
                 EvidenceDomain.TOXICOLOGY -> Color(0xFFFF8A80)
