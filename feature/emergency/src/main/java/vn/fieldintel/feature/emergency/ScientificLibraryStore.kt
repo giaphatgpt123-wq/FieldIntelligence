@@ -74,6 +74,35 @@ class ScientificLibraryStore(context: Context) {
         }.getOrElse { emptyList() }
     }
 
+    fun findByScientificNames(scientificNames: Collection<String>, limit: Int = 500): List<SpeciesRecord> {
+        if (!databaseFile.isFile || scientificNames.isEmpty()) return emptyList()
+        val normalized = scientificNames.asSequence()
+            .map { it.trim().lowercase() }
+            .filter { it.isNotBlank() }
+            .distinct()
+            .take(limit.coerceIn(1, 1000))
+            .toList()
+        if (normalized.isEmpty()) return emptyList()
+        return runCatching {
+            openReadOnly().use { db ->
+                requireSchema(db)
+                val placeholders = normalized.joinToString(",") { "?" }
+                val sql = """
+                    SELECT source_id, source_record_id, scientific_name, library_group,
+                           authority, license, source_scope, source_version, source_doi
+                    FROM taxon
+                    WHERE scientific_name_search IN ($placeholders)
+                    ORDER BY scientific_name_search
+                """.trimIndent()
+                db.rawQuery(sql, normalized.toTypedArray()).use { cursor ->
+                    buildList {
+                        while (cursor.moveToNext()) add(cursor.toSpeciesRecord())
+                    }
+                }
+            }
+        }.getOrElse { emptyList() }
+    }
+
     fun findById(id: String): SpeciesRecord? {
         if (!databaseFile.isFile || !id.startsWith(ID_PREFIX)) return null
         val body = id.removePrefix(ID_PREFIX)
