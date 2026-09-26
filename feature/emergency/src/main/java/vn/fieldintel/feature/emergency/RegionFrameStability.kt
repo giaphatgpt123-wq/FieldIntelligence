@@ -29,7 +29,15 @@ class RegionFrameStabilityGate(
         lastCaptureTimestamp = Long.MIN_VALUE
     }
 
-    fun shouldCapture(timestampNanos: Long, frame: LiveVisualFrameData): Boolean {
+    /**
+     * Always observes scene motion. captureEligible=false prevents the recognition pipeline from
+     * consuming the cooldown before a stable taxon candidate exists.
+     */
+    fun shouldCapture(
+        timestampNanos: Long,
+        frame: LiveVisualFrameData,
+        captureEligible: Boolean = true
+    ): Boolean {
         val signature = sampleLuma(frame)
         val prior = previous
         previous = signature
@@ -44,11 +52,12 @@ class RegionFrameStabilityGate(
 
         val intervalOk = lastCaptureTimestamp == Long.MIN_VALUE ||
             timestampNanos - lastCaptureTimestamp >= minimumIntervalNanos
-        if (stableFrames >= stableFramesRequired && intervalOk) {
+        if (stableFrames >= stableFramesRequired && intervalOk && captureEligible) {
             lastCaptureTimestamp = timestampNanos
             stableFrames = 0
             return true
         }
+        if (stableFrames > stableFramesRequired) stableFrames = stableFramesRequired
         return false
     }
 
