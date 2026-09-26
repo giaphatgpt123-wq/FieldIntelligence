@@ -20,6 +20,29 @@ class ScientificMediaStore(context: Context) {
         ScientificLibraryStore.DATABASE_NAME
     )
 
+    fun fishWithLocalMediaCount(): Long {
+        if (!databaseFile.isFile || databaseFile.length() <= 0L) return 0L
+        return runCatching {
+            SQLiteDatabase.openDatabase(
+                databaseFile.absolutePath,
+                null,
+                SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
+            ).use { db ->
+                if (!hasLocalMediaTables(db)) return@use 0L
+                val metaValue = db.rawQuery("SELECT value FROM meta WHERE key='fishWithLocalMedia' LIMIT 1", null).use { cursor ->
+                    if (cursor.moveToFirst()) cursor.getString(0).trim().trim('"').toLongOrNull() else null
+                }
+                metaValue ?: db.rawQuery(
+                    """SELECT COUNT(*) FROM taxon t
+                       WHERE t.library_group='Cá nước ngọt' AND EXISTS (
+                         SELECT 1 FROM species_media_local l
+                         WHERE l.source_id=t.source_id AND l.source_record_id=t.source_record_id
+                       )""".trimIndent(), null
+                ).use { cursor -> if (cursor.moveToFirst()) cursor.getLong(0) else 0L }
+            }
+        }.getOrElse { 0L }
+    }
+
     fun loadForRecord(recordId: String, limit: Int = 2): List<ScientificLocalMedia> {
         val key = parseRecordId(recordId) ?: return emptyList()
         if (!databaseFile.isFile || databaseFile.length() <= 0L) return emptyList()
