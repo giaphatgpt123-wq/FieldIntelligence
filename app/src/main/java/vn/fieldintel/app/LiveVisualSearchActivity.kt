@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -77,22 +80,51 @@ class LiveVisualSearchActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(0xFF07181D))
+                        .background(Color(0xFF316D74))
                         .verticalScroll(rememberScrollState())
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        OutlinedButton(onClick = { finish() }, modifier = Modifier.heightIn(min = 56.dp)) {
+                            Text("← TRANG CHỦ", color = Color.White, fontWeight = FontWeight.Bold)
+                        }
+                        Spacer(Modifier.weight(1f))
+                        Text("QUÉT THỰC ĐỊA", color = Color.White, fontWeight = FontWeight.Black)
+                    }
+
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Button(
+                            onClick = { mode = "LIVE" },
+                            colors = ButtonDefaults.buttonColors(containerColor = if (mode == "LIVE") FieldColors.primary else Color(0xFF245860)),
+                            modifier = Modifier.weight(1f).heightIn(min = 56.dp),
+                            shape = RoundedCornerShape(18.dp)
+                        ) { Text("QUÉT CAMERA", fontWeight = FontWeight.Bold) }
+                        OutlinedButton(
+                            onClick = { mode = "PHOTO" },
+                            
+                            modifier = Modifier.weight(1f).heightIn(min = 56.dp),
+                            shape = RoundedCornerShape(18.dp)
+                        ) { Text("ẢNH / THƯ VIỆN", fontWeight = FontWeight.Bold) }
+                    }
+
+                    if (mode == "LIVE") {
+                        RegionScanAutoCapturePanel(runner = runner)
+                    } else {
+                        StillImageRecognitionPanel(modelGeneration = runnerGeneration)
+                    }
+
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(18.dp),
-                        color = Color(0xFF102A31)
+                        color = Color(0xFF245860)
                     ) {
                         Column(Modifier.padding(14.dp)) {
                             Text("MODEL NHẬN DẠNG", style = MaterialTheme.typography.titleMedium)
                             Text(
                                 installStatus,
                                 modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
-                                color = Color(0xFFB8C8CC)
+                                color = Color(0xFFE0F3EE)
                             )
                             Button(
                                 onClick = { selectModelBundle.launch(arrayOf("application/zip", "application/octet-stream")) },
@@ -104,26 +136,6 @@ class LiveVisualSearchActivity : ComponentActivity() {
                         }
                     }
 
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Button(
-                            onClick = { mode = "LIVE" },
-                            enabled = mode != "LIVE",
-                            modifier = Modifier.weight(1f).heightIn(min = 56.dp),
-                            shape = RoundedCornerShape(18.dp)
-                        ) { Text("QUÉT CAMERA", fontWeight = FontWeight.Bold) }
-                        OutlinedButton(
-                            onClick = { mode = "PHOTO" },
-                            enabled = mode != "PHOTO",
-                            modifier = Modifier.weight(1f).heightIn(min = 56.dp),
-                            shape = RoundedCornerShape(18.dp)
-                        ) { Text("ẢNH / THƯ VIỆN", fontWeight = FontWeight.Bold) }
-                    }
-
-                    if (mode == "LIVE") {
-                        RegionScanAutoCapturePanel(runner = runner)
-                    } else {
-                        StillImageRecognitionPanel(modelGeneration = runnerGeneration)
-                    }
                 }
             }
         }
