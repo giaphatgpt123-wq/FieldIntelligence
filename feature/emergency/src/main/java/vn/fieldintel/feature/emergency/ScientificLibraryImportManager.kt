@@ -48,9 +48,7 @@ class ScientificLibraryImportManager(private val context: Context) {
 
     /** Imports the GitHub Actions artifact ZIP containing both required SQLite files. */
     fun importBundle(uri: Uri): BundleImportResult {
-        val directory = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME).apply { mkdirs() }
-        require(directory.isDirectory) { "Không thể tạo thư mục thư viện khoa học" }
-
+        val directory = libraryDirectory()
         val staged = PackType.entries.associateWith { type ->
             File(directory, ".${type.fileName}.incoming").also { it.delete() }
         }
@@ -75,22 +73,14 @@ class ScientificLibraryImportManager(private val context: Context) {
             }
 
             val counts = PackType.entries.associateWith { type -> validate(staged.getValue(type), type) }
-            val taxonomy = activate(staged.getValue(PackType.TAXONOMY), PackType.TAXONOMY, counts.getValue(PackType.TAXONOMY))
-            val evidence = activate(staged.getValue(PackType.SPECIALIST_EVIDENCE), PackType.SPECIALIST_EVIDENCE, counts.getValue(PackType.SPECIALIST_EVIDENCE))
-            return BundleImportResult(
-                taxonomy = taxonomy,
-                specialistEvidence = evidence,
-                message = "Đã cài thư viện khoa học: ${taxonomy.recordCount} taxonomy + ${evidence.recordCount} evidence"
-            )
+            return activateBundle(staged, counts)
         } finally {
             staged.values.forEach { it.delete() }
         }
     }
 
     fun import(uri: Uri, type: PackType): ImportResult {
-        val directory = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME).apply { mkdirs() }
-        require(directory.isDirectory) { "Không thể tạo thư mục thư viện khoa học" }
-
+        val directory = libraryDirectory()
         val staging = File(directory, ".${type.fileName}.incoming")
         staging.delete()
         val copied = copyBounded(uri, staging, type.maxBytes)
@@ -98,18 +88,78 @@ class ScientificLibraryImportManager(private val context: Context) {
 
         return try {
             val recordCount = validate(staging, type)
-            activate(staging, type, recordCount)
+            activateSingle(staging, type, recordCount)
         } finally {
             staging.delete()
         }
     }
 
-    private fun activate(staging: File, type: PackType, recordCount: Long): ImportResult {
-        val directory = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME)
+    private fun activateBundle(
+        staged: Map<PackType, File>,
+        counts: Map<PackType, Long>
+    ): BundleImportResult {
+        val directory = libraryDirectory()
+        val targets = PackType.entries.associateWith { File(directory, it.fileName) }
+        val previous = PackType.entries.associateWith { File(directory, it.previousName) }
+        val existedBefore = PackType.entries.associateWith { targets.getValue(it).isFile }
+
+        PackType.entries.forEach { type ->
+            val target = targets.getValue(type)
+            val backup = previous.getValue(type)
+            if (target.isFile && target.length() > 0L) target.copyTo(backup, overwrite = true) else backup.delete()
+        }
+
+        try {
+            PackType.entries.forEach { type -> atomicReplace(staged.getValue(type), targets.getValue(type)) }
+        } catch (failure: Throwable) {
+            val restoreFailures = mutableListOf<String>()
+            PackType.entries.forEach { type ->
+                val target = targets.getValue(type)
+                val backup = previous.getValue(type)
+                runCatching {
+                    if (existedBefore.getValue(type)) {
+                        require(backup.isFile && backup.length() > 0L) { "Thiếu bản sao ${type.fileName}" }
+                        val restore = File(directory, ".${type.fileName}.restore")
+                        backup.copyTo(restore, overwrite = true)
+                        atomicReplace(restore, target)
+                    } else {
+                        target.delete()
+                    }
+                }.onFailure { restoreFailures += "${type.fileName}: ${it.message}" }
+            }
+            val suffix = if (restoreFailures.isEmpty()) "đã hoàn nguyên gói trước" else "hoàn nguyên lỗi: ${restoreFailures.joinToString()}"
+            throw IllegalStateException("Kích hoạt bundle thất bại; $suffix", failure)
+        }
+
+        val taxonomy = resultFor(PackType.TAXONOMY, targets.getValue(PackType.TAXONOMY), counts.getValue(PackType.TAXONOMY))
+        val evidence = resultFor(PackType.SPECIALIST_EVIDENCE, targets.getValue(PackType.SPECIALIST_EVIDENCE), counts.getValue(PackType.SPECIALIST_EVIDENCE))
+        return BundleImportResult(
+            taxonomy = taxonomy,
+            specialistEvidence = evidence,
+            message = "Đã cài thư viện khoa học: ${taxonomy.recordCount} taxonomy + ${evidence.recordCount} evidence"
+        )
+    }
+
+    private fun activateSingle(staging: File, type: PackType, recordCount: Long): ImportResult {
+        val directory = libraryDirectory()
         val target = File(directory, type.fileName)
         val previous = File(directory, type.previousName)
         if (target.isFile && target.length() > 0L) target.copyTo(previous, overwrite = true)
+        atomicReplace(staging, target)
+        return resultFor(type, target, recordCount)
+    }
 
+    private fun resultFor(type: PackType, target: File, recordCount: Long): ImportResult = ImportResult(
+        type = type,
+        installedBytes = target.length(),
+        recordCount = recordCount,
+        message = when (type) {
+            PackType.TAXONOMY -> "Đã cài taxonomy SQLite: $recordCount hồ sơ"
+            PackType.SPECIALIST_EVIDENCE -> "Đã cài specialist evidence SQLite: $recordCount hồ sơ"
+        }
+    )
+
+    private fun atomicReplace(staging: File, target: File) {
         try {
             Files.move(
                 staging.toPath(),
@@ -118,18 +168,14 @@ class ScientificLibraryImportManager(private val context: Context) {
                 StandardCopyOption.REPLACE_EXISTING
             )
         } catch (failure: Throwable) {
-            throw IllegalStateException("Không thể kích hoạt gói SQLite theo cơ chế atomic", failure)
+            staging.delete()
+            throw IllegalStateException("Không thể kích hoạt ${target.name} theo cơ chế atomic", failure)
         }
+    }
 
-        return ImportResult(
-            type = type,
-            installedBytes = target.length(),
-            recordCount = recordCount,
-            message = when (type) {
-                PackType.TAXONOMY -> "Đã cài taxonomy SQLite: $recordCount hồ sơ"
-                PackType.SPECIALIST_EVIDENCE -> "Đã cài specialist evidence SQLite: $recordCount hồ sơ"
-            }
-        )
+    private fun libraryDirectory(): File = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME).apply {
+        mkdirs()
+        require(isDirectory) { "Không thể tạo thư mục thư viện khoa học" }
     }
 
     private fun copyBounded(uri: Uri, target: File, maxBytes: Long): Long {
