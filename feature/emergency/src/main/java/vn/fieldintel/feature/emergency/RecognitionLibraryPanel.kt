@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -129,6 +130,13 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     val uriHandler = LocalUriHandler.current
     val store = remember(context) { ScientificLibraryStore(context.applicationContext) }
     val storeStatus = remember { store.status() }
+    LaunchedEffect(store) {
+        repeat(30) {
+            if (storeStatus.installed) return@LaunchedEffect
+            delay(1000L)
+            store.status()
+        }
+    }
     var confirmDelete by remember { mutableStateOf<String?>(null) }
     var selectedObservation by remember { mutableStateOf<String?>(null) }
     var query by remember { mutableStateOf("") }
