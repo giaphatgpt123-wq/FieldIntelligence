@@ -14,6 +14,7 @@ class SpecialistEvidenceCatalogTest {
             assertTrue(record.sourceUrl.startsWith("https://"))
             assertTrue(record.statement.isNotBlank())
             assertTrue(record.scopeNote.isNotBlank())
+            assertFalse(record.scopeNote.contains("tự điều trị an toàn", ignoreCase = true))
         }
     }
 
@@ -28,6 +29,23 @@ class SpecialistEvidenceCatalogTest {
         val records = SpecialistEvidenceCatalog.forSpecies("curcuma-longa")
         assertTrue(records.any { it.domain == EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE })
         assertTrue(records.any { it.domain == EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH })
+    }
+
+    @Test
+    fun gingerHasBothVietnameseAndEmaEvidenceWithoutDoseClaims() {
+        val records = SpecialistEvidenceCatalog.forSpecies("zingiber-officinale")
+        assertTrue(records.count { it.domain == EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE } >= 2)
+        assertTrue(records.any { it.domain == EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH })
+        assertTrue(records.all { !it.statement.contains("liều", ignoreCase = true) })
+        assertTrue(records.any { it.title.contains("Sinh khương") })
+        assertTrue(records.any { it.title.contains("Can khương") })
+    }
+
+    @Test
+    fun hypericumMonographRemainsSeparateFromInteractionEvidence() {
+        val records = SpecialistEvidenceCatalog.forSpecies("hypericum-perforatum")
+        assertTrue(records.any { it.domain == EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH })
+        assertTrue(InteractionCatalog.findForEntity("Hypericum perforatum").isNotEmpty())
     }
 
     @Test
