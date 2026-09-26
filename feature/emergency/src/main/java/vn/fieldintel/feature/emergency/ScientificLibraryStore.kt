@@ -27,10 +27,7 @@ data class ScientificLibraryStatusSnapshot(
     val scope: String = "taxonomy-only"
 )
 
-/**
- * Observable status holder. Compose can remember this object once; property changes published from
- * the IO loader still trigger recomposition without running SQLite on the UI thread.
- */
+/** Observable status holder updated by the IO loader. */
 class ScientificLibraryStatus internal constructor() {
     var installed by mutableStateOf(false)
         internal set
@@ -58,14 +55,17 @@ class ScientificLibraryStatus internal constructor() {
     }
 }
 
+private class ScientificSearchState {
+    var loading by mutableStateOf(false)
+    var completed by mutableStateOf(false)
+}
+
 /**
  * Read-only access to the separately distributed scientific taxonomy database.
  *
- * The database contains taxonomy/provenance only. A database match must never be treated as image
- * identification, edibility/toxicity evidence, or medical guidance. UI-facing status/search/id
- * access is non-blocking: SQLite work runs on Dispatchers.IO and observable snapshots are published
- * back to Compose. Bulk resolver calls remain synchronous because they are already invoked by the
- * dedicated background collection loader.
+ * UI-facing status/search/id access never performs SQLite reads on the Compose thread. Taxonomy
+ * matches remain taxonomy/provenance only and must not be treated as image identification,
+ * edibility/toxicity evidence, or medical guidance.
  */
 class ScientificLibraryStore(context: Context) {
     private val appContext = context.applicationContext
@@ -73,6 +73,7 @@ class ScientificLibraryStore(context: Context) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val liveStatus = ScientificLibraryStatus()
     private val searchResults = ConcurrentHashMap<SearchKey, SnapshotStateList<SpeciesRecord>>()
+    private val searchStates = ConcurrentHashMap<SearchKey, ScientificSearchState>()
     private val recordCache = ConcurrentHashMap<String, SpeciesRecord>()
     private val pendingIdLoads = ConcurrentHashMap.newKeySet<String>()
     private val searchLock = Any()
@@ -94,29 +95,48 @@ class ScientificLibraryStore(context: Context) {
 
     internal fun isInstalledBlocking(): Boolean = readStatusBlocking().installed
 
+    /**
+     * Returns an observable result list immediately. The first request for a key is debounced and
+     * executed on Dispatchers.IO; a completed zero-result search stays completed and is not silently
+     * reissued on every recomposition.
+     */
     fun search(query: String, group: String = "Tất cả", limit: Int = 80): List<SpeciesRecord> {
-        val needle = query.trim().lowercase()
-        if (needle.isBlank()) return emptyList()
-        val safeLimit = limit.coerceIn(1, 200)
-        val key = SearchKey(needle, group, safeLimit)
+        val key = searchKey(query, group, limit) ?: return emptyList()
         val observable = searchResults.getOrPut(key) { mutableStateListOf() }
+        val state = searchStates.getOrPut(key) { ScientificSearchState() }
 
         synchronized(searchLock) {
-            if (activeSearchKey != key || activeSearchJob?.isActive != true) {
+            if (!state.loading && !state.completed) {
                 activeSearchJob?.cancel()
                 activeSearchKey = key
+                state.loading = true
                 activeSearchJob = scope.launch {
-                    delay(SEARCH_DEBOUNCE_MS)
-                    val loaded = searchBlocking(needle, group, safeLimit)
-                    loaded.forEach { recordCache[it.id] = it }
-                    Snapshot.withMutableSnapshot {
-                        observable.clear()
-                        observable.addAll(loaded)
+                    try {
+                        delay(SEARCH_DEBOUNCE_MS)
+                        val loaded = searchBlocking(key.query, key.group, key.limit)
+                        loaded.forEach { recordCache[it.id] = it }
+                        Snapshot.withMutableSnapshot {
+                            observable.clear()
+                            observable.addAll(loaded)
+                            state.completed = true
+                        }
+                    } finally {
+                        Snapshot.withMutableSnapshot { state.loading = false }
                     }
                 }
             }
         }
         return observable
+    }
+
+    fun isSearching(query: String, group: String = "Tất cả", limit: Int = 80): Boolean {
+        val key = searchKey(query, group, limit) ?: return false
+        return searchStates[key]?.loading == true
+    }
+
+    fun isSearchCompleted(query: String, group: String = "Tất cả", limit: Int = 80): Boolean {
+        val key = searchKey(query, group, limit) ?: return false
+        return searchStates[key]?.completed == true
     }
 
     /**
@@ -316,6 +336,12 @@ class ScientificLibraryStore(context: Context) {
         .replace("\\", "\\\\")
         .replace("%", "\\%")
         .replace("_", "\\_")
+
+    private fun searchKey(query: String, group: String, limit: Int): SearchKey? {
+        val needle = query.trim().lowercase()
+        if (needle.isBlank()) return null
+        return SearchKey(needle, group, limit.coerceIn(1, 200))
+    }
 
     private data class SearchKey(val query: String, val group: String, val limit: Int)
 
