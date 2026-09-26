@@ -18,6 +18,7 @@ android {
 dependencies {
     implementation(project(":domain:emergency"))
     implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.compose.material3:material3:1.3.1")
     implementation("androidx.camera:camera-core:1.4.2")
     implementation("androidx.camera:camera-camera2:1.4.2")
