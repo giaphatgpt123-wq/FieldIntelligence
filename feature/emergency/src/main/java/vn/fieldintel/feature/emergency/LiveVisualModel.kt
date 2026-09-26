@@ -81,11 +81,17 @@ data class VisualModelStatus(
 interface LiveVisualModelRunner {
     fun status(): VisualModelStatus
 
-    /** Runs inference on an owned copy of a YUV_420_888 camera frame. */
+    /** Runs target-oriented inference on an owned YUV camera frame. */
     fun detect(
         frame: LiveVisualFrameData,
         target: LiveVisualSearchTarget
     ): List<VisualDetection>
+
+    /**
+     * Runs open-region inference and returns every supported object/taxon candidate in the frame.
+     * Default is empty so a target-only model cannot accidentally masquerade as a region scanner.
+     */
+    fun scanRegion(frame: LiveVisualFrameData): List<VisualDetection> = emptyList()
 }
 
 object NoVerifiedLiveVisualModel : LiveVisualModelRunner {
@@ -98,6 +104,8 @@ object NoVerifiedLiveVisualModel : LiveVisualModelRunner {
         frame: LiveVisualFrameData,
         target: LiveVisualSearchTarget
     ): List<VisualDetection> = emptyList()
+
+    override fun scanRegion(frame: LiveVisualFrameData): List<VisualDetection> = emptyList()
 }
 
 /**
