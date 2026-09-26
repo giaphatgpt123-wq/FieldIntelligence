@@ -44,6 +44,8 @@ class VisualModelBundleBuilderTest(unittest.TestCase):
                 manifest = json.loads(archive.read("region-model.manifest.json"))
 
             self.assertEqual(manifest["schemaVersion"], 1)
+            self.assertEqual(manifest["taskType"], "OBJECT_DETECTOR")
+            self.assertEqual(manifest["modelFormat"], "TFLITE_TASK_VISION")
             self.assertEqual(manifest["id"], "field-test-detector")
             self.assertEqual(manifest["supportedGroups"], ["plants", "fungi"])
             self.assertFalse(manifest["speciesSafetyClaims"])
