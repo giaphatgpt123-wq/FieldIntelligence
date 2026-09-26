@@ -39,7 +39,7 @@ internal class CameraAdjustmentGate(
 
     @Synchronized fun state(nowNanos: Long): State {
         if (state == State.FOCUSING && nowNanos - startedAt >= focusTimeoutNanos) {
-            settlingAt = nowNanos
+            settlingAt = startedAt + focusTimeoutNanos
             state = State.EXPOSURE_SETTLING
         }
         if (state == State.EXPOSURE_SETTLING && nowNanos - settlingAt >= exposureSettleNanos) {
