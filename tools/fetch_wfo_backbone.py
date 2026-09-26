@@ -71,19 +71,31 @@ def detect_dialect(sample: str) -> csv.Dialect:
         return csv.excel_tab if "\t" in sample else csv.excel
 
 
+def detect_encoding(sample: bytes) -> str:
+    if sample.startswith(b"\xef\xbb\xbf"):
+        return "utf-8-sig"
+    try:
+        sample.decode("utf-8")
+        return "utf-8"
+    except UnicodeDecodeError:
+        return "cp1252"
+
+
 def iter_rows_from_zip(path: Path):
     with zipfile.ZipFile(path) as archive:
         member = choose_taxon_member(archive.namelist())
         with archive.open(member, "r") as raw:
-            text = io.TextIOWrapper(raw, encoding="utf-8-sig", newline="")
-            sample = text.read(8192)
-            dialect = detect_dialect(sample)
-            text.seek(0)
+            binary_sample = raw.read(2 * 1024 * 1024)
+        encoding = detect_encoding(binary_sample)
+        sample = binary_sample.decode(encoding, errors="strict")[:16384]
+        dialect = detect_dialect(sample)
+        with archive.open(member, "r") as raw:
+            text = io.TextIOWrapper(raw, encoding=encoding, errors="replace", newline="")
             reader = csv.DictReader(text, dialect=dialect)
             if not reader.fieldnames:
                 raise SystemExit(f"WFO taxonomy table has no header: {member}")
             for row in reader:
-                yield member, row
+                yield member, encoding, row
 
 
 def normalize_wfo(row: dict[str, str]) -> dict:
@@ -127,12 +139,13 @@ def build(archive_path: Path, output_path: Path, metadata_path: Path) -> dict:
     count = 0
     accepted = 0
     source_member = ""
+    source_encoding = ""
     sha = hashlib.sha256()
 
     with gzip.open(output_path, "wt", encoding="utf-8", newline="\n") as out:
         iterator = iter_rows_from_zip(archive_path)
         try:
-            source_member, first_row = next(iterator)
+            source_member, source_encoding, first_row = next(iterator)
         except StopIteration:
             raise SystemExit("WFO archive taxonomy table is empty")
 
@@ -149,7 +162,7 @@ def build(archive_path: Path, output_path: Path, metadata_path: Path) -> dict:
                 accepted += 1
 
         emit(first_row)
-        for _, row in iterator:
+        for _, _, row in iterator:
             emit(row)
 
     metadata = {
@@ -163,6 +176,8 @@ def build(archive_path: Path, output_path: Path, metadata_path: Path) -> dict:
         "version": SOURCE_VERSION,
         "versionDoi": SOURCE_VERSION_DOI,
         "archiveMember": source_member,
+        "sourceEncoding": source_encoding,
+        "decodePolicy": "strict sample detection; replacement only for isolated invalid bytes during streaming",
         "recordCount": count,
         "acceptedRecordCount": accepted,
         "normalizedNdjsonSha256": sha.hexdigest(),
@@ -185,7 +200,7 @@ def main() -> None:
     parser.add_argument("--metadata", required=True, type=Path)
     args = parser.parse_args()
     metadata = build(args.archive, args.output, args.metadata)
-    print(json.dumps({"recordCount": metadata["recordCount"], "acceptedRecordCount": metadata["acceptedRecordCount"]}))
+    print(json.dumps({"recordCount": metadata["recordCount"], "acceptedRecordCount": metadata["acceptedRecordCount"], "sourceEncoding": metadata["sourceEncoding"]}))
 
 
 if __name__ == "__main__":
