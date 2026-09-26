@@ -6,11 +6,12 @@ import org.junit.Test
 
 class InteractionCatalogTest {
     @Test fun publishedInteractionsRequireValidProvenance() {
-        assertTrue(InteractionCatalog.records.isNotEmpty())
+        assertTrue(InteractionCatalog.records.size >= 9)
         assertTrue(InteractionCatalog.allValidated())
         assertTrue(InteractionCatalog.records.all { record ->
             record.sources.all { it.url.startsWith("https://") && it.authority.isNotBlank() }
         })
+        assertEquals(InteractionCatalog.records.size, InteractionCatalog.records.map { it.id }.toSet().size)
     }
 
     @Test fun knownPairCanBeQueriedInEitherDirection() {
@@ -19,6 +20,25 @@ class InteractionCatalogTest {
         assertEquals("grapefruit-simvastatin-fda", direct.single().id)
         assertEquals(direct, reverse)
         assertEquals(EvidenceLevel.CONFIRMED, direct.single().evidence)
+    }
+
+    @Test fun medicinalPlantInteractionsAreLinkedByScientificName() {
+        val hypericum = InteractionCatalog.findForEntity("Hypericum perforatum")
+        assertTrue(hypericum.size >= 4)
+        assertTrue(hypericum.any { it.id == "hypericum-cyclosporine-nccih" })
+        assertTrue(hypericum.any { it.id == "hypericum-warfarin-nccih" })
+        assertTrue(hypericum.any { it.id == "hypericum-oral-contraceptive-nccih" })
+        assertTrue(hypericum.any { it.id == "hypericum-serotonergic-antidepressant-nccih" })
+
+        val greenTea = InteractionCatalog.pair("Camellia sinensis", "nadolol")
+        assertEquals("green-tea-nadolol-nccih", greenTea.single().id)
+        assertEquals(EvidenceLevel.PROBABLE, greenTea.single().evidence)
+    }
+
+    @Test fun foodDrugSafetyDatasetIncludesVitaminKAndWarfarin() {
+        val pair = InteractionCatalog.pair("vitamin K", "warfarin")
+        assertEquals("vitamin-k-warfarin-nih", pair.single().id)
+        assertEquals(EvidenceLevel.CONFIRMED, pair.single().evidence)
     }
 
     @Test fun unsupportedPairDoesNotInventConflict() {
