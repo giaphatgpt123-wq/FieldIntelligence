@@ -270,7 +270,10 @@ private fun SafetyNote(text:String){
 
 @Composable
 fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionUi>, mapPoints: List<OfflineMapPointUi>, mapLines: List<OfflineMapLineUi>, mapPolygons: List<OfflineMapPolygonUi>, gpsCovered: Boolean = false) {
- var zoom by remember { mutableFloatStateOf(1f) };var panX by remember { mutableFloatStateOf(0f) };var panY by remember { mutableFloatStateOf(0f) };var followGps by remember { mutableStateOf(true) }
+ var zoom by remember { mutableFloatStateOf(1f) }
+ var panX by remember { mutableFloatStateOf(0f) }
+ var panY by remember { mutableFloatStateOf(0f) }
+ var followGps by remember { mutableStateOf(true) }
  Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), colors=CardDefaults.cardColors(containerColor=Color(0xFF102A31))) {
   Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
    Row(verticalAlignment=Alignment.CenterVertically){Column(Modifier.weight(1f)){Text(if (gpsCovered) "BẢN ĐỒ OFFLINE" else "VÙNG BẢN ĐỒ XEM TRƯỚC", fontWeight = FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium);Text("Kéo để di chuyển • chụm để phóng to", style = MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant)};Surface(shape=RoundedCornerShape(999.dp),color=Color(0x2245E58C)){Text("${String.format("%.1f", zoom)}×",Modifier.padding(horizontal=12.dp,vertical=7.dp),color=FieldColors.primary,fontWeight=FontWeight.Bold)}}
@@ -279,13 +282,30 @@ fun OfflineMapCanvas(position: FieldPositionUi?, breadcrumb: List<FieldPositionU
      val mapCoords = mapPoints.map { it.latitude to it.longitude } + mapLines.flatMap { line -> line.points.map { it.latitude to it.longitude } } + mapPolygons.flatMap { polygon -> polygon.points.map { it.latitude to it.longitude } }
      val coords = if (mapCoords.isNotEmpty()) mapCoords else breadcrumb.map { it.latitude to it.longitude } + listOfNotNull(position?.let { it.latitude to it.longitude })
      if (coords.isNotEmpty()) {
-      val minLat = coords.minOf { it.first }; val maxLat = coords.maxOf { it.first };val minLon = coords.minOf { it.second }; val maxLon = coords.maxOf { it.second };val midLat = (minLat + maxLat) / 2.0; val midLon = (minLon + maxLon) / 2.0
-      val longitudeScale = cos(Math.toRadians(midLat)).coerceAtLeast(0.01);val projectedWidth = ((maxLon - minLon) * longitudeScale).coerceAtLeast(0.000001);val projectedHeight = (maxLat - minLat).coerceAtLeast(0.000001);val scale = minOf(size.width.toDouble() / projectedWidth, size.height.toDouble() / projectedHeight) * 0.9
-      fun baseX(lon: Double) = size.width.toDouble() / 2.0 + (lon - midLon) * longitudeScale * scale;fun baseY(lat: Double) = size.height.toDouble() / 2.0 - (lat - midLat) * scale
-      val gpsInMap = gpsCovered && position != null && (mapCoords.isEmpty() || (position.latitude in minLat..maxLat && position.longitude in minLon..maxLon));val gpsBaseX = position?.takeIf { gpsInMap }?.let { baseX(it.longitude) }; val gpsBaseY = position?.takeIf { gpsInMap }?.let { baseY(it.latitude) }
-      val followX = if (followGps && gpsBaseX != null) (size.width.toDouble() / 2.0 - ((gpsBaseX - size.width.toDouble() / 2.0) * zoom.toDouble() + size.width.toDouble() / 2.0)) else panX.toDouble();val followY = if (followGps && gpsBaseY != null) (size.height.toDouble() / 2.0 - ((gpsBaseY - size.height.toDouble() / 2.0) * zoom.toDouble() + size.height.toDouble() / 2.0)) else panY.toDouble()
-      fun x(lon: Double) = (((baseX(lon) - size.width.toDouble() / 2.0) * zoom) + size.width.toDouble() / 2.0 + followX).toFloat();fun y(lat: Double) = (((baseY(lat) - size.height.toDouble() / 2.0) * zoom) + size.height.toDouble() / 2.0 + followY).toFloat()
-      mapPolygons.forEach { polygon -> if (polygon.points.size >= 3) { for (i in polygon.points.indices) { val a=polygon.points[i]; val b=polygon.points[(i+1)%polygon.points.size]; drawLine(Color(0xFF8FAFA0),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),3f) } } };mapLines.forEach { line -> for (i in 1 until line.points.size) { val a=line.points[i-1]; val b=line.points[i]; drawLine(Color(0xFFB7D8C4),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),5f) } };mapPoints.forEach { drawCircle(Color(0xFFFFD166), 7f, Offset(x(it.longitude), y(it.latitude))) };for (i in 1 until breadcrumb.size) drawLine(Color(0xFF45E58C), Offset(x(breadcrumb[i-1].longitude), y(breadcrumb[i-1].latitude)), Offset(x(breadcrumb[i].longitude), y(breadcrumb[i].latitude)), 7f);position?.takeIf { gpsInMap }?.let { drawCircle(Color(0x5539D98A), 18f, Offset(x(it.longitude), y(it.latitude))); drawCircle(Color(0xFF45E58C), 9f, Offset(x(it.longitude), y(it.latitude))) }
+      val minLat = coords.minOf { it.first }
+      val maxLat = coords.maxOf { it.first }
+      val minLon = coords.minOf { it.second }
+      val maxLon = coords.maxOf { it.second }
+      val midLat = (minLat + maxLat) / 2.0
+      val midLon = (minLon + maxLon) / 2.0
+      val longitudeScale = cos(Math.toRadians(midLat)).coerceAtLeast(0.01)
+      val projectedWidth = ((maxLon - minLon) * longitudeScale).coerceAtLeast(0.000001)
+      val projectedHeight = (maxLat - minLat).coerceAtLeast(0.000001)
+      val scale = minOf(size.width.toDouble() / projectedWidth, size.height.toDouble() / projectedHeight) * 0.9
+      fun baseX(lon: Double) = size.width.toDouble() / 2.0 + (lon - midLon) * longitudeScale * scale
+      fun baseY(lat: Double) = size.height.toDouble() / 2.0 - (lat - midLat) * scale
+      val gpsInMap = gpsCovered && position != null && (mapCoords.isEmpty() || (position.latitude in minLat..maxLat && position.longitude in minLon..maxLon))
+      val gpsBaseX = position?.takeIf { gpsInMap }?.let { baseX(it.longitude) }
+      val gpsBaseY = position?.takeIf { gpsInMap }?.let { baseY(it.latitude) }
+      val followX = if (followGps && gpsBaseX != null) (size.width.toDouble() / 2.0 - ((gpsBaseX - size.width.toDouble() / 2.0) * zoom.toDouble() + size.width.toDouble() / 2.0)) else panX.toDouble()
+      val followY = if (followGps && gpsBaseY != null) (size.height.toDouble() / 2.0 - ((gpsBaseY - size.height.toDouble() / 2.0) * zoom.toDouble() + size.height.toDouble() / 2.0)) else panY.toDouble()
+      fun x(lon: Double) = (((baseX(lon) - size.width.toDouble() / 2.0) * zoom) + size.width.toDouble() / 2.0 + followX).toFloat()
+      fun y(lat: Double) = (((baseY(lat) - size.height.toDouble() / 2.0) * zoom) + size.height.toDouble() / 2.0 + followY).toFloat()
+      mapPolygons.forEach { polygon -> if (polygon.points.size >= 3) { for (i in polygon.points.indices) { val a=polygon.points[i]; val b=polygon.points[(i+1)%polygon.points.size]; drawLine(Color(0xFF8FAFA0),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),3f) } } }
+      mapLines.forEach { line -> for (i in 1 until line.points.size) { val a=line.points[i-1]; val b=line.points[i]; drawLine(Color(0xFFB7D8C4),Offset(x(a.longitude),y(a.latitude)),Offset(x(b.longitude),y(b.latitude)),5f) } }
+      mapPoints.forEach { drawCircle(Color(0xFFFFD166), 7f, Offset(x(it.longitude), y(it.latitude))) }
+      for (i in 1 until breadcrumb.size) drawLine(Color(0xFF45E58C), Offset(x(breadcrumb[i-1].longitude), y(breadcrumb[i-1].latitude)), Offset(x(breadcrumb[i].longitude), y(breadcrumb[i].latitude)), 7f)
+      position?.takeIf { gpsInMap }?.let { drawCircle(Color(0x5539D98A), 18f, Offset(x(it.longitude), y(it.latitude))); drawCircle(Color(0xFF45E58C), 9f, Offset(x(it.longitude), y(it.latitude))) }
      }
     }
     Column(Modifier.align(Alignment.CenterEnd).padding(10.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){MapRoundButton("+"){zoom=(zoom*1.35f).coerceAtMost(8f)};MapRoundButton("−"){zoom=(zoom/1.35f).coerceAtLeast(1f)}}
