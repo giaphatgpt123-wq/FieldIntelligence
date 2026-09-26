@@ -2,15 +2,22 @@ package vn.fieldintel.feature.emergency
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.Snapshot
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-/**
- * Read-only access to the separately distributed scientific taxonomy database.
- *
- * The database contains taxonomy/provenance only. A database match must never be treated as
- * image identification, edibility/toxicity evidence, or medical guidance.
- */
-data class ScientificLibraryStatus(
+data class ScientificLibraryStatusSnapshot(
     val installed: Boolean,
     val recordCount: Long = 0,
     val acceptedRecordCount: Long = 0,
@@ -20,23 +27,163 @@ data class ScientificLibraryStatus(
     val scope: String = "taxonomy-only"
 )
 
+/**
+ * Observable status holder. Compose can remember this object once; property changes published from
+ * the IO loader still trigger recomposition without running SQLite on the UI thread.
+ */
+class ScientificLibraryStatus internal constructor() {
+    var installed by mutableStateOf(false)
+        internal set
+    var recordCount by mutableStateOf(0L)
+        internal set
+    var acceptedRecordCount by mutableStateOf(0L)
+        internal set
+    var sourceVersion by mutableStateOf("")
+        internal set
+    var sourceDoi by mutableStateOf("")
+        internal set
+    var sourceLicense by mutableStateOf("")
+        internal set
+    var scope by mutableStateOf("taxonomy-only")
+        internal set
+
+    internal fun publish(value: ScientificLibraryStatusSnapshot) {
+        installed = value.installed
+        recordCount = value.recordCount
+        acceptedRecordCount = value.acceptedRecordCount
+        sourceVersion = value.sourceVersion
+        sourceDoi = value.sourceDoi
+        sourceLicense = value.sourceLicense
+        scope = value.scope
+    }
+}
+
+/**
+ * Read-only access to the separately distributed scientific taxonomy database.
+ *
+ * The database contains taxonomy/provenance only. A database match must never be treated as image
+ * identification, edibility/toxicity evidence, or medical guidance. UI-facing status/search/id
+ * access is non-blocking: SQLite work runs on Dispatchers.IO and observable snapshots are published
+ * back to Compose. Bulk resolver calls remain synchronous because they are already invoked by the
+ * dedicated background collection loader.
+ */
 class ScientificLibraryStore(context: Context) {
     private val appContext = context.applicationContext
     private val databaseFile = File(File(appContext.filesDir, DIRECTORY_NAME), DATABASE_NAME)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val liveStatus = ScientificLibraryStatus()
+    private val searchResults = ConcurrentHashMap<SearchKey, SnapshotStateList<SpeciesRecord>>()
+    private val recordCache = ConcurrentHashMap<String, SpeciesRecord>()
+    private val pendingIdLoads = ConcurrentHashMap.newKeySet<String>()
+    private val searchLock = Any()
+    private var activeSearchJob: Job? = null
+    private var activeSearchKey: SearchKey? = null
 
     init {
+        refreshStatusAsync()
         LibraryCollectionRuntime.bind(appContext, this)
     }
 
     fun databasePath(): File = databaseFile
 
+    /** Returns immediately. The same observable object is updated after the IO status read. */
     fun status(): ScientificLibraryStatus {
-        if (!databaseFile.isFile || databaseFile.length() <= 0L) return ScientificLibraryStatus(installed = false)
+        refreshStatusAsync()
+        return liveStatus
+    }
+
+    internal fun isInstalledBlocking(): Boolean = readStatusBlocking().installed
+
+    fun search(query: String, group: String = "Tất cả", limit: Int = 80): List<SpeciesRecord> {
+        val needle = query.trim().lowercase()
+        if (needle.isBlank()) return emptyList()
+        val safeLimit = limit.coerceIn(1, 200)
+        val key = SearchKey(needle, group, safeLimit)
+        val observable = searchResults.getOrPut(key) { mutableStateListOf() }
+
+        synchronized(searchLock) {
+            if (activeSearchKey != key || activeSearchJob?.isActive != true) {
+                activeSearchJob?.cancel()
+                activeSearchKey = key
+                activeSearchJob = scope.launch {
+                    delay(SEARCH_DEBOUNCE_MS)
+                    val loaded = searchBlocking(needle, group, safeLimit)
+                    loaded.forEach { recordCache[it.id] = it }
+                    Snapshot.withMutableSnapshot {
+                        observable.clear()
+                        observable.addAll(loaded)
+                    }
+                }
+            }
+        }
+        return observable
+    }
+
+    /**
+     * UI path is cache-first and never opens SQLite synchronously. Search/collection resolution puts
+     * displayed external records into this cache. A cache miss schedules a background lookup.
+     */
+    fun findById(id: String): SpeciesRecord? {
+        recordCache[id]?.let { return it }
+        if (!databaseFile.isFile || !id.startsWith(ID_PREFIX)) return null
+        if (pendingIdLoads.add(id)) {
+            scope.launch {
+                try {
+                    findByIdBlocking(id)?.let { recordCache[id] = it }
+                } finally {
+                    pendingIdLoads.remove(id)
+                }
+            }
+        }
+        return null
+    }
+
+    /** Background-only bulk lookup used by LibraryCollectionRuntime. */
+    fun findByScientificNames(scientificNames: Collection<String>, limit: Int = 500): List<SpeciesRecord> {
+        if (!databaseFile.isFile || scientificNames.isEmpty()) return emptyList()
+        val normalized = scientificNames.asSequence()
+            .map { it.trim().lowercase() }
+            .filter { it.isNotBlank() }
+            .distinct()
+            .take(limit.coerceIn(1, 1000))
+            .toList()
+        if (normalized.isEmpty()) return emptyList()
+        val loaded = runCatching {
+            openReadOnly().use { db ->
+                requireSchema(db)
+                val placeholders = normalized.joinToString(",") { "?" }
+                val sql = """
+                    SELECT source_id, source_record_id, scientific_name, library_group,
+                           authority, license, source_scope, source_version, source_doi
+                    FROM taxon
+                    WHERE scientific_name_search IN ($placeholders)
+                    ORDER BY scientific_name_search
+                """.trimIndent()
+                db.rawQuery(sql, normalized.toTypedArray()).use { cursor ->
+                    buildList {
+                        while (cursor.moveToNext()) add(cursor.toSpeciesRecord())
+                    }
+                }
+            }
+        }.getOrElse { emptyList() }
+        loaded.forEach { recordCache[it.id] = it }
+        return loaded
+    }
+
+    private fun refreshStatusAsync() {
+        scope.launch {
+            val loaded = readStatusBlocking()
+            Snapshot.withMutableSnapshot { liveStatus.publish(loaded) }
+        }
+    }
+
+    private fun readStatusBlocking(): ScientificLibraryStatusSnapshot {
+        if (!databaseFile.isFile || databaseFile.length() <= 0L) return ScientificLibraryStatusSnapshot(false)
         return runCatching {
             openReadOnly().use { db ->
                 requireSchema(db)
                 val meta = readMeta(db)
-                ScientificLibraryStatus(
+                ScientificLibraryStatusSnapshot(
                     installed = true,
                     recordCount = meta["recordCount"]?.trimJsonString()?.toLongOrNull() ?: 0L,
                     acceptedRecordCount = meta["acceptedRecordCount"]?.trimJsonString()?.toLongOrNull() ?: 0L,
@@ -46,13 +193,11 @@ class ScientificLibraryStore(context: Context) {
                     scope = meta["scope"]?.trimJsonString().orEmpty().ifBlank { "taxonomy-only" }
                 )
             }
-        }.getOrElse { ScientificLibraryStatus(installed = false) }
+        }.getOrElse { ScientificLibraryStatusSnapshot(false) }
     }
 
-    fun search(query: String, group: String = "Tất cả", limit: Int = 80): List<SpeciesRecord> {
-        if (!databaseFile.isFile || query.isBlank()) return emptyList()
-        val safeLimit = limit.coerceIn(1, 200)
-        val needle = query.trim().lowercase()
+    private fun searchBlocking(needle: String, group: String, safeLimit: Int): List<SpeciesRecord> {
+        if (!databaseFile.isFile) return emptyList()
         return runCatching {
             openReadOnly().use { db ->
                 requireSchema(db)
@@ -79,36 +224,7 @@ class ScientificLibraryStore(context: Context) {
         }.getOrElse { emptyList() }
     }
 
-    fun findByScientificNames(scientificNames: Collection<String>, limit: Int = 500): List<SpeciesRecord> {
-        if (!databaseFile.isFile || scientificNames.isEmpty()) return emptyList()
-        val normalized = scientificNames.asSequence()
-            .map { it.trim().lowercase() }
-            .filter { it.isNotBlank() }
-            .distinct()
-            .take(limit.coerceIn(1, 1000))
-            .toList()
-        if (normalized.isEmpty()) return emptyList()
-        return runCatching {
-            openReadOnly().use { db ->
-                requireSchema(db)
-                val placeholders = normalized.joinToString(",") { "?" }
-                val sql = """
-                    SELECT source_id, source_record_id, scientific_name, library_group,
-                           authority, license, source_scope, source_version, source_doi
-                    FROM taxon
-                    WHERE scientific_name_search IN ($placeholders)
-                    ORDER BY scientific_name_search
-                """.trimIndent()
-                db.rawQuery(sql, normalized.toTypedArray()).use { cursor ->
-                    buildList {
-                        while (cursor.moveToNext()) add(cursor.toSpeciesRecord())
-                    }
-                }
-            }
-        }.getOrElse { emptyList() }
-    }
-
-    fun findById(id: String): SpeciesRecord? {
+    private fun findByIdBlocking(id: String): SpeciesRecord? {
         if (!databaseFile.isFile || !id.startsWith(ID_PREFIX)) return null
         val body = id.removePrefix(ID_PREFIX)
         val separator = body.indexOf('|')
@@ -166,11 +282,11 @@ class ScientificLibraryStore(context: Context) {
         val group = getString(3).ifBlank { "Thực vật" }
         val authority = getString(4).ifBlank { sourceId }
         val license = getString(5)
-        val scope = getString(6).ifBlank { "taxonomy-only" }
+        val sourceScope = getString(6).ifBlank { "taxonomy-only" }
         val version = getString(7)
         val doi = getString(8)
         val provenance = buildString {
-            append("Phạm vi nguồn: ").append(scope)
+            append("Phạm vi nguồn: ").append(sourceScope)
             if (license.isNotBlank()) append(" • license ").append(license)
             if (version.isNotBlank()) append(" • phiên bản ").append(version)
             append(". Không xác minh mẫu vật trong ảnh, tính ăn được, độc tính hoặc hướng dẫn điều trị.")
@@ -201,10 +317,13 @@ class ScientificLibraryStore(context: Context) {
         .replace("%", "\\%")
         .replace("_", "\\_")
 
+    private data class SearchKey(val query: String, val group: String, val limit: Int)
+
     companion object {
         const val DIRECTORY_NAME = "scientific-library"
         const val DATABASE_NAME = "wfo-taxonomy.sqlite"
         private const val SUPPORTED_SCHEMA_VERSION = 1
         private const val ID_PREFIX = "scientific-db:"
+        private const val SEARCH_DEBOUNCE_MS = 300L
     }
 }
