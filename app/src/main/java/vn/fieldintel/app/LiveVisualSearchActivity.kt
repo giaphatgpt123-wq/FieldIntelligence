@@ -32,8 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import vn.fieldintel.feature.emergency.FieldColors
+import vn.fieldintel.feature.emergency.InstalledVisualModelRunner
 import vn.fieldintel.feature.emergency.RegionScanAutoCapturePanel
-import vn.fieldintel.feature.emergency.TfliteRegionModelRunner
 import vn.fieldintel.feature.emergency.VisualModelImportManager
 
 /** Direct entry point for on-device validation of region scanning and automatic evidence capture. */
@@ -42,16 +42,18 @@ class LiveVisualSearchActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             var runnerGeneration by remember { mutableIntStateOf(0) }
-            var installStatus by remember { mutableStateOf("Model quét vùng được cài từ gói ZIP đã kiểm tra SHA-256.") }
+            var installStatus by remember {
+                mutableStateOf("Cài gói model offline đã kiểm tra SHA-256. Hỗ trợ detector một tầng hoặc detector + classifier hai tầng.")
+            }
             val scope = rememberCoroutineScope()
             val importer = remember { VisualModelImportManager(applicationContext) }
-            val runner = remember(runnerGeneration) { TfliteRegionModelRunner(applicationContext) }
+            val runner = remember(runnerGeneration) { InstalledVisualModelRunner(applicationContext) }
             DisposableEffect(runner) { onDispose { runner.close() } }
 
             val selectModelBundle = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 if (uri != null) {
                     scope.launch {
-                        installStatus = "Đang kiểm tra và cài model…"
+                        installStatus = "Đang kiểm tra SHA-256 và cấu trúc gói model…"
                         val result = withContext(Dispatchers.IO) {
                             contentResolver.openInputStream(uri)?.use { importer.install(it) }
                                 ?: VisualModelImportManager.Result(false, "Không thể mở gói model đã chọn.")
@@ -77,7 +79,11 @@ class LiveVisualSearchActivity : ComponentActivity() {
                     ) {
                         Column(Modifier.padding(14.dp)) {
                             Text("MODEL NHẬN DẠNG VÙNG", style = MaterialTheme.typography.titleMedium)
-                            Text(installStatus, modifier = Modifier.padding(top = 5.dp, bottom = 10.dp), color = Color(0xFFB8C8CC))
+                            Text(
+                                installStatus,
+                                modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
+                                color = Color(0xFFB8C8CC)
+                            )
                             Button(
                                 onClick = { selectModelBundle.launch(arrayOf("application/zip", "application/octet-stream")) },
                                 modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
