@@ -61,6 +61,58 @@ object SpecialistEvidenceCatalog {
             scopeNote = "Chỉ ghi nhận tồn tại chuyên khảo quản lý và bộ phận dược liệu; không biến thành khuyến nghị tự điều trị."
         ),
         SpecialistEvidenceRecord(
+            id = "moh-zingiber-officinale-sinh-khuong",
+            speciesId = "zingiber-officinale",
+            domain = EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE,
+            evidenceClass = EvidenceClass.OFFICIAL_LISTING,
+            title = "Sinh khương — danh mục vị thuốc YHCT",
+            statement = "Danh mục của Bộ Y tế ghi Sinh khương, Rhizoma Zingiberis recens, từ Zingiber officinale Rosc.",
+            plantPart = "Thân rễ tươi theo tên dược liệu trong nguồn",
+            sourceName = "Cục Quản lý Y, Dược cổ truyền — Bộ Y tế Việt Nam",
+            sourceUrl = "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855",
+            sourceRecord = "Danh mục vị thuốc YHCT — Sinh khương — Zingiber officinale Rosc.",
+            scopeNote = "Xác nhận tên vị thuốc, dược liệu và loài trong danh mục chính thức; không tự suy ra công dụng, liều dùng hoặc tính an toàn."
+        ),
+        SpecialistEvidenceRecord(
+            id = "moh-zingiber-officinale-can-khuong",
+            speciesId = "zingiber-officinale",
+            domain = EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE,
+            evidenceClass = EvidenceClass.OFFICIAL_LISTING,
+            title = "Can khương — danh mục vị thuốc YHCT",
+            statement = "Danh mục của Bộ Y tế ghi Can khương, Rhizoma Zingiberis, từ Zingiber officinale Rosc.",
+            plantPart = "Thân rễ theo tên dược liệu trong nguồn",
+            sourceName = "Cục Quản lý Y, Dược cổ truyền — Bộ Y tế Việt Nam",
+            sourceUrl = "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855",
+            sourceRecord = "Nhóm thuốc trừ hàn — Can khương — Zingiber officinale Rosc.",
+            scopeNote = "Xác nhận tên vị thuốc, dược liệu và loài trong danh mục chính thức; không tự suy ra công dụng, liều dùng hoặc tính an toàn."
+        ),
+        SpecialistEvidenceRecord(
+            id = "ema-zingiber-officinale-rhizoma-2025",
+            speciesId = "zingiber-officinale",
+            domain = EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH,
+            evidenceClass = EvidenceClass.REGULATORY_MONOGRAPH,
+            title = "Zingiberis rhizoma — EU herbal monograph",
+            statement = "EMA/HMPC có chuyên khảo Liên minh châu Âu cho Zingiber officinale Roscoe, rhizoma; bản Revision 1 được cập nhật năm 2025.",
+            plantPart = "Rhizoma",
+            sourceName = "European Medicines Agency — HMPC",
+            sourceUrl = "https://www.ema.europa.eu/en/medicines/herbal/zingiberis-rhizoma",
+            sourceRecord = "EMA/HMPC/885789/2022 — Revision 1",
+            scopeNote = "Chỉ ghi nhận chuyên khảo quản lý và bộ phận dược liệu. Không chuyển nội dung chuyên khảo thành hướng dẫn tự điều trị hoặc liều dùng trong ứng dụng."
+        ),
+        SpecialistEvidenceRecord(
+            id = "ema-hypericum-perforatum-herba-2023",
+            speciesId = "hypericum-perforatum",
+            domain = EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH,
+            evidenceClass = EvidenceClass.REGULATORY_MONOGRAPH,
+            title = "Hyperici herba — EU herbal monograph",
+            statement = "EMA/HMPC có chuyên khảo Liên minh châu Âu cho Hypericum perforatum L., herba; đánh giá được ghi trạng thái hoàn tất.",
+            plantPart = "Herba",
+            sourceName = "European Medicines Agency — HMPC",
+            sourceUrl = "https://www.ema.europa.eu/en/medicines/herbal/hyperici-herba-0",
+            sourceRecord = "EMA/HMPC/7695/2021 — Revision 1",
+            scopeNote = "Chỉ ghi nhận chuyên khảo quản lý. Các tương tác thuốc của Hypericum phải lấy từ lớp InteractionCatalog có nguồn riêng; không suy ra liều dùng hay hiệu quả cá nhân."
+        ),
+        SpecialistEvidenceRecord(
             id = "cdc-ricinus-communis-ricin",
             speciesId = "ricinus-communis",
             domain = EvidenceDomain.TOXICOLOGY,
