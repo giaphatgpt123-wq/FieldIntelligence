@@ -16,6 +16,8 @@ import zipfile
 MODEL_NAME = "region-model.tflite"
 MANIFEST_NAME = "region-model.manifest.json"
 MAX_MODEL_BYTES = 160 * 1024 * 1024
+TASK_TYPE = "OBJECT_DETECTOR"
+MODEL_FORMAT = "TFLITE_TASK_VISION"
 
 
 def sha256(path: pathlib.Path) -> str:
@@ -42,6 +44,8 @@ def build_bundle(args: argparse.Namespace) -> pathlib.Path:
 
     manifest = {
         "schemaVersion": 1,
+        "taskType": TASK_TYPE,
+        "modelFormat": MODEL_FORMAT,
         "id": args.id.strip(),
         "version": args.version.strip(),
         "sourceName": source_name,
