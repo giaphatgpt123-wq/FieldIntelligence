@@ -1,6 +1,10 @@
+import gzip
 import importlib.util
+import json
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 MODULE_PATH = Path(__file__).with_name("cache_scientific_media.py")
 spec = importlib.util.spec_from_file_location("media_cache", MODULE_PATH)
@@ -39,6 +43,50 @@ class ScientificMediaCacheTest(unittest.TestCase):
             module.validate_public_https_url("http://example.org/a.jpg")
         with self.assertRaises(ValueError):
             module.validate_public_https_url("https://user:pass@example.org/a.jpg")
+
+    def test_build_counts_rejected_media_and_per_record_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "fish.ndjson.gz"
+            media_dir = root / "media"
+            manifest = root / "manifest.json"
+            record = {
+                "sourceId": "gbif", "sourceRecordId": "1", "scientificName": "Channa striata",
+                "mediaItems": [
+                    {"identifier":"https://example.org/a.jpg","license":"CC-BY-4.0","mediaType":"StillImage"},
+                    {"identifier":"https://example.org/b.jpg","license":"CC0-1.0","mediaType":"StillImage"},
+                    {"identifier":"https://example.org/c.jpg","license":"CC-BY-4.0","mediaType":"StillImage"},
+                    {"identifier":"https://example.org/no-license.jpg","license":"","mediaType":"StillImage"},
+                    {"identifier":"https://example.org/video.mp4","license":"CC-BY-4.0","mediaType":"MovingImage"},
+                ],
+            }
+            with gzip.open(source, "wt", encoding="utf-8") as handle:
+                handle.write(json.dumps(record) + "\n")
+            def fake_download(url, max_bytes, timeout=20):
+                return (url.encode("utf-8"), ".jpg", url)
+            with patch.object(module, "download_image", side_effect=fake_download):
+                result = module.build(source, media_dir, manifest, max_bytes=1024, max_per_record=2, max_total_bytes=4096)
+            metrics = result["metrics"]
+            self.assertEqual(2, metrics["attempted"])
+            self.assertEqual(2, metrics["cachedReferences"])
+            self.assertEqual(2, metrics["rejectedBeforeDownload"])
+            self.assertEqual(1, metrics["skippedPerRecordLimit"])
+            self.assertEqual(2, metrics["uniqueCachedFiles"])
+
+    def test_build_aborts_before_exceeding_total_pack_size(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "fish.ndjson.gz"
+            record = {
+                "sourceId":"gbif","sourceRecordId":"1","scientificName":"Channa striata",
+                "mediaItems":[{"identifier":"https://example.org/a.jpg","license":"CC-BY-4.0","mediaType":"StillImage"}]
+            }
+            with gzip.open(source,"wt",encoding="utf-8") as handle:
+                handle.write(json.dumps(record)+"\n")
+            with patch.object(module,"download_image",return_value=(b"1234567890",".jpg","https://example.org/a.jpg")):
+                with self.assertRaises(SystemExit) as ctx:
+                    module.build(source,root/"media",root/"manifest.json",max_bytes=100,max_per_record=1,max_total_bytes=9)
+            self.assertIn("total byte limit",str(ctx.exception).lower())
 
 
 if __name__ == "__main__":
