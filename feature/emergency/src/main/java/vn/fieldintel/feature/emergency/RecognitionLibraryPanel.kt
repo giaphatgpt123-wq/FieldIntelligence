@@ -10,6 +10,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -171,7 +173,9 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     val selectedCollection = LibraryCollections.byId(selectedCollectionId)
     val curatedResults = selectedCollectionId?.let { id ->
         if (id == "freshwater-fish") SpeciesCatalog.search(query, "Cá nước ngọt")
-        else {
+        else if (id == "wfo-plants") {
+            if (storeStatus.installed && query.trim().length >= 2) store.search(query, "Thực vật", 80) else emptyList()
+        } else {
             val needle = query.trim().lowercase(Locale.ROOT)
             LibraryCollections.recordsFor(id).filter { record ->
                 needle.isBlank() || record.vietnameseName.lowercase(Locale.ROOT).contains(needle) || record.scientificName.lowercase(Locale.ROOT).contains(needle)
@@ -196,7 +200,16 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         LibraryCollectionGrid(selectedCollectionId) { id ->
             selectedCollectionId = if (selectedCollectionId == id) null else id
             group = "Tất cả"
-            query = ""
+            query = if (selectedCollectionId == "wfo-plants") "Mangifera" else ""
+        }
+
+        if (selectedCollectionId == "wfo-plants") {
+            Text("TRA THEO CHI • CHỌN MỘT NHÓM", fontWeight = FontWeight.Black, style = MaterialTheme.typography.titleMedium)
+            Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf("Mangifera", "Musa", "Citrus", "Dioscorea", "Zingiber", "Curcuma", "Ficus", "Nepenthes").forEach { genus ->
+                    FilterChip(selected = query.equals(genus, ignoreCase = true), onClick = { query = genus }, label = { Text(genus) })
+                }
+            }
         }
 
         Card(Modifier.fillMaxWidth(), shape=RoundedCornerShape(26.dp), colors=CardDefaults.cardColors(containerColor=Color(0xFF0C272C)), border=BorderStroke(1.dp, Color(0x3345E58C))) {
@@ -207,17 +220,18 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                         if(selectedCollection!=null) Text(selectedCollection.subtitle, color=FieldColors.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
                     }
                     Surface(shape=RoundedCornerShape(999.dp), color=if(storeStatus.installed) Color(0x263EEA91) else Color(0x332F3436)) {
-                        Text(if(selectedCollection!=null) "CURATED" else if(storeStatus.installed) "DATABASE READY" else "STARTER DATA", Modifier.padding(horizontal=10.dp,vertical=6.dp), color=if(storeStatus.installed || selectedCollection!=null) FieldColors.primary else FieldColors.onSurfaceVariant, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.labelSmall)
+                        Text(if(selectedCollectionId=="wfo-plants") "WFO OFFLINE" else if(selectedCollection!=null) "CURATED" else if(storeStatus.installed) "DATABASE READY" else "STARTER DATA", Modifier.padding(horizontal=10.dp,vertical=6.dp), color=if(storeStatus.installed || selectedCollection!=null) FieldColors.primary else FieldColors.onSurfaceVariant, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.labelSmall)
                     }
                 }
                 OutlinedTextField(
                     value=query, onValueChange={query=it.take(120)},
-                    label={Text(if(selectedCollection!=null) "Lọc trong bộ sưu tập" else if(storeStatus.installed) "Tên Việt hoặc tên khoa học (WFO từ 2 ký tự)" else "Tên Việt hoặc tên khoa học")},
+                    label={Text(if(selectedCollectionId=="wfo-plants") "Tên khoa học hoặc chi (từ 2 ký tự)" else if(selectedCollection!=null) "Lọc trong bộ sưu tập" else if(storeStatus.installed) "Tên Việt hoặc tên khoa học (WFO từ 2 ký tự)" else "Tên Việt hoặc tên khoa học")},
                     leadingIcon={Text("⌕", style=MaterialTheme.typography.headlineSmall)},
                     modifier=Modifier.fillMaxWidth().heightIn(min=60.dp), singleLine=true, shape=RoundedCornerShape(20.dp)
                 )
                 Text(
                     when {
+                        selectedCollectionId=="wfo-plants" -> if(storeStatus.installed) "${formatCount(storeStatus.recordCount)} tên phân loại WFO offline • lọc theo tên khoa học hoặc chi; tối đa 80 kết quả mỗi truy vấn" else "Đang nạp dữ liệu WFO; thử mở lại thư viện sau ít phút"
                         selectedCollection!=null -> "${selectedCollection.recordIds.size} hồ sơ đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
                         storeStatus.installed -> "Đang dùng gói WFO ${storeStatus.sourceVersion.ifBlank { "offline" }} • ${formatCount(storeStatus.recordCount)} hồ sơ taxonomy"
                         else -> "Chưa cài gói SQLite khoa học lớn • đang dùng ${SpeciesCatalog.records.size} hồ sơ lõi trong APK"
@@ -228,6 +242,8 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         }
 
         when {
+            selectedCollectionId == "wfo-plants" && !storeStatus.installed -> SearchStatusBanner("ĐANG NẠP THƯ VIỆN WFO OFFLINE…")
+            selectedCollectionId == "wfo-plants" && store.isSearching(query, "Thực vật", 80) -> SearchStatusBanner("ĐANG TÌM TRONG WFO OFFLINE…")
             selectedCollection != null && results.isEmpty() -> SafetyBanner("${selectedCollection.label}: chưa có hồ sơ đủ điều kiện trong bộ dữ liệu hiện tại. Ứng dụng không tự gắn nhãn y khoa/độc tính chỉ từ taxonomy.")
             selectedCollection != null -> {
                 Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
@@ -321,7 +337,7 @@ private fun LibraryCollectionGrid(selectedId:String?,onSelect:(String)->Unit){
                 val selected=selectedId==item.id
                 Card(onClick={onSelect(item.id)},modifier=Modifier.weight(1f).heightIn(min=124.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=if(selected) Color(0xFF3B3725) else Color(0xFF102C33)),border=BorderStroke(1.dp,if(selected) Color(0x88FFC857) else Color.White.copy(alpha=.06f))) {
                     Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){
-                        Row(verticalAlignment=Alignment.CenterVertically){Text(item.icon,style=MaterialTheme.typography.headlineMedium);Spacer(Modifier.weight(1f));Surface(shape=RoundedCornerShape(999.dp),color=Color(0x221FFFFFF)){Text(item.recordIds.size.toString(),Modifier.padding(horizontal=8.dp,vertical=4.dp),fontWeight=FontWeight.Black,color=if(item.recordIds.isEmpty()) Color(0xFFFFC857) else FieldColors.primary)}}
+                        Row(verticalAlignment=Alignment.CenterVertically){Text(item.icon,style=MaterialTheme.typography.headlineMedium);Spacer(Modifier.weight(1f));Surface(shape=RoundedCornerShape(999.dp),color=Color(0x221FFFFFF)){Text(if(item.id=="wfo-plants") "WFO" else item.recordIds.size.toString(),Modifier.padding(horizontal=8.dp,vertical=4.dp),fontWeight=FontWeight.Black,color=if(item.recordIds.isEmpty()) Color(0xFFFFC857) else FieldColors.primary)}}
                         Text(item.label,fontWeight=FontWeight.Black)
                         Text(item.subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant,maxLines=2)
                     }
