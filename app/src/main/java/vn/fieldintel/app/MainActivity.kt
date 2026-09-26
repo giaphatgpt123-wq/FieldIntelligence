@@ -12,13 +12,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import vn.fieldintel.feature.emergency.EmergencyScreen
 import vn.fieldintel.feature.emergency.FieldPositionUi
 import vn.fieldintel.feature.emergency.OfflineMapPointUi
 import vn.fieldintel.feature.emergency.OfflineMapLineUi
 import vn.fieldintel.feature.emergency.OfflineMapPolygonUi
 import vn.fieldintel.feature.emergency.ObservationUi
+import vn.fieldintel.feature.emergency.ScientificLibraryImportManager
+import vn.fieldintel.feature.emergency.ScientificLibraryStore
 
 enum class TrackSessionState { IDLE, RECORDING, PAUSED, FINISHED }
 
@@ -29,10 +33,12 @@ class MainActivity:ComponentActivity(){
  private lateinit var mapPack:OfflineMapPack
  private lateinit var updates:DataUpdateManager
  private lateinit var observationStore:ObservationStore
+ private lateinit var scientificImporter:ScientificLibraryImportManager
  private var observations by mutableStateOf(emptyList<ObservationUi>())
  private var observationSaveStatus by mutableStateOf("")
  private var updateStatus by mutableStateOf("Sẵn sàng")
  private var updateBusy=false
+ private var scientificImportBusy=false
  private var activeMapRegionId:String?=null
  private var recording by mutableStateOf(false)
  private var trackSessionState by mutableStateOf(TrackSessionState.IDLE)
@@ -52,6 +58,7 @@ class MainActivity:ComponentActivity(){
  private val sessionPrefs by lazy { getSharedPreferences("field-session", MODE_PRIVATE) }
  private val selectPhoto=registerForActivityResult(ActivityResultContracts.GetContent()) { uri -> if(uri!=null) { imagePreview=readPreview(uri); imageStatus=if(imagePreview!=null) "Đã chọn ảnh; xem mẫu bên dưới. Chưa phân tích tự động." else "Không thể mở ảnh này; hãy chọn ảnh khác." } }
  private val takePhoto=registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap -> if(bitmap!=null) { imagePreview=bitmap; imageStatus="Đã chụp ảnh; xem mẫu bên dưới. Chưa phân tích tự động." } }
+ private val selectScientificBundle=registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> if(uri!=null) importScientificBundle(uri) }
  private fun readPreview(uri:Uri):Bitmap? = runCatching {
   val bounds=BitmapFactory.Options().apply { inJustDecodeBounds=true }
   contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it,null,bounds) }
@@ -63,7 +70,7 @@ class MainActivity:ComponentActivity(){
  override fun onCreate(savedInstanceState:Bundle?){
   super.onCreate(savedInstanceState)
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
-  location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); observationStore=ObservationStore(this); observations=observationStore.load(); recoverMapSwapIfNeeded(); mapPackState=mapPack.state(); loadMapRegion(mapPack.regions().firstOrNull()); mapCoverage=if(mapPackState.available) "Đang hiển thị vùng bản đồ đã nạp; chờ GPS để xác định vị trí." else null; tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
+  location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); observationStore=ObservationStore(this); scientificImporter=ScientificLibraryImportManager(applicationContext); observations=observationStore.load(); recoverMapSwapIfNeeded(); mapPackState=mapPack.state(); loadMapRegion(mapPack.regions().firstOrNull()); mapCoverage=if(mapPackState.available) "Đang hiển thị vùng bản đồ đã nạp; chờ GPS để xác định vị trí." else null; tracks=FieldTrackStore(this); val initial=tracks.summary(); trackCount=initial.points; trackDistanceM=initial.distanceM; trackStartedAt=initial.startedAt ?: sessionPrefs.getLong("trackStartedAt",0L).takeIf{it>0L}; trackSessionState=runCatching{TrackSessionState.valueOf(sessionPrefs.getString("trackState",null)?:if(sessionPrefs.getBoolean("recording",false)) "RECORDING" else if(initial.points>0) "PAUSED" else "IDLE")}.getOrDefault(TrackSessionState.IDLE); recording=trackSessionState==TrackSessionState.RECORDING
   if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) startGnss() else permission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
   setContent { EmergencyScreen(latestFix?.let{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},recording,trackCount,trackDistanceM,trackStartedAt,trackBack.remainingM,trackBack.bearingDeg,trackBack.offTrackM,trackBack.breadcrumb.size,trackBack.breadcrumb.map{FieldPositionUi(it.latitude,it.longitude,it.accuracyM)},mapPackState.available,mapPackState.fileCount,mapPackState.bytes,mapPoints,mapLines,mapPolygons,mapCredit,{ if(!recording && trackCount==0) trackStartedAt=System.currentTimeMillis(); recording=!recording; trackSessionState=if(recording) TrackSessionState.RECORDING else TrackSessionState.PAUSED; sessionPrefs.edit().putBoolean("recording",recording).putString("trackState",trackSessionState.name).putLong("trackStartedAt",trackStartedAt?:0L).apply() },{ recording=false; trackSessionState=TrackSessionState.FINISHED; sessionPrefs.edit().putBoolean("recording",false).putString("trackState",trackSessionState.name).apply() },{ recording=false; trackSessionState=TrackSessionState.IDLE; tracks.clear(); trackCount=0; trackDistanceM=0.0; trackStartedAt=null; trackBack=TrackBackState(null,0.0,null); sessionPrefs.edit().clear().putString("trackState",TrackSessionState.IDLE.name).apply() },updateStatus,{ checkConfiguredDataUpdate() },{ rollbackDataUpdate() },mapCoverage,imageStatus,imagePreview,{selectPhoto.launch("image/*")},{takePhoto.launch(null)},observations,observationSaveStatus,{ note -> val bitmap=imagePreview; observationSaveStatus=if(bitmap==null) "Chưa có ảnh để lưu." else runCatching { observationStore.save(bitmap,note); observations=observationStore.load(); "Đã lưu ảnh và ghi chú trong máy • chưa xác định loài." }.getOrElse { "Lưu thất bại: "+(it.message?:"không rõ lỗi") } },{ id -> runCatching { observationStore.delete(id); observations=observationStore.load() }.onFailure { observationSaveStatus="Xóa thất bại: "+(it.message?:"không rõ lỗi") } }) }
  }
@@ -74,7 +81,7 @@ class MainActivity:ComponentActivity(){
   mapCredit=if(region?.id?.startsWith("osm-")==true) "© OpenStreetMap contributors • ODbL 1.0" else null
   mapPoints=region?.let { r -> mapPack.features(r).map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) } } ?: emptyList()
   mapLines=region?.let { r -> mapPack.lines(r).map { line -> OfflineMapLineUi(line.points.map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) }) } } ?: emptyList()
-  mapPolygons=region?.let { r -> mapPack.polygons(r).map { poly -> OfflineMapPolygonUi(poly.points.map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) }) } } ?: emptyList()
+  mapPolygons=region?.let { r -> mapPack.polygons(r).map { poly -> OfflineMapPolygonUi(poly.points.map { p -> OfflineMapPointUi(p.latitude,p.longitude,p.label) }) } ?: emptyList()
  }
  private fun startGnss(){ if(listener==null) listener=location.start { fix ->
   latestFix=fix
@@ -108,8 +115,31 @@ class MainActivity:ComponentActivity(){
  }
 
  fun checkConfiguredDataUpdate(){
-  if(!UpdateConfig.configured){updateStatus="Kênh cập nhật nằm trong repo riêng tư; ứng dụng chưa thể tải gói. Cần nguồn dữ liệu riêng không yêu cầu đăng nhập.";return}
+  if(!UpdateConfig.configured){
+   if(scientificImportBusy){updateStatus="Đang cài thư viện khoa học…";return}
+   updateStatus="Chọn ZIP FieldIntelligence-WFO-scientific-library để cài taxonomy + specialist evidence offline."
+   selectScientificBundle.launch(arrayOf("application/zip","application/octet-stream","application/x-zip-compressed"))
+   return
+  }
   applyDataUpdate(UpdateConfig.MANIFEST_URL,UpdateConfig.PACKAGE_URL)
+ }
+
+ private fun importScientificBundle(uri:Uri){
+  if(scientificImportBusy) return
+  scientificImportBusy=true
+  lifecycleScope.launch{
+   updateStatus="Đang kiểm tra integrity, schema, scope và số lượng hồ sơ…"
+   val outcome=withContext(Dispatchers.IO){
+    runCatching { scientificImporter.importBundle(uri) }
+   }
+   if(outcome.isSuccess){
+    ScientificLibraryStore(applicationContext).refreshAfterImport()
+    updateStatus=outcome.getOrThrow().message+" • mở Thư viện để tra cứu"
+   } else {
+    updateStatus="Cài thư viện khoa học thất bại • "+(outcome.exceptionOrNull()?.message?:"không rõ lỗi")
+   }
+   scientificImportBusy=false
+  }
  }
 
  private fun recoverMapSwapIfNeeded(){
@@ -129,7 +159,7 @@ class MainActivity:ComponentActivity(){
   lifecycleScope.launch{
    updateStatus="Đang khôi phục bản đồ…"
    try {
-    val outcome=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
+    val outcome=withContext(Dispatchers.IO){
      val current=updates.activePackage()
      runCatching{
       updates.markMapSwapPending()
@@ -159,7 +189,7 @@ class MainActivity:ComponentActivity(){
   lifecycleScope.launch{
    updateStatus="Đang kiểm tra cập nhật…"
    try {
-    val outcome=kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO){
+    val outcome=withContext(Dispatchers.IO){
      runCatching{
       val manifest=updates.parseManifest(updates.fetchText(manifestUrl))
       val downloaded=updates.download(packageUrl,manifest,packageManager.getPackageInfo(packageName,0).longVersionCode.toInt())
