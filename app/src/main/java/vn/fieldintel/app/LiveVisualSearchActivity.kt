@@ -20,9 +20,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -77,6 +79,7 @@ class LiveVisualSearchActivity : ComponentActivity() {
             }
 
             MaterialTheme(colorScheme = FieldColors) {
+                CompositionLocalProvider(LocalContentColor provides Color.White) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -136,6 +139,7 @@ class LiveVisualSearchActivity : ComponentActivity() {
                         }
                     }
 
+                }
                 }
             }
         }
