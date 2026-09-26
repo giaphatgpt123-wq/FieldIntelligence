@@ -1,6 +1,7 @@
 package vn.fieldintel.feature.emergency
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -24,7 +25,10 @@ data class ScientificLibraryStatusSnapshot(
     val sourceVersion: String = "",
     val sourceDoi: String = "",
     val sourceLicense: String = "",
-    val scope: String = "taxonomy-only"
+    val scope: String = "taxonomy-only",
+    val fishTaxa: Long = 0,
+    val fishWithMedia: Long = 0,
+    val fishPendingMedia: Long = 0
 )
 
 /** Observable status holder updated by the IO loader. */
@@ -43,6 +47,12 @@ class ScientificLibraryStatus internal constructor() {
         internal set
     var scope by mutableStateOf("taxonomy-only")
         internal set
+    var fishTaxa by mutableStateOf(0L)
+        internal set
+    var fishWithMedia by mutableStateOf(0L)
+        internal set
+    var fishPendingMedia by mutableStateOf(0L)
+        internal set
 
     internal fun publish(value: ScientificLibraryStatusSnapshot) {
         installed = value.installed
@@ -52,6 +62,9 @@ class ScientificLibraryStatus internal constructor() {
         sourceDoi = value.sourceDoi
         sourceLicense = value.sourceLicense
         scope = value.scope
+        fishTaxa = value.fishTaxa
+        fishWithMedia = value.fishWithMedia
+        fishPendingMedia = value.fishPendingMedia
     }
 }
 
@@ -61,11 +74,11 @@ private class ScientificSearchState {
 }
 
 /**
- * Read-only access to the separately distributed scientific taxonomy database.
+ * Read-only access to the separately distributed scientific database.
  *
- * UI-facing status/search/id access never performs SQLite reads on the Compose thread. Taxonomy
- * matches remain taxonomy/provenance only and must not be treated as image identification,
- * edibility/toxicity evidence, or medical guidance.
+ * Schema v2 can expose licensed reference-media provenance and occurrence summaries. Reference
+ * media never proves that a photographed specimen is the same taxon and never implies edibility,
+ * toxicity, medicinal value or treatment advice.
  */
 class ScientificLibraryStore(context: Context) {
     private val appContext = context.applicationContext
@@ -87,13 +100,11 @@ class ScientificLibraryStore(context: Context) {
 
     fun databasePath(): File = databaseFile
 
-    /** Returns immediately. The same observable object is updated after the IO status read. */
     fun status(): ScientificLibraryStatus {
         refreshStatusAsync()
         return liveStatus
     }
 
-    /** Call after an atomic pack replacement so stale searches and collection snapshots are cleared. */
     fun refreshAfterImport() {
         synchronized(searchLock) {
             activeSearchJob?.cancel()
@@ -110,16 +121,10 @@ class ScientificLibraryStore(context: Context) {
 
     internal fun isInstalledBlocking(): Boolean = readStatusBlocking().installed
 
-    /**
-     * Returns an observable result list immediately. The first request for a key is debounced and
-     * executed on Dispatchers.IO; a completed zero-result search stays completed and is not silently
-     * reissued on every recomposition.
-     */
     fun search(query: String, group: String = "Tất cả", limit: Int = 80): List<SpeciesRecord> {
         val key = searchKey(query, group, limit) ?: return emptyList()
         val observable = searchResults.getOrPut(key) { mutableStateListOf() }
         val state = searchStates.getOrPut(key) { ScientificSearchState() }
-
         synchronized(searchLock) {
             if (!state.loading && !state.completed) {
                 activeSearchJob?.cancel()
@@ -154,10 +159,6 @@ class ScientificLibraryStore(context: Context) {
         return searchStates[key]?.completed == true
     }
 
-    /**
-     * UI path is cache-first and never opens SQLite synchronously. Search/collection resolution puts
-     * displayed external records into this cache. A cache miss schedules a background lookup.
-     */
     fun findById(id: String): SpeciesRecord? {
         recordCache[id]?.let { return it }
         if (!databaseFile.isFile || !id.startsWith(ID_PREFIX)) return null
@@ -185,19 +186,19 @@ class ScientificLibraryStore(context: Context) {
         if (normalized.isEmpty()) return emptyList()
         val loaded = runCatching {
             openReadOnly().use { db ->
-                requireSchema(db)
+                val schemaVersion = requireSchema(db)
                 val placeholders = normalized.joinToString(",") { "?" }
-                val sql = """
-                    SELECT source_id, source_record_id, scientific_name, library_group,
-                           authority, license, source_scope, source_version, source_doi
-                    FROM taxon
-                    WHERE scientific_name_search IN ($placeholders)
-                    ORDER BY scientific_name_search
-                """.trimIndent()
-                db.rawQuery(sql, normalized.toTypedArray()).use { cursor ->
-                    buildList {
-                        while (cursor.moveToNext()) add(cursor.toSpeciesRecord())
-                    }
+                val v2 = schemaVersion >= 2
+                val sql = buildString {
+                    append("SELECT ").append(recordProjection(v2)).append(" FROM taxon t ")
+                    append("WHERE t.scientific_name_search IN (").append(placeholders).append(")")
+                    if (v2) append(FISH_MEDIA_PUBLISH_SQL)
+                    append(" ORDER BY t.scientific_name_search")
+                }
+                val args = normalized.toMutableList()
+                if (v2) args += FISH_GROUP
+                db.rawQuery(sql, args.toTypedArray()).use { cursor ->
+                    buildList { while (cursor.moveToNext()) add(cursor.toSpeciesRecord(v2)) }
                 }
             }
         }.getOrElse { emptyList() }
@@ -220,12 +221,15 @@ class ScientificLibraryStore(context: Context) {
                 val meta = readMeta(db)
                 ScientificLibraryStatusSnapshot(
                     installed = true,
-                    recordCount = meta["recordCount"]?.trimJsonString()?.toLongOrNull() ?: 0L,
-                    acceptedRecordCount = meta["acceptedRecordCount"]?.trimJsonString()?.toLongOrNull() ?: 0L,
-                    sourceVersion = meta["sourceVersion"]?.trimJsonString().orEmpty(),
-                    sourceDoi = meta["sourceDoi"]?.trimJsonString().orEmpty(),
-                    sourceLicense = meta["sourceLicense"]?.trimJsonString().orEmpty(),
-                    scope = meta["scope"]?.trimJsonString().orEmpty().ifBlank { "taxonomy-only" }
+                    recordCount = meta.longValue("recordCount"),
+                    acceptedRecordCount = meta.longValue("acceptedRecordCount"),
+                    sourceVersion = meta.stringValue("sourceVersion"),
+                    sourceDoi = meta.stringValue("sourceDoi"),
+                    sourceLicense = meta.stringValue("sourceLicense"),
+                    scope = meta.stringValue("scope").ifBlank { "taxonomy-only" },
+                    fishTaxa = meta.longValue("fishTaxa"),
+                    fishWithMedia = meta.longValue("fishWithMedia"),
+                    fishPendingMedia = meta.longValue("fishPendingMedia")
                 )
             }
         }.getOrElse { ScientificLibraryStatusSnapshot(false) }
@@ -235,25 +239,27 @@ class ScientificLibraryStore(context: Context) {
         if (!databaseFile.isFile) return emptyList()
         return runCatching {
             openReadOnly().use { db ->
-                requireSchema(db)
-                val where = StringBuilder("scientific_name_search LIKE ? ESCAPE '\\\\'")
+                val schemaVersion = requireSchema(db)
+                val v2 = schemaVersion >= 2
+                val where = StringBuilder("t.scientific_name_search LIKE ? ESCAPE '\\\\'")
                 val args = mutableListOf("${escapeLike(needle)}%")
                 if (group != "Tất cả") {
-                    where.append(" AND library_group = ?")
+                    where.append(" AND t.library_group = ?")
                     args += group
                 }
+                if (v2) {
+                    where.append(FISH_MEDIA_PUBLISH_SQL)
+                    args += FISH_GROUP
+                }
                 val sql = """
-                    SELECT source_id, source_record_id, scientific_name, library_group,
-                           authority, license, source_scope, source_version, source_doi
-                    FROM taxon
+                    SELECT ${recordProjection(v2)}
+                    FROM taxon t
                     WHERE $where
-                    ORDER BY scientific_name_search
+                    ORDER BY t.scientific_name_search
                     LIMIT $safeLimit
                 """.trimIndent()
                 db.rawQuery(sql, args.toTypedArray()).use { cursor ->
-                    buildList {
-                        while (cursor.moveToNext()) add(cursor.toSpeciesRecord())
-                    }
+                    buildList { while (cursor.moveToNext()) add(cursor.toSpeciesRecord(v2)) }
                 }
             }
         }.getOrElse { emptyList() }
@@ -268,58 +274,59 @@ class ScientificLibraryStore(context: Context) {
         val sourceRecordId = body.substring(separator + 1)
         return runCatching {
             openReadOnly().use { db ->
-                requireSchema(db)
-                db.rawQuery(
-                    """
-                    SELECT source_id, source_record_id, scientific_name, library_group,
-                           authority, license, source_scope, source_version, source_doi
-                    FROM taxon
-                    WHERE source_id = ? AND source_record_id = ?
-                    LIMIT 1
-                    """.trimIndent(),
-                    arrayOf(sourceId, sourceRecordId)
-                ).use { cursor -> if (cursor.moveToFirst()) cursor.toSpeciesRecord() else null }
+                val schemaVersion = requireSchema(db)
+                val v2 = schemaVersion >= 2
+                val sql = buildString {
+                    append("SELECT ").append(recordProjection(v2)).append(" FROM taxon t ")
+                    append("WHERE t.source_id = ? AND t.source_record_id = ?")
+                    if (v2) append(FISH_MEDIA_PUBLISH_SQL)
+                    append(" LIMIT 1")
+                }
+                val args = mutableListOf(sourceId, sourceRecordId)
+                if (v2) args += FISH_GROUP
+                db.rawQuery(sql, args.toTypedArray()).use { cursor ->
+                    if (cursor.moveToFirst()) cursor.toSpeciesRecord(v2) else null
+                }
             }
         }.getOrNull()
     }
 
-    private fun openReadOnly(): SQLiteDatabase = SQLiteDatabase.openDatabase(
-        databaseFile.absolutePath,
-        null,
-        SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
-    )
-
-    private fun requireSchema(db: SQLiteDatabase) {
-        val table = db.rawQuery(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('meta','taxon') ORDER BY name",
-            null
-        ).use { cursor ->
-            buildSet { while (cursor.moveToNext()) add(cursor.getString(0)) }
-        }
-        require(table == setOf("meta", "taxon")) { "Scientific library schema is incomplete" }
-        val meta = readMeta(db)
-        val schemaVersion = meta["schemaVersion"]?.trimJsonString()?.toIntOrNull()
-        require(schemaVersion in SUPPORTED_SCHEMA_VERSIONS) { "Unsupported scientific library schema: $schemaVersion" }
-        val dataScope = meta["scope"]?.trimJsonString()
-        require(dataScope in SUPPORTED_SCOPES) { "Unexpected scientific library scope: $dataScope" }
-        if (schemaVersion == 2) {
-            val mediaTable = db.rawQuery(
-                "SELECT name FROM sqlite_master WHERE type='table' AND name='species_media'", null
-            ).use { cursor -> cursor.moveToFirst() }
-            require(mediaTable) { "Scientific library schema v2 is missing species_media" }
-        }
+    private fun recordProjection(v2: Boolean): String {
+        val base = """
+            t.source_id, t.source_record_id, t.scientific_name, t.library_group,
+            t.authority, t.license, t.source_scope, t.source_version, t.source_doi
+        """.trimIndent().replace("\n", " ")
+        if (!v2) return base
+        return base + """,
+            COALESCE((SELECT v.vernacular_name FROM vernacular_name v
+                WHERE v.source_id=t.source_id AND v.source_record_id=t.source_record_id
+                ORDER BY v.vernacular_name LIMIT 1), ''),
+            (SELECT COUNT(*) FROM species_media m
+                WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id),
+            COALESCE((SELECT m.creator FROM species_media m
+                WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id
+                ORDER BY m.media_identifier LIMIT 1), ''),
+            COALESCE((SELECT m.rights_holder FROM species_media m
+                WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id
+                ORDER BY m.media_identifier LIMIT 1), ''),
+            COALESCE((SELECT m.media_license FROM species_media m
+                WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id
+                ORDER BY m.media_identifier LIMIT 1), ''),
+            COALESCE((SELECT m.references_url FROM species_media m
+                WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id
+                ORDER BY m.media_identifier LIMIT 1), ''),
+            COALESCE((SELECT o.country_code FROM occurrence_summary o
+                WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1), ''),
+            COALESCE((SELECT o.state_province FROM occurrence_summary o
+                WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1), ''),
+            COALESCE((SELECT o.locality FROM occurrence_summary o
+                WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1), ''),
+            COALESCE((SELECT o.event_date FROM occurrence_summary o
+                WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1), '')
+        """.trimIndent().replace("\n", " ")
     }
 
-    private fun readMeta(db: SQLiteDatabase): Map<String, String> = db.rawQuery(
-        "SELECT key, value FROM meta",
-        null
-    ).use { cursor ->
-        buildMap {
-            while (cursor.moveToNext()) put(cursor.getString(0), cursor.getString(1))
-        }
-    }
-
-    private fun android.database.Cursor.toSpeciesRecord(): SpeciesRecord {
+    private fun Cursor.toSpeciesRecord(v2: Boolean): SpeciesRecord {
         val sourceId = getString(0)
         val sourceRecordId = getString(1)
         val scientificName = getString(2)
@@ -329,22 +336,83 @@ class ScientificLibraryStore(context: Context) {
         val sourceScope = getString(6).ifBlank { "taxonomy-only" }
         val version = getString(7)
         val doi = getString(8)
+        val vernacular = if (v2) getString(9).orEmpty() else ""
+        val mediaCount = if (v2) getLong(10) else 0L
+        val mediaCreator = if (v2) getString(11).orEmpty() else ""
+        val mediaRightsHolder = if (v2) getString(12).orEmpty() else ""
+        val mediaLicense = if (v2) getString(13).orEmpty() else ""
+        val mediaReference = if (v2) getString(14).orEmpty() else ""
+        val countryCode = if (v2) getString(15).orEmpty() else ""
+        val stateProvince = if (v2) getString(16).orEmpty() else ""
+        val locality = if (v2) getString(17).orEmpty() else ""
+        val eventDate = if (v2) getString(18).orEmpty() else ""
+
         val provenance = buildString {
             append("Phạm vi nguồn: ").append(sourceScope)
-            if (license.isNotBlank()) append(" • license ").append(license)
+            if (license.isNotBlank()) append(" • license dữ liệu ").append(license)
             if (version.isNotBlank()) append(" • phiên bản ").append(version)
-            append(". Không xác minh mẫu vật trong ảnh, tính ăn được, độc tính hoặc hướng dẫn điều trị.")
+            if (v2) {
+                append(". Ảnh tham chiếu có license: ").append(mediaCount)
+                if (mediaCreator.isNotBlank()) append(" • tác giả ảnh: ").append(mediaCreator)
+                if (mediaRightsHolder.isNotBlank()) append(" • chủ quyền: ").append(mediaRightsHolder)
+                if (mediaLicense.isNotBlank()) append(" • license ảnh: ").append(mediaLicense)
+                val occurrence = listOf(countryCode, stateProvince, locality, eventDate)
+                    .filter { it.isNotBlank() }.joinToString(" • ")
+                if (occurrence.isNotBlank()) append(". Ghi nhận nguồn: ").append(occurrence)
+            }
+            append(". Ảnh tham chiếu/taxonomy không xác minh mẫu vật người dùng, tính ăn được, độc tính hoặc hướng dẫn điều trị.")
+        }
+        val sourceUrl = when {
+            doi.isNotBlank() -> "https://doi.org/$doi"
+            mediaReference.startsWith("https://") -> mediaReference
+            else -> ""
         }
         return SpeciesRecord(
             id = "$ID_PREFIX$sourceId|$sourceRecordId",
-            vietnameseName = scientificName,
+            vietnameseName = vernacular.ifBlank { scientificName },
             scientificName = scientificName,
             group = group,
             sourceName = authority,
-            sourceUrl = if (doi.isBlank()) "" else "https://doi.org/$doi",
+            sourceUrl = sourceUrl,
             sourceScope = provenance
         )
     }
+
+    private fun openReadOnly(): SQLiteDatabase = SQLiteDatabase.openDatabase(
+        databaseFile.absolutePath,
+        null,
+        SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
+    )
+
+    /** Returns the validated schema version. */
+    private fun requireSchema(db: SQLiteDatabase): Int {
+        val coreTables = db.rawQuery(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('meta','taxon') ORDER BY name",
+            null
+        ).use { cursor -> buildSet { while (cursor.moveToNext()) add(cursor.getString(0)) } }
+        require(coreTables == setOf("meta", "taxon")) { "Scientific library schema is incomplete" }
+        val meta = readMeta(db)
+        val schemaVersion = meta["schemaVersion"]?.trimJsonString()?.toIntOrNull()
+        require(schemaVersion in SUPPORTED_SCHEMA_VERSIONS) { "Unsupported scientific library schema: $schemaVersion" }
+        val dataScope = meta["scope"]?.trimJsonString()
+        require(dataScope in SUPPORTED_SCOPES) { "Unexpected scientific library scope: $dataScope" }
+        if (schemaVersion == 2) {
+            val required = setOf("species_media", "vernacular_name", "occurrence_summary")
+            val actual = db.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('species_media','vernacular_name','occurrence_summary')",
+                null
+            ).use { cursor -> buildSet { while (cursor.moveToNext()) add(cursor.getString(0)) } }
+            require(actual == required) { "Scientific library schema v2 detail tables are incomplete" }
+        }
+        return schemaVersion ?: error("Missing scientific schema version")
+    }
+
+    private fun readMeta(db: SQLiteDatabase): Map<String, String> = db.rawQuery(
+        "SELECT key, value FROM meta", null
+    ).use { cursor -> buildMap { while (cursor.moveToNext()) put(cursor.getString(0), cursor.getString(1)) } }
+
+    private fun Map<String, String>.stringValue(key: String): String = this[key]?.trimJsonString().orEmpty()
+    private fun Map<String, String>.longValue(key: String): Long = stringValue(key).toLongOrNull() ?: 0L
 
     private fun String.trimJsonString(): String {
         val value = trim()
@@ -376,5 +444,7 @@ class ScientificLibraryStore(context: Context) {
         private val SUPPORTED_SCOPES = setOf("taxonomy-only", "taxonomy-media-occurrence")
         private const val ID_PREFIX = "scientific-db:"
         private const val SEARCH_DEBOUNCE_MS = 300L
+        private const val FISH_GROUP = "Cá nước ngọt"
+        private const val FISH_MEDIA_PUBLISH_SQL = " AND (t.library_group != ? OR EXISTS (SELECT 1 FROM species_media pm WHERE pm.source_id=t.source_id AND pm.source_record_id=t.source_record_id))"
     }
 }
