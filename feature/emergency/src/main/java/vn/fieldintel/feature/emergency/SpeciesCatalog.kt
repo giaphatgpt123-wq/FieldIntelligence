@@ -19,7 +19,7 @@ data class SpeciesRecord(
  * edibility, toxicity, treatment, or field-safety decisions.
  */
 object SpeciesCatalog {
-    val groups: List<String> = listOf("Thực vật", "Động vật", "Côn trùng", "Nấm")
+    val groups: List<String> = listOf("Thực vật", "Động vật", "Cá nước ngọt", "Côn trùng", "Nấm")
 
     val records: List<SpeciesRecord> = listOf(
         SpeciesRecord("mangifera-indica", "Xoài", "Mangifera indica L.", "Thực vật", "Royal Botanic Gardens, Kew — Plants of the World Online", "https://powo.science.kew.org/taxon/69913-1", "Tên khoa học và phân loại; không xác minh mẫu vật trong ảnh."),
@@ -53,7 +53,7 @@ object SpeciesCatalog {
         SpeciesRecord("varanus-salvator", "Kỳ đà nước", "Varanus salvator (Laurenti, 1768)", "Động vật", "GBIF — Catalogue of Life backbone", "https://www.gbif.org/taxon/7FG74", "Tên khoa học và phân loại; không xác minh cá thể trong ảnh hoặc hướng dẫn tiếp cận."),
         SpeciesRecord("ganoderma-lucidum", "Nấm Ganoderma lucidum", "Ganoderma lucidum (Curtis) P. Karst.", "Nấm", "GBIF — Catalogue of Life / Species Fungorum", "https://www.gbif.org/taxon/6JWYZ", "Tên được chấp nhận và phân loại nấm; không dùng hồ sơ này để quyết định ăn, dùng thuốc hoặc tự nhận dạng mẫu ngoài thực địa."),
         SpeciesRecord("termitomyces-clypeatus", "Nấm Termitomyces clypeatus", "Termitomyces clypeatus R.Heim", "Nấm", "GBIF Backbone Taxonomy", "https://www.gbif.org/species/2530598", "Tên khoa học và phân loại; không dùng hồ sơ taxonomy để kết luận ăn được hoặc xác minh mẫu vật trong ảnh.")
-    )
+    ) + FreshwaterFishCatalog.records
 
     fun countByGroup(group: String): Int = records.count { it.group == group }
 
