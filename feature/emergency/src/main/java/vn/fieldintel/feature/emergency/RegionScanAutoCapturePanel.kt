@@ -85,7 +85,9 @@ fun RegionScanAutoCapturePanel(
         }
     }
 
-    val summary = remember(detections) { RegionScanClassifier.summarize(detections) }
+    val stableDetections = remember(detections) { detections.filter { it.isStableRegionCandidate() } }
+    val verifyingCount = remember(detections) { detections.count { it.regionVerificationProgress() != null } }
+    val summary = remember(stableDetections) { RegionScanClassifier.summarize(stableDetections) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Card(
@@ -117,7 +119,13 @@ fun RegionScanAutoCapturePanel(
                                 onDetections = {
                                     detections = it
                                     statusText = if (modelReady) {
-                                        "Đang quét và phân loại toàn vùng."
+                                        val stable = it.count { detection -> detection.isStableRegionCandidate() }
+                                        val verifying = it.count { detection -> detection.regionVerificationProgress() != null }
+                                        when {
+                                            stable > 0 -> "Đã có $stable vùng ổn định; tự chụp chỉ dùng các vùng này."
+                                            verifying > 0 -> "Đang xác minh $verifying vùng; chưa tự chụp kết quả phân loại."
+                                            else -> "Đang quét và phân loại toàn vùng."
+                                        }
                                     } else {
                                         "Đang quét vùng; ảnh ổn định sẽ tự chụp và chờ model phân loại."
                                     }
@@ -126,7 +134,7 @@ fun RegionScanAutoCapturePanel(
                                     latestCapture = path
                                     autoCaptureCount += 1
                                     statusText = if (modelReady) {
-                                        "Đã tự chụp ảnh vùng ổn định và lưu kết quả phân loại kèm ảnh."
+                                        "Đã tự chụp ảnh với các kết quả đã ổn định và lưu metadata kèm ảnh."
                                     } else {
                                         "Đã tự chụp ảnh vùng ổn định; chưa gắn tên loài vì model chưa được cài."
                                     }
@@ -140,7 +148,7 @@ fun RegionScanAutoCapturePanel(
                                 color = Color(0xCC081A1F)
                             ) {
                                 Text(
-                                    if (modelReady) "AUTO SCAN • AUTO CAPTURE • PHÂN LOẠI" else "AUTO SCAN • AUTO CAPTURE • CHỜ MODEL",
+                                    if (modelReady) "AUTO SCAN • XÁC MINH • AUTO CAPTURE" else "AUTO SCAN • AUTO CAPTURE • CHỜ MODEL",
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
                                     color = if (modelReady) FieldColors.primary else Color(0xFFFFD166)
                                 )
@@ -163,6 +171,7 @@ fun RegionScanAutoCapturePanel(
                                 permissionLauncher.launch(Manifest.permission.CAMERA)
                             } else {
                                 detections = emptyList()
+                                (runner as? StableRegionVisualModelRunner)?.reset()
                                 statusText = "Đang khởi động camera quét vùng…"
                                 scanning = true
                             }
@@ -172,7 +181,11 @@ fun RegionScanAutoCapturePanel(
                     ) { Text(if (cameraGranted) "BẮT ĐẦU QUÉT VÙNG" else "CẤP QUYỀN CAMERA") }
                     if (scanning) {
                         OutlinedButton(
-                            onClick = { scanning = false; statusText = "Đã dừng quét vùng." },
+                            onClick = {
+                                scanning = false
+                                (runner as? StableRegionVisualModelRunner)?.reset()
+                                statusText = "Đã dừng quét vùng."
+                            },
                             modifier = Modifier.weight(1f).heightIn(min = 56.dp),
                             shape = RoundedCornerShape(18.dp)
                         ) { Text("DỪNG") }
@@ -193,12 +206,19 @@ fun RegionScanAutoCapturePanel(
                     Text(modelStatus.message, color = Color(0xFFFFD166))
                     Text("Ảnh vẫn được tự chụp, nhưng không sinh tên loài giả.", color = FieldColors.onSurfaceVariant)
                 } else if (summary.items.isEmpty()) {
-                    Text("Chưa phát hiện đối tượng đủ điều kiện phân loại.", color = FieldColors.onSurfaceVariant)
+                    if (verifyingCount > 0) {
+                        Text("$verifyingCount vùng đang xác minh qua nhiều frame; chưa đưa vào kết quả ổn định.", color = Color(0xFFFFD166))
+                    } else {
+                        Text("Chưa phát hiện đối tượng đủ điều kiện phân loại.", color = FieldColors.onSurfaceVariant)
+                    }
                 } else {
                     Text(
-                        "${summary.totalObjects} vùng • ${summary.strongObjects} vùng đủ ngưỡng • ${summary.items.size} loại",
+                        "${summary.totalObjects} vùng ổn định • ${summary.strongObjects} vùng đủ ngưỡng • ${summary.items.size} loại",
                         color = FieldColors.primary
                     )
+                    if (verifyingCount > 0) {
+                        Text("$verifyingCount vùng khác vẫn đang xác minh.", color = Color(0xFFFFD166))
+                    }
                     summary.items.take(12).forEach { item ->
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
@@ -209,7 +229,7 @@ fun RegionScanAutoCapturePanel(
                                 Text(item.label, style = MaterialTheme.typography.titleSmall)
                                 item.scientificName?.let { Text(it, color = FieldColors.onSurfaceVariant) }
                                 Text(
-                                    "${item.instances} vùng • ${(item.bestConfidence * 100).toInt()}% tốt nhất",
+                                    "${item.instances} vùng ổn định • ${(item.bestConfidence * 100).toInt()}% tốt nhất",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = FieldColors.onSurfaceVariant
                                 )
@@ -281,6 +301,7 @@ private fun RegionAutoCaptureCamera(
                 val provider = providerFuture.get()
                 provider.unbindAll()
                 frameGate.reset()
+                (runner as? StableRegionVisualModelRunner)?.reset()
 
                 val preview = Preview.Builder().build().also { it.surfaceProvider = previewView.surfaceProvider }
                 val imageCapture = ImageCapture.Builder()
@@ -300,12 +321,14 @@ private fun RegionAutoCaptureCamera(
                             lastAnalysisTimestamp = timestamp
                             val frame = image.toOwnedAutoRegionFrame()
                             val found = if (modelReady) runner.scanRegion(frame) else emptyList()
+                            val stableFound = found.filter { it.isStableRegionCandidate() }
                             mainExecutor.execute { if (!disposed) currentOnDetections(found) }
 
-                            if (!captureInFlight && frameGate.shouldCapture(timestamp, frame)) {
+                            val captureEligible = !modelReady || stableFound.isNotEmpty()
+                            if (!captureInFlight && frameGate.shouldCapture(timestamp, frame, captureEligible)) {
                                 captureInFlight = true
                                 val capturedAt = System.currentTimeMillis()
-                                val captureDetections = found.toList()
+                                val captureDetections = if (modelReady) stableFound.toList() else emptyList()
                                 val descriptor = if (modelReady) runner.status().descriptor else null
                                 val hasCandidates = descriptor != null && captureDetections.isNotEmpty()
                                 val folder = File(
@@ -371,6 +394,7 @@ private fun RegionAutoCaptureCamera(
         onDispose {
             disposed = true
             frameGate.reset()
+            (runner as? StableRegionVisualModelRunner)?.reset()
             runCatching { if (providerFuture.isDone) providerFuture.get().unbindAll() }
             executor.shutdownNow()
             metadataExecutor.shutdownNow()
