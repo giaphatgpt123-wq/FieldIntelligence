@@ -6,6 +6,7 @@ import android.net.Uri
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import java.util.zip.ZipInputStream
 
 /** Installs scientific SQLite packs selected through Android's Storage Access Framework. */
 class ScientificLibraryImportManager(private val context: Context) {
@@ -39,6 +40,53 @@ class ScientificLibraryImportManager(private val context: Context) {
         val message: String
     )
 
+    data class BundleImportResult(
+        val taxonomy: ImportResult,
+        val specialistEvidence: ImportResult,
+        val message: String
+    )
+
+    /** Imports the GitHub Actions artifact ZIP containing both required SQLite files. */
+    fun importBundle(uri: Uri): BundleImportResult {
+        val directory = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME).apply { mkdirs() }
+        require(directory.isDirectory) { "Không thể tạo thư mục thư viện khoa học" }
+
+        val staged = PackType.entries.associateWith { type ->
+            File(directory, ".${type.fileName}.incoming").also { it.delete() }
+        }
+        val found = mutableSetOf<PackType>()
+        try {
+            context.contentResolver.openInputStream(uri)?.buffered()?.use { input ->
+                ZipInputStream(input).use { zip ->
+                    while (true) {
+                        val entry = zip.nextEntry ?: break
+                        if (entry.isDirectory) continue
+                        val baseName = entry.name.substringAfterLast('/')
+                        val type = PackType.entries.firstOrNull { it.fileName == baseName } ?: continue
+                        require(type !in found) { "Gói ZIP có tệp trùng: ${type.fileName}" }
+                        copyZipEntryBounded(zip, staged.getValue(type), type.maxBytes)
+                        found += type
+                    }
+                }
+            } ?: error("Không thể mở gói ZIP đã chọn")
+
+            require(found == PackType.entries.toSet()) {
+                "Gói ZIP phải chứa ${PackType.entries.joinToString { it.fileName }}"
+            }
+
+            val counts = PackType.entries.associateWith { type -> validate(staged.getValue(type), type) }
+            val taxonomy = activate(staged.getValue(PackType.TAXONOMY), PackType.TAXONOMY, counts.getValue(PackType.TAXONOMY))
+            val evidence = activate(staged.getValue(PackType.SPECIALIST_EVIDENCE), PackType.SPECIALIST_EVIDENCE, counts.getValue(PackType.SPECIALIST_EVIDENCE))
+            return BundleImportResult(
+                taxonomy = taxonomy,
+                specialistEvidence = evidence,
+                message = "Đã cài thư viện khoa học: ${taxonomy.recordCount} taxonomy + ${evidence.recordCount} evidence"
+            )
+        } finally {
+            staged.values.forEach { it.delete() }
+        }
+    }
+
     fun import(uri: Uri, type: PackType): ImportResult {
         val directory = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME).apply { mkdirs() }
         require(directory.isDirectory) { "Không thể tạo thư mục thư viện khoa học" }
@@ -48,13 +96,16 @@ class ScientificLibraryImportManager(private val context: Context) {
         val copied = copyBounded(uri, staging, type.maxBytes)
         require(copied > 0L) { "Gói dữ liệu rỗng" }
 
-        val recordCount = try {
-            validate(staging, type)
-        } catch (failure: Throwable) {
+        return try {
+            val recordCount = validate(staging, type)
+            activate(staging, type, recordCount)
+        } finally {
             staging.delete()
-            throw failure
         }
+    }
 
+    private fun activate(staging: File, type: PackType, recordCount: Long): ImportResult {
+        val directory = File(context.filesDir, ScientificLibraryStore.DIRECTORY_NAME)
         val target = File(directory, type.fileName)
         val previous = File(directory, type.previousName)
         if (target.isFile && target.length() > 0L) target.copyTo(previous, overwrite = true)
@@ -67,7 +118,6 @@ class ScientificLibraryImportManager(private val context: Context) {
                 StandardCopyOption.REPLACE_EXISTING
             )
         } catch (failure: Throwable) {
-            staging.delete()
             throw IllegalStateException("Không thể kích hoạt gói SQLite theo cơ chế atomic", failure)
         }
 
@@ -98,6 +148,23 @@ class ScientificLibraryImportManager(private val context: Context) {
                 total
             }
         } ?: error("Không thể mở tệp đã chọn")
+    }
+
+    private fun copyZipEntryBounded(zip: ZipInputStream, target: File, maxBytes: Long): Long {
+        target.outputStream().buffered().use { output ->
+            val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+            var total = 0L
+            while (true) {
+                val read = zip.read(buffer)
+                if (read < 0) break
+                total += read
+                require(total <= maxBytes) { "${target.name} vượt giới hạn ${maxBytes / 1024 / 1024} MB" }
+                output.write(buffer, 0, read)
+            }
+            output.flush()
+            require(total > 0L) { "${target.name} rỗng" }
+            return total
+        }
     }
 
     private fun validate(file: File, type: PackType): Long {
