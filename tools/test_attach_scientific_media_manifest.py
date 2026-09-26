@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 import sqlite3
@@ -31,48 +32,75 @@ class AttachScientificMediaManifestTest(unittest.TestCase):
         db.execute("INSERT INTO species_media VALUES('gbif','1','https://example.org/fish.jpg','CC-BY-4.0')")
         db.commit(); db.close()
 
-    def test_attaches_verified_local_media(self):
+    def make_media(self, root: Path, data: bytes, ext: str = "jpg"):
+        digest = hashlib.sha256(data).hexdigest()
+        path = root / "media" / digest[:2] / f"{digest}.{ext}"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+        return digest, path
+
+    def test_attaches_verified_local_media_blob(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); database = root / "science.sqlite"; manifest = root / "manifest.json"
             self.make_db(database)
-            digest = "a" * 64
+            payload = b"fake-jpeg-payload"
+            digest, _ = self.make_media(root, payload)
             manifest.write_text(json.dumps({
                 "manifestVersion": 1,
                 "scope": "scientific-reference-media-offline-cache",
                 "records": [{
                     "sourceId": "gbif", "sourceRecordId": "1", "scientificName": "Channa striata",
                     "sourceIdentifier": "https://example.org/fish.jpg",
-                    "localPath": f"media/aa/{digest}.jpg", "sha256": digest,
-                    "sizeBytes": 1234, "license": "CC-BY-4.0"
+                    "localPath": f"media/{digest[:2]}/{digest}.jpg", "sha256": digest,
+                    "sizeBytes": len(payload), "license": "CC-BY-4.0"
                 }]
             }), encoding="utf-8")
             result = module.attach(database, manifest)
             self.assertEqual(1, result["localMediaRecordCount"])
+            self.assertEqual(1, result["localMediaBlobCount"])
+            self.assertEqual(len(payload), result["localMediaBytes"])
             self.assertEqual(1, result["fishWithLocalMedia"])
             db = sqlite3.connect(database)
             try:
-                self.assertEqual((f"media/aa/{digest}.jpg", digest), db.execute("SELECT local_path,sha256 FROM species_media_local").fetchone())
+                self.assertEqual((digest, "image/jpeg", len(payload), payload),
+                    db.execute("SELECT sha256,mime_type,size_bytes,media_blob FROM scientific_media_blob").fetchone())
+                self.assertEqual(("https://example.org/fish.jpg", digest, "CC-BY-4.0"),
+                    db.execute("SELECT source_identifier,sha256,media_license FROM species_media_local").fetchone())
                 meta = {k: json.loads(v) for k,v in db.execute("SELECT key,value FROM meta")}
                 self.assertEqual(1, meta["localMediaRecordCount"])
+                self.assertEqual(len(payload), meta["localMediaBytes"])
             finally: db.close()
 
-    def test_rejects_path_hash_mismatch_and_license_mismatch(self):
+    def test_rejects_path_hash_and_file_hash_mismatch(self):
         bad = {"sourceId":"gbif","sourceRecordId":"1","sourceIdentifier":"https://example.org/fish.jpg",
                "localPath":"../fish.jpg","sha256":"b"*64,"sizeBytes":10,"license":"CC-BY-4.0"}
         with self.assertRaises(ValueError): module.validate_entry(bad)
         bad["localPath"] = f"media/bb/{'a'*64}.jpg"
         with self.assertRaises(ValueError): module.validate_entry(bad)
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); database=root/"science.sqlite"; manifest=root/"manifest.json"
+            self.make_db(database)
+            digest,_=self.make_media(root,b"real")
+            entry={"sourceId":"gbif","sourceRecordId":"1","sourceIdentifier":"https://example.org/fish.jpg",
+                   "localPath":f"media/{digest[:2]}/{digest}.jpg","sha256":digest,"sizeBytes":4,"license":"CC-BY-4.0"}
+            (root/entry["localPath"]).write_bytes(b"fake")
+            manifest.write_text(json.dumps({"manifestVersion":1,"scope":"scientific-reference-media-offline-cache","records":[entry]}),encoding="utf-8")
+            with self.assertRaises(ValueError): module.attach(database,manifest)
 
-    def test_unmatched_source_is_reported_not_published(self):
+    def test_unmatched_source_is_reported_without_blob_publication(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); database = root / "science.sqlite"; manifest = root / "manifest.json"
-            self.make_db(database); digest = "c" * 64
+            self.make_db(database)
+            payload=b"unmatched"; digest,_=self.make_media(root,payload)
             manifest.write_text(json.dumps({"manifestVersion":1,"scope":"scientific-reference-media-offline-cache","records":[{
                 "sourceId":"gbif","sourceRecordId":"1","sourceIdentifier":"https://example.org/other.jpg",
-                "localPath":f"media/cc/{digest}.jpg","sha256":digest,"sizeBytes":100,"license":"CC-BY-4.0"
+                "localPath":f"media/{digest[:2]}/{digest}.jpg","sha256":digest,"sizeBytes":len(payload),"license":"CC-BY-4.0"
             }]}),encoding="utf-8")
             result=module.attach(database,manifest)
             self.assertEqual(0,result["localMediaRecordCount"]); self.assertEqual(1,result["localMediaUnmatched"])
+            db=sqlite3.connect(database)
+            try:self.assertEqual(0,db.execute("SELECT COUNT(*) FROM scientific_media_blob").fetchone()[0])
+            finally:db.close()
 
 
 if __name__ == "__main__":
