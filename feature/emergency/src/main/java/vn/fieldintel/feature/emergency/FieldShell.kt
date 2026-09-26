@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,31 +23,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 val FieldColors = darkColorScheme(
-    primary = Color(0xFF45E58C),
-    onPrimary = Color(0xFF03261A),
-    secondary = Color(0xFF9AD9C5),
+    primary = Color(0xFF52E99A),
+    onPrimary = Color(0xFF022A1B),
+    secondary = Color(0xFFA9E2D0),
     background = Color(0xFF06191E),
-    onBackground = Color(0xFFF5FAF7),
+    onBackground = Color(0xFFF6FBF8),
     surface = Color(0xFF102B32),
-    onSurface = Color(0xFFF5FAF7),
+    onSurface = Color(0xFFF6FBF8),
     surfaceVariant = Color(0xFF193740),
-    onSurfaceVariant = Color(0xFFD4E6E0),
+    onSurfaceVariant = Color(0xFFD5E6E0),
     outline = Color(0xFF6A8587)
 )
 
 val FieldBackground = Brush.verticalGradient(
-    listOf(Color(0xFF08252C), Color(0xFF06171C), Color(0xFF0B2026))
+    listOf(Color(0xFF06191E), Color(0xFF071E23), Color(0xFF051418))
 )
 
-private data class HomeTileStyle(val top: Color, val bottom: Color, val accent: Color)
+private data class HomeTileStyle(
+    val sky: Color,
+    val mid: Color,
+    val deep: Color,
+    val accent: Color
+)
 
 private fun tileStyle(section: AppSection): HomeTileStyle = when (section) {
-    AppSection.FIELD -> HomeTileStyle(Color(0xFF176244), Color(0xFF0C3A29), Color(0xFF58EE9B))
-    AppSection.RECOGNITION -> HomeTileStyle(Color(0xFF197381), Color(0xFF104A55), Color(0xFF79EEF0))
-    AppSection.SURVIVAL -> HomeTileStyle(Color(0xFF945D33), Color(0xFF5B351F), Color(0xFFFFBD72))
-    AppSection.EMERGENCY -> HomeTileStyle(Color(0xFFA64A53), Color(0xFF602A31), Color(0xFFFF8990))
-    AppSection.PREP -> HomeTileStyle(Color(0xFF655EA3), Color(0xFF3A356A), Color(0xFFC4B8FF))
-    else -> HomeTileStyle(Color(0xFF2A6FA4), Color(0xFF173F64), Color(0xFF99D3FF))
+    AppSection.FIELD -> HomeTileStyle(Color(0xFF4B9A76), Color(0xFF1F6D4D), Color(0xFF103D2D), Color(0xFF66F0A7))
+    AppSection.RECOGNITION -> HomeTileStyle(Color(0xFF58A9AE), Color(0xFF1D6C72), Color(0xFF0C434A), Color(0xFF7CF4EA))
+    AppSection.SURVIVAL -> HomeTileStyle(Color(0xFFC5905A), Color(0xFF875A36), Color(0xFF51351F), Color(0xFFFFC47B))
+    AppSection.EMERGENCY -> HomeTileStyle(Color(0xFFD47A72), Color(0xFF9D454D), Color(0xFF5C2630), Color(0xFFFF9A93))
+    AppSection.PREP -> HomeTileStyle(Color(0xFF8E84C9), Color(0xFF62589B), Color(0xFF383461), Color(0xFFD2C9FF))
+    else -> HomeTileStyle(Color(0xFF62A0C6), Color(0xFF2F7099), Color(0xFF174764), Color(0xFFA5DAFF))
 }
 
 private fun sectionGlyph(section: AppSection): String = when (section) {
@@ -66,130 +72,117 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
     val logoId = context.resources.getIdentifier("official_survival_logo", "drawable", context.packageName)
 
     Card(
-        shape = RoundedCornerShape(30.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF12363A)),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(32.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = .08f))
     ) {
-        Box(Modifier.fillMaxWidth().height(334.dp)) {
-            Canvas(
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color(0xFF86C4D3), Color(0xFF3C7078), Color(0xFF214B45), Color(0xFF0B2926))
-                        )
-                    )
-            ) {
-                drawCircle(Color(0x55F8F3C2), radius = 34f, center = Offset(size.width * .78f, size.height * .18f))
-
-                val far = Path().apply {
-                    moveTo(0f, size.height * .58f)
-                    lineTo(size.width * .18f, size.height * .31f)
-                    lineTo(size.width * .34f, size.height * .50f)
-                    lineTo(size.width * .54f, size.height * .23f)
-                    lineTo(size.width * .70f, size.height * .44f)
-                    lineTo(size.width * .84f, size.height * .32f)
-                    lineTo(size.width, size.height * .58f)
-                    lineTo(size.width, size.height)
-                    lineTo(0f, size.height)
-                    close()
-                }
-                drawPath(far, Color(0xFF47776F))
-
-                val mid = Path().apply {
-                    moveTo(0f, size.height * .70f)
-                    lineTo(size.width * .25f, size.height * .45f)
-                    lineTo(size.width * .43f, size.height * .63f)
-                    lineTo(size.width * .66f, size.height * .39f)
-                    lineTo(size.width * .83f, size.height * .59f)
-                    lineTo(size.width, size.height * .49f)
-                    lineTo(size.width, size.height)
-                    lineTo(0f, size.height)
-                    close()
-                }
-                drawPath(mid, Color(0xFF27564B))
-
-                val near = Path().apply {
-                    moveTo(0f, size.height * .83f)
-                    lineTo(size.width * .28f, size.height * .60f)
-                    lineTo(size.width * .48f, size.height * .76f)
-                    lineTo(size.width * .74f, size.height * .52f)
-                    lineTo(size.width, size.height * .75f)
-                    lineTo(size.width, size.height)
-                    lineTo(0f, size.height)
-                    close()
-                }
-                drawPath(near, Color(0xFF123A31))
-
-                val river = Path().apply {
-                    moveTo(size.width * .25f, size.height)
-                    cubicTo(size.width * .60f, size.height * .82f, size.width * .39f, size.height * .72f, size.width * .68f, size.height * .56f)
-                }
-                drawPath(river, Color(0xFF78DCE8), style = androidx.compose.ui.graphics.drawscope.Stroke(width = 14f))
-            }
-
+        Box(Modifier.fillMaxWidth().height(360.dp)) {
+            ScenicHero()
             Box(
                 Modifier.fillMaxSize().background(
                     Brush.verticalGradient(
-                        listOf(Color(0x12051418), Color(0x26061718), Color(0xA805171A), Color(0xF005171A))
+                        listOf(
+                            Color.Transparent,
+                            Color(0x22040F11),
+                            Color(0xB805171A),
+                            Color(0xF205171A)
+                        )
                     )
                 )
             )
 
             Column(
-                Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        shape = RoundedCornerShape(999.dp),
+                        color = Color(0x6B0A2B2C),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = .12f))
+                    ) {
+                        Text(
+                            "OFFLINE READY",
+                            Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                            color = FieldColors.primary,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
+                    Surface(
+                        shape = CircleShape,
+                        color = Color(0x7B0A2B2C),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = .12f))
+                    ) {
+                        Text("⋯", Modifier.padding(horizontal = 13.dp, vertical = 6.dp), color = Color.White, style = MaterialTheme.typography.titleLarge)
+                    }
+                }
+
+                Spacer(Modifier.height(28.dp))
                 Surface(
                     shape = CircleShape,
-                    color = Color(0xD910382F),
-                    border = BorderStroke(1.dp, Color(0x773FEA91)),
-                    shadowElevation = 8.dp
+                    color = Color(0xD10B302B),
+                    border = BorderStroke(1.dp, Color(0x9952E99A)),
+                    shadowElevation = 12.dp
                 ) {
-                    Box(Modifier.size(104.dp), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(100.dp), contentAlignment = Alignment.Center) {
                         if (logoId != 0) {
-                            Image(painterResource(logoId), "Biểu trưng la bàn núi rừng sông", Modifier.size(86.dp))
+                            Image(painterResource(logoId), "Biểu trưng la bàn núi rừng sông", Modifier.size(82.dp))
                         } else {
                             Text("⌖", style = MaterialTheme.typography.displayMedium, color = FieldColors.primary)
                         }
                     }
                 }
 
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(14.dp))
                 Text(
                     "FIELD INTELLIGENCE",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Black,
                     color = Color.White,
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    "Khám phá • Nhận biết • Sinh tồn an toàn",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFFE4F2EC),
+                    "Khám phá • Nhận biết • Sinh tồn",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.White.copy(alpha = .88f),
                     textAlign = TextAlign.Center
                 )
-                Spacer(Modifier.height(16.dp))
 
+                Spacer(Modifier.weight(1f))
                 Surface(
-                    color = Color(0xDF0A2C2D),
-                    shape = RoundedCornerShape(18.dp),
-                    border = BorderStroke(1.dp, Color(0x445DE9A3))
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color(0xC60A292B),
+                    shape = RoundedCornerShape(20.dp),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = .12f)),
+                    shadowElevation = 6.dp
                 ) {
                     Row(
-                        Modifier.padding(horizontal = 16.dp, vertical = 13.dp),
+                        Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 13.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(9.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Text(if (position == null) "○" else "●", color = if (position == null) Color(0xFFFFD166) else FieldColors.primary)
-                        Text(
-                            if (position == null) "GPS đang chờ tín hiệu • dữ liệu offline vẫn sẵn sàng"
-                            else "GPS %.5f, %.5f  •  ±%.0f m".format(position.latitude, position.longitude, position.accuracyM),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFFF0F7F4),
-                            textAlign = TextAlign.Center
-                        )
+                        Surface(shape = CircleShape, color = if (position == null) Color(0x33FFD166) else Color(0x3352E99A)) {
+                            Box(Modifier.size(36.dp), contentAlignment = Alignment.Center) {
+                                Text(if (position == null) "○" else "●", color = if (position == null) Color(0xFFFFD166) else FieldColors.primary)
+                            }
+                        }
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                if (position == null) "Đang lấy vị trí" else "Vị trí hiện tại",
+                                color = Color.White,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = MaterialTheme.typography.titleSmall
+                            )
+                            Text(
+                                if (position == null) "Dữ liệu offline vẫn sử dụng được"
+                                else "%.5f, %.5f  •  ±%.0f m".format(position.latitude, position.longitude, position.accuracyM),
+                                color = Color.White.copy(alpha = .78f),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                        Text("›", color = FieldColors.primary, style = MaterialTheme.typography.headlineMedium)
                     }
                 }
             }
@@ -197,22 +190,21 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
     }
 
     Row(
-        Modifier.fillMaxWidth(),
+        Modifier.fillMaxWidth().padding(top = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(Modifier.weight(1f)) {
-            Text("CHỌN CHỨC NĂNG", fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleLarge, color = Color.White)
-            Text("Công cụ chính ngoài thực địa", style = MaterialTheme.typography.bodyMedium, color = FieldColors.onSurfaceVariant)
+            Text("KHÁM PHÁ NHANH", fontWeight = FontWeight.Black, style = MaterialTheme.typography.titleLarge, color = Color.White)
+            Text("Các công cụ chính ngoài thực địa", style = MaterialTheme.typography.bodyMedium, color = FieldColors.onSurfaceVariant)
         }
-        Spacer(Modifier.width(8.dp))
-        Surface(shape = RoundedCornerShape(999.dp), color = Color(0x1A45E58C)) {
+        Surface(shape = RoundedCornerShape(999.dp), color = Color(0x1A52E99A), border = BorderStroke(1.dp, Color(0x3352E99A))) {
             Text(
-                "OFFLINE",
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                "6 CÔNG CỤ",
+                Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
                 color = FieldColors.primary,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.ExtraBold
             )
         }
     }
@@ -224,59 +216,149 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
     ).forEach { row ->
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             row.forEach { section ->
-                val style = tileStyle(section)
-                Card(
-                    onClick = { onSelect(section) },
-                    modifier = Modifier.weight(1f).heightIn(min = 158.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                    border = BorderStroke(1.dp, style.accent.copy(alpha = .35f))
-                ) {
-                    Box(
-                        Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(style.top, style.bottom))).padding(16.dp)
-                    ) {
-                        Surface(shape = RoundedCornerShape(17.dp), color = Color(0x28000000)) {
-                            Box(Modifier.size(54.dp), contentAlignment = Alignment.Center) {
-                                Text(
-                                    sectionGlyph(section),
-                                    style = if (section == AppSection.EMERGENCY) MaterialTheme.typography.titleMedium else MaterialTheme.typography.headlineMedium,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Black
-                                )
-                            }
-                        }
-                        Column(Modifier.align(Alignment.BottomStart), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(section.label, fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleMedium, color = Color.White)
-                            Text(section.subtitle, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = .86f), maxLines = 2)
-                        }
-                    }
-                }
+                DemoHomeTile(section, Modifier.weight(1f)) { onSelect(section) }
             }
         }
     }
 
     Surface(
         onClick = { onSelect(AppSection.TRAINING) },
-        modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp),
-        shape = RoundedCornerShape(22.dp),
-        color = Color(0xFF12333A),
-        border = BorderStroke(1.dp, Color(0x663EDB86))
+        modifier = Modifier.fillMaxWidth().heightIn(min = 88.dp),
+        shape = RoundedCornerShape(24.dp),
+        color = Color(0xFF102F36),
+        border = BorderStroke(1.dp, Color(0x3352E99A))
     ) {
         Row(
-            Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 14.dp),
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Surface(shape = CircleShape, color = Color(0x223EDB86)) {
-                Box(Modifier.size(50.dp), contentAlignment = Alignment.Center) {
-                    Text(sectionGlyph(AppSection.TRAINING), style = MaterialTheme.typography.titleLarge, color = FieldColors.primary)
+            Surface(shape = RoundedCornerShape(18.dp), color = Color(0x2252E99A)) {
+                Box(Modifier.size(56.dp), contentAlignment = Alignment.Center) {
+                    Text(sectionGlyph(AppSection.TRAINING), style = MaterialTheme.typography.headlineSmall, color = FieldColors.primary, fontWeight = FontWeight.Black)
                 }
             }
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text("Huấn luyện", fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleMedium, color = Color.White)
+                Text("Huấn luyện thực địa", fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleMedium, color = Color.White)
                 Text("Mô phỏng tình huống và kiểm tra kỹ năng", style = MaterialTheme.typography.bodyMedium, color = FieldColors.onSurfaceVariant)
             }
-            Text("›", style = MaterialTheme.typography.headlineMedium, color = FieldColors.primary)
+            Surface(shape = CircleShape, color = Color(0x1852E99A)) {
+                Text("›", Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.headlineSmall, color = FieldColors.primary)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScenicHero() {
+    Canvas(
+        Modifier.fillMaxSize().background(
+            Brush.verticalGradient(
+                listOf(Color(0xFF93CEDA), Color(0xFF4A8086), Color(0xFF285B53), Color(0xFF12362F))
+            )
+        )
+    ) {
+        drawCircle(Color(0x44FFF2B7), radius = size.minDimension * .095f, center = Offset(size.width * .78f, size.height * .20f))
+
+        val far = Path().apply {
+            moveTo(0f, size.height * .60f)
+            lineTo(size.width * .14f, size.height * .39f)
+            lineTo(size.width * .26f, size.height * .49f)
+            lineTo(size.width * .46f, size.height * .25f)
+            lineTo(size.width * .61f, size.height * .47f)
+            lineTo(size.width * .74f, size.height * .31f)
+            lineTo(size.width, size.height * .57f)
+            lineTo(size.width, size.height)
+            lineTo(0f, size.height)
+            close()
+        }
+        drawPath(far, Color(0xFF557F76))
+
+        val mid = Path().apply {
+            moveTo(0f, size.height * .72f)
+            lineTo(size.width * .20f, size.height * .48f)
+            lineTo(size.width * .37f, size.height * .64f)
+            lineTo(size.width * .58f, size.height * .42f)
+            lineTo(size.width * .75f, size.height * .63f)
+            lineTo(size.width, size.height * .46f)
+            lineTo(size.width, size.height)
+            lineTo(0f, size.height)
+            close()
+        }
+        drawPath(mid, Color(0xFF2E5C4F))
+
+        val near = Path().apply {
+            moveTo(0f, size.height * .83f)
+            lineTo(size.width * .22f, size.height * .66f)
+            lineTo(size.width * .40f, size.height * .78f)
+            lineTo(size.width * .65f, size.height * .57f)
+            lineTo(size.width * .85f, size.height * .72f)
+            lineTo(size.width, size.height * .67f)
+            lineTo(size.width, size.height)
+            lineTo(0f, size.height)
+            close()
+        }
+        drawPath(near, Color(0xFF173C32))
+
+        val river = Path().apply {
+            moveTo(size.width * .20f, size.height)
+            cubicTo(size.width * .48f, size.height * .83f, size.width * .39f, size.height * .73f, size.width * .69f, size.height * .56f)
+        }
+        drawPath(river, Color(0xFF89E5EC), style = Stroke(width = 16f))
+        drawPath(river, Color(0x88FFFFFF), style = Stroke(width = 4f))
+    }
+}
+
+@Composable
+private fun DemoHomeTile(section: AppSection, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val style = tileStyle(section)
+    Card(
+        onClick = onClick,
+        modifier = modifier.heightIn(min = 176.dp),
+        shape = RoundedCornerShape(26.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        border = BorderStroke(1.dp, style.accent.copy(alpha = .30f))
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            Canvas(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(style.sky, style.mid, style.deep)))) {
+                drawCircle(style.accent.copy(alpha = .18f), radius = size.minDimension * .26f, center = Offset(size.width * .82f, size.height * .17f))
+                val ridge = Path().apply {
+                    moveTo(0f, size.height * .65f)
+                    lineTo(size.width * .28f, size.height * .42f)
+                    lineTo(size.width * .48f, size.height * .61f)
+                    lineTo(size.width * .72f, size.height * .36f)
+                    lineTo(size.width, size.height * .60f)
+                    lineTo(size.width, size.height)
+                    lineTo(0f, size.height)
+                    close()
+                }
+                drawPath(ridge, style.deep.copy(alpha = .70f))
+            }
+            Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color(0x22000000), Color(0xB9000000)))))
+
+            Column(Modifier.fillMaxSize().padding(15.dp), verticalArrangement = Arrangement.SpaceBetween) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Surface(shape = RoundedCornerShape(17.dp), color = Color(0x65041317), border = BorderStroke(1.dp, Color.White.copy(alpha = .11f))) {
+                        Box(Modifier.size(52.dp), contentAlignment = Alignment.Center) {
+                            Text(
+                                sectionGlyph(section),
+                                style = if (section == AppSection.EMERGENCY) MaterialTheme.typography.titleSmall else MaterialTheme.typography.headlineSmall,
+                                color = Color.White,
+                                fontWeight = FontWeight.Black
+                            )
+                        }
+                    }
+                    Surface(shape = CircleShape, color = Color(0x44041317)) {
+                        Text("↗", Modifier.padding(horizontal = 9.dp, vertical = 5.dp), color = Color.White.copy(alpha = .88f), fontWeight = FontWeight.Bold)
+                    }
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(section.label, fontWeight = FontWeight.Black, style = MaterialTheme.typography.titleMedium, color = Color.White)
+                    Text(section.subtitle, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = .83f), maxLines = 2)
+                    Box(Modifier.padding(top = 4.dp).width(42.dp).height(3.dp).background(style.accent, RoundedCornerShape(999.dp)))
+                }
+            }
         }
     }
 }
@@ -284,13 +366,13 @@ fun FieldHomePanel(position: FieldPositionUi?, onSelect: (AppSection) -> Unit) {
 @Composable
 fun FieldBottomBar(current: AppSection?, onSelect: (AppSection?) -> Unit) {
     Surface(
-        color = Color(0xFF081F25),
-        shadowElevation = 14.dp,
+        color = Color(0xF2081D22),
+        shadowElevation = 18.dp,
         tonalElevation = 2.dp,
-        border = BorderStroke(1.dp, Color(0x3315E58D))
+        border = BorderStroke(1.dp, Color.White.copy(alpha = .07f))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().navigationBarsPadding().height(94.dp).padding(horizontal = 4.dp),
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding().height(96.dp).padding(horizontal = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -313,39 +395,40 @@ private fun RowScope.BottomItem(
 ) {
     TextButton(
         onClick = onClick,
-        modifier = Modifier.weight(1f).heightIn(min = 72.dp),
-        contentPadding = PaddingValues(horizontal = 1.dp, vertical = 4.dp)
+        modifier = Modifier.weight(1f).heightIn(min = 74.dp),
+        contentPadding = PaddingValues(horizontal = 1.dp, vertical = 3.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Surface(
                 shape = CircleShape,
                 color = when {
                     emphasized -> FieldColors.primary
-                    selected -> Color(0x303FEA91)
+                    selected -> Color(0x2B52E99A)
                     else -> Color.Transparent
                 },
-                border = if (emphasized) BorderStroke(3.dp, Color(0xFF0C3434)) else null,
-                shadowElevation = if (emphasized) 8.dp else 0.dp
+                border = when {
+                    emphasized -> BorderStroke(4.dp, Color(0xFF0B2C2C))
+                    selected -> BorderStroke(1.dp, Color(0x5552E99A))
+                    else -> null
+                },
+                shadowElevation = if (emphasized) 10.dp else 0.dp
             ) {
-                Box(
-                    modifier = Modifier.size(if (emphasized) 62.dp else 48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
+                Box(Modifier.size(if (emphasized) 64.dp else 46.dp), contentAlignment = Alignment.Center) {
                     Text(
                         icon,
                         style = if (emphasized) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge,
                         color = if (emphasized) FieldColors.onPrimary else if (selected) FieldColors.primary else FieldColors.onSurfaceVariant,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Black
                     )
                 }
             }
             Spacer(Modifier.height(3.dp))
             Text(
                 label,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
                 color = if (selected || emphasized) FieldColors.primary else FieldColors.onSurfaceVariant,
-                fontWeight = if (selected || emphasized) FontWeight.Bold else FontWeight.Medium
+                fontWeight = if (selected || emphasized) FontWeight.ExtraBold else FontWeight.Medium
             )
         }
     }
@@ -364,63 +447,62 @@ fun FieldSectionBanner(section: AppSection, onBack: () -> Unit) {
     }
 
     Card(
-        shape = RoundedCornerShape(26.dp),
+        shape = RoundedCornerShape(28.dp),
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = tone),
         border = BorderStroke(1.dp, Color.White.copy(alpha = .10f))
     ) {
-        Column(
-            Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(tone, Color(0xFF0B272D)))).padding(14.dp)
-        ) {
-            Surface(
-                onClick = onBack,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
-                shape = RoundedCornerShape(20.dp),
-                color = Color(0x25000000),
-                border = BorderStroke(1.dp, Color.White.copy(alpha = .14f))
-            ) {
-                Row(
-                    Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+        Box(Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(tone, Color(0xFF0B272D))))) {
+            Canvas(Modifier.matchParentSize()) {
+                drawCircle(Color.White.copy(alpha = .04f), radius = size.minDimension * .52f, center = Offset(size.width * .92f, size.height * .18f))
+            }
+            Column(Modifier.fillMaxWidth().padding(14.dp)) {
+                Surface(
+                    onClick = onBack,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    color = Color(0x26000000),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = .14f))
                 ) {
-                    Surface(shape = CircleShape, color = Color(0x28FFFFFF)) {
-                        Box(Modifier.size(50.dp), contentAlignment = Alignment.Center) {
-                            Text("←", style = MaterialTheme.typography.headlineMedium, color = Color.White, fontWeight = FontWeight.Black)
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Surface(shape = CircleShape, color = Color(0x28FFFFFF)) {
+                            Box(Modifier.size(50.dp), contentAlignment = Alignment.Center) {
+                                Text("←", style = MaterialTheme.typography.headlineMedium, color = Color.White, fontWeight = FontWeight.Black)
+                            }
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text("Quay lại", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = Color.White)
+                            Text("Về Trang chủ", style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = .78f))
+                        }
+                        Text("⌂", style = MaterialTheme.typography.headlineSmall, color = Color.White.copy(alpha = .82f))
+                    }
+                }
+
+                Spacer(Modifier.height(16.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                ) {
+                    Surface(shape = RoundedCornerShape(20.dp), color = Color(0x26000000), border = BorderStroke(1.dp, Color.White.copy(alpha = .08f))) {
+                        Box(Modifier.size(66.dp), contentAlignment = Alignment.Center) {
+                            Text(
+                                sectionGlyph(section),
+                                style = if (section == AppSection.EMERGENCY) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium,
+                                color = Color.White,
+                                fontWeight = FontWeight.Black
+                            )
                         }
                     }
-                    Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
-                        Text("Quay lại", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, color = Color.White)
-                        Text("Về Trang chủ", style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = .78f))
-                    }
-                    Text("⌂", style = MaterialTheme.typography.headlineSmall, color = Color.White.copy(alpha = .82f))
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
-            ) {
-                Surface(shape = RoundedCornerShape(20.dp), color = Color(0x26000000)) {
-                    Box(Modifier.size(66.dp), contentAlignment = Alignment.Center) {
-                        Text(
-                            sectionGlyph(section),
-                            style = if (section == AppSection.EMERGENCY) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium,
-                            color = Color.White,
-                            fontWeight = FontWeight.Black
-                        )
+                        Text(section.label, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Black, color = Color.White)
+                        Spacer(Modifier.height(3.dp))
+                        Text(section.subtitle, style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = .84f))
                     }
                 }
-                Column(Modifier.weight(1f)) {
-                    Text(section.label, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold, color = Color.White)
-                    Spacer(Modifier.height(3.dp))
-                    Text(section.subtitle, style = MaterialTheme.typography.bodyLarge, color = Color.White.copy(alpha = .84f))
-                }
+                Spacer(Modifier.height(8.dp))
             }
-            Spacer(Modifier.height(8.dp))
         }
     }
 }
