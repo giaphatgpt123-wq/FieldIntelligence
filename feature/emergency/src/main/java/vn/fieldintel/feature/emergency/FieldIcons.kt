@@ -2,7 +2,6 @@ package vn.fieldintel.feature.emergency
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,11 +12,11 @@ import androidx.compose.ui.unit.sp
 
 /** Familiar, colorful symbols from the earlier VN Sinh tồn home screen. */
 @Composable
-internal fun FieldIcon(section: AppSection?, modifier: Modifier = Modifier, color: Color = Color.White) {
+internal fun FieldIcon(section: AppSection?, modifier: Modifier = Modifier, color: Color = Color.White, navigation: Boolean = false) {
     val glyph = when (section) {
         null -> "⌂"
         AppSection.FIELD -> "🗺️"
-        AppSection.RECOGNITION -> "🌿"
+        AppSection.RECOGNITION -> if (navigation) "📷" else "🌿"
         AppSection.SURVIVAL -> "🔥"
         AppSection.EMERGENCY -> "SOS"
         AppSection.PREP -> "🎒"
