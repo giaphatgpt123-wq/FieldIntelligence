@@ -61,20 +61,23 @@ object SpeciesCatalog {
         .replace(Regex("\\p{M}+"), "")
         .replace('đ', 'd')
 
-    private fun matchesQuery(value: String, needle: String): Boolean {
+    private fun matchesQuery(value: String, needle: String, accentSensitive: Boolean): Boolean {
         if (needle.isEmpty()) return true
-        val candidate = normalized(value)
+        val candidate = if (accentSensitive) value.lowercase(Locale.ROOT) else normalized(value)
         if (' ' in needle) return candidate.contains(needle)
-        val tokens = candidate.split(Regex("[^a-z0-9]+"))
+        val tokens = candidate.split(Regex("[^\\p{L}0-9]+"))
             .filter { it.isNotEmpty() }
         return tokens.any { token -> token == needle || (needle.length >= 4 && token.startsWith(needle)) }
     }
 
     fun search(query: String, group: String = "Tất cả"): List<SpeciesRecord> {
-        val needle = normalized(query.trim())
+        val raw = query.trim().lowercase(Locale.ROOT)
+        val accentSensitive = normalized(raw) != raw
+        val needle = if (accentSensitive) raw else normalized(raw)
         return records.filter { record ->
             (group == "Tất cả" || record.group == group) &&
-                (matchesQuery(record.vietnameseName, needle) || matchesQuery(record.scientificName, needle))
+                (matchesQuery(record.vietnameseName, needle, accentSensitive) ||
+                    matchesQuery(record.scientificName, needle, accentSensitive))
         }
     }
 }
