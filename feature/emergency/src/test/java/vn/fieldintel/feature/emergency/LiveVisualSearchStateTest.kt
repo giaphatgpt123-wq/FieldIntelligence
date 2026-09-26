@@ -19,6 +19,18 @@ class LiveVisualSearchStateTest {
     }
 
     @Test
+    fun typedVietnameseTargetIsCanonicalizedBeforeScanning() {
+        val state = LiveVisualSearchReducer.start(
+            LiveVisualSearchTarget("rau má"),
+            modelReady = true
+        )
+
+        assertEquals("centella-asiatica", state.target?.speciesId)
+        assertEquals("Centella asiatica", state.target?.scientificName)
+        assertTrue(state.message.contains("Centella asiatica"))
+    }
+
+    @Test
     fun candidateMustPersistAcrossSeveralFramesBeforeStable() {
         val scanning = LiveVisualSearchReducer.start(LiveVisualSearchTarget("rau má"), modelReady = true)
         val early = LiveVisualSearchReducer.candidate(
