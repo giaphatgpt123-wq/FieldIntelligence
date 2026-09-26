@@ -1,9 +1,12 @@
 package vn.fieldintel.feature.emergency
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -40,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,20 +77,10 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
 
     val pickImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-            val bitmap = runCatching {
-                val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
-                require(bounds.outWidth > 0 && bounds.outHeight > 0)
-                val sample = boundedSampleSize(bounds.outWidth, bounds.outHeight, 1800)
-                val options = BitmapFactory.Options().apply {
-                    inSampleSize = sample
-                    inPreferredConfig = Bitmap.Config.ARGB_8888
-                }
-                context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, options) }
-            }.getOrNull()
+            val bitmap = decodeUriBounded(context, uri, 1800)
             if (bitmap != null) {
                 preview = bitmap
-                sourceLabel = "Ảnh từ máy • ${bitmap.width}×${bitmap.height}"
+                sourceLabel = "Ảnh từ máy • ${bitmap.width}×${bitmap.height} • đã chuẩn hóa hướng ảnh"
                 error = null
                 saveStatus = ""
             } else {
@@ -103,7 +97,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
             file.delete()
             if (bitmap != null) {
                 preview = bitmap
-                sourceLabel = "Ảnh chụp độ phân giải đầy đủ • ${bitmap.width}×${bitmap.height}"
+                sourceLabel = "Ảnh chụp độ phân giải đầy đủ • ${bitmap.width}×${bitmap.height} • đã chuẩn hóa hướng ảnh"
                 error = null
                 saveStatus = ""
             } else {
@@ -302,15 +296,66 @@ private fun boundedSampleSize(width: Int, height: Int, maxEdge: Int): Int {
     return sample
 }
 
+private fun decodeUriBounded(context: Context, uri: Uri, maxEdge: Int): Bitmap? = runCatching {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+    require(bounds.outWidth > 0 && bounds.outHeight > 0)
+    val decoded = context.contentResolver.openInputStream(uri)?.use { input ->
+        BitmapFactory.decodeStream(
+            input,
+            null,
+            BitmapFactory.Options().apply {
+                inSampleSize = boundedSampleSize(bounds.outWidth, bounds.outHeight, maxEdge)
+                inPreferredConfig = Bitmap.Config.ARGB_8888
+            }
+        )
+    } ?: error("Không thể giải mã ảnh")
+    val orientation = context.contentResolver.openInputStream(uri)?.use { input ->
+        ExifInterface(input).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+    } ?: ExifInterface.ORIENTATION_NORMAL
+    applyExifOrientation(decoded, orientation)
+}.getOrNull()
+
 private fun decodeFileBounded(file: File, maxEdge: Int): Bitmap? = runCatching {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     BitmapFactory.decodeFile(file.absolutePath, bounds)
     require(bounds.outWidth > 0 && bounds.outHeight > 0)
-    BitmapFactory.decodeFile(
+    val decoded = BitmapFactory.decodeFile(
         file.absolutePath,
         BitmapFactory.Options().apply {
             inSampleSize = boundedSampleSize(bounds.outWidth, bounds.outHeight, maxEdge)
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
+    ) ?: error("Không thể giải mã ảnh")
+    val orientation = ExifInterface(file).getAttributeInt(
+        ExifInterface.TAG_ORIENTATION,
+        ExifInterface.ORIENTATION_NORMAL
     )
+    applyExifOrientation(decoded, orientation)
 }.getOrNull()
+
+private fun applyExifOrientation(source: Bitmap, orientation: Int): Bitmap {
+    val matrix = Matrix()
+    when (orientation) {
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
+        ExifInterface.ORIENTATION_FLIP_VERTICAL -> {
+            matrix.setRotate(180f)
+            matrix.postScale(-1f, 1f)
+        }
+        ExifInterface.ORIENTATION_TRANSPOSE -> {
+            matrix.setRotate(90f)
+            matrix.postScale(-1f, 1f)
+        }
+        ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
+        ExifInterface.ORIENTATION_TRANSVERSE -> {
+            matrix.setRotate(-90f)
+            matrix.postScale(-1f, 1f)
+        }
+        ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
+        else -> return source
+    }
+    val transformed = Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+    if (transformed !== source && !source.isRecycled) source.recycle()
+    return transformed
+}
