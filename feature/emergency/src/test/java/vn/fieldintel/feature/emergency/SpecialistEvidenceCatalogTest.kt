@@ -64,7 +64,8 @@ class SpecialistEvidenceCatalogTest {
             .single { it.domain == EvidenceDomain.TOXICOLOGY }
         assertEquals("Hạt", record.plantPart)
         assertTrue(record.statement.contains("abrin", ignoreCase = true))
-        assertTrue(record.sourceName.contains("CDC"))
+        assertTrue(record.sourceUrl.contains("cdc.gov"))
+        assertTrue(record.sourceName.contains("Centers for Disease Control", ignoreCase = true))
         assertFalse(record.statement.contains("liều", ignoreCase = true))
         assertFalse(record.statement.contains("điều trị", ignoreCase = true))
     }
