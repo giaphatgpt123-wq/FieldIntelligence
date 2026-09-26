@@ -34,6 +34,7 @@ import kotlinx.coroutines.withContext
 import vn.fieldintel.feature.emergency.FieldColors
 import vn.fieldintel.feature.emergency.InstalledVisualModelRunner
 import vn.fieldintel.feature.emergency.RegionScanAutoCapturePanel
+import vn.fieldintel.feature.emergency.StableRegionVisualModelRunner
 import vn.fieldintel.feature.emergency.VisualModelImportManager
 
 /** Direct entry point for on-device validation of region scanning and automatic evidence capture. */
@@ -47,7 +48,9 @@ class LiveVisualSearchActivity : ComponentActivity() {
             }
             val scope = rememberCoroutineScope()
             val importer = remember { VisualModelImportManager(applicationContext) }
-            val runner = remember(runnerGeneration) { InstalledVisualModelRunner(applicationContext) }
+            val runner = remember(runnerGeneration) {
+                StableRegionVisualModelRunner(InstalledVisualModelRunner(applicationContext))
+            }
             DisposableEffect(runner) { onDispose { runner.close() } }
 
             val selectModelBundle = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
