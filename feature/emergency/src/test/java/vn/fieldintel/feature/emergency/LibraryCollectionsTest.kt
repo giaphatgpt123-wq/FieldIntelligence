@@ -54,7 +54,9 @@ class LibraryCollectionsTest {
         assertTrue(monographs.any { it.id == "zingiber-officinale" })
         assertTrue(monographs.any { it.id == "hypericum-perforatum" })
 
-        assertTrue(LibraryCollections.recordsFor("toxic-plants").any { it.id == "ricinus-communis" })
+        val toxic = LibraryCollections.recordsFor("toxic-plants")
+        assertTrue(toxic.any { it.id == "ricinus-communis" })
+        assertTrue(toxic.any { it.id == "abrus-precatorius" })
     }
 
     @Test
