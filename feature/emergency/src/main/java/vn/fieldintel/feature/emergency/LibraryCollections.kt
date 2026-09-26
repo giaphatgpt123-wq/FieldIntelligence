@@ -1,10 +1,12 @@
 package vn.fieldintel.feature.emergency
 
 /**
- * Curated navigation collections for the starter catalog plus optional evidence-backed expansion.
+ * Navigation collections for the scientific library.
  *
  * Taxonomy-only groups may be curated directly. High-risk labels such as medicinal or toxic are
- * derived only from specialist evidence, never from taxonomy or common-name inference.
+ * evidence-gated. When validated offline SQLite packs are available, those collections are
+ * replaced by runtime records resolved from specialist evidence -> canonical scientific name ->
+ * taxonomy. The starter catalog remains the explicit fallback when the external packs are absent.
  */
 data class LibraryCollection(
     val id: String,
@@ -16,7 +18,7 @@ data class LibraryCollection(
 )
 
 object LibraryCollections {
-    val items: List<LibraryCollection> = listOf(
+    private val baseItems: List<LibraryCollection> = listOf(
         LibraryCollection(
             id = "traditional-medicine",
             label = "Cây thuốc Đông y",
@@ -92,10 +94,27 @@ object LibraryCollections {
         )
     )
 
+    /** Reading this property from Compose observes the runtime evidence snapshot. */
+    val items: List<LibraryCollection>
+        get() = baseItems.map { item ->
+            val runtime = item.evidenceDomain?.let { LibraryCollectionRuntime.recordsFor(item.id) }
+            if (runtime == null) item else item.copy(recordIds = runtime.mapTo(linkedSetOf()) { it.id })
+        }
+
     fun byId(id: String?): LibraryCollection? = items.firstOrNull { it.id == id }
 
     fun recordsFor(id: String): List<SpeciesRecord> {
-        val ids = byId(id)?.recordIds.orEmpty()
+        val base = baseItems.firstOrNull { it.id == id } ?: return emptyList()
+        if (base.evidenceDomain != null) {
+            LibraryCollectionRuntime.recordsFor(id)?.let { return it }
+        }
+        return starterRecordsFor(id)
+    }
+
+    internal fun starterRecordsFor(id: String): List<SpeciesRecord> {
+        val ids = baseItems.firstOrNull { it.id == id }?.recordIds.orEmpty()
         return SpeciesCatalog.records.filter { it.id in ids }
     }
+
+    internal fun evidenceCollections(): List<LibraryCollection> = baseItems.filter { it.evidenceDomain != null }
 }
