@@ -82,7 +82,6 @@ def iter_rows_from_zip(path: Path):
             reader = csv.DictReader(text, dialect=dialect)
             if not reader.fieldnames:
                 raise SystemExit(f"WFO taxonomy table has no header: {member}")
-            yield member, reader
             for row in reader:
                 yield member, row
 
