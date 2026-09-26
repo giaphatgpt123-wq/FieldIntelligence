@@ -21,8 +21,9 @@ SOURCE_AUTHORITY = "World Flora Online Consortium"
 SOURCE_LICENSE = "CC0-1.0"
 SOURCE_SCOPE = "taxonomy-only"
 SOURCE_DOWNLOAD_PAGE = "https://www.worldfloraonline.org/downloadData"
-SOURCE_ARCHIVE_URL = "https://files.worldfloraonline.org/files/WFO_Backbone/_WFOCompleteBackbone/WFO_Backbone.zip"
-SOURCE_VERSION_DOI = "10.5281/zenodo.18007552"
+SOURCE_ARCHIVE_URL = "https://zenodo.org/records/20782718/files/_DwC_backbone_R.zip?download=1"
+SOURCE_VERSION = "2026-06"
+SOURCE_VERSION_DOI = "10.5281/zenodo.20782718"
 
 
 def clean(value: object) -> str:
@@ -111,6 +112,8 @@ def normalize_wfo(row: dict[str, str]) -> dict:
             "license": SOURCE_LICENSE,
             "scope": SOURCE_SCOPE,
             "downloadPage": SOURCE_DOWNLOAD_PAGE,
+            "archiveUrl": SOURCE_ARCHIVE_URL,
+            "version": SOURCE_VERSION,
             "versionDoi": SOURCE_VERSION_DOI,
         },
     }
@@ -158,6 +161,7 @@ def build(archive_path: Path, output_path: Path, metadata_path: Path) -> dict:
         "scope": SOURCE_SCOPE,
         "downloadPage": SOURCE_DOWNLOAD_PAGE,
         "archiveUrl": SOURCE_ARCHIVE_URL,
+        "version": SOURCE_VERSION,
         "versionDoi": SOURCE_VERSION_DOI,
         "archiveMember": source_member,
         "recordCount": count,
