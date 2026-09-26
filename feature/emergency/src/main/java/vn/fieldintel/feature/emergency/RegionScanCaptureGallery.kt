@@ -102,7 +102,7 @@ private fun decodeScanThumbnail(file: File): Bitmap? = runCatching {
     var sample = 1
     while (bounds.outWidth / sample > 1000 || bounds.outHeight / sample > 1000) sample *= 2
     val bitmap = BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply { inSampleSize = sample })
-        ?: return null
+        ?: return@runCatching null
     val orientation = ExifInterface(file.absolutePath)
         .getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
     val degrees = when (orientation) {
