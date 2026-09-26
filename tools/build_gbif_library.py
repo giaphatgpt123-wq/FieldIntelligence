@@ -51,6 +51,17 @@ def library_group(row: Dict[str, str]) -> str:
         return "Thực vật"
     if kingdom == "fungi":
         return "Nấm"
+    # Fish must be separated before the generic Animalia bucket. GBIF exports can
+    # carry either modern class names or higher-rank/order information.
+    fish_classes = {"actinopterygii", "elasmobranchii", "sarcopterygii", "myxini"}
+    fish_orders = {
+        "cypriniformes", "siluriformes", "anabantiformes", "perciformes",
+        "synbranchiformes", "osteoglossiformes", "clupeiformes",
+        "beloniformes", "gobiiformes", "cichliformes"
+    }
+    order = first(row, "order").lower()
+    if kingdom == "animalia" and (clazz in fish_classes or order in fish_orders):
+        return "Cá nước ngọt"
     if kingdom == "animalia" and clazz == "insecta":
         return "Côn trùng"
     if kingdom == "animalia":
@@ -77,6 +88,16 @@ def normalize(row: Dict[str, str], dataset_doi: str, publisher: str, license_id:
         "species": first(row, "species"),
         "vernacularName": first(row, "vernacularName"),
         "libraryGroup": library_group(row),
+        "media": {
+            "mediaType": first(row, "mediaType", "type"),
+            "identifier": first(row, "identifier", "accessURI"),
+            "references": first(row, "references"),
+            "title": first(row, "title"),
+            "description": first(row, "description"),
+            "creator": first(row, "creator"),
+            "rightsHolder": first(row, "rightsHolder"),
+            "license": first(row, "mediaLicense", "license"),
+        },
         "occurrence": {
             "basisOfRecord": first(row, "basisOfRecord"),
             "countryCode": first(row, "countryCode"),
@@ -93,7 +114,7 @@ def normalize(row: Dict[str, str], dataset_doi: str, publisher: str, license_id:
             "publisher": publisher,
             "datasetDoi": dataset_doi,
             "license": license_id,
-            "scope": "taxonomy-and-occurrence-metadata",
+            "scope": "taxonomy-occurrence-and-media-metadata",
             "nonCommercialRestriction": ALLOWED_LICENSES[license_id],
         },
     }
