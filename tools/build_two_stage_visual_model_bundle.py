@@ -29,8 +29,12 @@ def component(path: pathlib.Path, filename: str, score_threshold: float, max_res
     if not path.is_file():
         raise ValueError(f"model not found: {path}")
     size = path.stat().st_size
-    if size <= 0 or size > MAX_MODEL_BYTES:
+    if size < 8 or size > MAX_MODEL_BYTES:
         raise ValueError(f"model size is outside allowed range: {path.name}")
+    with path.open("rb") as handle:
+        header = handle.read(8)
+    if header[4:8] != b"TFL3":
+        raise ValueError(f"not a TensorFlow Lite file: {path.name}")
     return {
         "file": filename,
         "sha256": sha256(path),
