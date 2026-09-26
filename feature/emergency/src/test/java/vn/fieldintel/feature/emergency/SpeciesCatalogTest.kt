@@ -10,6 +10,12 @@ class SpeciesCatalogTest {
         assertEquals("musa-acuminata", SpeciesCatalog.search("MUSA ACUMINATA").single().id)
         assertEquals("cocos-nucifera", SpeciesCatalog.search("dua").single().id)
         assertEquals("centella-asiatica", SpeciesCatalog.search("rau ma").single().id)
+        assertEquals("oryza-sativa", SpeciesCatalog.search("lua").single().id)
+        assertEquals("zingiber-officinale", SpeciesCatalog.search("gung").single().id)
+        assertEquals("curcuma-longa", SpeciesCatalog.search("nghe").single().id)
+        assertEquals("cymbopogon-citratus", SpeciesCatalog.search("sa").single().id)
+        assertEquals("carica-papaya", SpeciesCatalog.search("du du").single().id)
+        assertEquals("psidium-guajava", SpeciesCatalog.search("oi").single().id)
     }
 
     @Test fun sourcedGroupsReturnOnlyMatchingRecords() {
@@ -31,6 +37,16 @@ class SpeciesCatalogTest {
         assertTrue(InteractionCatalog.findForEntity(tea.scientificName).any { it.id == "green-tea-nadolol-nccih" })
         assertTrue(hypericum.sourceScope.contains("nguồn y khoa riêng", ignoreCase = true))
         assertTrue(tea.sourceScope.contains("không dùng hồ sơ taxonomy", ignoreCase = true))
+    }
+
+    @Test fun agricultureAndMedicinalExpansionKeepsTaxonomySeparateFromUseClaims() {
+        val ids = SpeciesCatalog.records.map { it.id }.toSet()
+        assertTrue(setOf(
+            "oryza-sativa", "zingiber-officinale", "curcuma-longa",
+            "cymbopogon-citratus", "carica-papaya", "psidium-guajava"
+        ).all { it in ids })
+        assertTrue(SpeciesCatalog.records.filter { it.id in ids }.all { it.sourceUrl.startsWith("https://") })
+        assertTrue(SpeciesCatalog.search("Curcuma longa").single().sourceScope.contains("không suy ra", ignoreCase = true))
     }
 
     @Test fun sourceProvenanceAndUnknownBehaviorRemainExplicit() {
