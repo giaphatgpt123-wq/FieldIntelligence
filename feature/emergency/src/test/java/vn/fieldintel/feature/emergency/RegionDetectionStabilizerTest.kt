@@ -1,6 +1,7 @@
 package vn.fieldintel.feature.emergency
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -20,14 +21,20 @@ class RegionDetectionStabilizerTest {
     )
 
     @Test
-    fun requiresRepeatedObservationBeforeEmission() {
+    fun emitsVerifyingStateBeforeStableState() {
         val stabilizer = RegionDetectionStabilizer(stableHitsRequired = 3)
-        assertTrue(stabilizer.update(listOf(detection("Centella asiatica"))).isEmpty())
-        assertTrue(stabilizer.update(listOf(detection("Centella asiatica", 0.82f))).isEmpty())
-        val stable = stabilizer.update(listOf(detection("Centella asiatica", 0.84f)))
-        assertEquals(1, stable.size)
-        assertEquals("Centella asiatica", stable.single().scientificName)
-        assertTrue(stable.single().trackHint!!.startsWith("stable-"))
+        val first = stabilizer.update(listOf(detection("Centella asiatica"))).single()
+        assertFalse(first.isStableRegionCandidate())
+        assertEquals(1 to 3, first.regionVerificationProgress())
+
+        val second = stabilizer.update(listOf(detection("Centella asiatica", 0.82f))).single()
+        assertFalse(second.isStableRegionCandidate())
+        assertEquals(2 to 3, second.regionVerificationProgress())
+
+        val stable = stabilizer.update(listOf(detection("Centella asiatica", 0.84f))).single()
+        assertEquals("Centella asiatica", stable.scientificName)
+        assertTrue(stable.isStableRegionCandidate())
+        assertEquals(null, stable.regionVerificationProgress())
     }
 
     @Test
@@ -38,6 +45,7 @@ class RegionDetectionStabilizerTest {
         stabilizer.update(listOf(a, b))
         val stable = stabilizer.update(listOf(a, b))
         assertEquals(2, stable.size)
+        assertTrue(stable.all { it.isStableRegionCandidate() })
         assertEquals(2, stable.mapNotNull { it.trackHint }.distinct().size)
     }
 
@@ -46,12 +54,17 @@ class RegionDetectionStabilizerTest {
         val stabilizer = RegionDetectionStabilizer(stableHitsRequired = 2, maxMissedFrames = 2)
         val centella = detection("Centella asiatica")
         stabilizer.update(listOf(centella))
-        assertEquals(1, stabilizer.update(listOf(centella)).size)
+        assertTrue(stabilizer.update(listOf(centella)).single().isStableRegionCandidate())
 
         val noise = detection("Plantago major")
-        assertTrue(stabilizer.update(listOf(noise)).isEmpty())
+        val noisyFrame = stabilizer.update(listOf(noise))
+        assertEquals(1, noisyFrame.size)
+        assertFalse(noisyFrame.single().isStableRegionCandidate())
+        assertEquals("Plantago major", noisyFrame.single().scientificName)
+
         val recovered = stabilizer.update(listOf(centella))
         assertEquals(1, recovered.size)
+        assertTrue(recovered.single().isStableRegionCandidate())
         assertEquals("Centella asiatica", recovered.single().scientificName)
     }
 
@@ -60,10 +73,12 @@ class RegionDetectionStabilizerTest {
         val stabilizer = RegionDetectionStabilizer(stableHitsRequired = 2, maxMissedFrames = 1)
         val d = detection("Centella asiatica")
         stabilizer.update(listOf(d))
-        assertEquals(1, stabilizer.update(listOf(d)).size)
+        assertTrue(stabilizer.update(listOf(d)).single().isStableRegionCandidate())
         assertTrue(stabilizer.update(emptyList()).isEmpty())
         assertTrue(stabilizer.update(emptyList()).isEmpty())
-        assertTrue(stabilizer.update(listOf(d)).isEmpty())
+        val restarted = stabilizer.update(listOf(d)).single()
+        assertFalse(restarted.isStableRegionCandidate())
+        assertEquals(1 to 2, restarted.regionVerificationProgress())
     }
 
     @Test
@@ -82,6 +97,7 @@ class RegionDetectionStabilizerTest {
                 )
             )
         ).single()
+        assertTrue(stable.isStableRegionCandidate())
         assertTrue(stable.confidence > 0.60f && stable.confidence < 1.00f)
         assertTrue(stable.box.left > 0.10f && stable.box.left < 0.14f)
     }
