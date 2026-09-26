@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "bulkImportOnlyWhenExplicitlyAllowed": true,
+    "medicalClaimsRequireDocumentLevelProvenance": true,
+    "taxonomyNeverImpliesEdibilityToxicityOrTreatment": true,
+    "imageLicensesMustBeTrackedPerAsset": true
+  },
+  "sources": [
+    {
+      "id": "wfo-taxonomic-backbone",
+      "name": "World Flora Online Taxonomic Backbone",
+      "authority": "World Flora Online Consortium",
+      "domains": ["taxonomy", "plants"],
+      "url": "https://www.worldfloraonline.org/downloadData",
+      "ingestion": "bulk_open",
+      "license": "CC0-1.0",
+      "priority": 1
+    },
+    {
+      "id": "prc-vietnam-genebank",
+      "name": "Cơ sở dữ liệu nguồn gen thực vật nông nghiệp Việt Nam",
+      "authority": "Trung tâm Tài nguyên thực vật",
+      "domains": ["agriculture", "plant-genetic-resources", "vietnam"],
+      "url": "https://csdl.prc.org.vn/Home/Data",
+      "ingestion": "export_terms_review_required",
+      "license": "TERMS_REVIEW_REQUIRED",
+      "priority": 1
+    },
+    {
+      "id": "moh-traditional-medicine",
+      "name": "Cục Quản lý Y, Dược cổ truyền",
+      "authority": "Bộ Y tế Việt Nam",
+      "domains": ["traditional-medicine", "medicinal-plants", "vietnam"],
+      "url": "https://ydct.moh.gov.vn/",
+      "ingestion": "reference_metadata_only_until_terms_verified",
+      "license": "DOCUMENT_LEVEL_TERMS",
+      "priority": 1
+    },
+    {
+      "id": "vietnam-pharmacopoeia-vi",
+      "name": "Dược điển Việt Nam VI",
+      "authority": "Bộ Y tế Việt Nam / Hội đồng Dược điển Việt Nam",
+      "domains": ["pharmacopoeia", "traditional-medicine", "medicinal-plants", "vietnam"],
+      "url": "https://moh.gov.vn/",
+      "ingestion": "reference_metadata_only_until_terms_verified",
+      "license": "DOCUMENT_LEVEL_TERMS",
+      "priority": 1
+    },
+    {
+      "id": "national-institute-medicinal-materials",
+      "name": "Viện Dược liệu",
+      "authority": "Viện Dược liệu, Việt Nam",
+      "domains": ["medicinal-plants", "traditional-medicine", "vietnam"],
+      "url": "https://vienduoclieu.org.vn/",
+      "ingestion": "reference_metadata_only_until_terms_verified",
+      "license": "DOCUMENT_LEVEL_TERMS",
+      "priority": 1
+    },
+    {
+      "id": "who-medicinal-plants-vietnam",
+      "name": "Medicinal plants in Viet Nam",
+      "authority": "WHO Regional Office for the Western Pacific",
+      "domains": ["medicinal-plants", "traditional-medicine", "vietnam"],
+      "url": "https://www.who.int/publications/i/item/9290611014",
+      "ingestion": "reference_metadata_only_until_terms_verified",
+      "license": "PUBLICATION_TERMS",
+      "priority": 1
+    },
+    {
+      "id": "kew-powo",
+      "name": "Plants of the World Online",
+      "authority": "Royal Botanic Gardens, Kew",
+      "domains": ["taxonomy", "plants", "distribution"],
+      "url": "https://powo.science.kew.org/",
+      "ingestion": "reference_and_targeted_records",
+      "license": "CHECK_PER_CONTENT_ITEM",
+      "priority": 1
+    },
+    {
+      "id": "gbif",
+      "name": "Global Biodiversity Information Facility",
+      "authority": "GBIF Secretariat and dataset publishers",
+      "domains": ["taxonomy", "occurrence", "animals", "insects", "fungi", "plants"],
+      "url": "https://www.gbif.org/",
+      "ingestion": "dataset_license_required",
+      "license": "DATASET_LEVEL_CC0_CC-BY_CC-BY-NC",
+      "priority": 1
+    },
+    {
+      "id": "fao-wiews",
+      "name": "World Information and Early Warning System on Plant Genetic Resources for Food and Agriculture",
+      "authority": "Food and Agriculture Organization of the United Nations",
+      "domains": ["agriculture", "plant-genetic-resources", "genebanks"],
+      "url": "https://www.fao.org/wiews/en",
+      "ingestion": "terms_and_holding_institution_rights_required",
+      "license": "MIXED_BY_HOLDING_INSTITUTION",
+      "priority": 1
+    },
+    {
+      "id": "irri-rice-knowledge-bank",
+      "name": "Rice Knowledge Bank",
+      "authority": "International Rice Research Institute",
+      "domains": ["agriculture", "rice", "crop-health"],
+      "url": "https://education.irri.org/knowledge-platforms/",
+      "ingestion": "reference_metadata_only_until_terms_verified",
+      "license": "TERMS_REVIEW_REQUIRED",
+      "priority": 1
+    },
+    {
+      "id": "worldveg-genebank",
+      "name": "World Vegetable Center Genebank",
+      "authority": "World Vegetable Center",
+      "domains": ["agriculture", "vegetables", "plant-genetic-resources"],
+      "url": "https://www.worldveg.org/what-we-do/worldveg-genebank/",
+      "ingestion": "dataset_terms_required",
+      "license": "DATASET_TERMS",
+      "priority": 2
+    },
+    {
+      "id": "icrisat-genebank",
+      "name": "ICRISAT Genebank",
+      "authority": "International Crops Research Institute for the Semi-Arid Tropics",
+      "domains": ["agriculture", "dryland-crops", "plant-genetic-resources"],
+      "url": "https://genebank.icrisat.org/",
+      "ingestion": "dataset_terms_required",
+      "license": "DATASET_TERMS",
+      "priority": 2
+    },
+    {
+      "id": "cip-genebank",
+      "name": "CIP Genebank",
+      "authority": "International Potato Center",
+      "domains": ["agriculture", "potato", "sweet-potato", "plant-genetic-resources"],
+      "url": "https://genebank.cipotato.org/",
+      "ingestion": "dataset_terms_required",
+      "license": "DATASET_TERMS",
+      "priority": 2
+    },
+    {
+      "id": "fda-food-drug-interactions",
+      "name": "FDA food-drug interaction guidance",
+      "authority": "U.S. Food and Drug Administration",
+      "domains": ["food-drug-interactions", "safety"],
+      "url": "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
+      "ingestion": "curated_evidence_records",
+      "license": "US_GOVERNMENT_CONTENT_WITH_PAGE_LEVEL_EXCEPTIONS",
+      "priority": 1
+    },
+    {
+      "id": "nccih-herb-drug-interactions",
+      "name": "Herb-Drug Interactions: What the Science Says",
+      "authority": "NIH National Center for Complementary and Integrative Health",
+      "domains": ["herb-drug-interactions", "safety"],
+      "url": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
+      "ingestion": "curated_evidence_records",
+      "license": "US_GOVERNMENT_CONTENT_WITH_PAGE_LEVEL_EXCEPTIONS",
+      "priority": 1
+    },
+    {
+      "id": "nih-ods",
+      "name": "NIH Office of Dietary Supplements Fact Sheets",
+      "authority": "NIH Office of Dietary Supplements",
+      "domains": ["nutrients", "food-drug-interactions", "safety"],
+      "url": "https://ods.od.nih.gov/factsheets/list-all/",
+      "ingestion": "curated_evidence_records",
+      "license": "US_GOVERNMENT_CONTENT_WITH_PAGE_LEVEL_EXCEPTIONS",
+      "priority": 1
+    }
+  ]
+}
