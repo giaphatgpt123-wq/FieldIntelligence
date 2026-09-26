@@ -65,7 +65,6 @@ fun RegionScanAutoCapturePanel(
     runner: LiveVisualModelRunner = NoVerifiedLiveVisualModel
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val modelStatus = remember(runner) { runner.status() }
     val modelReady = modelStatus.availability == VisualModelAvailability.READY
     var cameraGranted by remember {
@@ -109,41 +108,43 @@ fun RegionScanAutoCapturePanel(
                     border = BorderStroke(1.dp, Color(0x5545E58C))
                 ) {
                     if (cameraGranted && scanning) {
-                        RegionAutoCaptureCamera(
-                            runner = runner,
-                            modelReady = modelReady,
-                            modifier = Modifier.fillMaxSize(),
-                            onFrame = { lastFrame = it },
-                            onDetections = {
-                                detections = it
-                                statusText = if (modelReady) {
-                                    "Đang quét và phân loại toàn vùng."
-                                } else {
-                                    "Đang quét vùng; ảnh ổn định sẽ tự chụp và chờ model phân loại."
-                                }
-                            },
-                            onAutoCaptured = { path ->
-                                latestCapture = path
-                                autoCaptureCount += 1
-                                statusText = if (modelReady) {
-                                    "Đã tự chụp ảnh vùng ổn định và giữ kết quả phân loại hiện tại."
-                                } else {
-                                    "Đã tự chụp ảnh vùng ổn định; chưa gắn tên loài vì model chưa được cài."
-                                }
-                            },
-                            onError = { statusText = it }
-                        )
-                        LiveVisualOverlay(detections = detections, target = null, modifier = Modifier.fillMaxSize())
-                        Surface(
-                            modifier = Modifier.align(Alignment.TopCenter).padding(12.dp),
-                            shape = RoundedCornerShape(999.dp),
-                            color = Color(0xCC081A1F)
-                        ) {
-                            Text(
-                                if (modelReady) "AUTO SCAN • AUTO CAPTURE • PHÂN LOẠI" else "AUTO SCAN • AUTO CAPTURE • CHỜ MODEL",
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
-                                color = if (modelReady) FieldColors.primary else Color(0xFFFFD166)
+                        Box(Modifier.fillMaxSize()) {
+                            RegionAutoCaptureCamera(
+                                runner = runner,
+                                modelReady = modelReady,
+                                modifier = Modifier.fillMaxSize(),
+                                onFrame = { lastFrame = it },
+                                onDetections = {
+                                    detections = it
+                                    statusText = if (modelReady) {
+                                        "Đang quét và phân loại toàn vùng."
+                                    } else {
+                                        "Đang quét vùng; ảnh ổn định sẽ tự chụp và chờ model phân loại."
+                                    }
+                                },
+                                onAutoCaptured = { path ->
+                                    latestCapture = path
+                                    autoCaptureCount += 1
+                                    statusText = if (modelReady) {
+                                        "Đã tự chụp ảnh vùng ổn định và giữ kết quả phân loại hiện tại."
+                                    } else {
+                                        "Đã tự chụp ảnh vùng ổn định; chưa gắn tên loài vì model chưa được cài."
+                                    }
+                                },
+                                onError = { statusText = it }
                             )
+                            LiveVisualOverlay(detections = detections, target = null, modifier = Modifier.fillMaxSize())
+                            Surface(
+                                modifier = Modifier.align(Alignment.TopCenter).padding(12.dp),
+                                shape = RoundedCornerShape(999.dp),
+                                color = Color(0xCC081A1F)
+                            ) {
+                                Text(
+                                    if (modelReady) "AUTO SCAN • AUTO CAPTURE • PHÂN LOẠI" else "AUTO SCAN • AUTO CAPTURE • CHỜ MODEL",
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+                                    color = if (modelReady) FieldColors.primary else Color(0xFFFFD166)
+                                )
+                            }
                         }
                     } else {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
