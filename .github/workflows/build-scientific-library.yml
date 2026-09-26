@@ -102,6 +102,42 @@ jobs:
           print({'wfo': p, 'sqliteRows': row_count, 'specialistEvidenceRows': evidence_count})
           PY
 
+      - name: Create scientific bundle manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, os
+          root = 'build/scientific-library'
+          files = []
+          for name, schema, scope in [
+              ('wfo-taxonomy.sqlite', 1, 'taxonomy-only'),
+              ('specialist-evidence.sqlite', 2, 'specialist-evidence-only'),
+          ]:
+              path = os.path.join(root, name)
+              h = hashlib.sha256()
+              with open(path, 'rb') as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                      h.update(chunk)
+              files.append({
+                  'name': name,
+                  'sha256': h.hexdigest(),
+                  'sizeBytes': os.path.getsize(path),
+                  'schemaVersion': schema,
+                  'scope': scope,
+              })
+          manifest = {
+              'manifestVersion': 1,
+              'bundle': 'FieldIntelligence-WFO-scientific-library',
+              'files': files,
+          }
+          with open(os.path.join(root, 'scientific-library.manifest.json'), 'w', encoding='utf-8') as f:
+              json.dump(manifest, f, ensure_ascii=False, sort_keys=True, indent=2)
+              f.write('\n')
+          print(manifest)
+          PY
+          test -s build/scientific-library/scientific-library.manifest.json
+
       - name: Upload scientific library package
         uses: actions/upload-artifact@v4
         with:
@@ -111,5 +147,6 @@ jobs:
             build/scientific-library/wfo-taxonomy.meta.json
             build/scientific-library/wfo-taxonomy.sqlite
             build/scientific-library/specialist-evidence.sqlite
+            build/scientific-library/scientific-library.manifest.json
           if-no-files-found: error
           retention-days: 30
