@@ -43,9 +43,9 @@ import kotlinx.coroutines.withContext
  * The same installed offline model package is reused, without temporal tracking.
  */
 @Composable
-fun StillImageRecognitionPanel() {
+fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     val context = LocalContext.current
-    val runner = remember { InstalledVisualModelRunner(context.applicationContext) }
+    val runner = remember(modelGeneration) { InstalledVisualModelRunner(context.applicationContext) }
     var preview by remember { mutableStateOf<Bitmap?>(null) }
     var sourceLabel by remember { mutableStateOf("Chưa có ảnh") }
     var analysis by remember { mutableStateOf<StillImageVisualAnalyzer.Result?>(null) }
@@ -88,7 +88,7 @@ fun StillImageRecognitionPanel() {
         }
     }
 
-    LaunchedEffect(preview) {
+    LaunchedEffect(preview, runner) {
         val bitmap = preview
         analysis = null
         if (bitmap == null) return@LaunchedEffect
