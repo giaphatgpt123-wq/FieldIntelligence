@@ -1,0 +1,71 @@
+name: Audit FishBase Vietnam Freshwater Checklist
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "tools/build_fishbase_vietnam_audit.py"
+      - "tools/test_build_fishbase_vietnam_audit.py"
+      - ".github/workflows/audit-fishbase-vietnam.yml"
+  workflow_dispatch:
+    inputs:
+      fishbase_version:
+        description: 'FishBase snapshot, e.g. 26.07; latest discovers Source Cooperative releases'
+        required: false
+        default: 'latest'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run adapter unit tests
+        run: python3 -m unittest tools.test_build_fishbase_vietnam_audit
+
+      - name: Install pinned DuckDB reader
+        run: python3 -m pip install --disable-pip-version-check --no-cache-dir 'duckdb==1.4.1'
+
+      - name: Build audit-only Vietnam freshwater checklist
+        env:
+          REQUESTED_VERSION: ${{ inputs.fishbase_version || 'latest' }}
+        run: |
+          set -euo pipefail
+          mkdir -p build/fishbase-audit
+          python3 tools/build_fishbase_vietnam_audit.py \
+            --version "$REQUESTED_VERSION" \
+            --country-code 704 \
+            --output build/fishbase-audit/vietnam-freshwater-fish.csv \
+            --report build/fishbase-audit/report.json
+          python3 tools/build_vietnam_freshwater_fish_checklist.py \
+            --input build/fishbase-audit/vietnam-freshwater-fish.csv \
+            --output build/fishbase-audit/vietnam-freshwater-fish.ndjson \
+            --report build/fishbase-audit/normalized-report.json
+
+      - name: Upload audit evidence before count gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FieldIntelligence-FishBase-Vietnam-audit
+          path: build/fishbase-audit/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Compare snapshot with current FishBase checklist contract
+        run: |
+          python3 - <<'PY'
+          import json
+          report=json.load(open('build/fishbase-audit/report.json',encoding='utf-8'))
+          expected={'total':772,'present':736,'review':29,'excluded':7}
+          actual={key:report.get(key) for key in expected}
+          print({'expected_current_web_checklist':expected,'snapshot_actual':actual,'snapshot':report.get('sourceSnapshot')})
+          assert actual==expected, (
+              'FishBase snapshot differs from current web checklist; keep it audit-only and reconcile the delta. '
+              f'expected={expected} actual={actual}'
+          )
+          PY
