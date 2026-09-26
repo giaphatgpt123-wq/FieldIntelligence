@@ -64,8 +64,56 @@ class ScientificLibraryImportManager(private val context: Context) {
     /** Installs the source-verified pack packaged inside the APK on a clean installation. */
     fun installBundledIfMissing(): BundleImportResult? {
         val directory = libraryDirectory()
-        if (PackType.entries.any { File(directory, it.fileName).isFile }) return null
-        return context.assets.open("scientific-library/FieldIntelligence-WFO-mobile.zip").use(::importBundle)
+        val valid = PackType.entries.associateWith { type ->
+            File(directory, type.fileName).takeIf { it.isFile && runCatching { validate(it, type) }.isSuccess }
+        }
+        val missing = PackType.entries.filter { valid[it] == null }
+        if (missing.isEmpty()) return null
+        if (missing.size == PackType.entries.size) {
+            return context.assets.open("scientific-library/FieldIntelligence-WFO-mobile.zip").use(::importBundle)
+        }
+
+        // Repair only the missing or damaged pack. Keep the other pack, including an imported
+        // custom taxonomy database, instead of replacing it with the smaller bundled snapshot.
+        val type = missing.single()
+        val staged = File(directory, ".${type.fileName}.incoming").also { it.delete() }
+        try {
+            var manifestText: String? = null
+            var found = false
+            var entries = 0
+            context.assets.open("scientific-library/FieldIntelligence-WFO-mobile.zip").buffered().use { input ->
+                ZipInputStream(input).use { zip ->
+                    while (true) {
+                        val entry = zip.nextEntry ?: break
+                        require(++entries <= MAX_ZIP_ENTRIES) { "Gói ZIP có quá nhiều mục" }
+                        if (entry.isDirectory) continue
+                        val name = entry.name.substringAfterLast('/')
+                        if (name == MANIFEST_NAME) {
+                            require(manifestText == null) { "Gói ZIP có manifest trùng" }
+                            manifestText = readZipTextBounded(zip, MAX_MANIFEST_BYTES)
+                        } else if (name == type.fileName) {
+                            require(!found) { "Gói ZIP có tệp trùng: ${type.fileName}" }
+                            copyZipEntryBounded(zip, staged, type.maxBytes)
+                            found = true
+                        }
+                    }
+                }
+            }
+            require(found) { "Gói tích hợp thiếu ${type.fileName}" }
+            val manifest = parseManifest(requireNotNull(manifestText) { "Thiếu $MANIFEST_NAME" })
+            verifyManifest(staged, type, manifest.getValue(type))
+            val installed = activateSingle(staged, type, validate(staged, type))
+            val otherType = PackType.entries.first { it != type }
+            val existing = requireNotNull(valid[otherType])
+            val retained = resultFor(otherType, existing, validate(existing, otherType))
+            return BundleImportResult(
+                taxonomy = if (type == PackType.TAXONOMY) installed else retained,
+                specialistEvidence = if (type == PackType.SPECIALIST_EVIDENCE) installed else retained,
+                message = "Đã bổ sung ${type.fileName}; giữ nguyên gói dữ liệu còn lại"
+            )
+        } finally {
+            staged.delete()
+        }
     }
 
     private fun importBundle(input: InputStream): BundleImportResult {
