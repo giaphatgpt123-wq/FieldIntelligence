@@ -1,17 +1,18 @@
 package vn.fieldintel.feature.emergency
 
 /**
- * Curated navigation collections for the small starter catalog.
+ * Curated navigation collections for the starter catalog plus optional evidence-backed expansion.
  *
  * Taxonomy-only groups may be curated directly. High-risk labels such as medicinal or toxic are
- * derived only from SpecialistEvidenceCatalog, never from taxonomy or common-name inference.
+ * derived only from specialist evidence, never from taxonomy or common-name inference.
  */
 data class LibraryCollection(
     val id: String,
     val label: String,
     val icon: String,
     val subtitle: String,
-    val recordIds: Set<String>
+    val recordIds: Set<String>,
+    val evidenceDomain: EvidenceDomain? = null
 )
 
 object LibraryCollections {
@@ -21,14 +22,16 @@ object LibraryCollections {
             label = "Cây thuốc Đông y",
             icon = "⚕",
             subtitle = "Chỉ hiện hồ sơ có bằng chứng dược liệu chính thức Việt Nam",
-            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE)
+            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE),
+            evidenceDomain = EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE
         ),
         LibraryCollection(
             id = "herbal-monographs",
             label = "Chuyên khảo dược liệu",
             icon = "▣",
             subtitle = "Chuyên khảo quản lý quốc tế • không phải hướng dẫn tự điều trị",
-            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH)
+            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH),
+            evidenceDomain = EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH
         ),
         LibraryCollection(
             id = "vegetables",
@@ -63,7 +66,8 @@ object LibraryCollections {
             label = "Cây độc",
             icon = "⚠",
             subtitle = "Chỉ hiện khi có bằng chứng độc tính chuyên ngành",
-            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.TOXICOLOGY)
+            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.TOXICOLOGY),
+            evidenceDomain = EvidenceDomain.TOXICOLOGY
         ),
         LibraryCollection(
             id = "mushrooms",
