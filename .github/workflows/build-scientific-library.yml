@@ -6,6 +6,8 @@ on:
     paths:
       - "tools/fetch_wfo_backbone.py"
       - "tools/test_fetch_wfo_backbone.py"
+      - "tools/build_scientific_sqlite.py"
+      - "tools/test_build_scientific_sqlite.py"
       - "tools/full_scientific_sources.json"
       - ".github/workflows/build-scientific-library.yml"
   workflow_dispatch:
@@ -43,14 +45,22 @@ jobs:
             --output build/scientific-library/wfo-taxonomy.ndjson.gz \
             --metadata build/scientific-library/wfo-taxonomy.meta.json
 
-      - name: Validate non-empty package
+      - name: Build offline SQLite taxonomy index
+        run: |
+          python3 tools/build_scientific_sqlite.py \
+            --input build/scientific-library/wfo-taxonomy.ndjson.gz \
+            --source-meta build/scientific-library/wfo-taxonomy.meta.json \
+            --output build/scientific-library/wfo-taxonomy.sqlite
+
+      - name: Validate scientific library package
         shell: bash
         run: |
           set -euo pipefail
           test -s build/scientific-library/wfo-taxonomy.ndjson.gz
           test -s build/scientific-library/wfo-taxonomy.meta.json
+          test -s build/scientific-library/wfo-taxonomy.sqlite
           python3 - <<'PY'
-          import json
+          import json, sqlite3
           p = json.load(open('build/scientific-library/wfo-taxonomy.meta.json', encoding='utf-8'))
           assert p['sourceId'] == 'wfo-taxonomic-backbone'
           assert p['license'] == 'CC0-1.0'
@@ -58,7 +68,16 @@ jobs:
           assert p['version'] == '2026-06'
           assert p['versionDoi'] == '10.5281/zenodo.20782718'
           assert p['recordCount'] > 100000, p['recordCount']
-          print(p)
+          db = sqlite3.connect('build/scientific-library/wfo-taxonomy.sqlite')
+          row_count = db.execute('SELECT COUNT(*) FROM taxon').fetchone()[0]
+          integrity = db.execute('PRAGMA integrity_check').fetchone()[0]
+          meta = {k: json.loads(v) for k, v in db.execute('SELECT key,value FROM meta')}
+          db.close()
+          assert integrity == 'ok', integrity
+          assert row_count == p['recordCount'], (row_count, p['recordCount'])
+          assert meta['scope'] == 'taxonomy-only'
+          assert meta['medicalClaimsIncluded'] is False
+          print({'wfo': p, 'sqliteRows': row_count})
           PY
 
       - name: Upload scientific library package
@@ -68,5 +87,6 @@ jobs:
           path: |
             build/scientific-library/wfo-taxonomy.ndjson.gz
             build/scientific-library/wfo-taxonomy.meta.json
+            build/scientific-library/wfo-taxonomy.sqlite
           if-no-files-found: error
           retention-days: 30
