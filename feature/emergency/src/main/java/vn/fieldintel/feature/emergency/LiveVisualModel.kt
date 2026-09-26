@@ -16,6 +16,32 @@ data class NormalizedBox(
     val centerY: Float get() = (top + bottom) / 2f
 }
 
+data class YuvPlaneData(
+    val bytes: ByteArray,
+    val rowStride: Int,
+    val pixelStride: Int
+) {
+    init {
+        require(rowStride > 0)
+        require(pixelStride > 0)
+    }
+}
+
+data class LiveVisualFrameData(
+    val timestampNanos: Long,
+    val width: Int,
+    val height: Int,
+    val rotationDegrees: Int,
+    val y: YuvPlaneData,
+    val u: YuvPlaneData,
+    val v: YuvPlaneData
+) {
+    init {
+        require(width > 0 && height > 0)
+        require(rotationDegrees in setOf(0, 90, 180, 270))
+    }
+}
+
 data class VisualDetection(
     val trackHint: String? = null,
     val label: String,
@@ -49,21 +75,15 @@ data class VisualModelStatus(
 )
 
 /**
- * Boundary for a future verified on-device detector/retrieval model.
+ * Boundary for a verified on-device detector/retrieval model.
  * Implementations must never attach edibility, toxicity or treatment conclusions to detections.
  */
 interface LiveVisualModelRunner {
     fun status(): VisualModelStatus
 
-    /**
-     * Receives model-ready image bytes owned by the caller. The exact tensor/image adapter belongs
-     * to the implementation so the UI layer does not depend on a specific ML runtime.
-     */
+    /** Runs inference on an owned copy of a YUV_420_888 camera frame. */
     fun detect(
-        imageBytes: ByteArray,
-        width: Int,
-        height: Int,
-        rotationDegrees: Int,
+        frame: LiveVisualFrameData,
         target: LiveVisualSearchTarget
     ): List<VisualDetection>
 }
@@ -75,10 +95,7 @@ object NoVerifiedLiveVisualModel : LiveVisualModelRunner {
     )
 
     override fun detect(
-        imageBytes: ByteArray,
-        width: Int,
-        height: Int,
-        rotationDegrees: Int,
+        frame: LiveVisualFrameData,
         target: LiveVisualSearchTarget
     ): List<VisualDetection> = emptyList()
 }
