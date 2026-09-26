@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build an offline-searchable SQLite taxonomy database from normalized scientific NDJSON.
 
-The database stores taxonomy plus source-linked media, vernacular names and occurrence summaries.\nIt deliberately does not infer edibility, toxicity, medical treatment or specimen identity from media.
+The database stores taxonomy plus source-linked media, vernacular names and occurrence summaries.
+It deliberately does not infer edibility, toxicity, medical treatment or specimen identity from media.
 """
 
 from __future__ import annotations
@@ -205,7 +206,8 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
             "sourceDoi": source_meta.get("versionDoi", ""),
             "sourceLicense": source_meta.get("license", ""),
             "scope": "taxonomy-media-occurrence",
-            "mediaRecordCount": media_count,\n            "recordsWithMedia": db.execute("SELECT COUNT(DISTINCT source_id || char(31) || source_record_id) FROM species_media").fetchone()[0],
+            "mediaRecordCount": media_count,
+            "recordsWithMedia": db.execute("SELECT COUNT(DISTINCT source_id || char(31) || source_record_id) FROM species_media").fetchone()[0],
             "fishTaxa": fish_taxa,
             "fishWithMedia": fish_with_media,
             "fishPendingMedia": fish_pending_media,
