@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -12,6 +14,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -47,8 +52,25 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.io.File
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 private const val AUTO_REGION_ANALYSIS_INTERVAL_NANOS = 250_000_000L
+
+internal fun regionFieldGuidance(detections: List<VisualDetection>, modelReady: Boolean): String {
+    if (!modelReady) return "Có thể quét và tự chụp bằng chứng; cần model hợp lệ để phân loại tự động."
+    if (detections.isEmpty()) return "Lia camera chậm qua toàn vùng; giữ cảnh đủ sáng và tránh rung."
+    val maxArea = detections.maxOf { detection ->
+        (detection.box.right - detection.box.left) * (detection.box.bottom - detection.box.top)
+    }
+    if (maxArea < 0.06f) return "Đối tượng còn nhỏ trong khung. Tiến gần hơn hoặc dùng zoom, rồi giữ máy ổn định."
+    val stable = detections.count { it.isStableRegionCandidate() }
+    val verifying = detections.count { it.regionVerificationProgress() != null }
+    return when {
+        stable > 0 -> "Đã có vùng ổn định. Giữ máy thêm một nhịp để auto-capture lưu bằng chứng rõ."
+        verifying > 0 -> "Đang xác minh $verifying vùng. Giữ máy ổn định hoặc chạm trực tiếp vào mẫu để lấy nét."
+        else -> "Tiếp tục lia chậm; chạm vào mẫu cần xem để lấy nét."
+    }
+}
 
 /**
  * Region scan mode requested for field use:
@@ -88,6 +110,7 @@ fun RegionScanAutoCapturePanel(
     val stableDetections = remember(detections) { detections.filter { it.isStableRegionCandidate() } }
     val verifyingCount = remember(detections) { detections.count { it.regionVerificationProgress() != null } }
     val summary = remember(stableDetections) { RegionScanClassifier.summarize(stableDetections) }
+    val fieldGuidance = remember(detections, modelReady) { regionFieldGuidance(detections, modelReady) }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Card(
@@ -139,6 +162,7 @@ fun RegionScanAutoCapturePanel(
                                         "Đã tự chụp ảnh vùng ổn định; chưa gắn tên loài vì model chưa được cài."
                                     }
                                 },
+                                onControlStatus = { statusText = it },
                                 onError = { statusText = it }
                             )
                             LiveVisualOverlay(detections = detections, target = null, modifier = Modifier.fillMaxSize())
@@ -161,6 +185,16 @@ fun RegionScanAutoCapturePanel(
                                 color = FieldColors.onSurfaceVariant
                             )
                         }
+                    }
+                }
+
+                if (scanning) {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp),
+                        color = Color(0xFF0E252A)
+                    ) {
+                        Text(fieldGuidance, modifier = Modifier.padding(11.dp), color = FieldColors.onSurfaceVariant)
                     }
                 }
 
@@ -268,6 +302,7 @@ private fun RegionAutoCaptureCamera(
     onFrame: (LiveFrameInfo) -> Unit,
     onDetections: (List<VisualDetection>) -> Unit,
     onAutoCaptured: (String) -> Unit,
+    onControlStatus: (String) -> Unit,
     onError: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -275,6 +310,7 @@ private fun RegionAutoCaptureCamera(
     val currentOnFrame by rememberUpdatedState(onFrame)
     val currentOnDetections by rememberUpdatedState(onDetections)
     val currentOnAutoCaptured by rememberUpdatedState(onAutoCaptured)
+    val currentOnControlStatus by rememberUpdatedState(onControlStatus)
     val currentOnError by rememberUpdatedState(onError)
     val previewView = remember {
         PreviewView(context).apply {
@@ -285,8 +321,75 @@ private fun RegionAutoCaptureCamera(
     val executor = remember { Executors.newSingleThreadExecutor() }
     val metadataExecutor = remember { Executors.newSingleThreadExecutor() }
     val frameGate = remember { RegionFrameStabilityGate() }
+    var boundCamera by remember { mutableStateOf<Camera?>(null) }
+    var linearZoom by remember { mutableFloatStateOf(0f) }
+    var torchEnabled by remember { mutableStateOf(false) }
+    var hasFlash by remember { mutableStateOf(false) }
 
-    AndroidView(factory = { previewView }, modifier = modifier)
+    fun focusAt(x: Float, y: Float) {
+        val camera = boundCamera ?: return
+        if (previewView.width <= 0 || previewView.height <= 0) return
+        val point = previewView.meteringPointFactory.createPoint(x, y)
+        val action = FocusMeteringAction.Builder(
+            point,
+            FocusMeteringAction.FLAG_AF or FocusMeteringAction.FLAG_AE
+        ).setAutoCancelDuration(3, TimeUnit.SECONDS).build()
+        camera.cameraControl.startFocusAndMetering(action)
+        currentOnControlStatus("Đang lấy nét tại vùng đã chọn…")
+    }
+
+    Box(modifier = modifier) {
+        AndroidView(
+            factory = { previewView },
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(boundCamera) {
+                    detectTapGestures { offset -> focusAt(offset.x, offset.y) }
+                }
+        )
+
+        Row(
+            modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedButton(
+                onClick = {
+                    linearZoom = (linearZoom - 0.20f).coerceIn(0f, 1f)
+                    boundCamera?.cameraControl?.setLinearZoom(linearZoom)
+                    currentOnControlStatus("Đã giảm zoom camera.")
+                },
+                enabled = boundCamera != null,
+                shape = RoundedCornerShape(14.dp)
+            ) { Text("− ZOOM") }
+            OutlinedButton(
+                onClick = {
+                    focusAt(previewView.width / 2f, previewView.height / 2f)
+                },
+                enabled = boundCamera != null,
+                shape = RoundedCornerShape(14.dp)
+            ) { Text("LẤY NÉT") }
+            OutlinedButton(
+                onClick = {
+                    linearZoom = (linearZoom + 0.20f).coerceIn(0f, 1f)
+                    boundCamera?.cameraControl?.setLinearZoom(linearZoom)
+                    currentOnControlStatus("Đã tăng zoom camera.")
+                },
+                enabled = boundCamera != null,
+                shape = RoundedCornerShape(14.dp)
+            ) { Text("+ ZOOM") }
+            OutlinedButton(
+                onClick = {
+                    val camera = boundCamera ?: return@OutlinedButton
+                    val next = !torchEnabled
+                    camera.cameraControl.enableTorch(next)
+                    torchEnabled = next
+                    currentOnControlStatus(if (next) "Đã bật đèn hỗ trợ quét." else "Đã tắt đèn hỗ trợ quét.")
+                },
+                enabled = boundCamera != null && hasFlash,
+                shape = RoundedCornerShape(14.dp)
+            ) { Text(if (torchEnabled) "TẮT ĐÈN" else "ĐÈN") }
+        }
+    }
 
     DisposableEffect(lifecycleOwner, previewView, runner, modelReady) {
         val providerFuture = ProcessCameraProvider.getInstance(context)
@@ -387,7 +490,17 @@ private fun RegionAutoCaptureCamera(
                     }
                 }
 
-                provider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageCapture, analysis)
+                val camera = provider.bindToLifecycle(
+                    lifecycleOwner,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview,
+                    imageCapture,
+                    analysis
+                )
+                boundCamera = camera
+                hasFlash = camera.cameraInfo.hasFlashUnit()
+                torchEnabled = false
+                linearZoom = 0f
             }.onFailure { failure -> currentOnError(failure.message ?: "Không thể khởi động camera") }
         }, mainExecutor)
 
@@ -395,6 +508,9 @@ private fun RegionAutoCaptureCamera(
             disposed = true
             frameGate.reset()
             (runner as? StableRegionVisualModelRunner)?.reset()
+            boundCamera?.cameraControl?.enableTorch(false)
+            boundCamera = null
+            torchEnabled = false
             runCatching { if (providerFuture.isDone) providerFuture.get().unbindAll() }
             executor.shutdownNow()
             metadataExecutor.shutdownNow()
