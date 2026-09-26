@@ -60,7 +60,7 @@ class SpeciesCatalogTest {
     }
 
     @Test fun sourceProvenanceAndUnknownBehaviorRemainExplicit() {
-        assertTrue(SpeciesCatalog.search("rắn").isEmpty())
+        assertTrue(SpeciesCatalog.search("rắn hổ mang").isEmpty())
         assertTrue(SpeciesCatalog.records.all {
             it.sourceUrl.startsWith("https://") && it.sourceName.isNotBlank() && it.sourceScope.isNotBlank()
         })
