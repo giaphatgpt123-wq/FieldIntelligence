@@ -77,6 +77,27 @@ class GbifScientificLibraryAdapterTest(unittest.TestCase):
             self.assertEqual("Example photographer", record["media"]["creator"])
             self.assertEqual("CC-BY-4.0", record["media"]["license"])
 
+    def test_multimedia_file_joins_multiple_images_by_gbif_id(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "occurrence.txt"
+            multimedia = root / "multimedia.txt"
+            output = root / "fish.ndjson.gz"
+            meta = root / "fish.meta.json"
+            write_tsv(source, [{"gbifID": "fish-2", "scientificName": "Anabas testudineus", "kingdom": "Animalia", "class": "Actinopterygii", "order": "Anabantiformes", "countryCode": "VN"}])
+            write_tsv(multimedia, [
+                {"gbifID": "fish-2", "identifier": "https://example.org/a.jpg", "mediaType": "StillImage", "creator": "A", "mediaLicense": "CC-BY-4.0"},
+                {"gbifID": "fish-2", "identifier": "https://example.org/b.jpg", "mediaType": "StillImage", "creator": "B", "mediaLicense": "CC0-1.0"},
+            ])
+            result = module.build(source, output, meta, "10.15468/dl.fish2", "Fish dataset", "CC-BY-4.0", multimedia)
+            self.assertEqual(1, result["recordsWithMedia"])
+            self.assertEqual(2, result["multimediaRows"])
+            with gzip.open(output, "rt", encoding="utf-8") as handle:
+                record = json.loads(next(handle))
+            self.assertEqual(2, len(record["mediaItems"]))
+            self.assertEqual("https://example.org/a.jpg", record["media"]["identifier"])
+            self.assertEqual(["A", "B"], [item["creator"] for item in record["mediaItems"]])
+
     def test_noncommercial_license_is_explicit_and_missing_provenance_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
