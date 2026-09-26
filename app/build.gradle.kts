@@ -17,8 +17,8 @@ android {
         applicationId = "vn.fieldintel.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 9
-        versionName = "0.4.1-ui-redesign"
+        versionCode = 10
+        versionName = "0.5.0"
         manifestPlaceholders["appLabel"] = "VN Sinh tồn"
     }
     signingConfigs {
@@ -31,6 +31,10 @@ android {
         }
     }
     buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("pilotDebug")
+            isMinifyEnabled = false
+        }
         getByName("debug") {
             applicationIdSuffix = ".osmtest"
             signingConfig = signingConfigs.getByName("pilotDebug")
