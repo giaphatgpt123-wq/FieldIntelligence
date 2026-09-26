@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import vn.fieldintel.feature.emergency.FieldColors
-import vn.fieldintel.feature.emergency.RegionScanPanel
+import vn.fieldintel.feature.emergency.RegionScanAutoCapturePanel
 
 /** Direct entry point for on-device validation of region scanning and automatic evidence capture. */
 class LiveVisualSearchActivity : ComponentActivity() {
@@ -28,7 +28,7 @@ class LiveVisualSearchActivity : ComponentActivity() {
                         .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                 ) {
-                    RegionScanPanel()
+                    RegionScanAutoCapturePanel()
                 }
             }
         }
