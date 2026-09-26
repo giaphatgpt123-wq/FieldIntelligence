@@ -35,8 +35,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /**
  * Manual photo + gallery-query path that runs in parallel with live region scanning.
@@ -51,6 +53,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     var analysis by remember { mutableStateOf<StillImageVisualAnalyzer.Result?>(null) }
     var analyzing by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
+    var pendingCaptureFile by remember { mutableStateOf<File?>(null) }
 
     DisposableEffect(runner) {
         onDispose { runner.close() }
@@ -62,8 +65,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                 context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
                 require(bounds.outWidth > 0 && bounds.outHeight > 0)
-                var sample = 1
-                while (maxOf(bounds.outWidth, bounds.outHeight) / sample > 1600) sample *= 2
+                val sample = boundedSampleSize(bounds.outWidth, bounds.outHeight, 1800)
                 val options = BitmapFactory.Options().apply {
                     inSampleSize = sample
                     inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -72,7 +74,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
             }.getOrNull()
             if (bitmap != null) {
                 preview = bitmap
-                sourceLabel = "Ảnh từ máy"
+                sourceLabel = "Ảnh từ máy • ${bitmap.width}×${bitmap.height}"
                 error = null
             } else {
                 error = "Không thể mở ảnh đã chọn."
@@ -80,11 +82,20 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
         }
     }
 
-    val takePhoto = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        if (bitmap != null) {
-            preview = bitmap.copy(Bitmap.Config.ARGB_8888, false)
-            sourceLabel = "Ảnh vừa chụp"
-            error = null
+    val takePhoto = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { saved ->
+        val file = pendingCaptureFile
+        pendingCaptureFile = null
+        if (saved && file?.isFile == true) {
+            val bitmap = decodeFileBounded(file, 1800)
+            if (bitmap != null) {
+                preview = bitmap
+                sourceLabel = "Ảnh chụp độ phân giải đầy đủ • ${bitmap.width}×${bitmap.height}"
+                error = null
+            } else {
+                error = "Đã chụp nhưng không thể đọc ảnh."
+            }
+        } else if (file != null) {
+            file.delete()
         }
     }
 
@@ -117,7 +128,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("CHỤP ẢNH / TRUY VẤN ẢNH", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
                 Text(
-                    "Chụp một mẫu hoặc chọn ảnh có sẵn. App dùng cùng model offline với quét vùng để tìm nhiều ứng viên trong ảnh.",
+                    "Chụp ảnh độ phân giải đầy đủ hoặc chọn ảnh có sẵn. App dùng cùng model offline với quét vùng để tìm nhiều ứng viên trong ảnh.",
                     color = FieldColors.onSurfaceVariant
                 )
 
@@ -141,7 +152,18 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
 
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        onClick = { takePhoto.launch(null) },
+                        onClick = {
+                            runCatching {
+                                val dir = File(context.cacheDir, "camera-capture").apply { mkdirs() }
+                                val file = File.createTempFile("manual-", ".jpg", dir)
+                                val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                                pendingCaptureFile = file
+                                takePhoto.launch(uri)
+                            }.onFailure { failure ->
+                                pendingCaptureFile = null
+                                error = failure.message ?: "Không thể mở camera chụp ảnh."
+                            }
+                        },
                         modifier = Modifier.weight(1f).heightIn(min = 56.dp),
                         shape = RoundedCornerShape(18.dp)
                     ) { Text("CHỤP ẢNH") }
@@ -220,3 +242,22 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
         }
     }
 }
+
+private fun boundedSampleSize(width: Int, height: Int, maxEdge: Int): Int {
+    var sample = 1
+    while (maxOf(width, height) / sample > maxEdge) sample *= 2
+    return sample
+}
+
+private fun decodeFileBounded(file: File, maxEdge: Int): Bitmap? = runCatching {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(file.absolutePath, bounds)
+    require(bounds.outWidth > 0 && bounds.outHeight > 0)
+    BitmapFactory.decodeFile(
+        file.absolutePath,
+        BitmapFactory.Options().apply {
+            inSampleSize = boundedSampleSize(bounds.outWidth, bounds.outHeight, maxEdge)
+            inPreferredConfig = Bitmap.Config.ARGB_8888
+        }
+    )
+}.getOrNull()
