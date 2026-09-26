@@ -11,6 +11,8 @@ on:
       - "tools/build_vietnam_freshwater_fish_checklist.py"
       - "tools/reconcile_fish_checklist_taxonomy.py"
       - "tools/test_reconcile_fish_checklist_taxonomy.py"
+      - "tools/merge_scientific_ndjson.py"
+      - "tools/test_merge_scientific_ndjson.py"
       - "data/scientific/freshwater_fish_vietnam_ingestion.json"
       - "data/scientific/gbif_vietnam_freshwater_fish_download_template.json"
       - ".github/workflows/build-vietnam-freshwater-fish.yml"
@@ -40,12 +42,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run fish ingestion and reconciliation tests
+      - name: Run fish ingestion, reconciliation and merge tests
         run: |
           python3 -m unittest \
             tools.test_build_gbif_library \
             tools.test_build_scientific_sqlite \
-            tools.test_reconcile_fish_checklist_taxonomy
+            tools.test_reconcile_fish_checklist_taxonomy \
+            tools.test_merge_scientific_ndjson
 
       - name: Validate fish ingestion contract
         shell: bash
@@ -90,9 +93,12 @@ jobs:
           python3 - <<'PY'
           import json,sqlite3
           db=sqlite3.connect('build/fish/fish.sqlite')
+          meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
           report={
             'taxa':db.execute("select count(*) from taxon where library_group='Cá nước ngọt'").fetchone()[0],
             'media':db.execute('select count(*) from species_media').fetchone()[0],
+            'fishWith2PlusMedia':meta.get('fishWith2PlusMedia',0),
+            'rejectedMedia':meta.get('rejectedMediaCount',0),
             'vernacular':db.execute('select count(*) from vernacular_name').fetchone()[0],
             'occurrence':db.execute('select count(*) from occurrence_summary').fetchone()[0],
             'integrity':db.execute('pragma integrity_check').fetchone()[0],
@@ -132,25 +138,31 @@ jobs:
           import json, sqlite3
           db=sqlite3.connect('build/fish-real/fish.sqlite')
           meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
-          fish_taxa=meta.get('fishTaxa',0)
-          fish_with_media=meta.get('fishWithMedia',0)
-          fish_pending=meta.get('fishPendingMedia',0)
-          valid_media=db.execute("""select count(*) from species_media m join taxon t using(source_id,source_record_id) where t.library_group='Cá nước ngọt'""").fetchone()[0]
-          fish_with_2plus=db.execute("""select count(*) from (select t.source_id,t.source_record_id,count(m.media_identifier) n from taxon t join species_media m using(source_id,source_record_id) where t.library_group='Cá nước ngọt' group by t.source_id,t.source_record_id having n>=2)""").fetchone()[0]
-          report={'fishTaxa':fish_taxa,'fishWithMedia':fish_with_media,'fishWith2PlusMedia':fish_with_2plus,'fishPendingMedia':fish_pending,'validMedia':valid_media,'integrity':db.execute('pragma integrity_check').fetchone()[0]}
+          report={
+            'fishTaxa':meta.get('fishTaxa',0),
+            'fishWithMedia':meta.get('fishWithMedia',0),
+            'fishWith2PlusMedia':meta.get('fishWith2PlusMedia',0),
+            'fishPendingMedia':meta.get('fishPendingMedia',0),
+            'validMedia':meta.get('mediaRecordCount',0),
+            'rejectedMedia':meta.get('rejectedMediaCount',0),
+            'sourceDoi':meta.get('sourceDoi',''),
+            'integrity':db.execute('pragma integrity_check').fetchone()[0],
+          }
           db.close()
           assert report['fishTaxa'] > 0, report
+          assert report['sourceDoi'], report
           assert report['integrity']=='ok', report
           open('build/fish-real/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
           print(report)
           PY
 
-      - name: Upload real fish ingestion report
+      - name: Upload real fish normalized input and validation report
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: FieldIntelligence-freshwater-fish-real
           path: |
+            build/fish-real/fish.ndjson.gz
             build/fish-real/fish.sqlite
             build/fish-real/fish.meta.json
             build/fish-real/ingestion-report.json
@@ -162,6 +174,7 @@ jobs:
         with:
           name: FieldIntelligence-freshwater-fish-ingestion-validation
           path: |
+            build/fish/fish.ndjson.gz
             build/fish/fish.sqlite
             build/fish/fish.meta.json
             build/fish/ingestion-report.json
