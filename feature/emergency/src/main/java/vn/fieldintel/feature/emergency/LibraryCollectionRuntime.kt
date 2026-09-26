@@ -57,7 +57,9 @@ object LibraryCollectionRuntime {
 
         thread(name = "fieldintel-evidence-collections", isDaemon = true) {
             val evidenceStore = SpecialistEvidenceStore(appContext)
-            val ready = evidenceStore.status().installed && taxonomyStore.status().installed
+            // This code already runs on the dedicated loader thread, so use the blocking taxonomy
+            // status check here. UI callers use ScientificLibraryStore.status(), which is async.
+            val ready = evidenceStore.status().installed && taxonomyStore.isInstalledBlocking()
             val resolved = if (!ready) {
                 emptyMap()
             } else {
