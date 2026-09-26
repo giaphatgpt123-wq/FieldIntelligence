@@ -22,7 +22,7 @@ internal fun FieldIcon(section: AppSection?, modifier: Modifier = Modifier, colo
             val shape = Path().apply {
                 moveTo(p[0].first*w,p[0].second*h)
                 p.drop(1).forEach { lineTo(it.first*w,it.second*h) }
-                if(close) close()
+                if(close) this.close()
             }
             drawPath(shape,color,style=Stroke(width=sw,cap=StrokeCap.Round))
         }
