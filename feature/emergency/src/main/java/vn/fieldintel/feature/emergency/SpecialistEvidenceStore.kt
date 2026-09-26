@@ -80,6 +80,32 @@ class SpecialistEvidenceStore(context: Context) {
         }.getOrElse { emptyList() }
     }
 
+    fun speciesIdsFor(domain: EvidenceDomain, limit: Int = 5000): Set<String> {
+        if (!databaseFile.isFile) return emptySet()
+        val safeLimit = limit.coerceIn(1, 20_000)
+        return runCatching {
+            openReadOnly().use { db ->
+                requireSchema(db)
+                db.rawQuery(
+                    """
+                    SELECT DISTINCT species_id
+                    FROM evidence
+                    WHERE domain = ?
+                    ORDER BY species_id
+                    LIMIT $safeLimit
+                    """.trimIndent(),
+                    arrayOf(domain.name)
+                ).use { cursor ->
+                    buildSet {
+                        while (cursor.moveToNext()) {
+                            cursor.getString(0)?.takeIf { it.isNotBlank() }?.let(::add)
+                        }
+                    }
+                }
+            }
+        }.getOrElse { emptySet() }
+    }
+
     private fun openReadOnly(): SQLiteDatabase = SQLiteDatabase.openDatabase(
         databaseFile.absolutePath,
         null,
