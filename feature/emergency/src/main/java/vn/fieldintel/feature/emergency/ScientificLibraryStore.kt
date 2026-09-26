@@ -299,8 +299,15 @@ class ScientificLibraryStore(context: Context) {
         require(table == setOf("meta", "taxon")) { "Scientific library schema is incomplete" }
         val meta = readMeta(db)
         val schemaVersion = meta["schemaVersion"]?.trimJsonString()?.toIntOrNull()
-        require(schemaVersion == SUPPORTED_SCHEMA_VERSION) { "Unsupported scientific library schema: $schemaVersion" }
-        require(meta["scope"]?.trimJsonString() == "taxonomy-only") { "Unexpected scientific library scope" }
+        require(schemaVersion in SUPPORTED_SCHEMA_VERSIONS) { "Unsupported scientific library schema: $schemaVersion" }
+        val dataScope = meta["scope"]?.trimJsonString()
+        require(dataScope in SUPPORTED_SCOPES) { "Unexpected scientific library scope: $dataScope" }
+        if (schemaVersion == 2) {
+            val mediaTable = db.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='species_media'", null
+            ).use { cursor -> cursor.moveToFirst() }
+            require(mediaTable) { "Scientific library schema v2 is missing species_media" }
+        }
     }
 
     private fun readMeta(db: SQLiteDatabase): Map<String, String> = db.rawQuery(
@@ -365,7 +372,8 @@ class ScientificLibraryStore(context: Context) {
     companion object {
         const val DIRECTORY_NAME = "scientific-library"
         const val DATABASE_NAME = "wfo-taxonomy.sqlite"
-        private const val SUPPORTED_SCHEMA_VERSION = 1
+        private val SUPPORTED_SCHEMA_VERSIONS = setOf(1, 2)
+        private val SUPPORTED_SCOPES = setOf("taxonomy-only", "taxonomy-media-occurrence")
         private const val ID_PREFIX = "scientific-db:"
         private const val SEARCH_DEBOUNCE_MS = 300L
     }
