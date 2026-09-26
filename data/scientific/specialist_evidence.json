@@ -1,10 +1,11 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "scope": "specialist-evidence-only",
   "records": [
     {
       "evidenceId": "moh-curcuma-longa-khuong-hoang-uat-kim",
       "speciesId": "curcuma-longa",
+      "scientificName": "Curcuma longa L.",
       "domain": "VIETNAM_TRADITIONAL_MEDICINE",
       "evidenceClass": "OFFICIAL_LISTING",
       "title": "Khương hoàng/Uất kim — danh mục dược liệu YDCT",
@@ -20,6 +21,7 @@
     {
       "evidenceId": "ema-curcuma-longa-rhizoma",
       "speciesId": "curcuma-longa",
+      "scientificName": "Curcuma longa L.",
       "domain": "HERBAL_MEDICINE_MONOGRAPH",
       "evidenceClass": "REGULATORY_MONOGRAPH",
       "title": "Curcumae longae rhizoma — EU herbal monograph",
@@ -35,6 +37,7 @@
     {
       "evidenceId": "moh-zingiber-officinale-sinh-khuong",
       "speciesId": "zingiber-officinale",
+      "scientificName": "Zingiber officinale Roscoe",
       "domain": "VIETNAM_TRADITIONAL_MEDICINE",
       "evidenceClass": "OFFICIAL_LISTING",
       "title": "Sinh khương — danh mục vị thuốc YHCT",
@@ -50,6 +53,7 @@
     {
       "evidenceId": "moh-zingiber-officinale-can-khuong",
       "speciesId": "zingiber-officinale",
+      "scientificName": "Zingiber officinale Roscoe",
       "domain": "VIETNAM_TRADITIONAL_MEDICINE",
       "evidenceClass": "OFFICIAL_LISTING",
       "title": "Can khương — danh mục vị thuốc YHCT",
@@ -65,6 +69,7 @@
     {
       "evidenceId": "ema-zingiber-officinale-rhizoma-2025",
       "speciesId": "zingiber-officinale",
+      "scientificName": "Zingiber officinale Roscoe",
       "domain": "HERBAL_MEDICINE_MONOGRAPH",
       "evidenceClass": "REGULATORY_MONOGRAPH",
       "title": "Zingiberis rhizoma — EU herbal monograph",
@@ -81,6 +86,7 @@
     {
       "evidenceId": "ema-hypericum-perforatum-herba-2023",
       "speciesId": "hypericum-perforatum",
+      "scientificName": "Hypericum perforatum L.",
       "domain": "HERBAL_MEDICINE_MONOGRAPH",
       "evidenceClass": "REGULATORY_MONOGRAPH",
       "title": "Hyperici herba — EU herbal monograph",
@@ -96,6 +102,7 @@
     {
       "evidenceId": "cdc-ricinus-communis-ricin",
       "speciesId": "ricinus-communis",
+      "scientificName": "Ricinus communis L.",
       "domain": "TOXICOLOGY",
       "evidenceClass": "PUBLIC_HEALTH_TOXICOLOGY",
       "title": "Ricin trong hạt thầu dầu",
@@ -111,6 +118,7 @@
     {
       "evidenceId": "cdc-abrus-precatorius-abrin",
       "speciesId": "abrus-precatorius",
+      "scientificName": "Abrus precatorius L.",
       "domain": "TOXICOLOGY",
       "evidenceClass": "PUBLIC_HEALTH_TOXICOLOGY",
       "title": "Abrin trong hạt Abrus precatorius",
@@ -126,6 +134,7 @@
     {
       "evidenceId": "kew-nerium-oleander-hazard-profile",
       "speciesId": "nerium-oleander",
+      "scientificName": "Nerium oleander L.",
       "domain": "TOXICOLOGY",
       "evidenceClass": "BOTANICAL_HAZARD_PROFILE",
       "title": "Nerium oleander — hồ sơ nguy cơ thực vật",
