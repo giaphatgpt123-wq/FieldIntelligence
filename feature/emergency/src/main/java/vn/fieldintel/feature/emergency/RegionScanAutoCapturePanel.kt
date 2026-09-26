@@ -1,6 +1,7 @@
 package vn.fieldintel.feature.emergency
 
 import android.Manifest
+import android.os.SystemClock
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -372,6 +373,8 @@ private fun RegionAutoCaptureCamera(
     val executor = remember { Executors.newSingleThreadExecutor() }
     val metadataExecutor = remember { Executors.newSingleThreadExecutor() }
     val frameGate = remember { RegionFrameStabilityGate() }
+    val adjustmentGate = remember { CameraAdjustmentGate() }
+    var adjustmentState by remember { mutableStateOf(CameraAdjustmentGate.State.IDLE) }
     var boundCamera by remember { mutableStateOf<Camera?>(null) }
     var linearZoom by remember { mutableFloatStateOf(0f) }
     var torchEnabled by remember { mutableStateOf(false) }
@@ -385,7 +388,15 @@ private fun RegionAutoCaptureCamera(
             point,
             FocusMeteringAction.FLAG_AF or FocusMeteringAction.FLAG_AE
         ).setAutoCancelDuration(3, TimeUnit.SECONDS).build()
-        camera.cameraControl.startFocusAndMetering(action)
+        val token = adjustmentGate.begin(SystemClock.elapsedRealtimeNanos())
+        adjustmentState = CameraAdjustmentGate.State.FOCUSING
+        val focusFuture = camera.cameraControl.startFocusAndMetering(action)
+        focusFuture.addListener({
+            runCatching { focusFuture.get() }.onSuccess { result ->
+                adjustmentGate.focusCompleted(token, SystemClock.elapsedRealtimeNanos(), result.isFocusSuccessful)
+                adjustmentState = adjustmentGate.state(SystemClock.elapsedRealtimeNanos())
+            }
+        }, ContextCompat.getMainExecutor(context))
         currentOnControlStatus("Đang lấy nét tại vùng đã chọn…")
     }
 
@@ -398,6 +409,19 @@ private fun RegionAutoCaptureCamera(
                     detectTapGestures { offset -> focusAt(offset.x, offset.y) }
                 }
         )
+
+        if (adjustmentState != CameraAdjustmentGate.State.IDLE) {
+            Text(
+                when (adjustmentState) {
+                    CameraAdjustmentGate.State.FOCUSING -> "ĐANG LẤY NÉT"
+                    CameraAdjustmentGate.State.EXPOSURE_SETTLING -> "ĐANG CÂN SÁNG"
+                    CameraAdjustmentGate.State.READY -> "SẴN SÀNG"
+                    CameraAdjustmentGate.State.IDLE -> ""
+                },
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = 52.dp),
+                color = FieldColors.primary
+            )
+        }
 
         Row(
             modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp),
@@ -455,6 +479,8 @@ private fun RegionAutoCaptureCamera(
                 val provider = providerFuture.get()
                 provider.unbindAll()
                 frameGate.reset()
+                adjustmentGate.reset()
+                adjustmentState = CameraAdjustmentGate.State.IDLE
                 (runner as? StableRegionVisualModelRunner)?.reset()
 
                 val preview = Preview.Builder().build().also { it.surfaceProvider = previewView.surfaceProvider }
@@ -484,7 +510,12 @@ private fun RegionAutoCaptureCamera(
                                 }
                             }
 
-                            val captureEligible = !modelReady || stableFound.isNotEmpty()
+                            val adjustmentReady = adjustmentGate.ready(SystemClock.elapsedRealtimeNanos())
+                            val cameraState = adjustmentGate.state(SystemClock.elapsedRealtimeNanos())
+                            mainExecutor.execute {
+                                if (!disposed && adjustmentState != cameraState) adjustmentState = cameraState
+                            }
+                            val captureEligible = adjustmentReady && (!modelReady || stableFound.isNotEmpty())
                             if (!captureInFlight && frameGate.shouldCapture(timestamp, frame, captureEligible)) {
                                 captureInFlight = true
                                 val capturedAt = System.currentTimeMillis()
@@ -564,6 +595,8 @@ private fun RegionAutoCaptureCamera(
         onDispose {
             disposed = true
             frameGate.reset()
+            adjustmentGate.reset()
+            adjustmentState = CameraAdjustmentGate.State.IDLE
             (runner as? StableRegionVisualModelRunner)?.reset()
             boundCamera?.cameraControl?.enableTorch(false)
             boundCamera = null
