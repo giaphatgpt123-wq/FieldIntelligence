@@ -68,4 +68,16 @@ class SpecialistEvidenceCatalogTest {
         assertFalse(record.statement.contains("liều", ignoreCase = true))
         assertFalse(record.statement.contains("điều trị", ignoreCase = true))
     }
+
+    @Test
+    fun oleanderHazardProfileCoversWholePlantWithoutTreatmentClaims() {
+        val record = SpecialistEvidenceCatalog.forSpecies("nerium-oleander")
+            .single { it.domain == EvidenceDomain.TOXICOLOGY }
+        assertEquals(EvidenceClass.BOTANICAL_HAZARD_PROFILE, record.evidenceClass)
+        assertTrue(record.plantPart.contains("Toàn cây"))
+        assertTrue(record.statement.contains("độc", ignoreCase = true))
+        assertTrue(record.sourceName.contains("Kew"))
+        assertFalse(record.statement.contains("liều", ignoreCase = true))
+        assertFalse(record.statement.contains("điều trị", ignoreCase = true))
+    }
 }
