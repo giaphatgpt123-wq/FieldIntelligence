@@ -7,16 +7,24 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LiveVisualModelTest {
+    private fun frame(): LiveVisualFrameData {
+        val y = YuvPlaneData(ByteArray(640 * 480), rowStride = 640, pixelStride = 1)
+        val uv = YuvPlaneData(ByteArray(320 * 240), rowStride = 320, pixelStride = 1)
+        return LiveVisualFrameData(
+            timestampNanos = 1L,
+            width = 640,
+            height = 480,
+            rotationDegrees = 0,
+            y = y,
+            u = uv,
+            v = uv
+        )
+    }
+
     @Test
     fun noVerifiedModelNeverReturnsDetections() {
         val status = NoVerifiedLiveVisualModel.status()
-        val detections = NoVerifiedLiveVisualModel.detect(
-            byteArrayOf(1, 2, 3),
-            640,
-            480,
-            0,
-            LiveVisualSearchTarget("rau má")
-        )
+        val detections = NoVerifiedLiveVisualModel.detect(frame(), LiveVisualSearchTarget("rau má"))
 
         assertEquals(VisualModelAvailability.NOT_INSTALLED, status.availability)
         assertTrue(detections.isEmpty())
