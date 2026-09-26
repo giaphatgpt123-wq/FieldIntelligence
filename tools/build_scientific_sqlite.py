@@ -140,9 +140,21 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
                 batch.append(row)
                 count += 1
                 source_id, source_record_id = row[0], row[1]
-                media = record.get("media") or {}
-                media_identifier = str(media.get("identifier") or "").strip()
-                if media_identifier:
+                media_items = record.get("mediaItems") or []
+                if not media_items and record.get("media"):
+                    media_items = [record.get("media") or {}]
+                for media in media_items:
+                    media_identifier = str(media.get("identifier") or "").strip()
+                    if not media_identifier:
+                        continue
+                    media_license = str(media.get("license") or "").strip()
+                    # A media URL without an explicit reusable licence is not eligible
+                    # for the offline scientific library.
+                    if media_license not in {"CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
+                                             "https://creativecommons.org/publicdomain/zero/1.0/",
+                                             "https://creativecommons.org/licenses/by/4.0/",
+                                             "https://creativecommons.org/licenses/by-nc/4.0/"}:
+                        continue
                     db.execute("""INSERT OR IGNORE INTO species_media
                         (source_id,source_record_id,media_identifier,media_type,references_url,title,description,creator,rights_holder,media_license)
                         VALUES (?,?,?,?,?,?,?,?,?,?)""", (
@@ -150,7 +162,7 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
                         str(media.get("mediaType") or "").strip(), str(media.get("references") or "").strip(),
                         str(media.get("title") or "").strip(), str(media.get("description") or "").strip(),
                         str(media.get("creator") or "").strip(), str(media.get("rightsHolder") or "").strip(),
-                        str(media.get("license") or "").strip()))
+                        media_license))
                     media_count += db.execute("SELECT changes()").fetchone()[0]
                 vernacular = str(record.get("vernacularName") or "").strip()
                 if vernacular:
@@ -186,7 +198,7 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
             "sourceDoi": source_meta.get("versionDoi", ""),
             "sourceLicense": source_meta.get("license", ""),
             "scope": "taxonomy-media-occurrence",
-            "mediaRecordCount": media_count,
+            "mediaRecordCount": media_count,\n            "recordsWithMedia": db.execute("SELECT COUNT(DISTINCT source_id || char(31) || source_record_id) FROM species_media").fetchone()[0],
             "vernacularNameCount": vernacular_count,
             "occurrenceSummaryCount": occurrence_count,
             "medicalClaimsIncluded": False,
