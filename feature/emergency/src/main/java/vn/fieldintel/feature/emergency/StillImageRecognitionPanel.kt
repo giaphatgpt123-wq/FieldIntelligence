@@ -63,6 +63,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     var preview by remember { mutableStateOf<Bitmap?>(null) }
     var sourceLabel by remember { mutableStateOf("Chưa có ảnh") }
     var analysis by remember { mutableStateOf<StillImageVisualAnalyzer.Result?>(null) }
+    var plantCandidates by remember { mutableStateOf<List<BundledPlantImageClassifier.Candidate>>(emptyList()) }
     var analyzing by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var saveStatus by remember { mutableStateOf("") }
@@ -138,6 +139,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     LaunchedEffect(preview, runner) {
         val bitmap = preview
         analysis = null
+        plantCandidates = emptyList()
         selectedDetection = null
         if (bitmap == null) return@LaunchedEffect
         analyzing = true
@@ -146,6 +148,10 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
             withContext(Dispatchers.Default) { StillImageVisualAnalyzer.analyze(bitmap, runner) }
         }.onSuccess { analysis = it }
             .onFailure { error = it.message ?: "Không thể phân tích ảnh." }
+        runCatching {
+            withContext(Dispatchers.Default) { BundledPlantImageClassifier.classify(context.applicationContext, bitmap) }
+        }.onSuccess { plantCandidates = it }
+            .onFailure { if (error == null) error = "Model thực vật chưa chạy được: ${it.message ?: "không rõ lỗi"}" }
         analyzing = false
     }
 
@@ -166,7 +172,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text("CHỤP ẢNH / TRUY VẤN ẢNH", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
                 Text(
-                    "Chụp ảnh độ phân giải đầy đủ hoặc chọn ảnh có sẵn. App dùng cùng model offline với quét vùng để tìm nhiều ứng viên trong ảnh.",
+                    "Chụp ảnh độ phân giải đầy đủ hoặc chọn ảnh có sẵn. Model thực vật offline gợi ý tên cho ảnh có một mẫu rõ; quét nhiều vùng dùng model riêng.",
                     color = FieldColors.onSurfaceVariant
                 )
 
@@ -235,7 +241,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 } else if (preview == null) {
                     Text("Chưa có ảnh để phân tích.", color = FieldColors.onSurfaceVariant)
                 } else if (result != null && !modelReady) {
-                    Text(result.status.message, color = Color(0xFFFFD166))
+                    Text("Model quét nhiều vùng: ${result.status.message}", color = Color(0xFFFFD166))
                     Text("Ảnh vẫn có thể lưu/đối chiếu thủ công; app không sinh tên loài giả.", color = FieldColors.onSurfaceVariant)
                 } else if (result != null && summary.items.isEmpty()) {
                     Text("Model không phát hiện ứng viên đủ ngưỡng trong ảnh này.", color = Color(0xFFFFD166))
@@ -269,6 +275,18 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                             }
                         }
                     }
+                }
+
+                if (preview != null && !analyzing) {
+                    Text("GỢI Ý THỰC VẬT • MODEL GOOGLE AIY", color = FieldColors.primary, fontWeight = FontWeight.Bold)
+                    if (plantCandidates.isEmpty()) {
+                        Text("Chưa có ứng viên thực vật đạt ngưỡng; thử ảnh cận một mẫu rõ hơn. Model chưa bao phủ toàn bộ thư viện.", color = FieldColors.onSurfaceVariant)
+                    } else {
+                        plantCandidates.forEach { candidate ->
+                            Text("${candidate.scientificName} • ${(candidate.score * 100).toInt()}% (điểm model)", color = Color.White)
+                        }
+                    }
+                    Text("Tên là gợi ý từ ảnh toàn khung, chưa xác minh mẫu vật hoặc kết luận ăn được/độc tính.", color = FieldColors.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
                 }
 
                 if (preview != null) {
