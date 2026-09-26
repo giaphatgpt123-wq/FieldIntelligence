@@ -72,6 +72,21 @@ internal fun regionFieldGuidance(detections: List<VisualDetection>, modelReady: 
     }
 }
 
+internal fun regionQualityLabel(quality: RegionFrameQuality?): String = when {
+    quality == null -> "ĐANG ĐO CHẤT LƯỢNG"
+    quality.tooDark -> "QUÁ TỐI"
+    quality.tooBright -> "QUÁ SÁNG"
+    quality.tooBlurred -> "CHƯA NÉT"
+    else -> "ĐỦ ĐIỀU KIỆN CHỤP"
+}
+
+private fun regionQualityColor(quality: RegionFrameQuality?): Color = when {
+    quality == null -> Color(0xFFFFD166)
+    quality.acceptable -> FieldColors.primary
+    quality.tooDark || quality.tooBright -> Color(0xFFFFA24C)
+    else -> Color(0xFFFFD166)
+}
+
 /**
  * Region scan mode requested for field use:
  * - no target is entered;
@@ -95,6 +110,7 @@ fun RegionScanAutoCapturePanel(
     var scanning by remember { mutableStateOf(false) }
     var detections by remember { mutableStateOf(emptyList<VisualDetection>()) }
     var lastFrame by remember { mutableStateOf<LiveFrameInfo?>(null) }
+    var frameQuality by remember { mutableStateOf<RegionFrameQuality?>(null) }
     var autoCaptureCount by remember { mutableIntStateOf(0) }
     var latestCapture by remember { mutableStateOf<String?>(null) }
     var statusText by remember { mutableStateOf("Sẵn sàng quét vùng.") }
@@ -103,6 +119,7 @@ fun RegionScanAutoCapturePanel(
         cameraGranted = granted
         if (!granted) {
             scanning = false
+            frameQuality = null
             statusText = "Cần quyền camera để quét vùng thực tế."
         }
     }
@@ -111,6 +128,7 @@ fun RegionScanAutoCapturePanel(
     val verifyingCount = remember(detections) { detections.count { it.regionVerificationProgress() != null } }
     val summary = remember(stableDetections) { RegionScanClassifier.summarize(stableDetections) }
     val fieldGuidance = remember(detections, modelReady) { regionFieldGuidance(detections, modelReady) }
+    val activeGuidance = frameQuality?.takeIf { !it.acceptable }?.guidance() ?: fieldGuidance
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Card(
@@ -139,6 +157,7 @@ fun RegionScanAutoCapturePanel(
                                 modelReady = modelReady,
                                 modifier = Modifier.fillMaxSize(),
                                 onFrame = { lastFrame = it },
+                                onQuality = { frameQuality = it },
                                 onDetections = {
                                     detections = it
                                     statusText = if (modelReady) {
@@ -177,6 +196,27 @@ fun RegionScanAutoCapturePanel(
                                     color = if (modelReady) FieldColors.primary else Color(0xFFFFD166)
                                 )
                             }
+                            Surface(
+                                modifier = Modifier.align(Alignment.TopStart).padding(start = 12.dp, top = 56.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                color = Color(0xD9081A1F),
+                                border = BorderStroke(1.dp, regionQualityColor(frameQuality).copy(alpha = .6f))
+                            ) {
+                                Column(Modifier.padding(horizontal = 11.dp, vertical = 8.dp)) {
+                                    Text(
+                                        regionQualityLabel(frameQuality),
+                                        color = regionQualityColor(frameQuality),
+                                        style = MaterialTheme.typography.labelLarge
+                                    )
+                                    frameQuality?.let { quality ->
+                                        Text(
+                                            "Sáng ${quality.meanLuma.toInt()} • nét ${quality.edgeStrength.toInt()}",
+                                            color = Color.White.copy(alpha = .72f),
+                                            style = MaterialTheme.typography.labelSmall
+                                        )
+                                    }
+                                }
+                            }
                         }
                     } else {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -194,7 +234,7 @@ fun RegionScanAutoCapturePanel(
                         shape = RoundedCornerShape(14.dp),
                         color = Color(0xFF0E252A)
                     ) {
-                        Text(fieldGuidance, modifier = Modifier.padding(11.dp), color = FieldColors.onSurfaceVariant)
+                        Text(activeGuidance, modifier = Modifier.padding(11.dp), color = FieldColors.onSurfaceVariant)
                     }
                 }
 
@@ -205,6 +245,7 @@ fun RegionScanAutoCapturePanel(
                                 permissionLauncher.launch(Manifest.permission.CAMERA)
                             } else {
                                 detections = emptyList()
+                                frameQuality = null
                                 (runner as? StableRegionVisualModelRunner)?.reset()
                                 statusText = "Đang khởi động camera quét vùng…"
                                 scanning = true
@@ -217,6 +258,7 @@ fun RegionScanAutoCapturePanel(
                         OutlinedButton(
                             onClick = {
                                 scanning = false
+                                frameQuality = null
                                 (runner as? StableRegionVisualModelRunner)?.reset()
                                 statusText = "Đã dừng quét vùng."
                             },
@@ -271,6 +313,13 @@ fun RegionScanAutoCapturePanel(
                         }
                     }
                 }
+                frameQuality?.let { quality ->
+                    Text(
+                        "Chất lượng camera: ${regionQualityLabel(quality)} • sáng ${quality.meanLuma.toInt()} • nét ${quality.edgeStrength.toInt()}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = regionQualityColor(quality)
+                    )
+                }
                 Text("Ảnh tự chụp: $autoCaptureCount", style = MaterialTheme.typography.bodySmall)
                 if (latestCapture != null) Text("Ảnh gần nhất và metadata đã lưu offline trên máy.", color = FieldColors.primary)
                 lastFrame?.let {
@@ -300,6 +349,7 @@ private fun RegionAutoCaptureCamera(
     modelReady: Boolean,
     modifier: Modifier,
     onFrame: (LiveFrameInfo) -> Unit,
+    onQuality: (RegionFrameQuality) -> Unit,
     onDetections: (List<VisualDetection>) -> Unit,
     onAutoCaptured: (String) -> Unit,
     onControlStatus: (String) -> Unit,
@@ -308,6 +358,7 @@ private fun RegionAutoCaptureCamera(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val currentOnFrame by rememberUpdatedState(onFrame)
+    val currentOnQuality by rememberUpdatedState(onQuality)
     val currentOnDetections by rememberUpdatedState(onDetections)
     val currentOnAutoCaptured by rememberUpdatedState(onAutoCaptured)
     val currentOnControlStatus by rememberUpdatedState(onControlStatus)
@@ -423,9 +474,15 @@ private fun RegionAutoCaptureCamera(
                         if (timestamp - lastAnalysisTimestamp >= AUTO_REGION_ANALYSIS_INTERVAL_NANOS) {
                             lastAnalysisTimestamp = timestamp
                             val frame = image.toOwnedAutoRegionFrame()
+                            val quality = frameGate.assess(frame)
                             val found = if (modelReady) runner.scanRegion(frame) else emptyList()
                             val stableFound = found.filter { it.isStableRegionCandidate() }
-                            mainExecutor.execute { if (!disposed) currentOnDetections(found) }
+                            mainExecutor.execute {
+                                if (!disposed) {
+                                    currentOnQuality(quality)
+                                    currentOnDetections(found)
+                                }
+                            }
 
                             val captureEligible = !modelReady || stableFound.isNotEmpty()
                             if (!captureInFlight && frameGate.shouldCapture(timestamp, frame, captureEligible)) {
