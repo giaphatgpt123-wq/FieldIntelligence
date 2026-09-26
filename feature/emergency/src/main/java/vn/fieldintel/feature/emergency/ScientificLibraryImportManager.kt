@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import java.io.File
+import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.security.MessageDigest
@@ -56,7 +57,18 @@ class ScientificLibraryImportManager(private val context: Context) {
     )
 
     /** Imports the GitHub Actions artifact ZIP containing both required SQLite files and manifest. */
-    fun importBundle(uri: Uri): BundleImportResult {
+    fun importBundle(uri: Uri): BundleImportResult =
+        context.contentResolver.openInputStream(uri)?.use(::importBundle)
+            ?: error("Không thể mở gói ZIP đã chọn")
+
+    /** Installs the source-verified pack packaged inside the APK on a clean installation. */
+    fun installBundledIfMissing(): BundleImportResult? {
+        val directory = libraryDirectory()
+        if (PackType.entries.any { File(directory, it.fileName).isFile }) return null
+        return context.assets.open("scientific-library/FieldIntelligence-WFO-mobile.zip").use(::importBundle)
+    }
+
+    private fun importBundle(input: InputStream): BundleImportResult {
         val directory = libraryDirectory()
         val staged = PackType.entries.associateWith { type ->
             File(directory, ".${type.fileName}.incoming").also { it.delete() }
@@ -65,8 +77,8 @@ class ScientificLibraryImportManager(private val context: Context) {
         var manifestText: String? = null
         var entryCount = 0
         try {
-            context.contentResolver.openInputStream(uri)?.buffered()?.use { input ->
-                ZipInputStream(input).use { zip ->
+            input.buffered().use { source ->
+                ZipInputStream(source).use { zip ->
                     while (true) {
                         val entry = zip.nextEntry ?: break
                         entryCount += 1
@@ -84,7 +96,7 @@ class ScientificLibraryImportManager(private val context: Context) {
                         found += type
                     }
                 }
-            } ?: error("Không thể mở gói ZIP đã chọn")
+            }
 
             require(found == PackType.entries.toSet()) {
                 "Gói ZIP phải chứa ${PackType.entries.joinToString { it.fileName }}"
