@@ -24,5 +24,6 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.4.2")
     implementation("androidx.camera:camera-view:1.4.2")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.4")
     testImplementation("junit:junit:4.13.2")
 }
