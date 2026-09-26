@@ -27,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -47,12 +49,14 @@ import java.io.File
 @Composable
 fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val runner = remember(modelGeneration) { InstalledVisualModelRunner(context.applicationContext) }
     var preview by remember { mutableStateOf<Bitmap?>(null) }
     var sourceLabel by remember { mutableStateOf("Chưa có ảnh") }
     var analysis by remember { mutableStateOf<StillImageVisualAnalyzer.Result?>(null) }
     var analyzing by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
+    var saveStatus by remember { mutableStateOf("") }
     var pendingCaptureFile by remember { mutableStateOf<File?>(null) }
 
     DisposableEffect(runner) {
@@ -76,6 +80,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 preview = bitmap
                 sourceLabel = "Ảnh từ máy • ${bitmap.width}×${bitmap.height}"
                 error = null
+                saveStatus = ""
             } else {
                 error = "Không thể mở ảnh đã chọn."
             }
@@ -87,10 +92,12 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
         pendingCaptureFile = null
         if (saved && file?.isFile == true) {
             val bitmap = decodeFileBounded(file, 1800)
+            file.delete()
             if (bitmap != null) {
                 preview = bitmap
                 sourceLabel = "Ảnh chụp độ phân giải đầy đủ • ${bitmap.width}×${bitmap.height}"
                 error = null
+                saveStatus = ""
             } else {
                 error = "Đã chụp nhưng không thể đọc ảnh."
             }
@@ -223,6 +230,30 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                                 )
                             }
                         }
+                    }
+                }
+
+                if (preview != null) {
+                    OutlinedButton(
+                        onClick = {
+                            val bitmap = preview ?: return@OutlinedButton
+                            scope.launch {
+                                saveStatus = "Đang lưu ảnh và metadata…"
+                                val outcome = withContext(Dispatchers.IO) {
+                                    runCatching { StillImageCaptureStore.save(context.applicationContext, bitmap, analysis) }
+                                }
+                                saveStatus = outcome.fold(
+                                    onSuccess = { "Đã lưu offline ảnh + metadata kiểm tra lại." },
+                                    onFailure = { "Lưu thất bại: ${it.message ?: "không rõ lỗi"}" }
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        enabled = !analyzing
+                    ) { Text("LƯU ẢNH + KẾT QUẢ OFFLINE") }
+                    if (saveStatus.isNotBlank()) {
+                        Text(saveStatus, color = if (saveStatus.startsWith("Đã")) FieldColors.primary else FieldColors.onSurfaceVariant)
                     }
                 }
             }
