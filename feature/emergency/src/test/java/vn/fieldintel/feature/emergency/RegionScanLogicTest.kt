@@ -89,12 +89,12 @@ class RegionScanLogicTest {
         val gate = RegionAutoCaptureGate(stableFramesRequired = 2, minimumIntervalNanos = 2_000_000_000L)
         val frame = listOf(detection("Rau má", "Centella asiatica"))
 
-        gate.shouldCapture(1_000_000_000L, frame)
+        assertFalse(gate.shouldCapture(1_000_000_000L, frame))
         assertTrue(gate.shouldCapture(1_300_000_000L, frame))
-        gate.shouldCapture(1_600_000_000L, frame)
+        assertFalse(gate.shouldCapture(1_600_000_000L, frame))
         assertFalse(gate.shouldCapture(1_900_000_000L, frame))
-        gate.shouldCapture(3_400_000_000L, frame)
-        assertTrue(gate.shouldCapture(3_700_000_000L, frame))
+        assertTrue(gate.shouldCapture(3_400_000_000L, frame))
+        assertFalse(gate.shouldCapture(3_700_000_000L, frame))
     }
 
     @Test
