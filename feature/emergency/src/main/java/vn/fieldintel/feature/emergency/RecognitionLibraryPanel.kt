@@ -222,10 +222,16 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                 Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
                 results.forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
             }
-            storeStatus.installed && query.isBlank() -> SafetyBanner("Nhập tên khoa học để tra trong ${formatCount(storeStatus.recordCount)} hồ sơ. CSDL lớn không tự liệt kê toàn bộ để tránh tải nặng giao diện.")
-            storeStatus.installed && query.trim().length < 2 -> SafetyBanner("Nhập ít nhất 2 ký tự để bắt đầu tra cứu WFO offline.")
+            storeStatus.installed && query.isBlank() -> {
+                SafetyBanner("Các hồ sơ nổi bật dưới đây có tên tiếng Việt. Nhập từ 2 ký tự để tra thêm ${formatCount(storeStatus.recordCount)} tên khoa học WFO offline.")
+                results.take(80).forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
+            }
+            storeStatus.installed && query.trim().length < 2 -> {
+                SafetyBanner("Nhập ít nhất 2 ký tự để tra WFO. Kết quả tiếng Việt có sẵn bên dưới.")
+                results.take(80).forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
+            }
             externalSearching -> SearchStatusBanner("ĐANG TÌM TRONG WFO OFFLINE…")
-            externalSearchCompleted && results.isEmpty() -> SafetyBanner("Không tìm thấy hồ sơ phù hợp trong WFO offline. Ứng dụng không thay kết quả bằng dữ liệu lõi và không suy ra mẫu vật an toàn hoặc không tồn tại.")
+            externalSearchCompleted && results.isEmpty() -> SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
             results.isEmpty() -> SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy trong dữ liệu không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
             else -> {
                 Text("KẾT QUẢ • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
