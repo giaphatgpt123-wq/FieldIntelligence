@@ -85,6 +85,6 @@ fun InteractionSafetyPanel(query: String) {
             }
         }
 
-        if (speciesId != null) SpecialistEvidencePanel(speciesId)
+        SpecialistEvidencePanel(speciesId = speciesId.orEmpty(), scientificName = query)
     }
 }
