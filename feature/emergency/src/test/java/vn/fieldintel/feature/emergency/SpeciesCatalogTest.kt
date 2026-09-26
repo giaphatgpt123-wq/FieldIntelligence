@@ -24,6 +24,15 @@ class SpeciesCatalogTest {
         assertEquals("ganoderma-lucidum", SpeciesCatalog.search("ganoderma lucidum").single().id)
     }
 
+    @Test fun medicinalPlantTaxonomyCanLinkToIndependentSafetyEvidence() {
+        val hypericum = SpeciesCatalog.search("Hypericum perforatum").single()
+        val tea = SpeciesCatalog.search("Camellia sinensis").single()
+        assertTrue(InteractionCatalog.findForEntity(hypericum.scientificName).size >= 4)
+        assertTrue(InteractionCatalog.findForEntity(tea.scientificName).any { it.id == "green-tea-nadolol-nccih" })
+        assertTrue(hypericum.sourceScope.contains("nguồn y khoa riêng", ignoreCase = true))
+        assertTrue(tea.sourceScope.contains("không dùng hồ sơ taxonomy", ignoreCase = true))
+    }
+
     @Test fun sourceProvenanceAndUnknownBehaviorRemainExplicit() {
         assertTrue(SpeciesCatalog.search("rắn").isEmpty())
         assertTrue(SpeciesCatalog.records.all {
