@@ -1,0 +1,97 @@
+name: Build Vietnam Freshwater Fish Library
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "tools/build_gbif_library.py"
+      - "tools/test_build_gbif_library.py"
+      - "tools/build_scientific_sqlite.py"
+      - "tools/test_build_scientific_sqlite.py"
+      - "data/scientific/freshwater_fish_vietnam_ingestion.json"
+      - ".github/workflows/build-vietnam-freshwater-fish.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-fish-ingestion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run GBIF and SQLite ingestion tests
+        run: |
+          python3 -m unittest tools.test_build_gbif_library tools.test_build_scientific_sqlite
+
+      - name: Validate fish ingestion contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          p=json.load(open('data/scientific/freshwater_fish_vietnam_ingestion.json',encoding='utf-8'))
+          assert p['categoryId']=='freshwater-fish-vietnam'
+          assert p['scope']['countryCode']=='VN'
+          assert p['scope']['habitat']=='freshwater'
+          counts=p['sources'][0]['observedCounts']
+          assert counts['reported']==772
+          assert counts['present']==736
+          assert counts['possible']==29
+          assert counts['absentOrRejected']==7
+          assert counts['present']+counts['possible']+counts['absentOrRejected']==counts['reported']
+          assert p['ingestionPolicy']['requireMediaLicenseForOfflineReuse'] is True
+          assert p['ingestionPolicy']['doNotInferEdibilityOrSafety'] is True
+          print({'contract':'PASS','counts':counts})
+          PY
+
+      - name: Build and validate representative fish SQLite
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/fish
+          python3 - <<'PY'
+          import csv
+          rows=[
+            dict(gbifID='1',scientificName='Channa striata (Bloch, 1793)',kingdom='Animalia',class_='Actinopterygii',order='Anabantiformes',family='Channidae',genus='Channa',countryCode='VN',vernacularName='Cá lóc',mediaType='StillImage',identifier='https://example.org/channa.jpg',creator='Fixture photographer',rightsHolder='Fixture collection',mediaLicense='CC-BY-4.0'),
+            dict(gbifID='2',scientificName='Anabas testudineus (Bloch, 1792)',kingdom='Animalia',class_='Actinopterygii',order='Anabantiformes',family='Anabantidae',genus='Anabas',countryCode='VN',vernacularName='Cá rô đồng')
+          ]
+          fields=['gbifID','scientificName','kingdom','class','order','family','genus','countryCode','vernacularName','mediaType','identifier','creator','rightsHolder','mediaLicense']
+          with open('build/fish/occurrence.txt','w',encoding='utf-8',newline='') as f:
+              w=csv.DictWriter(f,fieldnames=fields,delimiter='\t'); w.writeheader()
+              for r in rows:
+                  r['class']=r.pop('class_'); w.writerow(r)
+          PY
+          python3 tools/build_gbif_library.py --input build/fish/occurrence.txt --output build/fish/fish.ndjson.gz --metadata build/fish/fish.meta.json --dataset-doi 10.15468/dl.fixture --publisher "FieldIntelligence CI fixture" --license CC-BY-4.0
+          python3 tools/build_scientific_sqlite.py --input build/fish/fish.ndjson.gz --source-meta build/fish/fish.meta.json --output build/fish/fish.sqlite
+          python3 - <<'PY'
+          import json,sqlite3
+          db=sqlite3.connect('build/fish/fish.sqlite')
+          report={
+            'taxa':db.execute("select count(*) from taxon where library_group='Cá nước ngọt'").fetchone()[0],
+            'media':db.execute('select count(*) from species_media').fetchone()[0],
+            'vernacular':db.execute('select count(*) from vernacular_name').fetchone()[0],
+            'occurrence':db.execute('select count(*) from occurrence_summary').fetchone()[0],
+            'integrity':db.execute('pragma integrity_check').fetchone()[0],
+          }
+          db.close()
+          assert report['taxa']==2,report
+          assert report['media']==1,report
+          assert report['vernacular']==2,report
+          assert report['integrity']=='ok',report
+          open('build/fish/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
+          print(report)
+          PY
+
+      - name: Upload validated fish ingestion fixture
+        uses: actions/upload-artifact@v4
+        with:
+          name: FieldIntelligence-freshwater-fish-ingestion-validation
+          path: |
+            build/fish/fish.sqlite
+            build/fish/fish.meta.json
+            build/fish/ingestion-report.json
+          if-no-files-found: error
+          retention-days: 30
