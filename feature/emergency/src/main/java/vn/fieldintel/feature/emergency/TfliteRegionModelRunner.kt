@@ -96,6 +96,17 @@ class TfliteRegionModelRunner(context: Context) : LiveVisualModelRunner, AutoClo
         runCatching {
             val manifest = JSONObject(manifestFile.readText(Charsets.UTF_8))
             require(manifest.optInt("schemaVersion", 0) == 1) { "Model manifest schema không hỗ trợ" }
+            require(manifest.optString("taskType") == TASK_TYPE_OBJECT_DETECTOR) {
+                "Model đã cài không phải OBJECT_DETECTOR cho quét vùng"
+            }
+            require(manifest.optString("modelFormat") == MODEL_FORMAT_TFLITE_TASK_VISION) {
+                "Định dạng model không phải TFLITE_TASK_VISION được hỗ trợ"
+            }
+            require(manifest.optBoolean("speciesSafetyClaims", false).not()) {
+                "Model không được gắn tuyên bố ăn được/độc tính/y khoa như kết luận hình ảnh"
+            }
+            val declaredSize = manifest.optLong("sizeBytes", -1L)
+            require(declaredSize == modelFile.length()) { "Kích thước model không khớp manifest" }
             val expectedSha = manifest.getString("sha256").lowercase(Locale.ROOT)
             require(expectedSha.matches(Regex("[0-9a-f]{64}"))) { "SHA-256 trong manifest không hợp lệ" }
             val actualSha = sha256(modelFile)
@@ -140,6 +151,8 @@ class TfliteRegionModelRunner(context: Context) : LiveVisualModelRunner, AutoClo
     companion object {
         const val MODEL_FILE = "region-model.tflite"
         const val MANIFEST_FILE = "region-model.manifest.json"
+        const val TASK_TYPE_OBJECT_DETECTOR = "OBJECT_DETECTOR"
+        const val MODEL_FORMAT_TFLITE_TASK_VISION = "TFLITE_TASK_VISION"
 
         private fun sha256(file: File): String {
             val digest = MessageDigest.getInstance("SHA-256")
