@@ -9,6 +9,10 @@ import kotlin.math.min
  * Every current track is emitted so the overlay can show "ĐANG XÁC MINH" while it accumulates
  * repeated observations. A track is marked stable only after stableHitsRequired matching frames.
  * The stabilizer never creates a taxon name; it only filters, tracks and smooths model output.
+ *
+ * Object detectors can emit several highly-overlapping boxes for the same plant cluster. Those
+ * duplicates are suppressed per taxon before track association so one physical cluster does not
+ * become several counters merely because the detector jittered or duplicated a proposal.
  */
 class RegionDetectionStabilizer(
     private val stableHitsRequired: Int = 3,
@@ -16,7 +20,8 @@ class RegionDetectionStabilizer(
     private val minIoU: Float = 0.20f,
     private val centerTolerance: Float = 0.18f,
     private val confidenceAlpha: Float = 0.45f,
-    private val boxAlpha: Float = 0.40f
+    private val boxAlpha: Float = 0.40f,
+    private val duplicateDetectionIoU: Float = 0.65f
 ) {
     init {
         require(stableHitsRequired in 2..8)
@@ -25,6 +30,7 @@ class RegionDetectionStabilizer(
         require(centerTolerance in 0.02f..0.5f)
         require(confidenceAlpha in 0.05f..1f)
         require(boxAlpha in 0.05f..1f)
+        require(duplicateDetectionIoU in 0.40f..0.95f)
     }
 
     private data class Track(
@@ -49,8 +55,9 @@ class RegionDetectionStabilizer(
     fun update(detections: List<VisualDetection>): List<VisualDetection> {
         tracks.forEach { it.misses += 1 }
         val claimed = mutableSetOf<Long>()
+        val deduplicated = suppressDuplicateDetections(detections)
 
-        detections.sortedByDescending { it.confidence }.forEach { detection ->
+        deduplicated.sortedByDescending { it.confidence }.forEach { detection ->
             val best = tracks
                 .asSequence()
                 .filter { it.id !in claimed && sameIdentity(it, detection) }
@@ -105,14 +112,44 @@ class RegionDetectionStabilizer(
             .toList()
     }
 
-    private fun sameIdentity(track: Track, detection: VisualDetection): Boolean {
-        val trackScientific = track.scientificName?.trim().orEmpty()
-        val detectionScientific = detection.scientificName?.trim().orEmpty()
-        return if (trackScientific.isNotBlank() || detectionScientific.isNotBlank()) {
-            trackScientific.isNotBlank() && detectionScientific.isNotBlank() &&
-                trackScientific.equals(detectionScientific, ignoreCase = true)
+    /**
+     * Identity-aware non-maximum suppression.
+     *
+     * Only highly-overlapping boxes with the same scientific identity (or the same label when no
+     * scientific name exists) are collapsed. Different taxa are never merged, and spatially separate
+     * patches of the same taxon remain independent tracks.
+     */
+    private fun suppressDuplicateDetections(detections: List<VisualDetection>): List<VisualDetection> {
+        if (detections.size < 2) return detections
+        val kept = mutableListOf<VisualDetection>()
+        detections.sortedByDescending { it.confidence }.forEach { candidate ->
+            val duplicate = kept.any { existing ->
+                sameIdentity(existing, candidate) && iou(existing.box, candidate.box) >= duplicateDetectionIoU
+            }
+            if (!duplicate) kept += candidate
+        }
+        return kept
+    }
+
+    private fun sameIdentity(track: Track, detection: VisualDetection): Boolean =
+        sameIdentity(track.scientificName, track.label, detection.scientificName, detection.label)
+
+    private fun sameIdentity(a: VisualDetection, b: VisualDetection): Boolean =
+        sameIdentity(a.scientificName, a.label, b.scientificName, b.label)
+
+    private fun sameIdentity(
+        scientificA: String?,
+        labelA: String,
+        scientificB: String?,
+        labelB: String
+    ): Boolean {
+        val firstScientific = scientificA?.trim().orEmpty()
+        val secondScientific = scientificB?.trim().orEmpty()
+        return if (firstScientific.isNotBlank() || secondScientific.isNotBlank()) {
+            firstScientific.isNotBlank() && secondScientific.isNotBlank() &&
+                firstScientific.equals(secondScientific, ignoreCase = true)
         } else {
-            track.label.trim().equals(detection.label.trim(), ignoreCase = true)
+            labelA.trim().equals(labelB.trim(), ignoreCase = true)
         }
     }
 
