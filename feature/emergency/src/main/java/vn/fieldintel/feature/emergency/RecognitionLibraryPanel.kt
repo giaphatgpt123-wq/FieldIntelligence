@@ -170,9 +170,12 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
 
     val selectedCollection = LibraryCollections.byId(selectedCollectionId)
     val curatedResults = selectedCollectionId?.let { id ->
-        val needle = query.trim().lowercase(Locale.ROOT)
-        LibraryCollections.recordsFor(id).filter { record ->
-            needle.isBlank() || record.vietnameseName.lowercase(Locale.ROOT).contains(needle) || record.scientificName.lowercase(Locale.ROOT).contains(needle)
+        if (id == "freshwater-fish") SpeciesCatalog.search(query, "Cá nước ngọt")
+        else {
+            val needle = query.trim().lowercase(Locale.ROOT)
+            LibraryCollections.recordsFor(id).filter { record ->
+                needle.isBlank() || record.vietnameseName.lowercase(Locale.ROOT).contains(needle) || record.scientificName.lowercase(Locale.ROOT).contains(needle)
+            }
         }
     }.orEmpty()
     val starterResults = remember(query, group) { SpeciesCatalog.search(query, group) }
@@ -294,7 +297,7 @@ private fun MetricBox(value:String,label:String,modifier:Modifier=Modifier){
 private fun LibraryGroupGrid(selected:String,onSelect:(String)->Unit){
     val items=listOf(
         Triple("Tất cả","◈","Tất cả nguồn"), Triple("Thực vật","🌿","Cây • cỏ • taxonomy"), Triple("Động vật","🐾","Động vật hoang dã"),
-        Triple("Côn trùng","🐝","Côn trùng • chân khớp"), Triple("Nấm","🍄","Nấm • taxonomy"))
+        Triple("Cá nước ngọt","🐟","20 loài • nguồn GBIF"), Triple("Côn trùng","🐝","Côn trùng • chân khớp"), Triple("Nấm","🍄","Nấm • taxonomy"))
     Text("PHÂN LOẠI NHANH",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
     items.chunked(2).forEach { row ->
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)) {
@@ -435,4 +438,4 @@ private fun SearchStatusBanner(text:String){
 private fun SafetyBanner(text:String){Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF2E2520),border=BorderStroke(1.dp,Color(0x33FFC857))){Text(text,Modifier.fillMaxWidth().padding(14.dp),color=Color(0xFFFFC857),fontWeight=FontWeight.Medium)}}
 
 private fun formatCount(value:Long):String=when{value>=1_000_000->String.format(Locale.US,"%.2fM",value/1_000_000.0);value>=1_000->String.format(Locale.US,"%.1fK",value/1_000.0);else->value.toString()}
-private fun groupIcon(group:String):String=when(group){"Thực vật"->"🌿";"Động vật"->"🐾";"Côn trùng"->"🐝";"Nấm"->"🍄";else->"◈"}
+private fun groupIcon(group:String):String=when(group){"Thực vật"->"🌿";"Động vật"->"🐾";"Cá nước ngọt"->"🐟";"Côn trùng"->"🐝";"Nấm"->"🍄";else->"◈"}
