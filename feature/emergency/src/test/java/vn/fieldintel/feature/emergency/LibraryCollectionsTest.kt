@@ -57,6 +57,7 @@ class LibraryCollectionsTest {
         val toxic = LibraryCollections.recordsFor("toxic-plants")
         assertTrue(toxic.any { it.id == "ricinus-communis" })
         assertTrue(toxic.any { it.id == "abrus-precatorius" })
+        assertTrue(toxic.any { it.id == "nerium-oleander" })
     }
 
     @Test
