@@ -13,8 +13,8 @@ class TwoStageVisualModelBundleBuilderTest(unittest.TestCase):
     def args(self, root: Path, **overrides):
         detector = root / "detector.tflite"
         classifier = root / "classifier.tflite"
-        detector.write_bytes(b"TFL3-detector-fixture")
-        classifier.write_bytes(b"TFL3-classifier-fixture")
+        detector.write_bytes(b"\x18\x00\x00\x00TFL3-detector-fixture")
+        classifier.write_bytes(b"\x18\x00\x00\x00TFL3-classifier-fixture")
         values = dict(
             detector=str(detector),
             classifier=str(classifier),
@@ -77,6 +77,14 @@ class TwoStageVisualModelBundleBuilderTest(unittest.TestCase):
             args = self.args(root)
             Path(args.classifier).unlink()
             with self.assertRaises(ValueError):
+                build_bundle(args)
+
+    def test_rejects_non_tflite_component(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            args = self.args(root)
+            Path(args.detector).write_bytes(b"not-a-model")
+            with self.assertRaisesRegex(ValueError, "not a TensorFlow Lite file"):
                 build_bundle(args)
 
     def test_requires_provenance_and_validation_note(self):
