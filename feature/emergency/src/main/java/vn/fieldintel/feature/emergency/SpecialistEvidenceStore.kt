@@ -77,6 +77,32 @@ class SpecialistEvidenceStore(context: Context) {
         }.getOrElse { emptySet() }
     }
 
+    fun scientificNamesFor(domain: EvidenceDomain, limit: Int = 5000): Set<String> {
+        if (!databaseFile.isFile) return emptySet()
+        val safeLimit = limit.coerceIn(1, 20_000)
+        return runCatching {
+            openReadOnly().use { db ->
+                requireSchema(db)
+                db.rawQuery(
+                    """
+                    SELECT DISTINCT scientific_name
+                    FROM evidence
+                    WHERE domain = ? AND scientific_name <> ''
+                    ORDER BY scientific_name_search
+                    LIMIT $safeLimit
+                    """.trimIndent(),
+                    arrayOf(domain.name)
+                ).use { cursor ->
+                    buildSet {
+                        while (cursor.moveToNext()) {
+                            cursor.getString(0)?.takeIf { it.isNotBlank() }?.let(::add)
+                        }
+                    }
+                }
+            }
+        }.getOrElse { emptySet() }
+    }
+
     private fun queryEvidence(where: String, args: Array<String>, limit: Int): List<SpecialistEvidenceRecord> {
         val safeLimit = limit.coerceIn(1, 200)
         return runCatching {
