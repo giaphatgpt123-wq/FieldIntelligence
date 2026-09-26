@@ -13,7 +13,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 ALLOWED_DOMAINS = {
     "VIETNAM_TRADITIONAL_MEDICINE",
     "HERBAL_MEDICINE_MONOGRAPH",
@@ -40,6 +40,8 @@ def create_schema(db: sqlite3.Connection) -> None:
         CREATE TABLE evidence (
             evidence_id TEXT PRIMARY KEY,
             species_id TEXT NOT NULL,
+            scientific_name TEXT NOT NULL,
+            scientific_name_search TEXT NOT NULL,
             domain TEXT NOT NULL,
             evidence_class TEXT NOT NULL,
             title TEXT NOT NULL,
@@ -56,6 +58,7 @@ def create_schema(db: sqlite3.Connection) -> None:
             last_verified TEXT NOT NULL DEFAULT ''
         ) WITHOUT ROWID;
         CREATE INDEX idx_evidence_species ON evidence(species_id);
+        CREATE INDEX idx_evidence_scientific_name ON evidence(scientific_name_search);
         CREATE INDEX idx_evidence_domain ON evidence(domain);
         CREATE INDEX idx_evidence_class ON evidence(evidence_class);
         CREATE INDEX idx_evidence_source_id ON evidence(source_id);
@@ -73,6 +76,7 @@ def require_text(record: dict, key: str) -> str:
 def row_from_record(record: dict) -> tuple:
     evidence_id = require_text(record, "evidenceId")
     species_id = require_text(record, "speciesId")
+    scientific_name = require_text(record, "scientificName")
     domain = require_text(record, "domain")
     evidence_class = require_text(record, "evidenceClass")
     title = require_text(record, "title")
@@ -91,6 +95,8 @@ def row_from_record(record: dict) -> tuple:
     return (
         evidence_id,
         species_id,
+        scientific_name,
+        scientific_name.casefold(),
         domain,
         evidence_class,
         title,
@@ -133,10 +139,11 @@ def build(input_path: Path, output_path: Path) -> dict:
         db.executemany(
             """
             INSERT INTO evidence (
-                evidence_id, species_id, domain, evidence_class, title, statement, plant_part,
-                source_name, source_url, source_record, scope_note, source_id, source_record_id,
-                jurisdiction, source_date, last_verified
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                evidence_id, species_id, scientific_name, scientific_name_search, domain,
+                evidence_class, title, statement, plant_part, source_name, source_url,
+                source_record, scope_note, source_id, source_record_id, jurisdiction,
+                source_date, last_verified
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """,
             rows,
         )
