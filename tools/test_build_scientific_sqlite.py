@@ -112,6 +112,10 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
             result = module.build(source, output)
             self.assertEqual(2, result["mediaRecordCount"])
             self.assertEqual(1, result["recordsWithMedia"])
+            self.assertEqual(1, result["fishTaxa"])
+            self.assertEqual(1, result["fishWithMedia"])
+            self.assertEqual(0, result["fishPendingMedia"])
+            self.assertEqual("requires-at-least-one-licensed-media", result["fishPublishRule"])
             db = sqlite3.connect(output)
             try:
                 media = db.execute(
