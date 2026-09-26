@@ -1,0 +1,45 @@
+name: Verify Public Plant Model
+
+on:
+  push:
+    paths: [ ".github/workflows/model-source-probe.yml" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download the Google AIY plants classifier and labelmap
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p model
+          curl --fail --location --retry 3 --max-time 180 \
+            'https://tfhub.dev/google/lite-model/aiy/vision/classifier/plants_V1/3?lite-format=tflite' \
+            -o model/aiy-plants-v1.tflite
+          curl --fail --location --retry 3 --max-time 90 \
+            'https://www.gstatic.com/aihub/tfhub/labelmaps/aiy_plants_V1_labelmap.csv' \
+            -o model/labels.csv
+          python3 - <<'PY'
+          from pathlib import Path
+          import csv, hashlib
+          model = Path('model/aiy-plants-v1.tflite')
+          labels = Path('model/labels.csv')
+          assert 1024 < model.stat().st_size < 160*1024*1024
+          assert model.read_bytes()[4:8] == b'TFL3', model.read_bytes()[:16]
+          rows = list(csv.reader(labels.open(encoding='utf-8')))
+          assert len(rows) >= 2000, len(rows)
+          print({'modelBytes': model.stat().st_size,
+                 'modelSha256': hashlib.sha256(model.read_bytes()).hexdigest(),
+                 'labelCount': len(rows), 'sampleLabels': rows[:3]})
+          PY
+      - name: Upload verified model for compatibility investigation
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-aiy-plants-model-probe
+          path: model/
+          retention-days: 3
