@@ -18,6 +18,16 @@ class SpeciesCatalogTest {
         assertEquals("psidium-guajava", SpeciesCatalog.search("psidium guajava").single().id)
     }
 
+    @Test fun freshwaterFishCollectionIsCompleteAndSearchableOffline() {
+        val fish = LibraryCollections.recordsFor("freshwater-fish")
+        assertEquals(20, fish.size)
+        assertEquals(fish.size, fish.map { it.id }.toSet().size)
+        assertTrue(fish.all { it.group == "Cá nước ngọt" && it.sourceUrl.startsWith("https://www.gbif.org/taxon/") })
+        assertEquals("anabas-testudineus", SpeciesCatalog.search("ca ro dong", "Cá nước ngọt").single().id)
+        assertEquals("pangasianodon-hypophthalmus", SpeciesCatalog.search("pangasianodon hypophthalmus", "Cá nước ngọt").single().id)
+        assertEquals("chitala-ornata", SpeciesCatalog.search("ca that lat cuom", "Cá nước ngọt").single().id)
+    }
+
     @Test fun sourcedGroupsReturnOnlyMatchingRecords() {
         SpeciesCatalog.groups.forEach { group ->
             val matches = SpeciesCatalog.search("", group)
