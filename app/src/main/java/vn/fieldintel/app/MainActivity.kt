@@ -117,7 +117,7 @@ class MainActivity:ComponentActivity(){
  fun checkConfiguredDataUpdate(){
   if(!UpdateConfig.configured){
    if(scientificImportBusy){updateStatus="Đang cài thư viện khoa học…";return}
-   updateStatus="Chọn ZIP FieldIntelligence-WFO-scientific-library để cài taxonomy + specialist evidence offline."
+   updateStatus="Chọn ZIP WFO đầy đủ hoặc WFO mobile để cài taxonomy + bằng chứng chuyên ngành offline."
    selectScientificBundle.launch(arrayOf("application/zip","application/octet-stream","application/x-zip-compressed"))
    return
   }
