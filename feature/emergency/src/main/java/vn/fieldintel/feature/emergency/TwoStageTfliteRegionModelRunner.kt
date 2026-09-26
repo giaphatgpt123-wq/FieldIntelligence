@@ -251,8 +251,15 @@ internal class TfliteCropClassifier(
         return try {
             classifier.classify(TensorImage.fromBitmap(crop))
                 .flatMap { it.categories }
+                .filter { category ->
+                    val label = category.label.trim()
+                    label.isNotEmpty() &&
+                        !label.equals("background", ignoreCase = true) &&
+                        !label.equals("unknown", ignoreCase = true) &&
+                        !label.matches(Regex("class-\\d+", RegexOption.IGNORE_CASE))
+                }
                 .map { category ->
-                    val raw = category.label.ifBlank { "class-${category.index}" }
+                    val raw = category.label.trim()
                     val mapped = ModelClassNameParser.parse(raw)
                     RegionClassification(
                         label = mapped.displayLabel,
