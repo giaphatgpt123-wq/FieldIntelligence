@@ -83,6 +83,25 @@ jobs:
           print({'packRecords': count, 'packBytes': output.stat().st_size})
           PY
 
+      - name: Bundle verified Google AIY Plants model
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p app/src/main/assets/visual-model
+          curl --fail --location --retry 3 --max-time 180 \
+            'https://tfhub.dev/google/lite-model/aiy/vision/classifier/plants_V1/3?lite-format=tflite' \
+            -o app/src/main/assets/visual-model/aiy-plants-v1.tflite
+          echo '9ff2cc02d066fc266045ce299f04fb76907d9313d576881b61c255aa19433521  app/src/main/assets/visual-model/aiy-plants-v1.tflite' | sha256sum -c -
+          python3 - <<'PY'
+          from pathlib import Path
+          import io,zipfile
+          data=Path('app/src/main/assets/visual-model/aiy-plants-v1.tflite').read_bytes()
+          assert data[4:8]==b'TFL3'
+          with zipfile.ZipFile(io.BytesIO(data)) as model:
+              names=model.read('probability-labels-en.txt').decode().splitlines()
+              assert len(names)==2102 and names[0]=='Betula lenta'
+          PY
+
       - name: Build Main and Debug APKs
         run: gradle --no-daemon :app:assembleRelease :app:assembleDebug
 
