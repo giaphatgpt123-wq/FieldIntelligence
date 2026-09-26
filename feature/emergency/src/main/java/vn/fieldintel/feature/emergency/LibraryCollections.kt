@@ -3,9 +3,8 @@ package vn.fieldintel.feature.emergency
 /**
  * Curated navigation collections for the small starter catalog.
  *
- * These labels are UI organization only. They are not evidence that a plant is edible,
- * medicinal, toxic, or safe to use. High-risk claims remain in separately sourced evidence
- * layers such as InteractionCatalog and future medicinal/toxicology datasets.
+ * Taxonomy-only groups may be curated directly. High-risk labels such as medicinal or toxic are
+ * derived only from SpecialistEvidenceCatalog, never from taxonomy or common-name inference.
  */
 data class LibraryCollection(
     val id: String,
@@ -21,8 +20,8 @@ object LibraryCollections {
             id = "traditional-medicine",
             label = "Cây thuốc Đông y",
             icon = "⚕",
-            subtitle = "Chỉ hiện hồ sơ có lớp bằng chứng dược liệu riêng",
-            recordIds = emptySet()
+            subtitle = "Chỉ hiện hồ sơ có bằng chứng dược liệu chính thức",
+            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE)
         ),
         LibraryCollection(
             id = "vegetables",
@@ -57,7 +56,7 @@ object LibraryCollections {
             label = "Cây độc",
             icon = "⚠",
             subtitle = "Chỉ hiện khi có bằng chứng độc tính chuyên ngành",
-            recordIds = emptySet()
+            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.TOXICOLOGY)
         ),
         LibraryCollection(
             id = "mushrooms",
