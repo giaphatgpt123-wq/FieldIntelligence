@@ -23,7 +23,7 @@ class LiveVisualModelTest {
     }
 
     @Test
-    fun targetMatcherPrefersExactScientificName() {
+    fun targetMatcherRequiresExactScientificNameWhenTargetProvidesIt() {
         val target = LiveVisualSearchTarget("rau má", scientificName = "Centella asiatica")
         val correct = VisualDetection(
             label = "Gotu kola",
@@ -32,9 +32,11 @@ class LiveVisualModelTest {
             box = NormalizedBox(0.1f, 0.1f, 0.4f, 0.4f)
         )
         val wrong = correct.copy(scientificName = "Hydrocotyle vulgaris")
+        val missingScientificName = correct.copy(label = "rau má", scientificName = null)
 
         assertTrue(LiveVisualTargetMatcher.matches(target, correct))
         assertFalse(LiveVisualTargetMatcher.matches(target, wrong))
+        assertFalse(LiveVisualTargetMatcher.matches(target, missingScientificName))
     }
 
     @Test
