@@ -11,7 +11,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LiveVisualSearchActivity" android:exported="true" android:label="Tìm trong thực tế">
+        <activity android:name=".LiveVisualSearchActivity" android:exported="true" android:label="Quét vùng thực tế">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
