@@ -31,6 +31,12 @@ class VisualModelImportManager(context: Context) {
 
             val manifest = JSONObject(manifestFile.readText(Charsets.UTF_8))
             require(manifest.optInt("schemaVersion", 0) == 1) { "Model manifest schema không hỗ trợ" }
+            require(manifest.optString("taskType") == TfliteRegionModelRunner.TASK_TYPE_OBJECT_DETECTOR) {
+                "Gói model không phải OBJECT_DETECTOR cho quét vùng"
+            }
+            require(manifest.optString("modelFormat") == TfliteRegionModelRunner.MODEL_FORMAT_TFLITE_TASK_VISION) {
+                "Gói model không dùng định dạng TFLITE_TASK_VISION được hỗ trợ"
+            }
             val modelId = manifest.getString("id").trim()
             val version = manifest.getString("version").trim()
             val sourceName = manifest.getString("sourceName").trim()
@@ -41,6 +47,8 @@ class VisualModelImportManager(context: Context) {
                 "Gói model không được chứa tuyên bố ăn được/độc tính/y khoa như kết luận hình ảnh"
             }
 
+            val declaredSize = manifest.optLong("sizeBytes", -1L)
+            require(declaredSize == model.length()) { "Kích thước model không khớp manifest" }
             val expectedSha = manifest.getString("sha256").lowercase(Locale.ROOT)
             require(expectedSha.matches(Regex("[0-9a-f]{64}"))) { "SHA-256 trong manifest không hợp lệ" }
             require(sha256(model) == expectedSha) { "SHA-256 model không khớp manifest" }
