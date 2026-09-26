@@ -9,20 +9,28 @@ class SpeciesCatalogTest {
         assertEquals("mangifera-indica", SpeciesCatalog.search("xoai").single().id)
         assertEquals("musa-acuminata", SpeciesCatalog.search("MUSA ACUMINATA").single().id)
         assertEquals("cocos-nucifera", SpeciesCatalog.search("dua").single().id)
+        assertEquals("centella-asiatica", SpeciesCatalog.search("rau ma").single().id)
     }
 
     @Test fun sourcedGroupsReturnOnlyMatchingRecords() {
-        val insects = SpeciesCatalog.search("", "Côn trùng")
-        val animals = SpeciesCatalog.search("", "Động vật")
-        assertTrue(insects.isNotEmpty() && insects.all { it.group == "Côn trùng" })
-        assertTrue(animals.isNotEmpty() && animals.all { it.group == "Động vật" })
+        SpeciesCatalog.groups.forEach { group ->
+            val matches = SpeciesCatalog.search("", group)
+            assertTrue("Expected records for $group", matches.isNotEmpty())
+            assertTrue(matches.all { it.group == group })
+            assertEquals(matches.size, SpeciesCatalog.countByGroup(group))
+        }
         assertEquals("aedes-aegypti", SpeciesCatalog.search("muoi van").single().id)
         assertEquals("varanus-salvator", SpeciesCatalog.search("ky da nuoc").single().id)
+        assertEquals("ganoderma-lucidum", SpeciesCatalog.search("ganoderma lucidum").single().id)
     }
 
-    @Test fun missingGroupNeverReturnsInventedSpecies() {
+    @Test fun sourceProvenanceAndUnknownBehaviorRemainExplicit() {
         assertTrue(SpeciesCatalog.search("rắn").isEmpty())
-        assertTrue(SpeciesCatalog.search("", "Nấm").isEmpty())
-        assertTrue(SpeciesCatalog.records.all { it.sourceUrl.startsWith("https://") && it.sourceScope.isNotBlank() })
+        assertTrue(SpeciesCatalog.records.all {
+            it.sourceUrl.startsWith("https://") && it.sourceName.isNotBlank() && it.sourceScope.isNotBlank()
+        })
+        assertTrue(SpeciesCatalog.records.none {
+            it.sourceScope.contains("ăn được", ignoreCase = true) && !it.sourceScope.contains("không", ignoreCase = true)
+        })
     }
 }
