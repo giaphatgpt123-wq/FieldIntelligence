@@ -1,0 +1,12 @@
+{
+  "id": "google-aiy-plants-v1-3",
+  "source": "Google AIY / TensorFlow Hub",
+  "url": "https://tfhub.dev/google/lite-model/aiy/vision/classifier/plants_V1/3",
+  "license": "Apache-2.0",
+  "sha256": "9ff2cc02d066fc266045ce299f04fb76907d9313d576881b61c255aa19433521",
+  "format": "TensorFlow Lite Task Vision ImageClassifier",
+  "embeddedLabelCount": 2102,
+  "modelScope": "single-subject plant photograph; 2101 candidate species labels plus background",
+  "notValidatedFor": "Vietnamese field conditions; poisonous or edible decisions; multiple objects; fish and fungi",
+  "sourceLabelNote": "Google AIY embedded English metadata, historic taxonomy may differ from WFO"
+}
