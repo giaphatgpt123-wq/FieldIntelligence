@@ -150,7 +150,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     }
 
     val starterSelected = SpeciesCatalog.records.firstOrNull { it.id == selectedId }
-    val externalSelected = remember(selectedId) { selectedId?.let(store::findById) }
+    val externalSelected = selectedId?.let(store::findById)
     val selected = externalSelected ?: starterSelected
     if(selected != null) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -161,21 +161,21 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     }
 
     val selectedCollection = LibraryCollections.byId(selectedCollectionId)
-    val curatedResults = remember(selectedCollectionId, query) {
-        selectedCollectionId?.let { id ->
-            val needle = query.trim().lowercase(Locale.ROOT)
-            LibraryCollections.recordsFor(id).filter { record ->
-                needle.isBlank() || record.vietnameseName.lowercase(Locale.ROOT).contains(needle) || record.scientificName.lowercase(Locale.ROOT).contains(needle)
-            }
-        }.orEmpty()
-    }
+    val curatedResults = selectedCollectionId?.let { id ->
+        val needle = query.trim().lowercase(Locale.ROOT)
+        LibraryCollections.recordsFor(id).filter { record ->
+            needle.isBlank() || record.vietnameseName.lowercase(Locale.ROOT).contains(needle) || record.scientificName.lowercase(Locale.ROOT).contains(needle)
+        }
+    }.orEmpty()
     val starterResults = remember(query, group) { SpeciesCatalog.search(query, group) }
-    val externalResults = remember(query, group, storeStatus.installed, selectedCollectionId) {
-        if (selectedCollectionId == null && storeStatus.installed && query.trim().length >= 2) store.search(query, group, 80) else emptyList()
-    }
+    val externalSearchRequested = selectedCollectionId == null && storeStatus.installed && query.trim().length >= 2
+    val externalResults = if (externalSearchRequested) store.search(query, group, 80) else emptyList()
+    val externalSearching = externalSearchRequested && store.isSearching(query, group, 80)
+    val externalSearchCompleted = externalSearchRequested && store.isSearchCompleted(query, group, 80)
     val results = when {
         selectedCollection != null -> curatedResults
-        externalResults.isNotEmpty() -> externalResults
+        externalSearchRequested -> externalResults
+        storeStatus.installed -> emptyList()
         else -> starterResults
     }
     val totalCount = if (storeStatus.installed && storeStatus.recordCount > 0) storeStatus.recordCount else SpeciesCatalog.records.size.toLong()
@@ -211,7 +211,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                 )
                 Text(
                     when {
-                        selectedCollection!=null -> "${selectedCollection.recordIds.size} hồ sơ lõi đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
+                        selectedCollection!=null -> "${selectedCollection.recordIds.size} hồ sơ đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
                         storeStatus.installed -> "Đang dùng gói WFO ${storeStatus.sourceVersion.ifBlank { "offline" }} • ${formatCount(storeStatus.recordCount)} hồ sơ taxonomy"
                         else -> "Chưa cài gói SQLite khoa học lớn • đang dùng ${SpeciesCatalog.records.size} hồ sơ lõi trong APK"
                     },
@@ -226,7 +226,10 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                 Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
                 results.forEach { record -> SpeciesResultCard(record){selectedId=record.id} }
             }
-            query.isBlank() && storeStatus.installed -> SafetyBanner("Nhập tên khoa học để tra trong ${formatCount(storeStatus.recordCount)} hồ sơ. CSDL lớn không tự liệt kê toàn bộ để tránh tải nặng giao diện.")
+            storeStatus.installed && query.isBlank() -> SafetyBanner("Nhập tên khoa học để tra trong ${formatCount(storeStatus.recordCount)} hồ sơ. CSDL lớn không tự liệt kê toàn bộ để tránh tải nặng giao diện.")
+            storeStatus.installed && query.trim().length < 2 -> SafetyBanner("Nhập ít nhất 2 ký tự để bắt đầu tra cứu WFO offline.")
+            externalSearching -> SearchStatusBanner("ĐANG TÌM TRONG WFO OFFLINE…")
+            externalSearchCompleted && results.isEmpty() -> SafetyBanner("Không tìm thấy hồ sơ phù hợp trong WFO offline. Ứng dụng không thay kết quả bằng dữ liệu lõi và không suy ra mẫu vật an toàn hoặc không tồn tại.")
             results.isEmpty() -> SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy trong dữ liệu không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
             else -> {
                 Text("KẾT QUẢ • ${results.size}", fontWeight=FontWeight.Black, style=MaterialTheme.typography.titleMedium)
@@ -334,7 +337,7 @@ private fun SpeciesResultCard(record:SpeciesRecord,onClick:()->Unit){
 
 @Composable
 private fun SpeciesDetailCard(selected:SpeciesRecord,uriHandler:androidx.compose.ui.platform.UriHandler){
-    val collections=remember(selected.id){LibraryCollections.items.filter{selected.id in it.recordIds}}
+    val collections=LibraryCollections.items.filter{selected.id in it.recordIds}
     Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(28.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33)),border=BorderStroke(1.dp,Color(0x3345E58C))){
         Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
             Surface(shape=RoundedCornerShape(20.dp),color=Color(0x2245E58C)){Text(groupIcon(selected.group),Modifier.padding(16.dp),style=MaterialTheme.typography.headlineLarge)}
@@ -404,6 +407,16 @@ private fun DataProvenanceCard(status:ScientificLibraryStatus){
                 if(status.sourceDoi.isNotBlank()) Text("DOI: ${status.sourceDoi}",color=FieldColors.onSurfaceVariant)
                 Text("Phạm vi: ${status.scope}. Dữ liệu taxonomy được tách khỏi lớp Đông y, độc tính, thực phẩm và tương tác.",color=FieldColors.onSurfaceVariant)
             }else Text("Chưa cài gói SQLite khoa học ngoài APK. Bộ lõi vẫn giữ nguồn riêng theo từng hồ sơ.",color=FieldColors.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun SearchStatusBanner(text:String){
+    Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF12323A),border=BorderStroke(1.dp,Color(0x3345E58C))){
+        Row(Modifier.fillMaxWidth().padding(14.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)){
+            CircularProgressIndicator(modifier=Modifier.size(22.dp),strokeWidth=2.dp,color=FieldColors.primary)
+            Text(text,color=FieldColors.primary,fontWeight=FontWeight.Bold)
         }
     }
 }
