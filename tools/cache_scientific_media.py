@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Cache explicitly reusable scientific reference images for offline FieldIntelligence packs.
 
-Input is normalized scientific NDJSON(.gz). Only HTTPS image media carrying an accepted reusable
-license are eligible. The cache keeps source provenance in a separate manifest and never treats a
-reference image as proof of specimen identity, edibility, toxicity, or medical safety.
+Only public HTTPS JPEG/PNG/WebP media with an accepted reusable licence are eligible. Reference
+media remains evidence for visual comparison only; it is never specimen-identification, edibility,
+toxicity or treatment evidence.
 """
 from __future__ import annotations
 
@@ -14,44 +14,31 @@ import ipaddress
 import json
 import mimetypes
 import socket
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
 
 ALLOWED_LICENSES = {
-    "CC0-1.0",
-    "CC-BY-4.0",
-    "CC-BY-NC-4.0",
+    "CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
     "https://creativecommons.org/publicdomain/zero/1.0/",
     "https://creativecommons.org/licenses/by/4.0/",
     "https://creativecommons.org/licenses/by-nc/4.0/",
 }
-ALLOWED_CONTENT_TYPES = {
-    "image/jpeg": ".jpg",
-    "image/png": ".png",
-    "image/webp": ".webp",
-}
-DEFAULT_MAX_BYTES = 8 * 1024 * 1024
-DEFAULT_MAX_PER_RECORD = 3
+ALLOWED_CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
+DEFAULT_MAX_BYTES = 5 * 1024 * 1024
+DEFAULT_MAX_TOTAL_BYTES = 256 * 1024 * 1024
+DEFAULT_MAX_PER_RECORD = 2
 USER_AGENT = "FieldIntelligence-scientific-media/1.0"
 
 
 def open_text(path: Path):
-    if path.suffix == ".gz":
-        return gzip.open(path, "rt", encoding="utf-8")
-    return path.open("r", encoding="utf-8")
+    return gzip.open(path, "rt", encoding="utf-8") if path.suffix == ".gz" else path.open("r", encoding="utf-8")
 
 
 def is_public_address(address: str) -> bool:
     ip = ipaddress.ip_address(address)
-    return not (
-        ip.is_private
-        or ip.is_loopback
-        or ip.is_link_local
-        or ip.is_multicast
-        or ip.is_reserved
-        or ip.is_unspecified
-    )
+    return not (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast or ip.is_reserved or ip.is_unspecified)
 
 
 def validate_public_https_url(url: str) -> urllib.parse.ParseResult:
@@ -75,16 +62,22 @@ class SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def media_items(record: dict):
+def raw_media_items(record: dict) -> list[dict]:
     items = record.get("mediaItems") or []
     if not items and record.get("media"):
         items = [record.get("media") or {}]
-    for item in items:
-        identifier = str(item.get("identifier") or "").strip()
-        license_id = str(item.get("license") or "").strip()
-        media_type = str(item.get("mediaType") or item.get("type") or "").strip().casefold()
-        if identifier and license_id in ALLOWED_LICENSES and (not media_type or "image" in media_type):
-            yield item
+    return [item for item in items if isinstance(item, dict)]
+
+
+def is_eligible_media(item: dict) -> bool:
+    identifier = str(item.get("identifier") or "").strip()
+    license_id = str(item.get("license") or "").strip()
+    media_type = str(item.get("mediaType") or item.get("type") or "").strip().casefold()
+    return bool(identifier and license_id in ALLOWED_LICENSES and (not media_type or "image" in media_type))
+
+
+def media_items(record: dict):
+    yield from (item for item in raw_media_items(record) if is_eligible_media(item))
 
 
 def extension_for(content_type: str, url: str) -> str | None:
@@ -96,8 +89,7 @@ def extension_for(content_type: str, url: str) -> str | None:
         return ".jpg"
     if suffix in {".png", ".webp"}:
         return suffix
-    guessed = mimetypes.guess_type(url)[0]
-    return ALLOWED_CONTENT_TYPES.get(guessed or "")
+    return ALLOWED_CONTENT_TYPES.get(mimetypes.guess_type(url)[0] or "")
 
 
 def download_image(url: str, max_bytes: int, timeout: int = 20) -> tuple[bytes, str, str]:
@@ -122,16 +114,22 @@ def download_image(url: str, max_bytes: int, timeout: int = 20) -> tuple[bytes, 
         return data, ext, final_url
 
 
-def build(input_path: Path, media_dir: Path, manifest_path: Path, max_bytes: int = DEFAULT_MAX_BYTES, max_per_record: int = DEFAULT_MAX_PER_RECORD) -> dict:
+def build(
+    input_path: Path,
+    media_dir: Path,
+    manifest_path: Path,
+    max_bytes: int = DEFAULT_MAX_BYTES,
+    max_per_record: int = DEFAULT_MAX_PER_RECORD,
+    max_total_bytes: int = DEFAULT_MAX_TOTAL_BYTES,
+) -> dict:
+    if max_bytes <= 0 or max_total_bytes <= 0 or max_per_record < 0:
+        raise ValueError("media cache limits must be positive")
     media_dir.mkdir(parents=True, exist_ok=True)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     records: list[dict] = []
-    attempted = 0
-    cached = 0
-    rejected = 0
-    failed = 0
-    total_bytes = 0
+    attempted = cached = rejected = failed = skipped_limit = total_bytes = 0
     seen_source_urls: dict[str, dict] = {}
+    stored_hashes: set[str] = set()
 
     with open_text(input_path) as handle:
         for line in handle:
@@ -143,8 +141,12 @@ def build(input_path: Path, media_dir: Path, manifest_path: Path, max_bytes: int
             scientific_name = str(record.get("scientificName") or "").strip()
             if not source_id or not source_record_id or not scientific_name:
                 continue
-            selected = list(media_items(record))[: max(0, max_per_record)]
-            for item in selected:
+            raw = raw_media_items(record)
+            eligible = [item for item in raw if is_eligible_media(item)]
+            rejected += len(raw) - len(eligible)
+            if len(eligible) > max_per_record:
+                skipped_limit += len(eligible) - max_per_record
+            for item in eligible[:max_per_record]:
                 attempted += 1
                 source_url = str(item.get("identifier") or "").strip()
                 if source_url in seen_source_urls:
@@ -156,11 +158,17 @@ def build(input_path: Path, media_dir: Path, manifest_path: Path, max_bytes: int
                 try:
                     data, ext, final_url = download_image(source_url, max_bytes=max_bytes)
                     digest = hashlib.sha256(data).hexdigest()
+                    is_new_file = digest not in stored_hashes
+                    if is_new_file and total_bytes + len(data) > max_total_bytes:
+                        raise SystemExit(
+                            f"scientific media pack would exceed total byte limit: {total_bytes + len(data)} > {max_total_bytes}"
+                        )
                     relative_path = f"media/{digest[:2]}/{digest}{ext}"
                     target = media_dir / digest[:2] / f"{digest}{ext}"
                     target.parent.mkdir(parents=True, exist_ok=True)
-                    if not target.exists():
+                    if is_new_file:
                         target.write_bytes(data)
+                        stored_hashes.add(digest)
                         total_bytes += len(data)
                     entry = {
                         "sourceId": source_id,
@@ -177,7 +185,7 @@ def build(input_path: Path, media_dir: Path, manifest_path: Path, max_bytes: int
                         "license": str(item.get("license") or "").strip(),
                         "mediaType": str(item.get("mediaType") or item.get("type") or "StillImage").strip(),
                     }
-                    seen_source_urls[source_url] = {key: value for key, value in entry.items() if key not in {"sourceId", "sourceRecordId", "scientificName"}}
+                    seen_source_urls[source_url] = {k: v for k, v in entry.items() if k not in {"sourceId", "sourceRecordId", "scientificName"}}
                     records.append(entry)
                     cached += 1
                 except (ValueError, OSError, urllib.error.URLError, urllib.error.HTTPError, socket.timeout):
@@ -191,10 +199,14 @@ def build(input_path: Path, media_dir: Path, manifest_path: Path, max_bytes: int
         "metrics": {
             "attempted": attempted,
             "cachedReferences": cached,
-            "uniqueCachedFiles": len({item["sha256"] for item in records}),
+            "uniqueCachedFiles": len(stored_hashes),
             "failed": failed,
             "rejectedBeforeDownload": rejected,
+            "skippedPerRecordLimit": skipped_limit,
             "totalBytes": total_bytes,
+            "maxTotalBytes": max_total_bytes,
+            "maxBytesPerFile": max_bytes,
+            "maxPerRecord": max_per_record,
         },
         "safety": {
             "referenceMediaIsIdentificationEvidence": False,
@@ -213,9 +225,10 @@ def main() -> None:
     parser.add_argument("--media-dir", required=True, type=Path)
     parser.add_argument("--manifest", required=True, type=Path)
     parser.add_argument("--max-bytes", type=int, default=DEFAULT_MAX_BYTES)
+    parser.add_argument("--max-total-bytes", type=int, default=DEFAULT_MAX_TOTAL_BYTES)
     parser.add_argument("--max-per-record", type=int, default=DEFAULT_MAX_PER_RECORD)
     args = parser.parse_args()
-    manifest = build(args.input, args.media_dir, args.manifest, args.max_bytes, args.max_per_record)
+    manifest = build(args.input, args.media_dir, args.manifest, args.max_bytes, args.max_per_record, args.max_total_bytes)
     print(json.dumps(manifest["metrics"], ensure_ascii=False))
 
 
