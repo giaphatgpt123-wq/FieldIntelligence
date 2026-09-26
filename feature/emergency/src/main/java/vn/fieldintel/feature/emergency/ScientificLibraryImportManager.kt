@@ -6,7 +6,9 @@ import android.net.Uri
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import java.security.MessageDigest
 import java.util.zip.ZipInputStream
+import org.json.JSONObject
 
 /** Installs scientific SQLite packs selected through Android's Storage Access Framework. */
 class ScientificLibraryImportManager(private val context: Context) {
@@ -46,20 +48,36 @@ class ScientificLibraryImportManager(private val context: Context) {
         val message: String
     )
 
-    /** Imports the GitHub Actions artifact ZIP containing both required SQLite files. */
+    private data class ManifestEntry(
+        val sha256: String,
+        val sizeBytes: Long,
+        val schemaVersion: Int,
+        val scope: String
+    )
+
+    /** Imports the GitHub Actions artifact ZIP containing both required SQLite files and manifest. */
     fun importBundle(uri: Uri): BundleImportResult {
         val directory = libraryDirectory()
         val staged = PackType.entries.associateWith { type ->
             File(directory, ".${type.fileName}.incoming").also { it.delete() }
         }
         val found = mutableSetOf<PackType>()
+        var manifestText: String? = null
+        var entryCount = 0
         try {
             context.contentResolver.openInputStream(uri)?.buffered()?.use { input ->
                 ZipInputStream(input).use { zip ->
                     while (true) {
                         val entry = zip.nextEntry ?: break
+                        entryCount += 1
+                        require(entryCount <= MAX_ZIP_ENTRIES) { "Gói ZIP có quá nhiều mục" }
                         if (entry.isDirectory) continue
                         val baseName = entry.name.substringAfterLast('/')
+                        if (baseName == MANIFEST_NAME) {
+                            require(manifestText == null) { "Gói ZIP có manifest trùng" }
+                            manifestText = readZipTextBounded(zip, MAX_MANIFEST_BYTES)
+                            continue
+                        }
                         val type = PackType.entries.firstOrNull { it.fileName == baseName } ?: continue
                         require(type !in found) { "Gói ZIP có tệp trùng: ${type.fileName}" }
                         copyZipEntryBounded(zip, staged.getValue(type), type.maxBytes)
@@ -71,6 +89,8 @@ class ScientificLibraryImportManager(private val context: Context) {
             require(found == PackType.entries.toSet()) {
                 "Gói ZIP phải chứa ${PackType.entries.joinToString { it.fileName }}"
             }
+            val manifest = parseManifest(requireNotNull(manifestText) { "Thiếu $MANIFEST_NAME" })
+            PackType.entries.forEach { type -> verifyManifest(staged.getValue(type), type, manifest.getValue(type)) }
 
             val counts = PackType.entries.associateWith { type -> validate(staged.getValue(type), type) }
             return activateBundle(staged, counts)
@@ -92,6 +112,39 @@ class ScientificLibraryImportManager(private val context: Context) {
         } finally {
             staging.delete()
         }
+    }
+
+    private fun parseManifest(text: String): Map<PackType, ManifestEntry> {
+        val root = JSONObject(text)
+        require(root.optInt("manifestVersion", -1) == 1) { "Manifest version không được hỗ trợ" }
+        require(root.optString("bundle") == EXPECTED_BUNDLE_NAME) { "Tên scientific bundle không hợp lệ" }
+        val files = root.optJSONArray("files") ?: error("Manifest thiếu danh sách files")
+        val entries = mutableMapOf<PackType, ManifestEntry>()
+        for (index in 0 until files.length()) {
+            val item = files.getJSONObject(index)
+            val type = PackType.entries.firstOrNull { it.fileName == item.optString("name") } ?: continue
+            require(type !in entries) { "Manifest lặp ${type.fileName}" }
+            val sha = item.optString("sha256").lowercase()
+            require(SHA256_REGEX.matches(sha)) { "SHA-256 không hợp lệ cho ${type.fileName}" }
+            entries[type] = ManifestEntry(
+                sha256 = sha,
+                sizeBytes = item.optLong("sizeBytes", -1L),
+                schemaVersion = item.optInt("schemaVersion", -1),
+                scope = item.optString("scope")
+            )
+        }
+        require(entries.keys == PackType.entries.toSet()) { "Manifest không mô tả đủ hai SQLite bắt buộc" }
+        return entries
+    }
+
+    private fun verifyManifest(file: File, type: PackType, manifest: ManifestEntry) {
+        require(manifest.sizeBytes in 1..type.maxBytes) { "Kích thước manifest không hợp lệ cho ${type.fileName}" }
+        require(file.length() == manifest.sizeBytes) {
+            "Sai kích thước ${type.fileName}: ${file.length()} != ${manifest.sizeBytes}"
+        }
+        require(manifest.schemaVersion == type.expectedSchemaVersion) { "Manifest schema không khớp ${type.fileName}" }
+        require(manifest.scope == type.expectedScope) { "Manifest scope không khớp ${type.fileName}" }
+        require(file.sha256() == manifest.sha256) { "SHA-256 không khớp ${type.fileName}" }
     }
 
     private fun activateBundle(
@@ -136,7 +189,7 @@ class ScientificLibraryImportManager(private val context: Context) {
         return BundleImportResult(
             taxonomy = taxonomy,
             specialistEvidence = evidence,
-            message = "Đã cài thư viện khoa học: ${taxonomy.recordCount} taxonomy + ${evidence.recordCount} evidence"
+            message = "Đã cài thư viện khoa học: ${taxonomy.recordCount} taxonomy + ${evidence.recordCount} evidence • SHA-256 OK"
         )
     }
 
@@ -213,6 +266,20 @@ class ScientificLibraryImportManager(private val context: Context) {
         }
     }
 
+    private fun readZipTextBounded(zip: ZipInputStream, maxBytes: Int): String {
+        val output = java.io.ByteArrayOutputStream()
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        var total = 0
+        while (true) {
+            val read = zip.read(buffer)
+            if (read < 0) break
+            total += read
+            require(total <= maxBytes) { "Manifest quá lớn" }
+            output.write(buffer, 0, read)
+        }
+        return output.toString(Charsets.UTF_8.name())
+    }
+
     private fun validate(file: File, type: PackType): Long {
         SQLiteDatabase.openDatabase(
             file.absolutePath,
@@ -264,6 +331,19 @@ class ScientificLibraryImportManager(private val context: Context) {
         }
     }
 
+    private fun File.sha256(): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        inputStream().buffered().use { input ->
+            val buffer = ByteArray(1024 * 1024)
+            while (true) {
+                val read = input.read(buffer)
+                if (read < 0) break
+                digest.update(buffer, 0, read)
+            }
+        }
+        return digest.digest().joinToString("") { "%02x".format(it) }
+    }
+
     private fun String.trimJsonString(): String {
         val value = trim()
         if (value.length >= 2 && value.first() == '"' && value.last() == '"') {
@@ -272,5 +352,13 @@ class ScientificLibraryImportManager(private val context: Context) {
                 .replace("\\\\", "\\")
         }
         return value
+    }
+
+    companion object {
+        private const val MANIFEST_NAME = "scientific-library.manifest.json"
+        private const val EXPECTED_BUNDLE_NAME = "FieldIntelligence-WFO-scientific-library"
+        private const val MAX_ZIP_ENTRIES = 32
+        private const val MAX_MANIFEST_BYTES = 64 * 1024
+        private val SHA256_REGEX = Regex("^[0-9a-f]{64}$")
     }
 }
