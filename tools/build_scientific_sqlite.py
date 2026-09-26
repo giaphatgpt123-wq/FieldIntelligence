@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Build an offline-searchable SQLite taxonomy database from normalized scientific NDJSON.
 
-The database stores taxonomy/provenance only. It deliberately has no edibility, toxicity,
-medical-treatment, or image-identification fields. It is intended to be distributed as a
-separate scientific data pack rather than baked into the APK.
+The database stores taxonomy plus source-linked media, vernacular names and occurrence summaries.\nIt deliberately does not infer edibility, toxicity, medical treatment or specimen identity from media.
 """
 
 from __future__ import annotations
@@ -14,7 +12,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def open_text(path: Path):
@@ -60,6 +58,26 @@ def create_schema(db: sqlite3.Connection) -> None:
         CREATE INDEX idx_taxon_family ON taxon(family);
         CREATE INDEX idx_taxon_status ON taxon(taxonomic_status);
         CREATE INDEX idx_taxon_accepted_id ON taxon(accepted_name_usage_id);
+        CREATE TABLE species_media (
+            source_id TEXT NOT NULL, source_record_id TEXT NOT NULL,
+            media_identifier TEXT NOT NULL, media_type TEXT NOT NULL DEFAULT '',
+            references_url TEXT NOT NULL DEFAULT '', title TEXT NOT NULL DEFAULT '',
+            description TEXT NOT NULL DEFAULT '', creator TEXT NOT NULL DEFAULT '',
+            rights_holder TEXT NOT NULL DEFAULT '', media_license TEXT NOT NULL DEFAULT '',
+            PRIMARY KEY (source_id, source_record_id, media_identifier)
+        ) WITHOUT ROWID;
+        CREATE INDEX idx_media_record ON species_media(source_id, source_record_id);
+        CREATE TABLE vernacular_name (
+            source_id TEXT NOT NULL, source_record_id TEXT NOT NULL, vernacular_name TEXT NOT NULL,
+            PRIMARY KEY (source_id, source_record_id, vernacular_name)
+        ) WITHOUT ROWID;
+        CREATE TABLE occurrence_summary (
+            source_id TEXT NOT NULL, source_record_id TEXT NOT NULL,
+            country_code TEXT NOT NULL DEFAULT '', state_province TEXT NOT NULL DEFAULT '',
+            locality TEXT NOT NULL DEFAULT '', event_date TEXT NOT NULL DEFAULT '',
+            basis_of_record TEXT NOT NULL DEFAULT '', dataset_key TEXT NOT NULL DEFAULT '',
+            PRIMARY KEY (source_id, source_record_id)
+        ) WITHOUT ROWID;
         """
     )
 
@@ -107,6 +125,9 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
         """
         count = 0
         accepted = 0
+        media_count = 0
+        vernacular_count = 0
+        occurrence_count = 0
         batch = []
         with open_text(input_path) as handle:
             for line in handle:
@@ -118,6 +139,33 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
                     continue
                 batch.append(row)
                 count += 1
+                source_id, source_record_id = row[0], row[1]
+                media = record.get("media") or {}
+                media_identifier = str(media.get("identifier") or "").strip()
+                if media_identifier:
+                    db.execute("""INSERT OR IGNORE INTO species_media
+                        (source_id,source_record_id,media_identifier,media_type,references_url,title,description,creator,rights_holder,media_license)
+                        VALUES (?,?,?,?,?,?,?,?,?,?)""", (
+                        source_id, source_record_id, media_identifier,
+                        str(media.get("mediaType") or "").strip(), str(media.get("references") or "").strip(),
+                        str(media.get("title") or "").strip(), str(media.get("description") or "").strip(),
+                        str(media.get("creator") or "").strip(), str(media.get("rightsHolder") or "").strip(),
+                        str(media.get("license") or "").strip()))
+                    media_count += db.execute("SELECT changes()").fetchone()[0]
+                vernacular = str(record.get("vernacularName") or "").strip()
+                if vernacular:
+                    db.execute("INSERT OR IGNORE INTO vernacular_name VALUES (?,?,?)", (source_id, source_record_id, vernacular))
+                    vernacular_count += db.execute("SELECT changes()").fetchone()[0]
+                occurrence = record.get("occurrence") or {}
+                if any(str(occurrence.get(k) or "").strip() for k in ("countryCode","stateProvince","locality","eventDate","basisOfRecord","datasetKey")):
+                    db.execute("""INSERT OR REPLACE INTO occurrence_summary
+                        (source_id,source_record_id,country_code,state_province,locality,event_date,basis_of_record,dataset_key)
+                        VALUES (?,?,?,?,?,?,?,?)""", (
+                        source_id, source_record_id, str(occurrence.get("countryCode") or "").strip(),
+                        str(occurrence.get("stateProvince") or "").strip(), str(occurrence.get("locality") or "").strip(),
+                        str(occurrence.get("eventDate") or "").strip(), str(occurrence.get("basisOfRecord") or "").strip(),
+                        str(occurrence.get("datasetKey") or "").strip()))
+                    occurrence_count += 1
                 if row[5].casefold() in {"accepted", "accepted name", "acceptedname"}:
                     accepted += 1
                 if len(batch) >= batch_size:
@@ -137,7 +185,10 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
             "sourceVersion": source_meta.get("version", ""),
             "sourceDoi": source_meta.get("versionDoi", ""),
             "sourceLicense": source_meta.get("license", ""),
-            "scope": "taxonomy-only",
+            "scope": "taxonomy-media-occurrence",
+            "mediaRecordCount": media_count,
+            "vernacularNameCount": vernacular_count,
+            "occurrenceSummaryCount": occurrence_count,
             "medicalClaimsIncluded": False,
             "edibilityClaimsIncluded": False,
             "toxicityClaimsIncluded": False,
