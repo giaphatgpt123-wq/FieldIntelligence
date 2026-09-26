@@ -16,7 +16,8 @@ spec.loader.exec_module(module)
 def write_tsv(path: Path, rows):
     fields = [
         "gbifID", "scientificName", "kingdom", "class", "family", "genus",
-        "basisOfRecord", "countryCode", "decimalLatitude", "decimalLongitude", "datasetKey"
+        "basisOfRecord", "countryCode", "decimalLatitude", "decimalLongitude", "datasetKey",
+        "order", "mediaType", "identifier", "creator", "rightsHolder", "mediaLicense"
     ]
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, delimiter="\t")
@@ -44,6 +45,37 @@ class GbifScientificLibraryAdapterTest(unittest.TestCase):
             self.assertTrue(all(r["provenance"]["license"] == "CC-BY-4.0" for r in rows))
             self.assertTrue(all(r["provenance"]["datasetDoi"] == "10.15468/dl.test" for r in rows))
             self.assertTrue(all("danger" not in r and "edible" not in r and "treatment" not in r for r in rows))
+
+
+    def test_fish_is_grouped_separately_and_media_provenance_is_preserved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "occurrence.txt"
+            output = root / "fish.ndjson.gz"
+            meta = root / "fish.meta.json"
+            write_tsv(source, [{
+                "gbifID": "fish-1",
+                "scientificName": "Channa striata (Bloch, 1793)",
+                "kingdom": "Animalia",
+                "class": "Actinopterygii",
+                "order": "Anabantiformes",
+                "family": "Channidae",
+                "genus": "Channa",
+                "countryCode": "VN",
+                "mediaType": "StillImage",
+                "identifier": "https://example.org/fish.jpg",
+                "creator": "Example photographer",
+                "rightsHolder": "Example collection",
+                "mediaLicense": "CC-BY-4.0",
+            }])
+            result = module.build(source, output, meta, "10.15468/dl.fish", "Fish dataset", "CC-BY-4.0")
+            self.assertEqual(1, result["groupCounts"]["Cá nước ngọt"])
+            with gzip.open(output, "rt", encoding="utf-8") as handle:
+                record = json.loads(next(handle))
+            self.assertEqual("Cá nước ngọt", record["libraryGroup"])
+            self.assertEqual("https://example.org/fish.jpg", record["media"]["identifier"])
+            self.assertEqual("Example photographer", record["media"]["creator"])
+            self.assertEqual("CC-BY-4.0", record["media"]["license"])
 
     def test_noncommercial_license_is_explicit_and_missing_provenance_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
