@@ -8,7 +8,7 @@ import java.security.MessageDigest
 import java.util.Locale
 import java.util.zip.ZipInputStream
 
-/** Installs an offline visual-model bundle without requiring network credentials inside the APK. */
+/** Installs verified offline visual-model bundles without network credentials inside the APK. */
 class VisualModelImportManager(context: Context) {
     private val appContext = context.applicationContext
     private val root = File(appContext.filesDir, "visual-model")
@@ -24,19 +24,10 @@ class VisualModelImportManager(context: Context) {
         val staging = File(appContext.cacheDir, "visual-model-staging-${System.nanoTime()}").apply { mkdirs() }
         try {
             extractBundle(input, staging)
-            val model = File(staging, TfliteRegionModelRunner.MODEL_FILE)
             val manifestFile = File(staging, TfliteRegionModelRunner.MANIFEST_FILE)
-            require(model.isFile) { "Gói thiếu ${TfliteRegionModelRunner.MODEL_FILE}" }
             require(manifestFile.isFile) { "Gói thiếu ${TfliteRegionModelRunner.MANIFEST_FILE}" }
-
             val manifest = JSONObject(manifestFile.readText(Charsets.UTF_8))
-            require(manifest.optInt("schemaVersion", 0) == 1) { "Model manifest schema không hỗ trợ" }
-            require(manifest.optString("taskType") == TfliteRegionModelRunner.TASK_TYPE_OBJECT_DETECTOR) {
-                "Gói model không phải OBJECT_DETECTOR cho quét vùng"
-            }
-            require(manifest.optString("modelFormat") == TfliteRegionModelRunner.MODEL_FORMAT_TFLITE_TASK_VISION) {
-                "Gói model không dùng định dạng TFLITE_TASK_VISION được hỗ trợ"
-            }
+            val schema = manifest.optInt("schemaVersion", 0)
             val modelId = manifest.getString("id").trim()
             val version = manifest.getString("version").trim()
             val sourceName = manifest.getString("sourceName").trim()
@@ -47,11 +38,11 @@ class VisualModelImportManager(context: Context) {
                 "Gói model không được chứa tuyên bố ăn được/độc tính/y khoa như kết luận hình ảnh"
             }
 
-            val declaredSize = manifest.optLong("sizeBytes", -1L)
-            require(declaredSize == model.length()) { "Kích thước model không khớp manifest" }
-            val expectedSha = manifest.getString("sha256").lowercase(Locale.ROOT)
-            require(expectedSha.matches(Regex("[0-9a-f]{64}"))) { "SHA-256 trong manifest không hợp lệ" }
-            require(sha256(model) == expectedSha) { "SHA-256 model không khớp manifest" }
+            when (schema) {
+                1 -> validateSingleStageBundle(staging, manifest)
+                2 -> validateTwoStageBundle(staging, manifest)
+                else -> error("Model manifest schema không hỗ trợ: $schema")
+            }
 
             val backup = File(appContext.filesDir, "visual-model.previous")
             if (backup.exists()) backup.deleteRecursively()
@@ -63,12 +54,64 @@ class VisualModelImportManager(context: Context) {
                 error("Không thể kích hoạt gói model")
             }
             backup.deleteRecursively()
-            Result(true, "Đã cài model quét vùng $modelId • $version", modelId, version)
+            val mode = if (schema == 2) "hai tầng detector + classifier" else "một tầng"
+            Result(true, "Đã cài model quét vùng $modelId • $version • $mode", modelId, version)
         } finally {
             if (staging.exists()) staging.deleteRecursively()
         }
     }.getOrElse { failure ->
         Result(false, "Cài model thất bại: ${failure.message ?: failure.javaClass.simpleName}")
+    }
+
+    private fun validateSingleStageBundle(staging: File, manifest: JSONObject) {
+        require(manifest.optString("taskType") == TfliteRegionModelRunner.TASK_TYPE_OBJECT_DETECTOR) {
+            "Gói schema v1 phải là OBJECT_DETECTOR"
+        }
+        require(manifest.optString("modelFormat") == TfliteRegionModelRunner.MODEL_FORMAT_TFLITE_TASK_VISION) {
+            "Gói model không dùng định dạng TFLITE_TASK_VISION được hỗ trợ"
+        }
+        val model = File(staging, TfliteRegionModelRunner.MODEL_FILE)
+        require(model.isFile) { "Gói thiếu ${TfliteRegionModelRunner.MODEL_FILE}" }
+        verifyFile(model, manifest, "model")
+        val expected = setOf(TfliteRegionModelRunner.MODEL_FILE, TfliteRegionModelRunner.MANIFEST_FILE)
+        require(staging.list()?.toSet() == expected) { "Gói schema v1 phải gồm đúng model và manifest" }
+    }
+
+    private fun validateTwoStageBundle(staging: File, manifest: JSONObject) {
+        require(manifest.optString("taskType") == TwoStageTfliteRegionModelRunner.TASK_TYPE_TWO_STAGE) {
+            "Gói schema v2 phải là TWO_STAGE_REGION_CLASSIFIER"
+        }
+        require(manifest.optString("modelFormat") == TfliteRegionModelRunner.MODEL_FORMAT_TFLITE_TASK_VISION) {
+            "Gói model không dùng định dạng TFLITE_TASK_VISION được hỗ trợ"
+        }
+        val detector = File(staging, TwoStageTfliteRegionModelRunner.DETECTOR_FILE)
+        val classifier = File(staging, TwoStageTfliteRegionModelRunner.CLASSIFIER_FILE)
+        require(detector.isFile) { "Gói thiếu ${TwoStageTfliteRegionModelRunner.DETECTOR_FILE}" }
+        require(classifier.isFile) { "Gói thiếu ${TwoStageTfliteRegionModelRunner.CLASSIFIER_FILE}" }
+        val detectorMeta = manifest.getJSONObject("detector")
+        val classifierMeta = manifest.getJSONObject("classifier")
+        require(detectorMeta.optString("file") == TwoStageTfliteRegionModelRunner.DETECTOR_FILE) {
+            "Manifest detector trỏ sai file"
+        }
+        require(classifierMeta.optString("file") == TwoStageTfliteRegionModelRunner.CLASSIFIER_FILE) {
+            "Manifest classifier trỏ sai file"
+        }
+        verifyFile(detector, detectorMeta, "detector")
+        verifyFile(classifier, classifierMeta, "classifier")
+        val expected = setOf(
+            TwoStageTfliteRegionModelRunner.DETECTOR_FILE,
+            TwoStageTfliteRegionModelRunner.CLASSIFIER_FILE,
+            TwoStageTfliteRegionModelRunner.MANIFEST_FILE
+        )
+        require(staging.list()?.toSet() == expected) { "Gói schema v2 phải gồm đúng detector, classifier và manifest" }
+    }
+
+    private fun verifyFile(file: File, meta: JSONObject, label: String) {
+        val declaredSize = meta.optLong("sizeBytes", -1L)
+        require(declaredSize == file.length()) { "Kích thước $label không khớp manifest" }
+        val expectedSha = meta.getString("sha256").lowercase(Locale.ROOT)
+        require(expectedSha.matches(Regex("[0-9a-f]{64}"))) { "SHA-256 $label trong manifest không hợp lệ" }
+        require(sha256(file) == expectedSha) { "SHA-256 $label không khớp manifest" }
     }
 
     private fun extractBundle(input: InputStream, staging: File) {
@@ -82,9 +125,7 @@ class VisualModelImportManager(context: Context) {
                 require(entries <= MAX_ENTRIES) { "Gói model có quá nhiều file" }
                 require(!entry.isDirectory) { "Gói model không được chứa thư mục" }
                 val name = entry.name
-                require(name == TfliteRegionModelRunner.MODEL_FILE || name == TfliteRegionModelRunner.MANIFEST_FILE) {
-                    "File không được phép trong gói model: $name"
-                }
+                require(name in ALLOWED_NAMES) { "File không được phép trong gói model: $name" }
                 require(seen.add(name)) { "File bị lặp trong gói model: $name" }
                 val max = if (name.endsWith(".json")) MAX_MANIFEST_BYTES else MAX_MODEL_BYTES
                 val output = File(staging, name)
@@ -104,7 +145,7 @@ class VisualModelImportManager(context: Context) {
                 zip.closeEntry()
             }
         }
-        require(entries == 2) { "Gói model phải gồm đúng model và manifest" }
+        require(entries in 2..3) { "Gói model phải có 2 hoặc 3 file theo schema" }
     }
 
     private fun sha256(file: File): String {
@@ -121,9 +162,15 @@ class VisualModelImportManager(context: Context) {
     }
 
     companion object {
-        private const val MAX_ENTRIES = 2
+        private const val MAX_ENTRIES = 3
         private const val MAX_MANIFEST_BYTES = 64L * 1024L
         private const val MAX_MODEL_BYTES = 160L * 1024L * 1024L
-        private const val MAX_TOTAL_BYTES = MAX_MODEL_BYTES + MAX_MANIFEST_BYTES
+        private const val MAX_TOTAL_BYTES = MAX_MODEL_BYTES * 2 + MAX_MANIFEST_BYTES
+        private val ALLOWED_NAMES = setOf(
+            TfliteRegionModelRunner.MODEL_FILE,
+            TfliteRegionModelRunner.MANIFEST_FILE,
+            TwoStageTfliteRegionModelRunner.DETECTOR_FILE,
+            TwoStageTfliteRegionModelRunner.CLASSIFIER_FILE
+        )
     }
 }
