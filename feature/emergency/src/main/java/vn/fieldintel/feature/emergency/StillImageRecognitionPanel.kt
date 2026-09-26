@@ -67,6 +67,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     var error by remember { mutableStateOf<String?>(null) }
     var saveStatus by remember { mutableStateOf("") }
     var pendingCaptureFile by remember { mutableStateOf<File?>(null) }
+    var selectedDetection by remember { mutableStateOf<VisualDetection?>(null) }
     var cameraGranted by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -85,6 +86,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 sourceLabel = "Ảnh từ máy • ${bitmap.width}×${bitmap.height} • đã chuẩn hóa hướng ảnh"
                 error = null
                 saveStatus = ""
+                selectedDetection = null
             } else {
                 error = "Không thể mở ảnh đã chọn."
             }
@@ -102,6 +104,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 sourceLabel = "Ảnh chụp độ phân giải đầy đủ • ${bitmap.width}×${bitmap.height} • đã chuẩn hóa hướng ảnh"
                 error = null
                 saveStatus = ""
+                selectedDetection = null
             } else {
                 error = "Đã chụp nhưng không thể đọc ảnh."
             }
@@ -135,6 +138,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     LaunchedEffect(preview, runner) {
         val bitmap = preview
         analysis = null
+        selectedDetection = null
         if (bitmap == null) return@LaunchedEffect
         analyzing = true
         error = null
@@ -179,7 +183,9 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                             detections = detections,
                             imageWidth = bitmap.width,
                             imageHeight = bitmap.height,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
+                            selected = selectedDetection,
+                            onDetectionTap = { selectedDetection = it }
                         )
                     }
                 } else {
@@ -240,7 +246,7 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                         color = FieldColors.primary
                     )
                     Text(
-                        "Bounding box được vẽ trực tiếp trên ảnh để đối chiếu vùng model đã phân tích.",
+                        "Chạm trực tiếp vào bounding box để chọn ứng viên và đối chiếu hồ sơ khoa học offline.",
                         color = FieldColors.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -290,6 +296,8 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 }
             }
         }
+
+        selectedDetection?.let { StillImageScientificMatchPanel(it) }
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
