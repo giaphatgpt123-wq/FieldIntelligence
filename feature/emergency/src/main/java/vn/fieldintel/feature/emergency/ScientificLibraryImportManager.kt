@@ -23,8 +23,8 @@ class ScientificLibraryImportManager(private val context: Context) {
         TAXONOMY(
             fileName = ScientificLibraryStore.DATABASE_NAME,
             previousName = "wfo-taxonomy.previous.sqlite",
-            expectedSchemaVersion = 1,
-            expectedScope = "taxonomy-only",
+            expectedSchemaVersion = 2,
+            expectedScope = "taxonomy-media-occurrence",
             maxBytes = 768L * 1024L * 1024L
         ),
         SPECIALIST_EVIDENCE(
