@@ -27,11 +27,16 @@ class LibraryCollectionsTest {
     @Test
     fun highRiskCollectionsRequireSpecialistEvidence() {
         val medicinal = LibraryCollections.byId("traditional-medicine")!!.recordIds
+        val monographs = LibraryCollections.byId("herbal-monographs")!!.recordIds
         val toxic = LibraryCollections.byId("toxic-plants")!!.recordIds
         assertFalse(medicinal.isEmpty())
+        assertFalse(monographs.isEmpty())
         assertFalse(toxic.isEmpty())
         assertTrue(medicinal.all { id ->
             SpecialistEvidenceCatalog.forSpecies(id).any { it.domain == EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE }
+        })
+        assertTrue(monographs.all { id ->
+            SpecialistEvidenceCatalog.forSpecies(id).any { it.domain == EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH }
         })
         assertTrue(toxic.all { id ->
             SpecialistEvidenceCatalog.forSpecies(id).any { it.domain == EvidenceDomain.TOXICOLOGY }
@@ -40,7 +45,15 @@ class LibraryCollectionsTest {
 
     @Test
     fun evidenceBackedCollectionsExposeKnownRecords() {
-        assertTrue(LibraryCollections.recordsFor("traditional-medicine").any { it.id == "curcuma-longa" })
+        val traditional = LibraryCollections.recordsFor("traditional-medicine")
+        assertTrue(traditional.any { it.id == "curcuma-longa" })
+        assertTrue(traditional.any { it.id == "zingiber-officinale" })
+
+        val monographs = LibraryCollections.recordsFor("herbal-monographs")
+        assertTrue(monographs.any { it.id == "curcuma-longa" })
+        assertTrue(monographs.any { it.id == "zingiber-officinale" })
+        assertTrue(monographs.any { it.id == "hypericum-perforatum" })
+
         assertTrue(LibraryCollections.recordsFor("toxic-plants").any { it.id == "ricinus-communis" })
     }
 
