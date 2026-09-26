@@ -50,6 +50,60 @@ class RegionDetectionStabilizerTest {
     }
 
     @Test
+    fun overlappingDuplicateBoxesForSameTaxonBecomeOneTrack() {
+        val stabilizer = RegionDetectionStabilizer(stableHitsRequired = 2, duplicateDetectionIoU = 0.60f)
+        val strong = detection(
+            "Centella asiatica",
+            confidence = 0.91f,
+            left = 0.10f,
+            top = 0.10f,
+            right = 0.45f,
+            bottom = 0.45f
+        )
+        val duplicate = detection(
+            "Centella asiatica",
+            confidence = 0.76f,
+            left = 0.12f,
+            top = 0.12f,
+            right = 0.46f,
+            bottom = 0.46f
+        )
+
+        val verifying = stabilizer.update(listOf(strong, duplicate))
+        assertEquals(1, verifying.size)
+        assertEquals(1 to 2, verifying.single().regionVerificationProgress())
+
+        val stable = stabilizer.update(listOf(strong, duplicate))
+        assertEquals(1, stable.size)
+        assertTrue(stable.single().isStableRegionCandidate())
+        assertTrue(stable.single().confidence >= 0.90f)
+    }
+
+    @Test
+    fun overlappingDifferentTaxaAreNotCollapsed() {
+        val stabilizer = RegionDetectionStabilizer(stableHitsRequired = 2, duplicateDetectionIoU = 0.60f)
+        val centella = detection(
+            "Centella asiatica",
+            left = 0.10f,
+            top = 0.10f,
+            right = 0.45f,
+            bottom = 0.45f
+        )
+        val plantago = detection(
+            "Plantago major",
+            left = 0.12f,
+            top = 0.12f,
+            right = 0.46f,
+            bottom = 0.46f
+        )
+
+        stabilizer.update(listOf(centella, plantago))
+        val stable = stabilizer.update(listOf(centella, plantago))
+        assertEquals(2, stable.size)
+        assertEquals(setOf("Centella asiatica", "Plantago major"), stable.mapNotNull { it.scientificName }.toSet())
+    }
+
+    @Test
     fun oneFrameLabelNoiseDoesNotReplaceStableIdentity() {
         val stabilizer = RegionDetectionStabilizer(stableHitsRequired = 2, maxMissedFrames = 2)
         val centella = detection("Centella asiatica")
