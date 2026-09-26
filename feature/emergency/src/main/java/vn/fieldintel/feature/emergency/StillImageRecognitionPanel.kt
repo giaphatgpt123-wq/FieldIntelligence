@@ -12,8 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -145,8 +147,9 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
 
     val result = analysis
     val modelReady = result?.status?.availability == VisualModelAvailability.READY
-    val summary = remember(result?.detections) {
-        RegionScanClassifier.summarize(result?.detections.orEmpty())
+    val detections = result?.detections.orEmpty()
+    val summary = remember(detections) {
+        RegionScanClassifier.summarize(detections)
     }
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -165,12 +168,20 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
 
                 val bitmap = preview
                 if (bitmap != null) {
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = sourceLabel,
-                        modifier = Modifier.fillMaxWidth().heightIn(min = 280.dp, max = 430.dp),
-                        contentScale = ContentScale.Fit
-                    )
+                    Box(modifier = Modifier.fillMaxWidth().heightIn(min = 280.dp, max = 430.dp)) {
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = sourceLabel,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Fit
+                        )
+                        StillImageDetectionOverlay(
+                            detections = detections,
+                            imageWidth = bitmap.width,
+                            imageHeight = bitmap.height,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 } else {
                     Surface(
                         modifier = Modifier.fillMaxWidth().heightIn(min = 260.dp),
@@ -227,6 +238,11 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                     Text(
                         "${summary.totalObjects} vùng • ${summary.items.size} loại ứng viên • ảnh phân tích ${result.analyzedWidth}×${result.analyzedHeight}",
                         color = FieldColors.primary
+                    )
+                    Text(
+                        "Bounding box được vẽ trực tiếp trên ảnh để đối chiếu vùng model đã phân tích.",
+                        color = FieldColors.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall
                     )
                     summary.items.take(12).forEach { item ->
                         Surface(
