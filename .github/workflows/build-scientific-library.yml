@@ -1,0 +1,63 @@
+name: Build Scientific Library
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  build-wfo-library:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Run ingestion tests
+        run: python3 -m unittest discover -s tools -p 'test_*.py'
+
+      - name: Download official WFO Taxonomic Backbone
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/scientific-library
+          curl --fail --location --retry 3 --retry-delay 5 \
+            --output build/scientific-library/WFO_Backbone.zip \
+            https://files.worldfloraonline.org/files/WFO_Backbone/_WFOCompleteBackbone/WFO_Backbone.zip
+          unzip -t build/scientific-library/WFO_Backbone.zip >/dev/null
+
+      - name: Normalize complete WFO taxonomy
+        run: |
+          python3 tools/fetch_wfo_backbone.py \
+            --archive build/scientific-library/WFO_Backbone.zip \
+            --output build/scientific-library/wfo-taxonomy.ndjson.gz \
+            --metadata build/scientific-library/wfo-taxonomy.meta.json
+
+      - name: Validate non-empty package
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s build/scientific-library/wfo-taxonomy.ndjson.gz
+          test -s build/scientific-library/wfo-taxonomy.meta.json
+          python3 - <<'PY'
+          import json
+          p = json.load(open('build/scientific-library/wfo-taxonomy.meta.json', encoding='utf-8'))
+          assert p['sourceId'] == 'wfo-taxonomic-backbone'
+          assert p['license'] == 'CC0-1.0'
+          assert p['scope'] == 'taxonomy-only'
+          assert p['recordCount'] > 100000, p['recordCount']
+          print(p)
+          PY
+
+      - name: Upload scientific library package
+        uses: actions/upload-artifact@v4
+        with:
+          name: FieldIntelligence-WFO-scientific-library
+          path: |
+            build/scientific-library/wfo-taxonomy.ndjson.gz
+            build/scientific-library/wfo-taxonomy.meta.json
+          if-no-files-found: error
+          retention-days: 30
