@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Attach an offline reference-media manifest to a schema-v2 scientific SQLite database.
+"""Embed a verified offline reference-media cache into a schema-v2 scientific SQLite database.
 
-This is an additive extension: older schema-v2 databases without species_media_local remain valid.
-Local media rows must correspond to an existing licensed species_media source row. The image bytes
-remain external files under scientific-library/media/ and are verified again by the Android importer.
+This is additive: older schema-v2 databases without the local-media tables remain valid. Media
+bytes are content-addressed once by SHA-256, while species_media_local links licensed source rows
+to those blobs. Keeping the bytes inside SQLite preserves the existing atomic bundle importer.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sqlite3
@@ -21,6 +22,8 @@ ALLOWED_LICENSES = {
 }
 LOCAL_PATH_RE = re.compile(r"^media/[0-9a-f]{2}/([0-9a-f]{64})\.(jpg|png|webp)$")
 SHA_RE = re.compile(r"^[0-9a-f]{64}$")
+MAX_FILE_BYTES = 5 * 1024 * 1024
+MIME_BY_EXTENSION = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp"}
 
 
 def read_meta(db: sqlite3.Connection) -> dict[str, object]:
@@ -33,7 +36,7 @@ def read_meta(db: sqlite3.Connection) -> dict[str, object]:
     return result
 
 
-def validate_entry(entry: dict) -> None:
+def validate_entry(entry: dict) -> re.Match[str]:
     source_id = str(entry.get("sourceId") or "").strip()
     source_record_id = str(entry.get("sourceRecordId") or "").strip()
     source_identifier = str(entry.get("sourceIdentifier") or "").strip()
@@ -48,10 +51,28 @@ def validate_entry(entry: dict) -> None:
         raise ValueError(f"unsafe offline media path: {local_path}")
     if not SHA_RE.fullmatch(sha256) or match.group(1) != sha256:
         raise ValueError("offline media SHA-256 does not match local path")
-    if size_bytes <= 0 or size_bytes > 8 * 1024 * 1024:
+    if size_bytes <= 0 or size_bytes > MAX_FILE_BYTES:
         raise ValueError("offline media size is outside allowed range")
     if license_id not in ALLOWED_LICENSES:
         raise ValueError("offline media license is not accepted")
+    return match
+
+
+def verified_bytes(manifest_path: Path, entry: dict, match: re.Match[str]) -> tuple[bytes, str]:
+    local_path = str(entry["localPath"]).strip()
+    media_file = manifest_path.parent / local_path
+    if not media_file.is_file():
+        raise ValueError(f"offline media file is missing: {local_path}")
+    expected_size = int(entry["sizeBytes"])
+    if media_file.stat().st_size != expected_size:
+        raise ValueError(f"offline media size mismatch: {local_path}")
+    data = media_file.read_bytes()
+    digest = hashlib.sha256(data).hexdigest()
+    expected_sha = str(entry["sha256"]).strip().lower()
+    if digest != expected_sha:
+        raise ValueError(f"offline media SHA-256 mismatch: {local_path}")
+    mime_type = MIME_BY_EXTENSION[match.group(2)]
+    return data, mime_type
 
 
 def attach(database: Path, manifest_path: Path) -> dict:
@@ -68,30 +89,38 @@ def attach(database: Path, manifest_path: Path) -> dict:
         if str(integrity).lower() != "ok":
             raise ValueError(f"SQLite integrity_check failed before media attach: {integrity}")
         tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        required = {"meta", "taxon", "species_media"}
-        if not required.issubset(tables):
+        if not {"meta", "taxon", "species_media"}.issubset(tables):
             raise ValueError("scientific SQLite is missing required media/taxon tables")
         meta = read_meta(db)
         if int(meta.get("schemaVersion") or 0) != 2:
             raise ValueError("offline media attachment currently requires scientific schema v2")
 
-        db.execute("""CREATE TABLE IF NOT EXISTS species_media_local (
-            source_id TEXT NOT NULL,
-            source_record_id TEXT NOT NULL,
-            source_identifier TEXT NOT NULL,
-            local_path TEXT NOT NULL,
-            sha256 TEXT NOT NULL,
-            size_bytes INTEGER NOT NULL,
-            media_license TEXT NOT NULL,
-            PRIMARY KEY (source_id, source_record_id, source_identifier)
-        ) WITHOUT ROWID""")
-        db.execute("CREATE INDEX IF NOT EXISTS idx_media_local_record ON species_media_local(source_id,source_record_id)")
+        db.executescript("""
+            CREATE TABLE IF NOT EXISTS scientific_media_blob (
+                sha256 TEXT PRIMARY KEY,
+                mime_type TEXT NOT NULL,
+                size_bytes INTEGER NOT NULL,
+                media_blob BLOB NOT NULL
+            ) WITHOUT ROWID;
+            CREATE TABLE IF NOT EXISTS species_media_local (
+                source_id TEXT NOT NULL,
+                source_record_id TEXT NOT NULL,
+                source_identifier TEXT NOT NULL,
+                sha256 TEXT NOT NULL,
+                media_license TEXT NOT NULL,
+                PRIMARY KEY (source_id, source_record_id, source_identifier)
+            ) WITHOUT ROWID;
+            CREATE INDEX IF NOT EXISTS idx_media_local_record
+              ON species_media_local(source_id,source_record_id);
+        """)
         db.execute("DELETE FROM species_media_local")
+        db.execute("DELETE FROM scientific_media_blob")
 
-        inserted = 0
-        unmatched = 0
+        inserted = unmatched = 0
+        embedded_bytes = 0
+        embedded_hashes: set[str] = set()
         for entry in entries:
-            validate_entry(entry)
+            match = validate_entry(entry)
             source_id = str(entry["sourceId"]).strip()
             source_record_id = str(entry["sourceRecordId"]).strip()
             source_identifier = str(entry["sourceIdentifier"]).strip()
@@ -106,18 +135,28 @@ def attach(database: Path, manifest_path: Path) -> dict:
             base_license = str(base[0] or "").strip()
             if base_license != str(entry["license"]).strip():
                 raise ValueError("offline media license does not match scientific media source row")
+            data, mime_type = verified_bytes(manifest_path, entry, match)
+            sha256 = str(entry["sha256"]).strip().lower()
+            if sha256 not in embedded_hashes:
+                db.execute(
+                    "INSERT INTO scientific_media_blob(sha256,mime_type,size_bytes,media_blob) VALUES(?,?,?,?)",
+                    (sha256, mime_type, len(data), sqlite3.Binary(data)),
+                )
+                embedded_hashes.add(sha256)
+                embedded_bytes += len(data)
             db.execute(
                 """INSERT INTO species_media_local
-                   (source_id,source_record_id,source_identifier,local_path,sha256,size_bytes,media_license)
-                   VALUES (?,?,?,?,?,?,?)""",
-                (source_id, source_record_id, source_identifier, str(entry["localPath"]).strip(),
-                 str(entry["sha256"]).strip().lower(), int(entry["sizeBytes"]), base_license),
+                   (source_id,source_record_id,source_identifier,sha256,media_license)
+                   VALUES (?,?,?,?,?)""",
+                (source_id, source_record_id, source_identifier, sha256, base_license),
             )
             inserted += 1
 
         metrics = {
             "localMediaRecordCount": inserted,
             "localMediaUnmatched": unmatched,
+            "localMediaBlobCount": len(embedded_hashes),
+            "localMediaBytes": embedded_bytes,
             "taxaWithLocalMedia": db.execute(
                 "SELECT COUNT(DISTINCT source_id || char(31) || source_record_id) FROM species_media_local"
             ).fetchone()[0],
