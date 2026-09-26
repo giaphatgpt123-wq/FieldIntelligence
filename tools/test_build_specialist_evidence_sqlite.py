@@ -25,6 +25,7 @@ class SpecialistEvidenceSqliteBuilderTest(unittest.TestCase):
                             {
                                 "evidenceId": "cdc-ricin",
                                 "speciesId": "ricinus-communis",
+                                "scientificName": "Ricinus communis L.",
                                 "domain": "TOXICOLOGY",
                                 "evidenceClass": "PUBLIC_HEALTH_TOXICOLOGY",
                                 "title": "Ricin in castor beans",
@@ -48,30 +49,37 @@ class SpecialistEvidenceSqliteBuilderTest(unittest.TestCase):
             )
             result = module.build(source, output)
             self.assertEqual(1, result["recordCount"])
+            self.assertEqual(2, result["schemaVersion"])
             self.assertFalse(result["taxonomyIncluded"])
             self.assertFalse(result["treatmentRecommendationsIncluded"])
             db = sqlite3.connect(output)
             try:
                 row = db.execute(
-                    "SELECT species_id, domain, evidence_class, source_id FROM evidence WHERE evidence_id=?",
+                    "SELECT species_id, scientific_name, domain, evidence_class, source_id FROM evidence WHERE evidence_id=?",
                     ("cdc-ricin",),
                 ).fetchone()
                 self.assertEqual(
-                    ("ricinus-communis", "TOXICOLOGY", "PUBLIC_HEALTH_TOXICOLOGY", "cdc-toxicology"),
+                    ("ricinus-communis", "Ricinus communis L.", "TOXICOLOGY", "PUBLIC_HEALTH_TOXICOLOGY", "cdc-toxicology"),
                     row,
                 )
+                by_name = db.execute(
+                    "SELECT evidence_id FROM evidence WHERE scientific_name_search=?",
+                    ("ricinus communis l.",),
+                ).fetchone()
+                self.assertEqual(("cdc-ricin",), by_name)
                 meta = dict(db.execute("SELECT key,value FROM meta"))
                 self.assertEqual("specialist-evidence-only", json.loads(meta["scope"]))
             finally:
                 db.close()
 
-    def test_rejects_duplicate_ids_and_insecure_sources(self):
+    def test_rejects_duplicate_ids_insecure_sources_and_missing_scientific_name(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             output = root / "e.sqlite"
             base = {
                 "evidenceId": "dup",
                 "speciesId": "x",
+                "scientificName": "Example species L.",
                 "domain": "TOXICOLOGY",
                 "evidenceClass": "PUBLIC_HEALTH_TOXICOLOGY",
                 "title": "Title",
@@ -93,6 +101,14 @@ class SpecialistEvidenceSqliteBuilderTest(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 module.build(insecure, output)
 
+            missing_name = root / "missing-name.json"
+            missing_name_record = dict(base)
+            missing_name_record["evidenceId"] = "missing-name"
+            missing_name_record.pop("scientificName")
+            missing_name.write_text(json.dumps([missing_name_record]), encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                module.build(missing_name, output)
+
     def test_rejects_unknown_domain_and_class(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -100,6 +116,7 @@ class SpecialistEvidenceSqliteBuilderTest(unittest.TestCase):
             base = {
                 "evidenceId": "bad",
                 "speciesId": "x",
+                "scientificName": "Example species L.",
                 "domain": "UNBOUNDED_MEDICAL_CLAIM",
                 "evidenceClass": "PUBLIC_HEALTH_TOXICOLOGY",
                 "title": "Title",
