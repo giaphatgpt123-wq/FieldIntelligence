@@ -49,13 +49,15 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
                 self.assertEqual(("Oryza sativa L.", "Poaceae"), hit)
                 meta = dict(db.execute("SELECT key,value FROM meta"))
                 self.assertEqual("taxonomy-media-occurrence", json.loads(meta["scope"]))
+                self.assertEqual("10.5281/zenodo.20782718", json.loads(meta["sourceDoi"]))
             finally:
                 db.close()
 
-    def test_preserves_fish_media_vernacular_and_occurrence(self):
+    def test_preserves_fish_media_vernacular_occurrence_and_gbif_doi(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             source = root / "fish.ndjson.gz"
+            source_meta = root / "fish.meta.json"
             output = root / "fish.sqlite"
             row = {
                 "sourceId": "gbif", "sourceRecordId": "fish-1",
@@ -68,14 +70,18 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
                 "occurrence": {"countryCode": "VN", "stateProvince": "An Giang",
                                "basisOfRecord": "HUMAN_OBSERVATION", "datasetKey": "dataset-1"},
                 "provenance": {"authority": "GBIF", "license": "CC-BY-4.0",
-                               "scope": "taxonomy-occurrence-and-media-metadata"}
+                               "scope": "taxonomy-occurrence-and-media-metadata",
+                               "datasetDoi": "10.15468/dl.testfish"}
             }
             with gzip.open(source, "wt", encoding="utf-8") as handle:
                 handle.write(json.dumps(row, ensure_ascii=False) + "\n")
-            result = module.build(source, output)
+            source_meta.write_text(json.dumps({"sourceId": "gbif", "datasetDoi": "10.15468/dl.testfish", "license": "CC-BY-4.0"}), encoding="utf-8")
+            result = module.build(source, output, source_meta)
             self.assertEqual(1, result["mediaRecordCount"])
+            self.assertEqual(0, result["rejectedMediaCount"])
             self.assertEqual(1, result["vernacularNameCount"])
             self.assertEqual(1, result["occurrenceSummaryCount"])
+            self.assertEqual("10.15468/dl.testfish", result["sourceDoi"])
             db = sqlite3.connect(output)
             try:
                 self.assertEqual(("https://example.org/channa.jpg", "Photographer", "CC-BY-4.0"),
@@ -83,6 +89,7 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
                 self.assertEqual(("Cá lóc",), db.execute("SELECT vernacular_name FROM vernacular_name").fetchone())
                 self.assertEqual(("VN", "An Giang"),
                     db.execute("SELECT country_code,state_province FROM occurrence_summary").fetchone())
+                self.assertEqual(("10.15468/dl.testfish",), db.execute("SELECT source_doi FROM taxon").fetchone())
             finally:
                 db.close()
 
@@ -111,9 +118,11 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
                 handle.write(json.dumps(row) + "\n")
             result = module.build(source, output)
             self.assertEqual(2, result["mediaRecordCount"])
+            self.assertEqual(1, result["rejectedMediaCount"])
             self.assertEqual(1, result["recordsWithMedia"])
             self.assertEqual(1, result["fishTaxa"])
             self.assertEqual(1, result["fishWithMedia"])
+            self.assertEqual(1, result["fishWith2PlusMedia"])
             self.assertEqual(0, result["fishPendingMedia"])
             self.assertEqual("requires-at-least-one-licensed-media", result["fishPublishRule"])
             db = sqlite3.connect(output)
