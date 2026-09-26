@@ -263,6 +263,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                     Surface(shape=RoundedCornerShape(14.dp),color=Color(0xFF17383F)){Text("Nhóm: ${selected.group}",Modifier.padding(12.dp))}
                     Text("Nguồn: " + selected.sourceName, fontWeight=FontWeight.Bold)
                     Text(selected.sourceScope, color=FieldColors.onSurfaceVariant)
+                    InteractionSafetyPanel(selected.scientificName)
                     OutlinedButton(onClick = { uriHandler.openUri(selected.sourceUrl) }, modifier=Modifier.fillMaxWidth().heightIn(min=56.dp), shape=RoundedCornerShape(16.dp)) { Text("MỞ NGUỒN KHI CÓ MẠNG") }
                     Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF2E2520)){Text("Chưa có hình đối chiếu nhiều góc độ; không dùng mục này để nhận dạng hay quyết định ăn/uống/chữa trị.",Modifier.padding(14.dp),color=Color(0xFFFFC857))}
                 }
