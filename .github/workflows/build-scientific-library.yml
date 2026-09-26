@@ -8,7 +8,10 @@ on:
       - "tools/test_fetch_wfo_backbone.py"
       - "tools/build_scientific_sqlite.py"
       - "tools/test_build_scientific_sqlite.py"
+      - "tools/build_specialist_evidence_sqlite.py"
+      - "tools/test_build_specialist_evidence_sqlite.py"
       - "tools/full_scientific_sources.json"
+      - "data/scientific/specialist_evidence.json"
       - ".github/workflows/build-scientific-library.yml"
   workflow_dispatch:
   schedule:
@@ -52,6 +55,12 @@ jobs:
             --source-meta build/scientific-library/wfo-taxonomy.meta.json \
             --output build/scientific-library/wfo-taxonomy.sqlite
 
+      - name: Build specialist evidence SQLite pack
+        run: |
+          python3 tools/build_specialist_evidence_sqlite.py \
+            --input data/scientific/specialist_evidence.json \
+            --output build/scientific-library/specialist-evidence.sqlite
+
       - name: Validate scientific library package
         shell: bash
         run: |
@@ -59,6 +68,7 @@ jobs:
           test -s build/scientific-library/wfo-taxonomy.ndjson.gz
           test -s build/scientific-library/wfo-taxonomy.meta.json
           test -s build/scientific-library/wfo-taxonomy.sqlite
+          test -s build/scientific-library/specialist-evidence.sqlite
           python3 - <<'PY'
           import json, sqlite3
           p = json.load(open('build/scientific-library/wfo-taxonomy.meta.json', encoding='utf-8'))
@@ -77,7 +87,19 @@ jobs:
           assert row_count == p['recordCount'], (row_count, p['recordCount'])
           assert meta['scope'] == 'taxonomy-only'
           assert meta['medicalClaimsIncluded'] is False
-          print({'wfo': p, 'sqliteRows': row_count})
+
+          evidence_db = sqlite3.connect('build/scientific-library/specialist-evidence.sqlite')
+          evidence_count = evidence_db.execute('SELECT COUNT(*) FROM evidence').fetchone()[0]
+          evidence_integrity = evidence_db.execute('PRAGMA integrity_check').fetchone()[0]
+          evidence_meta = {k: json.loads(v) for k, v in evidence_db.execute('SELECT key,value FROM meta')}
+          evidence_db.close()
+          assert evidence_integrity == 'ok', evidence_integrity
+          assert evidence_count >= 1
+          assert evidence_meta['scope'] == 'specialist-evidence-only'
+          assert evidence_meta['doseRecommendationsIncluded'] is False
+          assert evidence_meta['treatmentRecommendationsIncluded'] is False
+          assert evidence_meta['imageIdentificationIncluded'] is False
+          print({'wfo': p, 'sqliteRows': row_count, 'specialistEvidenceRows': evidence_count})
           PY
 
       - name: Upload scientific library package
@@ -88,5 +110,6 @@ jobs:
             build/scientific-library/wfo-taxonomy.ndjson.gz
             build/scientific-library/wfo-taxonomy.meta.json
             build/scientific-library/wfo-taxonomy.sqlite
+            build/scientific-library/specialist-evidence.sqlite
           if-no-files-found: error
           retention-days: 30
