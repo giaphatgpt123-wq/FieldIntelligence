@@ -9,6 +9,13 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
+enum class LibraryCollectionRuntimeState {
+    IDLE,
+    LOADING,
+    SQLITE_READY,
+    FALLBACK
+}
+
 /**
  * Small runtime bridge between the validated specialist-evidence pack and taxonomy pack.
  *
@@ -18,6 +25,9 @@ import kotlin.concurrent.thread
  */
 object LibraryCollectionRuntime {
     private var recordsByCollection by mutableStateOf<Map<String, List<SpeciesRecord>>>(emptyMap())
+    var state by mutableStateOf(LibraryCollectionRuntimeState.IDLE)
+        private set
+
     private val activeFingerprint = AtomicReference<String?>(null)
 
     fun recordsFor(collectionId: String): List<SpeciesRecord>? = recordsByCollection[collectionId]
@@ -41,6 +51,10 @@ object LibraryCollectionRuntime {
             activeFingerprint.set(fingerprint)
         }
 
+        Snapshot.withMutableSnapshot {
+            state = LibraryCollectionRuntimeState.LOADING
+        }
+
         thread(name = "fieldintel-evidence-collections", isDaemon = true) {
             val evidenceStore = SpecialistEvidenceStore(appContext)
             val ready = evidenceStore.status().installed && taxonomyStore.status().installed
@@ -60,6 +74,11 @@ object LibraryCollectionRuntime {
 
             Snapshot.withMutableSnapshot {
                 recordsByCollection = resolved
+                state = if (ready) {
+                    LibraryCollectionRuntimeState.SQLITE_READY
+                } else {
+                    LibraryCollectionRuntimeState.FALLBACK
+                }
             }
         }
     }
