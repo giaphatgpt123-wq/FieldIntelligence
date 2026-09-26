@@ -118,6 +118,7 @@ fun RegionScanAutoCapturePanel(
 
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         cameraGranted = granted
+        if (granted) scanning = true
         if (!granted) {
             scanning = false
             frameQuality = null
@@ -135,15 +136,45 @@ fun RegionScanAutoCapturePanel(
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF0B2329)),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF245860)),
             border = BorderStroke(1.dp, Color(0x3345E58C))
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text("QUÉT VÙNG THỰC TẾ", style = MaterialTheme.typography.titleLarge)
+                Text("QUÉT VÙNG THỰC TẾ", style = MaterialTheme.typography.titleLarge, color = Color.White)
                 Text(
                     "Lia camera qua đám rau/cỏ/cây. App tự chọn lúc hình ổn định để chụp ảnh; khi model vùng sẵn sàng, các đối tượng trong cảnh được phân loại đồng thời.",
                     color = FieldColors.onSurfaceVariant
                 )
+
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Button(
+                        onClick = {
+                            if (!cameraGranted) {
+                                permissionLauncher.launch(Manifest.permission.CAMERA)
+                            } else {
+                                detections = emptyList()
+                                frameQuality = null
+                                (runner as? StableRegionVisualModelRunner)?.reset()
+                                statusText = "Đang khởi động camera quét vùng…"
+                                scanning = true
+                            }
+                        },
+                        modifier = Modifier.weight(1f).heightIn(min = 56.dp),
+                        shape = RoundedCornerShape(18.dp)
+                    ) { Text(if (cameraGranted) "BẮT ĐẦU QUÉT VÙNG" else "CẤP QUYỀN CAMERA") }
+                    if (scanning) {
+                        OutlinedButton(
+                            onClick = {
+                                scanning = false
+                                frameQuality = null
+                                (runner as? StableRegionVisualModelRunner)?.reset()
+                                statusText = "Đã dừng quét vùng."
+                            },
+                            modifier = Modifier.weight(1f).heightIn(min = 56.dp),
+                            shape = RoundedCornerShape(18.dp)
+                        ) { Text("DỪNG") }
+                    }
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxWidth().height(470.dp),
@@ -233,48 +264,20 @@ fun RegionScanAutoCapturePanel(
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        color = Color(0xFF0E252A)
+                        color = Color(0xFF204951)
                     ) {
                         Text(activeGuidance, modifier = Modifier.padding(11.dp), color = FieldColors.onSurfaceVariant)
                     }
                 }
 
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Button(
-                        onClick = {
-                            if (!cameraGranted) {
-                                permissionLauncher.launch(Manifest.permission.CAMERA)
-                            } else {
-                                detections = emptyList()
-                                frameQuality = null
-                                (runner as? StableRegionVisualModelRunner)?.reset()
-                                statusText = "Đang khởi động camera quét vùng…"
-                                scanning = true
-                            }
-                        },
-                        modifier = Modifier.weight(1f).heightIn(min = 56.dp),
-                        shape = RoundedCornerShape(18.dp)
-                    ) { Text(if (cameraGranted) "BẮT ĐẦU QUÉT VÙNG" else "CẤP QUYỀN CAMERA") }
-                    if (scanning) {
-                        OutlinedButton(
-                            onClick = {
-                                scanning = false
-                                frameQuality = null
-                                (runner as? StableRegionVisualModelRunner)?.reset()
-                                statusText = "Đã dừng quét vùng."
-                            },
-                            modifier = Modifier.weight(1f).heightIn(min = 56.dp),
-                            shape = RoundedCornerShape(18.dp)
-                        ) { Text("DỪNG") }
-                    }
-                }
+
             }
         }
 
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(22.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF132D32))
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF2B6167))
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                 Text("KẾT QUẢ VÙNG", style = MaterialTheme.typography.titleMedium)
@@ -332,7 +335,7 @@ fun RegionScanAutoCapturePanel(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(18.dp),
-            color = Color(0xFF102A31),
+            color = Color(0xFF245860),
             border = BorderStroke(1.dp, Color(0x33FFD166))
         ) {
             Text(
