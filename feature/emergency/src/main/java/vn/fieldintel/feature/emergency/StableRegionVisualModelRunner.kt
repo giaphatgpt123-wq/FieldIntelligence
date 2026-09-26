@@ -6,9 +6,9 @@ import kotlin.math.min
 /**
  * Multi-frame stabilizer for open-region camera scanning.
  *
- * A taxon candidate is only emitted after it has been observed repeatedly in a spatially similar
- * region. This reduces label flicker while the user pans across dense vegetation. The stabilizer
- * never creates a taxon name; it only filters and smooths detections produced by the installed model.
+ * Every current track is emitted so the overlay can show "ĐANG XÁC MINH" while it accumulates
+ * repeated observations. A track is marked stable only after stableHitsRequired matching frames.
+ * The stabilizer never creates a taxon name; it only filters, tracks and smooths model output.
  */
 class RegionDetectionStabilizer(
     private val stableHitsRequired: Int = 3,
@@ -86,11 +86,16 @@ class RegionDetectionStabilizer(
 
         return tracks
             .asSequence()
-            .filter { it.hits >= stableHitsRequired && it.misses == 0 }
-            .sortedByDescending { it.confidence }
+            .filter { it.misses == 0 }
+            .sortedWith(compareByDescending<Track> { it.hits >= stableHitsRequired }.thenByDescending { it.confidence })
             .map { track ->
+                val hint = if (track.hits >= stableHitsRequired) {
+                    "stable-${track.id}"
+                } else {
+                    "verifying-${track.id}:${track.hits}/$stableHitsRequired"
+                }
                 VisualDetection(
-                    trackHint = "stable-${track.id}",
+                    trackHint = hint,
                     label = track.label,
                     scientificName = track.scientificName,
                     confidence = track.confidence.coerceIn(0f, 1f),
@@ -146,6 +151,20 @@ class RegionDetectionStabilizer(
         val bottom = blend(previous.bottom, current.bottom).coerceAtLeast(top + 0.0001f).coerceAtMost(1f)
         return NormalizedBox(left, top, right, bottom)
     }
+}
+
+fun VisualDetection.isStableRegionCandidate(): Boolean = trackHint?.startsWith("stable-") == true
+
+fun VisualDetection.regionVerificationProgress(): Pair<Int, Int>? {
+    val hint = trackHint ?: return null
+    if (!hint.startsWith("verifying-")) return null
+    val progress = hint.substringAfter(':', missingDelimiterValue = "")
+    if (progress.isBlank()) return null
+    val parts = progress.split('/', limit = 2)
+    if (parts.size != 2) return null
+    val hits = parts[0].toIntOrNull() ?: return null
+    val required = parts[1].toIntOrNull() ?: return null
+    return hits to required
 }
 
 /** Decorates any installed visual runner with multi-frame stabilization for region scanning. */
