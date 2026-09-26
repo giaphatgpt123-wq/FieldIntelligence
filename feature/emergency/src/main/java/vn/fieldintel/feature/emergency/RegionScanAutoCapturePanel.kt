@@ -54,6 +54,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 private const val AUTO_REGION_ANALYSIS_INTERVAL_NANOS = 250_000_000L
 
@@ -112,7 +113,8 @@ fun RegionScanAutoCapturePanel(
     var detections by remember { mutableStateOf(emptyList<VisualDetection>()) }
     var lastFrame by remember { mutableStateOf<LiveFrameInfo?>(null) }
     var frameQuality by remember { mutableStateOf<RegionFrameQuality?>(null) }
-    var autoCaptureCount by remember { mutableIntStateOf(0) }
+    var savedCaptureCount by remember { mutableIntStateOf(0) }
+    var manualCaptureRequest by remember { mutableIntStateOf(0) }
     var latestCapture by remember { mutableStateOf<String?>(null) }
     var statusText by remember { mutableStateOf("Sẵn sàng quét vùng.") }
 
@@ -188,6 +190,7 @@ fun RegionScanAutoCapturePanel(
                                 runner = runner,
                                 modelReady = modelReady,
                                 modifier = Modifier.fillMaxSize(),
+                                manualCaptureRequest = manualCaptureRequest,
                                 onFrame = { lastFrame = it },
                                 onQuality = { frameQuality = it },
                                 onDetections = {
@@ -206,11 +209,11 @@ fun RegionScanAutoCapturePanel(
                                 },
                                 onAutoCaptured = { path ->
                                     latestCapture = path
-                                    autoCaptureCount += 1
+                                    savedCaptureCount += 1
                                     statusText = if (modelReady) {
-                                        "Đã tự chụp ảnh với các kết quả đã ổn định và lưu metadata kèm ảnh."
+                                        "Đã lưu ảnh vùng và metadata offline."
                                     } else {
-                                        "Đã tự chụp ảnh vùng ổn định; chưa gắn tên loài vì model chưa được cài."
+                                        "Đã lưu ảnh offline; chưa gắn tên loài vì chưa có model."
                                     }
                                 },
                                 onControlStatus = { statusText = it },
@@ -261,6 +264,14 @@ fun RegionScanAutoCapturePanel(
                 }
 
                 if (scanning) {
+                    Button(
+                        onClick = {
+                            manualCaptureRequest += 1
+                            statusText = "Đang chụp ảnh thủ công sau khi camera ổn định…"
+                        },
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                        shape = RoundedCornerShape(16.dp)
+                    ) { Text("📷 CHỤP THỦ CÔNG", color = FieldColors.onPrimary) }
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
@@ -324,13 +335,15 @@ fun RegionScanAutoCapturePanel(
                         color = regionQualityColor(quality)
                     )
                 }
-                Text("Ảnh tự chụp: $autoCaptureCount", style = MaterialTheme.typography.bodySmall)
+                Text("Ảnh đã lưu trong phiên: $savedCaptureCount", style = MaterialTheme.typography.bodySmall)
                 if (latestCapture != null) Text("Ảnh gần nhất và metadata đã lưu offline trên máy.", color = FieldColors.primary)
                 lastFrame?.let {
                     Text("Camera ${it.width}×${it.height} • xoay ${it.rotationDegrees}°", style = MaterialTheme.typography.bodySmall, color = FieldColors.onSurfaceVariant)
                 }
             }
         }
+
+        RegionScanCaptureGallery(latestCapture)
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -351,6 +364,7 @@ fun RegionScanAutoCapturePanel(
 private fun RegionAutoCaptureCamera(
     runner: LiveVisualModelRunner,
     modelReady: Boolean,
+    manualCaptureRequest: Int,
     modifier: Modifier,
     onFrame: (LiveFrameInfo) -> Unit,
     onQuality: (RegionFrameQuality) -> Unit,
@@ -361,6 +375,7 @@ private fun RegionAutoCaptureCamera(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val latestManualCaptureRequest by rememberUpdatedState(manualCaptureRequest)
     val currentOnFrame by rememberUpdatedState(onFrame)
     val currentOnQuality by rememberUpdatedState(onQuality)
     val currentOnDetections by rememberUpdatedState(onDetections)
@@ -474,7 +489,8 @@ private fun RegionAutoCaptureCamera(
         val mainExecutor = ContextCompat.getMainExecutor(context)
         var disposed = false
         var lastAnalysisTimestamp = 0L
-        var captureInFlight = false
+        val captureInFlight = AtomicBoolean(false)
+        var consumedManualCaptureRequest = manualCaptureRequest
 
         providerFuture.addListener({
             if (disposed) return@addListener
@@ -518,9 +534,13 @@ private fun RegionAutoCaptureCamera(
                             mainExecutor.execute {
                                 if (!disposed && adjustmentState != cameraState) adjustmentState = cameraState
                             }
+                            val manualRequested = adjustmentReady &&
+                                latestManualCaptureRequest > consumedManualCaptureRequest
                             val captureEligible = adjustmentReady && (!modelReady || stableFound.isNotEmpty())
-                            if (!captureInFlight && frameGate.shouldCapture(timestamp, frame, captureEligible)) {
-                                captureInFlight = true
+                            val autoRequested = !captureInFlight.get() &&
+                                frameGate.shouldCapture(timestamp, frame, captureEligible && !manualRequested)
+                            if ((manualRequested || autoRequested) && captureInFlight.compareAndSet(false, true)) {
+                                if (manualRequested) consumedManualCaptureRequest = latestManualCaptureRequest
                                 val capturedAt = System.currentTimeMillis()
                                 val captureDetections = if (modelReady) stableFound.toList() else emptyList()
                                 val descriptor = if (modelReady) runner.status().descriptor else null
@@ -535,7 +555,7 @@ private fun RegionAutoCaptureCamera(
                                     mainExecutor,
                                     object : ImageCapture.OnImageSavedCallback {
                                         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                            captureInFlight = false
+                                            captureInFlight.set(false)
                                             if (disposed) return
                                             runCatching {
                                                 metadataExecutor.execute {
@@ -567,7 +587,7 @@ private fun RegionAutoCaptureCamera(
                                         }
 
                                         override fun onError(exception: ImageCaptureException) {
-                                            captureInFlight = false
+                                            captureInFlight.set(false)
                                             if (!disposed) currentOnError(exception.message ?: "Không thể tự chụp ảnh vùng")
                                         }
                                     }
