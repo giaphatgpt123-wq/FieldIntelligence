@@ -136,13 +136,13 @@ def validate_provenance(dataset_doi: str, publisher: str, license_id: str) -> No
 def build(input_path: Path, output_path: Path, metadata_path: Path, dataset_doi: str, publisher: str, license_id: str, multimedia_path: Path | None = None) -> dict:
     validate_provenance(dataset_doi, publisher, license_id)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    media_by_gbif: dict[str, List[Dict[str, str]]] = {}\n    if multimedia_path:\n        for media_row in read_delimited(multimedia_path):\n            gbif_id = first(media_row, \"gbifID\")\n            if gbif_id:\n                media_by_gbif.setdefault(gbif_id, []).append(media_row)\n    seen = set()
+    media_by_gbif: dict[str, List[Dict[str, str]]] = {}\n    if multimedia_path:\n        for media_row in read_delimited(multimedia_path):\n            gbif_id = first(media_row, "gbifID")\n            if gbif_id:\n                media_by_gbif.setdefault(gbif_id, []).append(media_row)\n    seen = set()
     groups: dict[str, int] = {}
     count = 0
     sha = hashlib.sha256()
     with gzip.open(output_path, "wt", encoding="utf-8", newline="\n") as out:
         for row in read_delimited(input_path):
-            record = normalize(row, dataset_doi, publisher, license_id, media_by_gbif.get(first(row, \"gbifID\"), []))
+            record = normalize(row, dataset_doi, publisher, license_id, media_by_gbif.get(first(row, "gbifID"), []))
             if not valid(record):
                 continue
             key = (record["sourceRecordId"].lower(), record["scientificName"].lower())
