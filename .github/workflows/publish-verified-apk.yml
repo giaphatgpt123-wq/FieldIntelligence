@@ -1,0 +1,39 @@
+name: Publish Verified APK
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [ ".github/workflows/publish-verified-apk.yml" ]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download verified Android build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          gh run download 36247981836 --repo "${GITHUB_REPOSITORY}" --name FieldIntelligence-P0-debug --dir dist
+          test -s dist/app-debug.apk
+          echo 'a180f39cb2cc70a012386bab2026e2f26afd1c4f020bb542c063a810f5bebaa5  dist/app-debug.apk' | sha256sum --check
+          mv dist/app-debug.apk dist/FieldIntelligence-WFO-auto-d5c8d01.apk
+
+      - name: Publish direct APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create fieldintel-wfo-auto-d5c8d01 \
+            dist/FieldIntelligence-WFO-auto-d5c8d01.apk \
+            --repo "${GITHUB_REPOSITORY}" \
+            --target d5c8d011e8dc1e94cca42eecf27d414b41529e30 \
+            --title "FieldIntelligence - tự nạp thư viện WFO" \
+            --notes "APK debug. Tích hợp 38100 tên phân loại WFO thuộc 47 chi và 9 bản ghi evidence; tự cài dữ liệu ở lần mở đầu. Model nhận diện loài từ ảnh chưa có." \
+            --prerelease
