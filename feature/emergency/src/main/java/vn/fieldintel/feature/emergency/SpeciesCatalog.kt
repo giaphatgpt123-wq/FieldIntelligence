@@ -68,6 +68,24 @@ object SpeciesCatalog {
             sourceScope = "Tên được chấp nhận, phân loại và phạm vi phân bố; không dùng hồ sơ taxonomy để hướng dẫn dùng làm thuốc hoặc thực phẩm."
         ),
         SpeciesRecord(
+            id = "hypericum-perforatum",
+            vietnameseName = "St. John's wort (Hypericum perforatum)",
+            scientificName = "Hypericum perforatum L.",
+            group = "Thực vật",
+            sourceName = "Royal Botanic Gardens, Kew — Plants of the World Online",
+            sourceUrl = "https://powo.science.kew.org/taxon/433719-1",
+            sourceScope = "Tên được chấp nhận và phân loại. Cảnh báo tương tác thuốc trong app lấy từ nguồn y khoa riêng, không suy ra từ taxonomy Kew."
+        ),
+        SpeciesRecord(
+            id = "camellia-sinensis",
+            vietnameseName = "Chè / trà (Camellia sinensis)",
+            scientificName = "Camellia sinensis (L.) Kuntze",
+            group = "Thực vật",
+            sourceName = "Royal Botanic Gardens, Kew — Plants of the World Online",
+            sourceUrl = "https://powo.science.kew.org/taxon/828548-1",
+            sourceScope = "Tên được chấp nhận, phân loại và phạm vi phân bố; không dùng hồ sơ taxonomy để kết luận liều dùng, công dụng hoặc tương tác thuốc."
+        ),
+        SpeciesRecord(
             id = "apis-cerana",
             vietnameseName = "Ong mật châu Á",
             scientificName = "Apis cerana Fabricius, 1793",
