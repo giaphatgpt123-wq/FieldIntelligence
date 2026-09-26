@@ -1,6 +1,7 @@
 package vn.fieldintel.feature.emergency
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -24,9 +25,23 @@ class LibraryCollectionsTest {
     }
 
     @Test
-    fun highRiskCollectionsDoNotGetTaxonomyOnlyAutofill() {
-        assertTrue(LibraryCollections.byId("traditional-medicine")!!.recordIds.isEmpty())
-        assertTrue(LibraryCollections.byId("toxic-plants")!!.recordIds.isEmpty())
+    fun highRiskCollectionsRequireSpecialistEvidence() {
+        val medicinal = LibraryCollections.byId("traditional-medicine")!!.recordIds
+        val toxic = LibraryCollections.byId("toxic-plants")!!.recordIds
+        assertFalse(medicinal.isEmpty())
+        assertFalse(toxic.isEmpty())
+        assertTrue(medicinal.all { id ->
+            SpecialistEvidenceCatalog.forSpecies(id).any { it.domain == EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE }
+        })
+        assertTrue(toxic.all { id ->
+            SpecialistEvidenceCatalog.forSpecies(id).any { it.domain == EvidenceDomain.TOXICOLOGY }
+        })
+    }
+
+    @Test
+    fun evidenceBackedCollectionsExposeKnownRecords() {
+        assertTrue(LibraryCollections.recordsFor("traditional-medicine").any { it.id == "curcuma-longa" })
+        assertTrue(LibraryCollections.recordsFor("toxic-plants").any { it.id == "ricinus-communis" })
     }
 
     @Test
