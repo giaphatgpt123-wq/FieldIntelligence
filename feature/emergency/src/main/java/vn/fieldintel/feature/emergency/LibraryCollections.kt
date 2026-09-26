@@ -20,8 +20,15 @@ object LibraryCollections {
             id = "traditional-medicine",
             label = "Cây thuốc Đông y",
             icon = "⚕",
-            subtitle = "Chỉ hiện hồ sơ có bằng chứng dược liệu chính thức",
+            subtitle = "Chỉ hiện hồ sơ có bằng chứng dược liệu chính thức Việt Nam",
             recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE)
+        ),
+        LibraryCollection(
+            id = "herbal-monographs",
+            label = "Chuyên khảo dược liệu",
+            icon = "▣",
+            subtitle = "Chuyên khảo quản lý quốc tế • không phải hướng dẫn tự điều trị",
+            recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH)
         ),
         LibraryCollection(
             id = "vegetables",
