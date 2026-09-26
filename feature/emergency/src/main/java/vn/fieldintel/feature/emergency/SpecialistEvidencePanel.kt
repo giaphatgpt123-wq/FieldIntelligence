@@ -21,13 +21,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SpecialistEvidencePanel(speciesId: String) {
+fun SpecialistEvidencePanel(speciesId: String = "", scientificName: String = "") {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val store = remember(context) { SpecialistEvidenceStore(context.applicationContext) }
-    val packStatus = remember(speciesId) { store.status() }
-    val packRecords = remember(speciesId) { store.forSpecies(speciesId) }
-    val records = if (packRecords.isNotEmpty()) packRecords else SpecialistEvidenceCatalog.forSpecies(speciesId)
+    val packStatus = remember(speciesId, scientificName) { store.status() }
+    val packRecords = remember(speciesId, scientificName) {
+        when {
+            speciesId.isNotBlank() -> store.forSpecies(speciesId)
+            scientificName.isNotBlank() -> store.forScientificName(scientificName)
+            else -> emptyList()
+        }
+    }
+    val fallbackRecords = remember(speciesId, scientificName) {
+        when {
+            speciesId.isNotBlank() -> SpecialistEvidenceCatalog.forSpecies(speciesId)
+            scientificName.isNotBlank() -> SpecialistEvidenceCatalog.forScientificName(scientificName)
+            else -> emptyList()
+        }
+    }
+    val records = if (packRecords.isNotEmpty()) packRecords else fallbackRecords
     if (records.isEmpty()) return
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -51,6 +64,7 @@ fun SpecialistEvidencePanel(speciesId: String) {
             ) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(record.title, fontWeight = FontWeight.Black, color = accent)
+                    if (record.scientificName.isNotBlank()) Text(record.scientificName, color = FieldColors.primary, fontWeight = FontWeight.Bold)
                     Text(record.statement, fontWeight = FontWeight.Medium)
                     if (record.plantPart.isNotBlank()) Text("Bộ phận: ${record.plantPart}", color = FieldColors.onSurfaceVariant)
                     Text("Nguồn: ${record.sourceName}", fontWeight = FontWeight.Bold)
