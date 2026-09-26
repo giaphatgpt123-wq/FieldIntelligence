@@ -16,10 +16,12 @@ class StillImageDetectionOverlayTest {
         val first = detection("A", 0.1f, 0.1f, 0.4f, 0.4f)
         val second = detection("B", 0.6f, 0.6f, 0.9f, 0.9f)
 
+        // 100x200 image fitted into 200x200 canvas renders as 100x200 with 50px side letterboxes.
+        // (75, 50) maps to normalized image coordinate (0.25, 0.25), inside `first`.
         val hit = stillImageHitTest(
             detections = listOf(first, second),
-            tapX = 50f,
-            tapY = 100f,
+            tapX = 75f,
+            tapY = 50f,
             canvasWidth = 200f,
             canvasHeight = 200f,
             imageWidth = 100,
