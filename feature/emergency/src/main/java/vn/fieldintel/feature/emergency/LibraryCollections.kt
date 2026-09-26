@@ -20,6 +20,13 @@ data class LibraryCollection(
 object LibraryCollections {
     private val baseItems: List<LibraryCollection> = listOf(
         LibraryCollection(
+            id = "wfo-plants",
+            label = "Kho thực vật WFO",
+            icon = "🌿",
+            subtitle = "Tra cứu tên phân loại offline theo chi • chưa xác định mẫu vật",
+            recordIds = emptySet()
+        ),
+        LibraryCollection(
             id = "traditional-medicine",
             label = "Cây thuốc Đông y",
             icon = "⚕",
