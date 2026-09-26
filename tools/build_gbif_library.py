@@ -13,7 +13,7 @@ import gzip
 import hashlib
 import json
 from pathlib import Path
-from typing import Dict, Iterator
+from typing import Dict, Iterator, List
 
 ALLOWED_LICENSES = {
     "CC0-1.0": False,
@@ -69,7 +69,7 @@ def library_group(row: Dict[str, str]) -> str:
     return "Khác"
 
 
-def normalize(row: Dict[str, str], dataset_doi: str, publisher: str, license_id: str) -> dict:
+def normalize(row: Dict[str, str], dataset_doi: str, publisher: str, license_id: str, media_rows: List[Dict[str, str]] | None = None) -> dict:
     source_record_id = first(row, "occurrenceID", "gbifID", "taxonID", "taxonKey", "id")
     scientific = first(row, "scientificName", "acceptedScientificName", "species")
     return {
@@ -133,16 +133,16 @@ def validate_provenance(dataset_doi: str, publisher: str, license_id: str) -> No
         raise SystemExit("Unsupported GBIF licence; expected CC0-1.0, CC-BY-4.0 or CC-BY-NC-4.0")
 
 
-def build(input_path: Path, output_path: Path, metadata_path: Path, dataset_doi: str, publisher: str, license_id: str) -> dict:
+def build(input_path: Path, output_path: Path, metadata_path: Path, dataset_doi: str, publisher: str, license_id: str, multimedia_path: Path | None = None) -> dict:
     validate_provenance(dataset_doi, publisher, license_id)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    seen = set()
+    media_by_gbif: dict[str, List[Dict[str, str]]] = {}\n    if multimedia_path:\n        for media_row in read_delimited(multimedia_path):\n            gbif_id = first(media_row, \"gbifID\")\n            if gbif_id:\n                media_by_gbif.setdefault(gbif_id, []).append(media_row)\n    seen = set()
     groups: dict[str, int] = {}
     count = 0
     sha = hashlib.sha256()
     with gzip.open(output_path, "wt", encoding="utf-8", newline="\n") as out:
         for row in read_delimited(input_path):
-            record = normalize(row, dataset_doi, publisher, license_id)
+            record = normalize(row, dataset_doi, publisher, license_id, media_by_gbif.get(first(row, \"gbifID\"), []))
             if not valid(record):
                 continue
             key = (record["sourceRecordId"].lower(), record["scientificName"].lower())
@@ -162,7 +162,7 @@ def build(input_path: Path, output_path: Path, metadata_path: Path, dataset_doi:
         "publisher": publisher,
         "license": license_id,
         "nonCommercialRestriction": ALLOWED_LICENSES[license_id],
-        "recordCount": count,
+        "recordCount": count,\n        "recordsWithMedia": sum(1 for rows in media_by_gbif.values() if any(first(m, "identifier", "accessURI") for m in rows)),\n        "multimediaRows": sum(len(rows) for rows in media_by_gbif.values()),
         "groupCounts": groups,
         "normalizedNdjsonSha256": sha.hexdigest(),
         "safety": {
@@ -181,13 +181,13 @@ def build(input_path: Path, output_path: Path, metadata_path: Path, dataset_doi:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True, type=Path)
-    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--output", required=True, type=Path)\n    parser.add_argument("--multimedia", type=Path, help="GBIF DWCA multimedia.txt joined to occurrence rows by gbifID")
     parser.add_argument("--metadata", required=True, type=Path)
     parser.add_argument("--dataset-doi", required=True)
     parser.add_argument("--publisher", required=True)
     parser.add_argument("--license", required=True, choices=sorted(ALLOWED_LICENSES))
     args = parser.parse_args()
-    meta = build(args.input, args.output, args.metadata, args.dataset_doi, args.publisher, args.license)
+    meta = build(args.input, args.output, args.metadata, args.dataset_doi, args.publisher, args.license, args.multimedia)
     print(json.dumps({"recordCount": meta["recordCount"], "groupCounts": meta["groupCounts"]}, ensure_ascii=False))
 
 
