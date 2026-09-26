@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "freshwater-fish-vietnam",
+  "displayName": "Cá nước ngọt Việt Nam",
+  "scope": {
+    "countryCode": "VN",
+    "habitat": "freshwater",
+    "primaryPresence": "present",
+    "includePossibleInMainLibrary": false,
+    "includeAbsentInMainLibrary": false
+  },
+  "sources": [
+    {
+      "id": "fishbase-vietnam-freshwater",
+      "role": "country-checklist-crosscheck",
+      "url": "https://www.fishbase.se/country/CountryChecklist.php?c_code=704&vhabitat=fresh",
+      "observedCounts": {
+        "reported": 772,
+        "present": 736,
+        "possible": 29,
+        "absentOrRejected": 7
+      }
+    },
+    {
+      "id": "gbif-occurrence-dwca",
+      "role": "taxonomy-occurrence-media",
+      "format": "DWCA",
+      "requiredFields": [
+        "gbifID","acceptedTaxonKey","speciesKey","scientificName","acceptedScientificName",
+        "countryCode","occurrenceStatus","establishmentMeans","mediaType"
+      ],
+      "multimediaFields": [
+        "identifier","references","title","description","creator","publisher",
+        "license","rightsHolder","type"
+      ]
+    }
+  ],
+  "ingestionPolicy": {
+    "acceptedTaxonOnlyForCanonicalProfile": true,
+    "preserveSynonyms": true,
+    "deduplicateByAcceptedTaxon": true,
+    "requireMediaLicenseForOfflineReuse": true,
+    "preserveMediaCreatorAndRightsHolder": true,
+    "doNotInferEdibilityOrSafety": true,
+    "possiblePresenceStatus": "review",
+    "absentOrMisidentifiedStatus": "exclude"
+  },
+  "output": {
+    "taxonomyTable": "taxon",
+    "mediaTable": "species_media",
+    "vernacularTable": "vernacular_name",
+    "occurrenceSummaryTable": "occurrence_summary",
+    "similarSpeciesTable": "similar_species"
+  }
+}
