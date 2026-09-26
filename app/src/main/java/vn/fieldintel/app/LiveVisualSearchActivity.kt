@@ -13,12 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import vn.fieldintel.feature.emergency.FieldColors
-import vn.fieldintel.feature.emergency.LiveVisualSearchPanel
+import vn.fieldintel.feature.emergency.RegionScanPanel
 
-/**
- * Temporary direct entry point for on-device validation of the live visual search pipeline.
- * It is intentionally separate from taxon safety/evidence decisions.
- */
+/** Direct entry point for on-device validation of region scanning and automatic evidence capture. */
 class LiveVisualSearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +28,7 @@ class LiveVisualSearchActivity : ComponentActivity() {
                         .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                 ) {
-                    LiveVisualSearchPanel()
+                    RegionScanPanel()
                 }
             }
         }
