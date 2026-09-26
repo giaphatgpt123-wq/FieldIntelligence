@@ -1,11 +1,11 @@
 package vn.fieldintel.feature.emergency
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.spacedBy
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,7 +24,7 @@ fun SpecialistEvidencePanel(speciesId: String) {
     if (records.isEmpty()) return
     val uriHandler = LocalUriHandler.current
 
-    Column(verticalArrangement = spacedBy(10.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("BẰNG CHỨNG CHUYÊN NGÀNH", fontWeight = FontWeight.Black)
         records.forEach { record ->
             val accent = when (record.domain) {
@@ -38,7 +38,7 @@ fun SpecialistEvidencePanel(speciesId: String) {
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF132D32)),
                 border = BorderStroke(1.dp, accent.copy(alpha = .35f))
             ) {
-                Column(Modifier.padding(14.dp), verticalArrangement = spacedBy(7.dp)) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(record.title, fontWeight = FontWeight.Black, color = accent)
                     Text(record.statement, fontWeight = FontWeight.Medium)
                     if (record.plantPart.isNotBlank()) Text("Bộ phận: ${record.plantPart}", color = FieldColors.onSurfaceVariant)
