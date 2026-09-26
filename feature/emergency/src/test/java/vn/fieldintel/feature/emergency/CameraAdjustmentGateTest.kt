@@ -59,4 +59,25 @@ class CameraAdjustmentGateTest {
         assertFalse(gate.ready(1_499_999_999))
         assertTrue(gate.ready(1_850_000_000))
     }
+    @Test fun stableQualityFrameCapturesOnlyAfterAdjustment() {
+        val camera = CameraAdjustmentGate()
+        val stability = RegionFrameStabilityGate(stableFramesRequired = 2)
+        val token = camera.begin(0)
+        fun frame(timestamp: Long): LiveVisualFrameData {
+            val width = 24
+            val y = ByteArray(width * width) { index ->
+                (90 + ((index / width / 2 + index % width / 2) % 2) * 18).toByte()
+            }
+            val uv = ByteArray(width * width / 4) { 128.toByte() }
+            return LiveVisualFrameData(timestamp, width, width, 0,
+                YuvPlaneData(y, width, 1), YuvPlaneData(uv, width / 2, 1),
+                YuvPlaneData(uv, width / 2, 1))
+        }
+        assertFalse(stability.shouldCapture(100, frame(100), camera.ready(100)))
+        assertFalse(stability.shouldCapture(200, frame(200), camera.ready(200)))
+        camera.focusCompleted(token, 300, successful = true)
+        assertFalse(stability.shouldCapture(349_000_300, frame(349_000_300), camera.ready(349_000_300)))
+        assertTrue(stability.shouldCapture(350_000_300, frame(350_000_300), camera.ready(350_000_300)))
+    }
+
 }
