@@ -1,5 +1,7 @@
 package vn.fieldintel.feature.emergency
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,6 +61,11 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
     var error by remember { mutableStateOf<String?>(null) }
     var saveStatus by remember { mutableStateOf("") }
     var pendingCaptureFile by remember { mutableStateOf<File?>(null) }
+    var cameraGranted by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        )
+    }
 
     DisposableEffect(runner) {
         onDispose { runner.close() }
@@ -103,6 +111,28 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
             }
         } else if (file != null) {
             file.delete()
+        }
+    }
+
+    fun startFullResolutionCapture() {
+        runCatching {
+            val dir = File(context.cacheDir, "camera-capture").apply { mkdirs() }
+            val file = File.createTempFile("manual-", ".jpg", dir)
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+            pendingCaptureFile = file
+            takePhoto.launch(uri)
+        }.onFailure { failure ->
+            pendingCaptureFile = null
+            error = failure.message ?: "Không thể mở camera chụp ảnh."
+        }
+    }
+
+    val cameraPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        cameraGranted = granted
+        if (granted) {
+            startFullResolutionCapture()
+        } else {
+            error = "Cần quyền camera để chụp ảnh. Chọn ảnh từ máy vẫn sử dụng được."
         }
     }
 
@@ -160,16 +190,8 @@ fun StillImageRecognitionPanel(modelGeneration: Int = 0) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
                         onClick = {
-                            runCatching {
-                                val dir = File(context.cacheDir, "camera-capture").apply { mkdirs() }
-                                val file = File.createTempFile("manual-", ".jpg", dir)
-                                val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-                                pendingCaptureFile = file
-                                takePhoto.launch(uri)
-                            }.onFailure { failure ->
-                                pendingCaptureFile = null
-                                error = failure.message ?: "Không thể mở camera chụp ảnh."
-                            }
+                            if (cameraGranted) startFullResolutionCapture()
+                            else cameraPermission.launch(Manifest.permission.CAMERA)
                         },
                         modifier = Modifier.weight(1f).heightIn(min = 56.dp),
                         shape = RoundedCornerShape(18.dp)
