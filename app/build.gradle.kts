@@ -17,7 +17,7 @@ android {
         applicationId = "vn.fieldintel.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
+        versionCode = 11
         versionName = "0.5.0"
         manifestPlaceholders["appLabel"] = "VN Sinh tồn"
     }
@@ -39,7 +39,7 @@ android {
             applicationIdSuffix = ".osmtest"
             signingConfig = signingConfigs.getByName("pilotDebug")
             versionNameSuffix = "-test"
-            manifestPlaceholders["appLabel"] = "VN Sinh tồn OSM thử nghiệm"
+            manifestPlaceholders["appLabel"] = "VN Sinh tồn (cập nhật)"
         }
     }
     compileOptions {
