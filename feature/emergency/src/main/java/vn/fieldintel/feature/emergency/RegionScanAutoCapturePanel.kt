@@ -126,7 +126,7 @@ fun RegionScanAutoCapturePanel(
                                     latestCapture = path
                                     autoCaptureCount += 1
                                     statusText = if (modelReady) {
-                                        "Đã tự chụp ảnh vùng ổn định và giữ kết quả phân loại hiện tại."
+                                        "Đã tự chụp ảnh vùng ổn định và lưu kết quả phân loại kèm ảnh."
                                     } else {
                                         "Đã tự chụp ảnh vùng ổn định; chưa gắn tên loài vì model chưa được cài."
                                     }
@@ -218,7 +218,7 @@ fun RegionScanAutoCapturePanel(
                     }
                 }
                 Text("Ảnh tự chụp: $autoCaptureCount", style = MaterialTheme.typography.bodySmall)
-                if (latestCapture != null) Text("Ảnh gần nhất đã lưu offline trên máy.", color = FieldColors.primary)
+                if (latestCapture != null) Text("Ảnh gần nhất và metadata đã lưu offline trên máy.", color = FieldColors.primary)
                 lastFrame?.let {
                     Text("Camera ${it.width}×${it.height} • xoay ${it.rotationDegrees}°", style = MaterialTheme.typography.bodySmall, color = FieldColors.onSurfaceVariant)
                 }
@@ -263,6 +263,7 @@ private fun RegionAutoCaptureCamera(
         }
     }
     val executor = remember { Executors.newSingleThreadExecutor() }
+    val metadataExecutor = remember { Executors.newSingleThreadExecutor() }
     val frameGate = remember { RegionFrameStabilityGate() }
 
     AndroidView(factory = { previewView }, modifier = modifier)
@@ -303,16 +304,49 @@ private fun RegionAutoCaptureCamera(
 
                             if (!captureInFlight && frameGate.shouldCapture(timestamp, frame)) {
                                 captureInFlight = true
-                                val folder = File(context.filesDir, if (modelReady) "region-scans/classified" else "region-scans/pending")
-                                    .apply { mkdirs() }
-                                val file = File(folder, "region-${System.currentTimeMillis()}.jpg")
+                                val capturedAt = System.currentTimeMillis()
+                                val captureDetections = found.toList()
+                                val descriptor = if (modelReady) runner.status().descriptor else null
+                                val hasCandidates = descriptor != null && captureDetections.isNotEmpty()
+                                val folder = File(
+                                    context.filesDir,
+                                    if (hasCandidates) "region-scans/classified" else "region-scans/pending"
+                                ).apply { mkdirs() }
+                                val file = File(folder, "region-$capturedAt.jpg")
                                 imageCapture.takePicture(
                                     ImageCapture.OutputFileOptions.Builder(file).build(),
                                     mainExecutor,
                                     object : ImageCapture.OnImageSavedCallback {
                                         override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                                             captureInFlight = false
-                                            if (!disposed) currentOnAutoCaptured(file.absolutePath)
+                                            if (disposed) return
+                                            runCatching {
+                                                metadataExecutor.execute {
+                                                    runCatching {
+                                                        RegionScanCaptureMetadata.write(
+                                                            imageFile = file,
+                                                            capturedAtEpochMs = capturedAt,
+                                                            frameTimestampNanos = timestamp,
+                                                            model = descriptor,
+                                                            detections = captureDetections
+                                                        )
+                                                    }.onSuccess {
+                                                        mainExecutor.execute {
+                                                            if (!disposed) currentOnAutoCaptured(file.absolutePath)
+                                                        }
+                                                    }.onFailure { failure ->
+                                                        mainExecutor.execute {
+                                                            if (!disposed) currentOnError(
+                                                                failure.message ?: "Đã chụp ảnh nhưng không thể lưu metadata phân loại"
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }.onFailure { failure ->
+                                                if (!disposed) currentOnError(
+                                                    failure.message ?: "Không thể lên lịch lưu metadata ảnh vùng"
+                                                )
+                                            }
                                         }
 
                                         override fun onError(exception: ImageCaptureException) {
@@ -339,6 +373,7 @@ private fun RegionAutoCaptureCamera(
             frameGate.reset()
             runCatching { if (providerFuture.isDone) providerFuture.get().unbindAll() }
             executor.shutdownNow()
+            metadataExecutor.shutdownNow()
         }
     }
 }
