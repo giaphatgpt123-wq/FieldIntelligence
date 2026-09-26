@@ -21,7 +21,12 @@ data class ScientificLibraryStatus(
 )
 
 class ScientificLibraryStore(context: Context) {
-    private val databaseFile = File(File(context.filesDir, DIRECTORY_NAME), DATABASE_NAME)
+    private val appContext = context.applicationContext
+    private val databaseFile = File(File(appContext.filesDir, DIRECTORY_NAME), DATABASE_NAME)
+
+    init {
+        LibraryCollectionRuntime.bind(appContext, this)
+    }
 
     fun databasePath(): File = databaseFile
 
