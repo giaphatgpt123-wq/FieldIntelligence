@@ -48,7 +48,41 @@ class ScientificSqliteBuilderTest(unittest.TestCase):
                 hit = db.execute("SELECT scientific_name, family FROM taxon WHERE scientific_name_search = ?", ("oryza sativa l.",)).fetchone()
                 self.assertEqual(("Oryza sativa L.", "Poaceae"), hit)
                 meta = dict(db.execute("SELECT key,value FROM meta"))
-                self.assertEqual("taxonomy-only", json.loads(meta["scope"]))
+                self.assertEqual("taxonomy-media-occurrence", json.loads(meta["scope"]))
+            finally:
+                db.close()
+
+    def test_preserves_fish_media_vernacular_and_occurrence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "fish.ndjson.gz"
+            output = root / "fish.sqlite"
+            row = {
+                "sourceId": "gbif", "sourceRecordId": "fish-1",
+                "scientificName": "Channa striata (Bloch, 1793)", "taxonomicStatus": "Accepted",
+                "kingdom": "Animalia", "class": "Actinopterygii", "order": "Anabantiformes",
+                "family": "Channidae", "genus": "Channa", "libraryGroup": "Cá nước ngọt",
+                "vernacularName": "Cá lóc",
+                "media": {"mediaType": "StillImage", "identifier": "https://example.org/channa.jpg",
+                          "creator": "Photographer", "rightsHolder": "Collection", "license": "CC-BY-4.0"},
+                "occurrence": {"countryCode": "VN", "stateProvince": "An Giang",
+                               "basisOfRecord": "HUMAN_OBSERVATION", "datasetKey": "dataset-1"},
+                "provenance": {"authority": "GBIF", "license": "CC-BY-4.0",
+                               "scope": "taxonomy-occurrence-and-media-metadata"}
+            }
+            with gzip.open(source, "wt", encoding="utf-8") as handle:
+                handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+            result = module.build(source, output)
+            self.assertEqual(1, result["mediaRecordCount"])
+            self.assertEqual(1, result["vernacularNameCount"])
+            self.assertEqual(1, result["occurrenceSummaryCount"])
+            db = sqlite3.connect(output)
+            try:
+                self.assertEqual(("https://example.org/channa.jpg", "Photographer", "CC-BY-4.0"),
+                    db.execute("SELECT media_identifier,creator,media_license FROM species_media").fetchone())
+                self.assertEqual(("Cá lóc",), db.execute("SELECT vernacular_name FROM vernacular_name").fetchone())
+                self.assertEqual(("VN", "An Giang"),
+                    db.execute("SELECT country_code,state_province FROM occurrence_summary").fetchone())
             finally:
                 db.close()
 
