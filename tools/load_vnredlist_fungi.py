@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 BASE = "http://vnredlist.vast.vn"
-CATEGORY = "https://vnredlist.vast.vn/thuc-vat/"
+CATEGORY = BASE + "/thuc-vat/"
 
 class Parser(HTMLParser):
     def __init__(self):
