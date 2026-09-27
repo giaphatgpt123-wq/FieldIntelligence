@@ -261,7 +261,7 @@ class ScientificMediaStore(context: Context) {
         private const val FISH_GROUP = "Cá nước ngọt"
         private const val OBSERVER_MARKER = "__fieldintel_scientific_media_observer__"
         private const val MAX_MEDIA_PER_PROFILE = 3
-        private const val MAX_MEDIA_BYTES = 5L * 1024L * 1024L
+        private const val MAX_MEDIA_BYTES = 8L * 1024L * 1024L
         private const val REVISION_POLL_MS = 1_500L
         private const val REVISION_SETTLE_MS = 150L
         private const val MISSING_FINGERPRINT = "missing"
