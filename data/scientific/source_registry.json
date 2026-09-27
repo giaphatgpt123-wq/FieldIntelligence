@@ -12,6 +12,7 @@
       "label": "Cá nước ngọt Việt Nam",
       "sources": [
         {"id": "fishbase", "kind": "taxonomy-and-occurrence", "url": "https://www.fishbase.se/", "licenseRequired": true},
+        {"id": "vnredlist", "kind": "vietnam-red-list-taxonomy-conservation-and-media", "url": "http://vnredlist.vast.vn/category/ca-nuoc-ngot/", "licenseRequired": true, "httpsRequired": false, "publisher": "Vietnam Academy of Science and Technology"},
         {"id": "gbif", "kind": "taxonomy-and-licensed-media", "url": "https://www.gbif.org/", "licenseRequired": true},
         {"id": "inat", "kind": "research-grade-licensed-media", "url": "https://www.inaturalist.org/", "licenseRequired": true},
         {"id": "commons-wikidata", "kind": "taxon-linked-licensed-media", "url": "https://commons.wikimedia.org/", "licenseRequired": true}
