@@ -163,7 +163,13 @@ class ScientificLibraryStore(context: Context) {
     }
 
     private fun invalidateCaches(){
-        synchronized(searchLock){activeSearchJob?.cancel();activeSearchJob=null;searchResults.clear();searchStates.clear()}
+        synchronized(searchLock){
+            activeSearchJob?.cancel();activeSearchJob=null
+            Snapshot.withMutableSnapshot{
+                searchResults.values.forEach{it.clear()}
+                searchStates.values.forEach{state->state.loading=false;state.completed=false}
+            }
+        }
         recordCache.clear();pendingIdLoads.clear()
     }
 
