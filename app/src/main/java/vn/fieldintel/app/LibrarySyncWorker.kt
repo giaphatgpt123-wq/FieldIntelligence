@@ -9,6 +9,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
+import vn.fieldintel.feature.emergency.ScientificLibraryImportManager
 
 class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
@@ -18,6 +19,8 @@ class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : Corouti
             val manifest = updates.parseManifest(updates.fetchText(UpdateConfig.MANIFEST_URL))
             val downloaded = updates.download(UpdateConfig.PACKAGE_URL, manifest, applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0).longVersionCode.toInt())
             if (!downloaded.applied) error(downloaded.message)
+            val staged = updates.stagedPackage(manifest.version) ?: error("Thiếu gói đã xác minh")
+            ScientificLibraryImportManager(applicationContext).importBundle(staged)
             Result.success()
         }.getOrElse { Result.retry() }
     }
