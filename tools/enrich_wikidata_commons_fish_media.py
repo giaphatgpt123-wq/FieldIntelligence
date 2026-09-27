@@ -49,13 +49,13 @@ def canonical_license(short_name: object, url: object) -> str:
     return ""
 
 
-def _request_json(endpoint: str, params: dict, retries: int = 4) -> dict:
+def _request_json(endpoint: str, params: dict, retries: int = 4, timeout: int = 30) -> dict:
     url = endpoint + "?" + urllib.parse.urlencode(params)
     request = urllib.request.Request(url, headers={"Accept": "application/json", "User-Agent": USER_AGENT})
     last_error: Exception | None = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
                 if response.status != 200:
                     raise RuntimeError(f"Wikimedia API returned HTTP {response.status}")
                 return json.loads(response.read().decode("utf-8"))
@@ -110,6 +110,18 @@ def _get_commons_file(filename: str) -> dict:
     })
 
 
+def _search_commons_depicts(entity_id: str) -> dict:
+    return _request_json(COMMONS_API, {
+        "action": "query",
+        "format": "json",
+        "formatversion": "2",
+        "list": "search",
+        "srsearch": f"haswbstatement:P180={entity_id}",
+        "srnamespace": "6",
+        "srlimit": "10",
+    }, retries=2, timeout=8)
+
+
 def _claim_values(entity: dict, property_id: str) -> list[object]:
     values: list[object] = []
     for claim in (entity.get("claims") or {}).get(property_id) or []:
@@ -128,11 +140,51 @@ def _is_taxon_entity(entity: dict) -> bool:
     return False
 
 
+def _licensed_commons_file(filename: str, entity_id: str, get_commons: Callable[[str], dict], mapping: str) -> dict | None:
+    commons = get_commons(filename)
+    pages = ((commons.get("query") or {}).get("pages") or [])
+    for page in pages:
+        infos = page.get("imageinfo") or []
+        if not infos:
+            continue
+        info = infos[0]
+        url = clean(info.get("url"))
+        if not url.startswith("https://"):
+            continue
+        meta = info.get("extmetadata") or {}
+
+        def mv(key: str) -> str:
+            value = meta.get(key) or {}
+            return clean(value.get("value") if isinstance(value, dict) else value)
+
+        license_id = canonical_license(mv("LicenseShortName"), mv("LicenseUrl"))
+        if license_id not in ALLOWED_LICENSES:
+            continue
+        return {
+            "mediaType": "StillImage",
+            "identifier": url,
+            "references": clean(info.get("descriptionurl")),
+            "title": plain(mv("ObjectName")) or clean(page.get("title")) or filename,
+            "description": plain(mv("ImageDescription")),
+            "creator": plain(mv("Attribution")) or plain(mv("Artist")),
+            "rightsHolder": plain(mv("Credit")),
+            "license": license_id,
+            "licenseOriginal": mv("LicenseShortName") or mv("LicenseUrl"),
+            "sourceProvider": "Wikimedia Commons",
+            "wikidataItem": entity_id,
+            "wikidataInstanceOf": TAXON_ENTITY_ID,
+            "wikidataScientificNameProperty": "P225",
+            "wikimediaImageProperty": mapping,
+            "mappingEvidence": f"P31-taxon+exact-P225-to-{mapping}",
+        }
+
+
 def find_exact_taxon_image(
     scientific_name: str,
     search_wikidata: Callable[[str], dict] = _search_wikidata,
     get_entities: Callable[[list[str]], dict] = _get_wikidata_entities,
     get_commons: Callable[[str], dict] = _get_commons_file,
+    search_depicts: Callable[[str], dict] = _search_commons_depicts,
 ) -> tuple[dict | None, str]:
     search = search_wikidata(scientific_name)
     ids = [clean(item.get("id")) for item in search.get("search") or [] if clean(item.get("id"))]
@@ -153,47 +205,17 @@ def find_exact_taxon_image(
     for entity_id, entity in exact_candidates:
         images = [clean(v) for v in _claim_values(entity, "P18") if clean(v)]
         for filename in images:
-            commons = get_commons(filename)
-            pages = ((commons.get("query") or {}).get("pages") or [])
-            for page in pages:
-                infos = page.get("imageinfo") or []
-                if not infos:
-                    continue
-                info = infos[0]
-                url = clean(info.get("url"))
-                if not url.startswith("https://"):
-                    continue
-                meta = info.get("extmetadata") or {}
-
-                def mv(key: str) -> str:
-                    value = meta.get(key) or {}
-                    return clean(value.get("value") if isinstance(value, dict) else value)
-
-                license_id = canonical_license(mv("LicenseShortName"), mv("LicenseUrl"))
-                if license_id not in ALLOWED_LICENSES:
-                    continue
-                attribution = plain(mv("Attribution"))
-                artist = plain(mv("Artist"))
-                credit = plain(mv("Credit"))
-                title = plain(mv("ObjectName")) or clean(page.get("title")) or filename
-                description = plain(mv("ImageDescription"))
-                return ({
-                    "mediaType": "StillImage",
-                    "identifier": url,
-                    "references": clean(info.get("descriptionurl")),
-                    "title": title,
-                    "description": description,
-                    "creator": attribution or artist,
-                    "rightsHolder": credit,
-                    "license": license_id,
-                    "licenseOriginal": mv("LicenseShortName") or mv("LicenseUrl"),
-                    "sourceProvider": "Wikimedia Commons",
-                    "wikidataItem": entity_id,
-                    "wikidataInstanceOf": TAXON_ENTITY_ID,
-                    "wikidataScientificNameProperty": "P225",
-                    "wikimediaImageProperty": "P18",
-                    "mappingEvidence": "P31-taxon+exact-P225-to-P18",
-                }, "matched")
+            item = _licensed_commons_file(filename, entity_id, get_commons, "P18")
+            if item:
+                return item, "matched"
+        depicts = search_depicts(entity_id)
+        for result in ((depicts.get("query") or {}).get("search") or []):
+            title = clean(result.get("title"))
+            if not title.startswith("File:"):
+                continue
+            item = _licensed_commons_file(title, entity_id, get_commons, "P180")
+            if item:
+                return item, "matched"
     return None, "wikidata-exact-taxon-without-allowed-commons-image"
 
 

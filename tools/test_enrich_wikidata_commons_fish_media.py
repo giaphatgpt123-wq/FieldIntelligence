@@ -90,9 +90,25 @@ class CommonsFishMediaTest(unittest.TestCase):
                 "LicenseUrl": {"value": "https://creativecommons.org/licenses/by-sa/4.0/"},
             },
         }]}]}}
-        item, reason = module.find_exact_taxon_image("Channa striata", searcher, entities, commons)
+        item, reason = module.find_exact_taxon_image("Channa striata", searcher, entities, commons, lambda q: {"query": {"search": []}})
         self.assertIsNone(item)
         self.assertEqual("wikidata-exact-taxon-without-allowed-commons-image", reason)
+
+    def test_structured_depicts_fills_missing_p18(self):
+        searcher = lambda name: {"search": [{"id": "Q2"}]}
+        entities = lambda ids: {"entities": {"Q2": {"claims": {
+            "P31": [item_claim("Q16521")], "P225": [claim("Channa striata")],
+        }}}}
+        depicts = lambda q: {"query": {"search": [{"title": "File:Channa2.jpg"}]}} if q == "Q2" else {}
+        commons = lambda filename: {"query": {"pages": [{"title": filename, "imageinfo": [{
+            "url": "https://upload.wikimedia.org/channa2.jpg",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Channa2.jpg",
+            "extmetadata": {"LicenseShortName": {"value": "CC0"}},
+        }]}]}}
+        item, reason = module.find_exact_taxon_image("Channa striata", searcher, entities, commons, depicts)
+        self.assertEqual("matched", reason)
+        self.assertEqual("P31-taxon+exact-P225-to-P180", item["mappingEvidence"])
+        self.assertEqual("CC0-1.0", item["license"])
 
     def test_enrich_only_fills_missing_media(self):
         with tempfile.TemporaryDirectory() as tmp:
