@@ -130,15 +130,16 @@ class ScientificLibraryStore(context: Context) {
         val loaded=runCatching{
             openReadOnly().use{db->
                 val v2=requireSchema(db)>=2
+                val references=v2&&hasSourceReferences(db)
                 val placeholders=normalized.joinToString(","){"?"}
                 val sql=buildString{
-                    append("SELECT ").append(recordProjection(v2)).append(" FROM taxon t WHERE t.scientific_name_search IN (")
+                    append("SELECT ").append(recordProjection(v2,references)).append(" FROM taxon t WHERE t.scientific_name_search IN (")
                     append(placeholders).append(")")
                     if(v2)append(FISH_MEDIA_PUBLISH_SQL)
                     append(" ORDER BY t.scientific_name_search")
                 }
                 val args=normalized.toMutableList();if(v2)args+=FISH_GROUP
-                db.rawQuery(sql,args.toTypedArray()).use{cursor->buildList{while(cursor.moveToNext())add(cursor.toSpeciesRecord(v2))}}
+                db.rawQuery(sql,args.toTypedArray()).use{cursor->buildList{while(cursor.moveToNext())add(cursor.toSpeciesRecord(v2,references))}}
             }
         }.getOrElse{emptyList()}
         loaded.forEach{recordCache[it.id]=it};return loaded
@@ -200,6 +201,7 @@ class ScientificLibraryStore(context: Context) {
         return runCatching{
             openReadOnly().use{db->
                 val v2=requireSchema(db)>=2
+                val references=v2&&hasSourceReferences(db)
                 val where=StringBuilder()
                 val args=mutableListOf<String>()
                 if(needle.isBlank()) {
@@ -218,13 +220,13 @@ class ScientificLibraryStore(context: Context) {
                 if(group!="Tất cả"){where.append(" AND t.library_group = ?");args+=group}
                 if(v2){where.append(FISH_MEDIA_PUBLISH_SQL);args+=FISH_GROUP}
                 val sql="""
-                    SELECT ${recordProjection(v2)}
+                    SELECT ${recordProjection(v2,references)}
                     FROM taxon t
                     WHERE $where
                     ORDER BY t.scientific_name_search
                     LIMIT $safeLimit
                 """.trimIndent()
-                db.rawQuery(sql,args.toTypedArray()).use{cursor->buildList{while(cursor.moveToNext())add(cursor.toSpeciesRecord(v2))}}
+                db.rawQuery(sql,args.toTypedArray()).use{cursor->buildList{while(cursor.moveToNext())add(cursor.toSpeciesRecord(v2,references))}}
             }
         }.getOrElse{emptyList()}
     }
@@ -237,17 +239,22 @@ class ScientificLibraryStore(context: Context) {
         return runCatching{
             openReadOnly().use{db->
                 val v2=requireSchema(db)>=2
+                val references=v2&&hasSourceReferences(db)
                 val sql=buildString{
-                    append("SELECT ").append(recordProjection(v2)).append(" FROM taxon t WHERE t.source_id=? AND t.source_record_id=?")
+                    append("SELECT ").append(recordProjection(v2,references)).append(" FROM taxon t WHERE t.source_id=? AND t.source_record_id=?")
                     if(v2)append(FISH_MEDIA_PUBLISH_SQL);append(" LIMIT 1")
                 }
                 val args=mutableListOf(sourceId,sourceRecordId);if(v2)args+=FISH_GROUP
-                db.rawQuery(sql,args.toTypedArray()).use{cursor->if(cursor.moveToFirst())cursor.toSpeciesRecord(v2) else null}
+                db.rawQuery(sql,args.toTypedArray()).use{cursor->if(cursor.moveToFirst())cursor.toSpeciesRecord(v2,references) else null}
             }
         }.getOrNull()
     }
 
-    private fun recordProjection(v2:Boolean):String{
+    private fun hasSourceReferences(db:SQLiteDatabase):Boolean=db.rawQuery(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='source_reference' LIMIT 1",null
+    ).use{it.moveToFirst()}
+
+    private fun recordProjection(v2:Boolean,references:Boolean):String{
         val base="t.source_id,t.source_record_id,t.scientific_name,t.library_group,t.authority,t.license,t.source_scope,t.source_version,t.source_doi"
         if(!v2)return base
         return base+""",
@@ -261,10 +268,12 @@ class ScientificLibraryStore(context: Context) {
             COALESCE((SELECT o.state_province FROM occurrence_summary o WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1),''),
             COALESCE((SELECT o.locality FROM occurrence_summary o WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1),''),
             COALESCE((SELECT o.event_date FROM occurrence_summary o WHERE o.source_id=t.source_id AND o.source_record_id=t.source_record_id LIMIT 1),'')
-        """.trimIndent().replace("\n"," ")
+        """.trimIndent().replace("\n"," ")+(if(references)""",
+            COALESCE((SELECT r.source_url FROM source_reference r WHERE r.source_id=t.source_id AND r.source_record_id=t.source_record_id ORDER BY r.source_url LIMIT 1),'')
+        """.trimIndent().replace("\n"," ") else "")
     }
 
-    private fun Cursor.toSpeciesRecord(v2:Boolean):SpeciesRecord{
+    private fun Cursor.toSpeciesRecord(v2:Boolean,references:Boolean):SpeciesRecord{
         val sourceId=getString(0);val sourceRecordId=getString(1);val scientificName=getString(2)
         val group=getString(3).ifBlank{"Thực vật"};val authority=getString(4).ifBlank{sourceId};val license=getString(5)
         val sourceScope=getString(6).ifBlank{"taxonomy-only"};val version=getString(7);val doi=getString(8)
@@ -287,7 +296,8 @@ class ScientificLibraryStore(context: Context) {
             }
             append(". Ảnh tham chiếu/taxonomy không xác minh mẫu vật người dùng, tính ăn được, độc tính hoặc hướng dẫn điều trị.")
         }
-        val sourceUrl=when{doi.isNotBlank()->"https://doi.org/$doi";mediaReference.startsWith("https://")->mediaReference;else->""}
+        val recordReference=if(references)getString(19).orEmpty() else ""
+        val sourceUrl=when{recordReference.startsWith("https://")->recordReference;doi.isNotBlank()->"https://doi.org/$doi";mediaReference.startsWith("https://")->mediaReference;else->""}
         return SpeciesRecord("$ID_PREFIX$sourceId|$sourceRecordId",vernacular.ifBlank{scientificName},scientificName,group,authority,sourceUrl,provenance)
     }
 
