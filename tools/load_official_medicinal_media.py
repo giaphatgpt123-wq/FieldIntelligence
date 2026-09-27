@@ -54,7 +54,8 @@ def rows(evidence, fetch):
         if not media:continue
         source=item['sourceUrl']
         result.append({'schemaVersion':1,'sourceId':'moh-traditional-medicine','sourceRecordId':item['evidenceId'],
-                       'scientificName':species,'kingdom':'Plantae','libraryGroup':'Cây thuốc',
+                       'scientificName':species,'vernacularName':item.get('vernacularName',''),
+                       'kingdom':'Plantae','libraryGroup':'Cây thuốc',
                        'sourceRecordUrl':source,'mediaItems':media,
                        'provenance':{'authority':'Bộ Y tế Việt Nam','license':'factual-taxonomy-metadata-only',
                                      'scope':'official-listing-and-licensed-reference-media','sourceUrl':source,
