@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 data class ScientificLibraryStatusSnapshot(
@@ -67,15 +68,18 @@ class ScientificLibraryStore(context: Context) {
     private val pendingIdLoads=ConcurrentHashMap.newKeySet<String>()
     private val searchLock=Any()
     private var activeSearchJob:Job?=null
+    @Volatile private var observedDatabaseFingerprint=databaseFingerprint()
 
-    init { refreshStatusAsync(); LibraryCollectionRuntime.bind(appContext,this) }
+    init { refreshStatusAsync(); LibraryCollectionRuntime.bind(appContext,this); startRevisionWatcher() }
 
     fun databasePath():File=databaseFile
     fun status():ScientificLibraryStatus { refreshStatusAsync(); return liveStatus }
 
     fun refreshAfterImport(){
-        synchronized(searchLock){ activeSearchJob?.cancel();activeSearchJob=null;searchResults.clear();searchStates.clear() }
-        recordCache.clear();pendingIdLoads.clear();refreshStatusAsync();LibraryCollectionRuntime.bind(appContext,this)
+        observedDatabaseFingerprint=databaseFingerprint()
+        invalidateCaches()
+        refreshStatusAsync()
+        LibraryCollectionRuntime.bind(appContext,this)
     }
 
     internal fun isInstalledBlocking():Boolean=readStatusBlocking().installed
@@ -138,6 +142,34 @@ class ScientificLibraryStore(context: Context) {
             }
         }.getOrElse{emptyList()}
         loaded.forEach{recordCache[it.id]=it};return loaded
+    }
+
+    private fun startRevisionWatcher(){
+        scope.launch{
+            while(isActive){
+                delay(DB_REVISION_POLL_MS)
+                val fingerprint=databaseFingerprint()
+                if(fingerprint==observedDatabaseFingerprint)continue
+                delay(DB_REVISION_SETTLE_MS)
+                val settledFingerprint=databaseFingerprint()
+                if(settledFingerprint==observedDatabaseFingerprint)continue
+                observedDatabaseFingerprint=settledFingerprint
+                invalidateCaches()
+                val value=readStatusBlocking()
+                Snapshot.withMutableSnapshot{liveStatus.publish(value)}
+                LibraryCollectionRuntime.bind(appContext,this@ScientificLibraryStore)
+            }
+        }
+    }
+
+    private fun invalidateCaches(){
+        synchronized(searchLock){activeSearchJob?.cancel();activeSearchJob=null;searchResults.clear();searchStates.clear()}
+        recordCache.clear();pendingIdLoads.clear()
+    }
+
+    private fun databaseFingerprint():String{
+        if(!databaseFile.isFile||databaseFile.length()<=0L)return MISSING_DB_FINGERPRINT
+        return "${databaseFile.length()}:${databaseFile.lastModified()}"
     }
 
     private fun refreshStatusAsync(){scope.launch{val value=readStatusBlocking();Snapshot.withMutableSnapshot{liveStatus.publish(value)}}}
@@ -282,6 +314,7 @@ class ScientificLibraryStore(context: Context) {
         const val DIRECTORY_NAME="scientific-library";const val DATABASE_NAME="wfo-taxonomy.sqlite"
         private val SUPPORTED_SCHEMA_VERSIONS=setOf(1,2);private val SUPPORTED_SCOPES=setOf("taxonomy-only","taxonomy-media-occurrence")
         private const val ID_PREFIX="scientific-db:";private const val SEARCH_DEBOUNCE_MS=250L;private const val FISH_GROUP="Cá nước ngọt"
+        private const val DB_REVISION_POLL_MS=1_500L;private const val DB_REVISION_SETTLE_MS=150L;private const val MISSING_DB_FINGERPRINT="missing"
         private const val FISH_MEDIA_PUBLISH_SQL=" AND (t.library_group != ? OR EXISTS (SELECT 1 FROM species_media pm WHERE pm.source_id=t.source_id AND pm.source_record_id=t.source_record_id))"
     }
 }
