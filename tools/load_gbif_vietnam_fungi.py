@@ -79,9 +79,12 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--pages',type=int,default=5)
+    parser.add_argument('--max-records',type=int,default=0,help='Cap initial offline-media verification; 0 scans all pages')
     args=parser.parse_args()
     if not 1 <= args.pages <= 20: parser.error('--pages must be 1..20')
+    if args.max_records < 0:parser.error('--max-records must not be negative')
     records=collect(args.pages)
+    if args.max_records:records=records[:args.max_records]
     if not records: raise SystemExit('No verified Vietnamese fungi with licensed media; refusing empty output')
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(''.join(json.dumps(row,ensure_ascii=False)+'\n' for row in records),encoding='utf-8')
