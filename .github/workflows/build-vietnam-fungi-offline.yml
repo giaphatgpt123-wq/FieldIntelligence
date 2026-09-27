@@ -2,6 +2,13 @@ name: Build Vietnam Fungi Offline
 
 on:
   workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "tools/load_gbif_vietnam_fungi.py"
+      - "tools/load_official_medicinal_media.py"
+      - "data/scientific/specialist_evidence.json"
+      - ".github/workflows/build-vietnam-fungi-offline.yml"
   schedule:
     - cron: '41 2 * * 0'
 
