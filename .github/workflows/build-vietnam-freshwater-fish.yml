@@ -8,7 +8,11 @@ on:
       - "tools/test_build_gbif_library.py"
       - "tools/build_scientific_sqlite.py"
       - "tools/test_build_scientific_sqlite.py"
+      - "tools/build_fishbase_vietnam_audit.py"
       - "tools/build_vietnam_freshwater_fish_checklist.py"
+      - "tools/audit_fish_checklist_coverage.py"
+      - "tools/test_audit_fish_checklist_coverage.py"
+      - "tools/attach_fish_coverage_report.py"
       - "tools/reconcile_fish_checklist_taxonomy.py"
       - "tools/test_reconcile_fish_checklist_taxonomy.py"
       - "tools/merge_scientific_ndjson.py"
@@ -62,6 +66,7 @@ jobs:
           python3 -m unittest \
             tools.test_build_gbif_library \
             tools.test_build_scientific_sqlite \
+            tools.test_audit_fish_checklist_coverage \
             tools.test_reconcile_fish_checklist_taxonomy \
             tools.test_merge_scientific_ndjson \
             tools.test_cache_scientific_media \
@@ -97,10 +102,10 @@ jobs:
           python3 - <<'PY'
           import csv
           rows=[
-            dict(gbifID='1',scientificName='Channa striata (Bloch, 1793)',kingdom='Animalia',class_='Actinopterygii',order='Anabantiformes',family='Channidae',genus='Channa',countryCode='VN',vernacularName='Cá lóc',mediaType='StillImage',identifier='https://example.org/channa.jpg',creator='Fixture photographer',rightsHolder='Fixture collection',mediaLicense='CC-BY-4.0'),
-            dict(gbifID='2',scientificName='Anabas testudineus (Bloch, 1792)',kingdom='Animalia',class_='Actinopterygii',order='Anabantiformes',family='Anabantidae',genus='Anabas',countryCode='VN',vernacularName='Cá rô đồng')
+            dict(gbifID='1',scientificName='Channa striata (Bloch, 1793)',acceptedScientificName='Channa striata (Bloch, 1793)',acceptedTaxonKey='1',kingdom='Animalia',class_='Actinopterygii',order='Anabantiformes',family='Channidae',genus='Channa',countryCode='VN',vernacularName='Cá lóc',mediaType='StillImage',identifier='https://example.org/channa.jpg',creator='Fixture photographer',rightsHolder='Fixture collection',mediaLicense='CC-BY-4.0'),
+            dict(gbifID='2',scientificName='Anabas testudineus (Bloch, 1792)',acceptedScientificName='Anabas testudineus (Bloch, 1792)',acceptedTaxonKey='2',kingdom='Animalia',class_='Actinopterygii',order='Anabantiformes',family='Anabantidae',genus='Anabas',countryCode='VN',vernacularName='Cá rô đồng')
           ]
-          fields=['gbifID','scientificName','kingdom','class','order','family','genus','countryCode','vernacularName','mediaType','identifier','creator','rightsHolder','mediaLicense']
+          fields=['gbifID','scientificName','acceptedScientificName','acceptedTaxonKey','kingdom','class','order','family','genus','countryCode','vernacularName','mediaType','identifier','creator','rightsHolder','mediaLicense']
           with open('build/fish/occurrence.txt','w',encoding='utf-8',newline='') as f:
               w=csv.DictWriter(f,fieldnames=fields,delimiter='\t'); w.writeheader()
               for r in rows:
@@ -109,7 +114,11 @@ jobs:
           python3 tools/build_gbif_library.py --input build/fish/occurrence.txt --output build/fish/fish.ndjson.gz --metadata build/fish/fish.meta.json --dataset-doi 10.15468/dl.fixture --publisher "FieldIntelligence CI fixture" --license CC-BY-4.0 --collapse-to-accepted-taxon
           python3 tools/build_scientific_sqlite.py --input build/fish/fish.ndjson.gz --source-meta build/fish/fish.meta.json --output build/fish/fish.sqlite
           python3 - <<'PY'
-          import json,sqlite3
+          import gzip,json,sqlite3
+          with gzip.open('build/fish/fish.ndjson.gz','rt',encoding='utf-8') as handle:
+              rows=[json.loads(line) for line in handle if line.strip()]
+          assert len(rows)==2
+          assert rows[0]['sourceScientificNames']
           db=sqlite3.connect('build/fish/fish.sqlite')
           meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
           source=json.load(open('build/fish/fish.meta.json',encoding='utf-8'))
@@ -135,6 +144,34 @@ jobs:
           print(report)
           PY
 
+      - name: Install pinned FishBase audit reader for real pack
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
+        run: python3 -m pip install --disable-pip-version-check --no-cache-dir 'duckdb==1.4.1'
+
+      - name: Build current audit-only Vietnam freshwater checklist
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/fish-real/audit
+          python3 tools/build_fishbase_vietnam_audit.py \
+            --version latest \
+            --country-code 704 \
+            --output build/fish-real/audit/vietnam-freshwater-fish.csv \
+            --report build/fish-real/audit/fishbase-report.json \
+            --expect-total 772 \
+            --expect-present 736
+          python3 tools/build_vietnam_freshwater_fish_checklist.py \
+            --input build/fish-real/audit/vietnam-freshwater-fish.csv \
+            --output build/fish-real/audit/vietnam-freshwater-fish.ndjson \
+            --report build/fish-real/audit/normalized-report.json
+          python3 - <<'PY'
+          import json
+          report=json.load(open('build/fish-real/audit/normalized-report.json',encoding='utf-8'))
+          assert report=={'total':772,'present':736,'review':29,'excluded':7}, report
+          print(report)
+          PY
+
       - name: Build real GBIF fish pack when an audited DwC-A is supplied
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
         env:
@@ -157,6 +194,23 @@ jobs:
           args=(--input "$occurrence" --output build/fish-real/fish.ndjson.gz --metadata build/fish-real/fish.meta.json --dataset-doi "$GBIF_DOWNLOAD_DOI" --publisher "$GBIF_PUBLISHER" --license "$GBIF_DATASET_LICENSE" --collapse-to-accepted-taxon --max-media-per-taxon 50)
           if [ -n "$multimedia" ]; then args+=(--multimedia "$multimedia"); fi
           python3 tools/build_gbif_library.py "${args[@]}"
+          python3 tools/audit_fish_checklist_coverage.py \
+            --checklist build/fish-real/audit/vietnam-freshwater-fish.ndjson \
+            --taxonomy build/fish-real/fish.ndjson.gz \
+            --output build/fish-real/audit/reconciled.ndjson \
+            --report build/fish-real/audit/coverage-report.json
+          python3 - <<'PY'
+          import json
+          report=json.load(open('build/fish-real/audit/coverage-report.json',encoding='utf-8'))
+          assert report['total']==772, report
+          assert report['presentInput']==736, report
+          assert report['reviewInput']==29, report
+          assert report['excludedInput']==7, report
+          assert report['resolvedPresentChecklistCount']==736, report
+          assert report['unresolvedPresentChecklistCount']==0, report
+          assert report['reconciledPresentTaxonCount']>0, report
+          print(report)
+          PY
           python3 tools/build_scientific_sqlite.py --input build/fish-real/fish.ndjson.gz --source-meta build/fish-real/fish.meta.json --output build/fish-real/fish.sqlite
 
       - name: Cache licensed reference images and embed them in real fish SQLite
@@ -174,6 +228,14 @@ jobs:
           python3 tools/attach_scientific_media_manifest.py \
             --database build/fish-real/fish.sqlite \
             --manifest build/fish-real/scientific-media.manifest.json
+          python3 tools/attach_fish_coverage_report.py \
+            --database build/fish-real/fish.sqlite \
+            --reconciled build/fish-real/audit/reconciled.ndjson \
+            --coverage build/fish-real/audit/coverage-report.json \
+            --expect-total 772 \
+            --expect-present 736 \
+            --expect-review 29 \
+            --expect-excluded 7
 
       - name: Validate real fish coverage and offline-image gate
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
@@ -200,6 +262,14 @@ jobs:
             'localMediaBlobCount':meta.get('localMediaBlobCount',0),
             'localMediaBytes':meta.get('localMediaBytes',0),
             'sourceDoi':meta.get('sourceDoi',''),
+            'fishChecklistReported':meta.get('fishChecklistReported',0),
+            'fishChecklistPresent':meta.get('fishChecklistPresent',0),
+            'fishChecklistReview':meta.get('fishChecklistReview',0),
+            'fishChecklistExcluded':meta.get('fishChecklistExcluded',0),
+            'fishPresentChecklistResolved':meta.get('fishPresentChecklistResolved',0),
+            'fishPresentChecklistUnresolved':meta.get('fishPresentChecklistUnresolved',-1),
+            'fishPresentAcceptedTaxa':meta.get('fishPresentAcceptedTaxa',0),
+            'fishPresentTaxaWithLocalMedia':meta.get('fishPresentTaxaWithLocalMedia',0),
             'integrity':db.execute('pragma integrity_check').fetchone()[0],
           }
           db.close()
@@ -209,12 +279,17 @@ jobs:
           assert report['sourceDoi'], report
           assert report['fishWithLocalMedia'] > 0, report
           assert report['localMediaBlobCount'] > 0, report
+          assert (report['fishChecklistReported'],report['fishChecklistPresent'],report['fishChecklistReview'],report['fishChecklistExcluded'])==(772,736,29,7), report
+          assert report['fishPresentChecklistResolved']==736, report
+          assert report['fishPresentChecklistUnresolved']==0, report
+          assert report['fishPresentAcceptedTaxa']>0, report
+          assert report['fishPresentTaxaWithLocalMedia']==report['fishPresentAcceptedTaxa'], report
           assert report['integrity']=='ok', report
           open('build/fish-real/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
           print(report)
           PY
 
-      - name: Upload real fish normalized input, self-contained SQLite and report
+      - name: Upload real fish normalized input, self-contained SQLite and reports
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
         uses: actions/upload-artifact@v4
         with:
@@ -225,6 +300,10 @@ jobs:
             build/fish-real/fish.meta.json
             build/fish-real/scientific-media.manifest.json
             build/fish-real/ingestion-report.json
+            build/fish-real/audit/fishbase-report.json
+            build/fish-real/audit/normalized-report.json
+            build/fish-real/audit/coverage-report.json
+            build/fish-real/audit/reconciled.ndjson
           if-no-files-found: error
           retention-days: 30
 
