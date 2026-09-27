@@ -121,6 +121,14 @@ jobs:
               --target build/scientific-library/wfo-taxonomy.sqlite \
               --source build/fungi-artifact/fungi.sqlite \
               --source-label "WFO + audited fish + licensed Vietnam fungi"
+            mkdir -p build/medicinal-artifact
+            gh run download "$fungi_run" --repo "$GITHUB_REPOSITORY" \
+              --name FieldIntelligence-official-medicinal-offline --dir build/medicinal-artifact
+            test -s build/medicinal-artifact/medicinal.sqlite
+            python3 tools/merge_scientific_sqlite.py \
+              --target build/scientific-library/wfo-taxonomy.sqlite \
+              --source build/medicinal-artifact/medicinal.sqlite \
+              --source-label "WFO + audited fish + licensed fungi + official medicinal taxonomy"
             echo "$fungi_run" > build/scientific-library/fungi-source-run.txt
           fi
           if [ -n "$fish_run" ]; then
@@ -149,8 +157,12 @@ jobs:
               fungi = db.execute("SELECT COUNT(*) FROM taxon WHERE library_group='Nấm'").fetchone()[0]
               fungi_local = db.execute("""SELECT COUNT(*) FROM taxon t WHERE t.library_group='Nấm'
                 AND EXISTS(SELECT 1 FROM species_media_local m WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id)""").fetchone()[0]
+              medicinal = db.execute("SELECT COUNT(*) FROM taxon WHERE library_group='Cây thuốc'").fetchone()[0]
+              medicinal_local = db.execute("""SELECT COUNT(*) FROM taxon t WHERE t.library_group='Cây thuốc'
+                AND EXISTS(SELECT 1 FROM species_media_local m WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id)""").fetchone()[0]
               if (root / 'fungi-source-run.txt').exists():
                   assert fungi > 0 and fungi_local > 0 and fungi_local <= fungi, (fungi, fungi_local)
+                  assert medicinal > 0 and medicinal_local > 0 and medicinal_local <= medicinal, (medicinal, medicinal_local)
               if fish_taxa:
                   assert fish_local > 0, meta
                   assert local_blobs > 0, meta
