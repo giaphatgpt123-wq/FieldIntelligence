@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download APK from the latest verified build
+        id: verified_apk
         env:
           GH_TOKEN: ${{ github.token }}
           SOURCE_RUN: ${{ github.event.workflow_run.id }}
@@ -26,6 +27,7 @@ jobs:
             echo "Build is no longer main HEAD; skipping release."
             exit 0
           fi
+          echo "current=true" >> "$GITHUB_OUTPUT"
           mkdir -p dist
           gh run download "${SOURCE_RUN}" --repo "${GITHUB_REPOSITORY}" --name FieldIntelligence-main-release --dir dist
           gh run download "${SOURCE_RUN}" --repo "${GITHUB_REPOSITORY}" --name FieldIntelligence-P0-debug --dir dist
@@ -112,6 +114,7 @@ jobs:
             --notes "$notes"
 
       - name: Publish verified offline scientific library for Wi-Fi sync
+        if: ${{ steps.verified_apk.outputs.current == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           SOURCE_RUN: ${{ github.event.workflow_run.id }}
