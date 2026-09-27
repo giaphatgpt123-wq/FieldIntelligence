@@ -68,7 +68,8 @@ class MainActivity:ComponentActivity(){
  }.getOrNull()
  private val permission=registerForActivityResult(ActivityResultContracts.RequestPermission()){granted->if(granted) startGnss()}
  override fun onCreate(savedInstanceState:Bundle?){
-  super.onCreate(savedInstanceState)
+ super.onCreate(savedInstanceState)
+  LibrarySyncWorker.schedule(this)
   val db=EmergencyBootstrap.database(this); val recovery=EmergencyBootstrap.recovery(this,db); lifecycleScope.launch{recovery.recover()}
   location=FieldLocationController(this); mapPack=OfflineMapPack(this); updates=DataUpdateManager(this); observationStore=ObservationStore(this); scientificImporter=ScientificLibraryImportManager(applicationContext); lifecycleScope.launch {
    val result=withContext(Dispatchers.IO){ runCatching { scientificImporter.installBundledIfMissing() } }
