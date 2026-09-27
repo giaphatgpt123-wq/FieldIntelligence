@@ -1,0 +1,43 @@
+name: Build Vietnam Fungi Offline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 2 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify loader and SQLite tests
+        run: python3 -m unittest tools.test_load_gbif_vietnam_fungi tools.test_build_scientific_sqlite tools.test_attach_scientific_media_manifest
+      - name: Collect licensed Vietnam fungal records
+        run: |
+          mkdir -p build/fungi
+          python3 tools/load_gbif_vietnam_fungi.py --pages 10 --output build/fungi/fungi.ndjson
+          python3 tools/build_scientific_sqlite.py --input build/fungi/fungi.ndjson --output build/fungi/fungi.sqlite
+          python3 tools/cache_scientific_media.py --input build/fungi/fungi.ndjson --media-dir build/fungi/media --manifest build/fungi/scientific-media.manifest.json --max-per-record 1 --max-total-bytes 134217728
+          python3 tools/attach_scientific_media_manifest.py --database build/fungi/fungi.sqlite --manifest build/fungi/scientific-media.manifest.json
+      - name: Require installed offline images and source references
+        run: |
+          python3 - <<'PY'
+          import sqlite3
+          with sqlite3.connect('build/fungi/fungi.sqlite') as db:
+              count=db.execute("select count(*) from taxon where library_group='Nấm'").fetchone()[0]
+              local=db.execute('select count(distinct source_record_id) from species_media_local').fetchone()[0]
+              sources=db.execute('select count(*) from source_reference').fetchone()[0]
+              assert count>0 and local>0 and sources==count,(count,local,sources)
+              assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+              print({'fungiTaxa':count,'fungiWithOfflineImages':local,'sourceReferences':sources})
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FieldIntelligence-vietnam-fungi-offline
+          path: build/fungi/fungi.sqlite
+          if-no-files-found: error
+          retention-days: 14
