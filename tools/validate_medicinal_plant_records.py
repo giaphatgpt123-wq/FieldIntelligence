@@ -16,12 +16,13 @@ def rows(path):
 
 def validate(r):
     errors=[]; p=r.get('provenance') or {}; sid=str(r.get('sourceId') or '').strip(); url=str(r.get('sourceRecordUrl') or p.get('sourceUrl') or '').strip()
-    if r.get('libraryGroup') not in ('Cây thuốc','Thực vật'): errors.append('wrong-library-group')
+    if r.get('libraryGroup') != 'Cây thuốc': errors.append('wrong-library-group')
     for k in ('scientificName','sourceRecordId'):
         if not str(r.get(k) or '').strip(): errors.append('missing-'+k)
     if sid not in ALLOWED_SOURCES: errors.append('unapproved-source')
     if not url or urlparse(url).scheme not in ('https','http') or not urlparse(url).netloc: errors.append('missing-source-url')
     if not str(p.get('license') or r.get('sourceLicense') or '').strip(): errors.append('missing-license')
+    if str(p.get('license') or r.get('sourceLicense') or '').strip() in {'site-terms-review-required','requires-permission-or-site-terms','site-terms'}: errors.append('reuse-rights-unconfirmed')
     if any(k in r for k in MEDICAL_FIELDS):
         if not p.get('medicalReviewRequired'): errors.append('medical-claim-without-review-flag')
         if not p.get('medicalEvidenceSource'): errors.append('medical-claim-without-independent-evidence')
