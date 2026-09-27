@@ -2,8 +2,17 @@ package vn.fieldintel.feature.emergency
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.snapshots.Snapshot
 import java.io.File
 import java.security.MessageDigest
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 data class ScientificLocalMedia(
     val bytes: ByteArray,
@@ -20,25 +29,15 @@ class ScientificMediaStore(context: Context) {
         ScientificLibraryStore.DATABASE_NAME
     )
 
+    /**
+     * Returns a Compose-observable shared set. The set is refreshed automatically when the
+     * installed scientific SQLite file is replaced, so library filtering does not keep stale
+     * media IDs after an in-place data update.
+     */
     fun localMediaRecordIds(): Set<String> {
-        if (!databaseFile.isFile || databaseFile.length() <= 0L) return emptySet()
-        return runCatching {
-            SQLiteDatabase.openDatabase(
-                databaseFile.absolutePath,
-                null,
-                SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
-            ).use { db ->
-                if (!hasLocalMediaTables(db)) return@use emptySet()
-                db.rawQuery(
-                    "SELECT DISTINCT source_id,source_record_id FROM species_media_local",
-                    null
-                ).use { cursor ->
-                    buildSet {
-                        while (cursor.moveToNext()) add("$ID_PREFIX${cursor.getString(0)}|${cursor.getString(1)}")
-                    }
-                }
-            }
-        }.getOrElse { emptySet() }
+        refreshObservedMediaIds(force = true)
+        startRevisionWatcher()
+        return OBSERVED_MEDIA_IDS
     }
 
     fun fishWithLocalMediaCount(): Long {
@@ -108,6 +107,64 @@ class ScientificMediaStore(context: Context) {
         }.getOrElse { emptyList() }
     }
 
+    private fun startRevisionWatcher() {
+        if (!REVISION_WATCHER_STARTED.compareAndSet(false, true)) return
+        REVISION_WATCHER_SCOPE.launch {
+            while (isActive) {
+                delay(REVISION_POLL_MS)
+                val fingerprint = databaseFingerprint()
+                if (fingerprint == observedFingerprint) continue
+
+                // Data updates replace the SQLite file atomically. Give the rename/copy boundary a
+                // short settle window before opening it read-only, then refresh only if it changed.
+                delay(REVISION_SETTLE_MS)
+                refreshObservedMediaIds(force = false)
+            }
+        }
+    }
+
+    private fun refreshObservedMediaIds(force: Boolean) {
+        val fingerprintBefore = databaseFingerprint()
+        if (!force && fingerprintBefore == observedFingerprint) return
+
+        val fresh = readLocalMediaRecordIds()
+        val fingerprintAfter = databaseFingerprint()
+        observedFingerprint = fingerprintAfter
+
+        Snapshot.withMutableSnapshot {
+            if (OBSERVED_MEDIA_IDS != fresh) {
+                OBSERVED_MEDIA_IDS.clear()
+                OBSERVED_MEDIA_IDS.addAll(fresh)
+            }
+        }
+    }
+
+    private fun readLocalMediaRecordIds(): Set<String> {
+        if (!databaseFile.isFile || databaseFile.length() <= 0L) return emptySet()
+        return runCatching {
+            SQLiteDatabase.openDatabase(
+                databaseFile.absolutePath,
+                null,
+                SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
+            ).use { db ->
+                if (!hasLocalMediaTables(db)) return@use emptySet()
+                db.rawQuery(
+                    "SELECT DISTINCT source_id,source_record_id FROM species_media_local",
+                    null
+                ).use { cursor ->
+                    buildSet {
+                        while (cursor.moveToNext()) add("$ID_PREFIX${cursor.getString(0)}|${cursor.getString(1)}")
+                    }
+                }
+            }
+        }.getOrElse { emptySet() }
+    }
+
+    private fun databaseFingerprint(): String {
+        if (!databaseFile.isFile || databaseFile.length() <= 0L) return MISSING_FINGERPRINT
+        return "${databaseFile.length()}:${databaseFile.lastModified()}"
+    }
+
     private fun hasLocalMediaTables(db: SQLiteDatabase): Boolean {
         val required = setOf("species_media_local", "scientific_media_blob")
         val actual = db.rawQuery(
@@ -129,6 +186,15 @@ class ScientificMediaStore(context: Context) {
         private const val ID_PREFIX = "scientific-db:"
         private const val MAX_MEDIA_PER_PROFILE = 3
         private const val MAX_MEDIA_BYTES = 5L * 1024L * 1024L
+        private const val REVISION_POLL_MS = 1_500L
+        private const val REVISION_SETTLE_MS = 150L
+        private const val MISSING_FINGERPRINT = "missing"
+
+        private val OBSERVED_MEDIA_IDS = mutableStateSetOf<String>()
+        private val REVISION_WATCHER_STARTED = AtomicBoolean(false)
+        private val REVISION_WATCHER_SCOPE = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        @Volatile private var observedFingerprint: String = "uninitialized"
+
         private val ALLOWED_MIME_TYPES = setOf("image/jpeg", "image/png", "image/webp")
         private val ALLOWED_LICENSES = setOf(
             "CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
