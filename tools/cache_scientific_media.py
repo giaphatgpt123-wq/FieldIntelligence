@@ -4,6 +4,10 @@
 Only public HTTPS JPEG/PNG/WebP media with an accepted reusable licence are eligible. Reference
 media remains evidence for visual comparison only; it is never specimen-identification, edibility,
 toxicity or treatment evidence.
+
+For GBIF occurrence media, bytes are downloaded through GBIF's official crop/resize cache at a
+mobile-friendly maximum width. The publisher's original media identifier remains the provenance
+identity stored in the manifest/SQLite so licence matching and attribution are not weakened.
 """
 from __future__ import annotations
 
@@ -29,6 +33,8 @@ ALLOWED_CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp"
 DEFAULT_MAX_BYTES = 5 * 1024 * 1024
 DEFAULT_MAX_TOTAL_BYTES = 256 * 1024 * 1024
 DEFAULT_MAX_PER_RECORD = 2
+GBIF_IMAGE_CACHE_WIDTH = 1200
+GBIF_IMAGE_CACHE_PREFIX = "https://api.gbif.org/v1/image/cache"
 USER_AGENT = "FieldIntelligence-scientific-media/1.0"
 
 
@@ -80,6 +86,31 @@ def media_items(record: dict):
     yield from (item for item in raw_media_items(record) if is_eligible_media(item))
 
 
+def gbif_resized_download_url(item: dict, width: int = GBIF_IMAGE_CACHE_WIDTH) -> str:
+    """Return a deterministic GBIF resize-cache URL while preserving the original identifier.
+
+    GBIF documents image-cache keys as md5(media.identifier) and supports resize prefixes such as
+    `200x`. We only derive this URL for media discovered from a concrete GBIF occurrence key.
+    """
+    identifier = str(item.get("identifier") or "").strip()
+    provider = str(item.get("sourceProvider") or "").strip().casefold()
+    occurrence_key = str(item.get("gbifOccurrenceKey") or "").strip()
+    if provider != "gbif occurrence media" or not occurrence_key or not identifier.startswith("https://"):
+        return identifier
+    if width <= 0 or width > 1200:
+        raise ValueError("GBIF image cache width must be between 1 and 1200")
+    digest = hashlib.md5(identifier.encode("utf-8")).hexdigest()
+    safe_key = urllib.parse.quote(occurrence_key, safe="")
+    return f"{GBIF_IMAGE_CACHE_PREFIX}/{width}x/occurrence/{safe_key}/media/{digest}"
+
+
+def download_url_for_item(item: dict) -> str:
+    original = str(item.get("identifier") or "").strip()
+    if not original:
+        return ""
+    return gbif_resized_download_url(item) or original
+
+
 def extension_for(content_type: str, url: str) -> str | None:
     normalized = content_type.split(";", 1)[0].strip().lower()
     if normalized in ALLOWED_CONTENT_TYPES:
@@ -127,8 +158,8 @@ def build(
     media_dir.mkdir(parents=True, exist_ok=True)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     records: list[dict] = []
-    attempted = cached = rejected = failed = skipped_limit = total_bytes = 0
-    seen_source_urls: dict[str, dict] = {}
+    attempted = cached = rejected = failed = skipped_limit = total_bytes = resized_downloads = 0
+    seen_downloads: dict[tuple[str, str], dict] = {}
     stored_hashes: set[str] = set()
 
     with open_text(input_path) as handle:
@@ -149,14 +180,21 @@ def build(
             for item in eligible[:max_per_record]:
                 attempted += 1
                 source_url = str(item.get("identifier") or "").strip()
-                if source_url in seen_source_urls:
-                    cached_entry = dict(seen_source_urls[source_url])
+                download_url = download_url_for_item(item)
+                if not download_url:
+                    failed += 1
+                    continue
+                cache_key = (source_url, download_url)
+                if cache_key in seen_downloads:
+                    cached_entry = dict(seen_downloads[cache_key])
                     cached_entry.update({"sourceId": source_id, "sourceRecordId": source_record_id, "scientificName": scientific_name})
                     records.append(cached_entry)
                     cached += 1
+                    if download_url != source_url:
+                        resized_downloads += 1
                     continue
                 try:
-                    data, ext, final_url = download_image(source_url, max_bytes=max_bytes)
+                    data, ext, final_url = download_image(download_url, max_bytes=max_bytes)
                     digest = hashlib.sha256(data).hexdigest()
                     is_new_file = digest not in stored_hashes
                     if is_new_file and total_bytes + len(data) > max_total_bytes:
@@ -178,6 +216,7 @@ def build(
                         "sha256": digest,
                         "sizeBytes": len(data),
                         "sourceIdentifier": source_url,
+                        "downloadIdentifier": download_url,
                         "resolvedIdentifier": final_url,
                         "references": str(item.get("references") or "").strip(),
                         "creator": str(item.get("creator") or "").strip(),
@@ -185,9 +224,11 @@ def build(
                         "license": str(item.get("license") or "").strip(),
                         "mediaType": str(item.get("mediaType") or item.get("type") or "StillImage").strip(),
                     }
-                    seen_source_urls[source_url] = {k: v for k, v in entry.items() if k not in {"sourceId", "sourceRecordId", "scientificName"}}
+                    seen_downloads[cache_key] = {k: v for k, v in entry.items() if k not in {"sourceId", "sourceRecordId", "scientificName"}}
                     records.append(entry)
                     cached += 1
+                    if download_url != source_url:
+                        resized_downloads += 1
                 except (ValueError, OSError, urllib.error.URLError, urllib.error.HTTPError, socket.timeout):
                     failed += 1
 
@@ -203,6 +244,8 @@ def build(
             "failed": failed,
             "rejectedBeforeDownload": rejected,
             "skippedPerRecordLimit": skipped_limit,
+            "gbifResizedDownloads": resized_downloads,
+            "gbifResizeWidth": GBIF_IMAGE_CACHE_WIDTH,
             "totalBytes": total_bytes,
             "maxTotalBytes": max_total_bytes,
             "maxBytesPerFile": max_bytes,
@@ -213,6 +256,7 @@ def build(
             "edibilityInferred": False,
             "toxicityInferred": False,
             "medicalAdviceInferred": False,
+            "publisherIdentifierPreserved": True,
         },
     }
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
