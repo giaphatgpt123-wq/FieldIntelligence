@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """Build one freshwater-fish library profile per independently resolved GBIF Backbone taxon.
 
-The input is the audited/resolved Vietnam freshwater-fish checklist. Taxonomy comes from the
-resolver evidence, not occurrence rows. Reference media is optionally discovered through the
-public GBIF occurrence search API, preferring Vietnam records before global fallback. Only HTTPS
-StillImage candidates with explicitly reusable licences are retained for the offline-media stage.
+Taxonomy comes from independent GBIF resolver evidence, never occurrence rows. Reference media is
+first discovered through GBIF occurrences (Vietnam preferred, then global). If no reusable GBIF
+image exists, a conservative Wikidata -> Wikimedia Commons fallback may provide one image when the
+accepted canonical scientific name maps exactly to Wikidata P225 and Commons reports an allowed
+licence. Synonyms resolving to the same accepted taxon share one profile and one media lookup.
 """
 from __future__ import annotations
 
 import argparse
 import gzip
 import hashlib
+import importlib.util
 import json
 import time
 import urllib.error
@@ -25,6 +27,7 @@ GBIF_BACKBONE_DOI = "10.15468/39omei"
 GBIF_BACKBONE_VERSION = "2023-08-28-frozen"
 USER_AGENT = "FieldIntelligence/1.0 scientific-library-builder"
 CANONICAL_MEDIA_LICENSES = {"CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0"}
+_COMMONS_MODULE = None
 
 
 def clean(value: object) -> str:
@@ -83,6 +86,7 @@ def eligible_media_item(media: dict, occurrence: dict) -> dict | None:
         "rightsHolder": clean(media.get("rightsHolder") or occurrence.get("rightsHolder")),
         "license": license_id,
         "licenseOriginal": clean(media.get("license") or occurrence.get("license")),
+        "sourceProvider": "GBIF occurrence media",
         "gbifOccurrenceKey": clean(occurrence.get("key") or occurrence.get("gbifID")),
         "datasetKey": clean(occurrence.get("datasetKey")),
         "countryCode": clean(occurrence.get("countryCode")),
@@ -154,6 +158,19 @@ def discover_media(
     return chosen[:max_candidates], used_global_fallback
 
 
+def _default_commons_finder(scientific_name: str) -> tuple[dict | None, str]:
+    global _COMMONS_MODULE
+    if _COMMONS_MODULE is None:
+        module_path = Path(__file__).with_name("enrich_wikidata_commons_fish_media.py")
+        spec = importlib.util.spec_from_file_location("fieldintel_commons_fish_media", module_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("cannot load Wikimedia Commons fish media fallback")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _COMMONS_MODULE = module
+    return _COMMONS_MODULE.find_exact_taxon_image(scientific_name)
+
+
 def profile_from_resolution(row: dict, media_items: list[dict]) -> dict:
     resolution = row.get("taxonomyResolution") or {}
     accepted_id = clean(resolution.get("acceptedTaxonId"))
@@ -197,23 +214,13 @@ def profile_from_resolution(row: dict, media_items: list[dict]) -> dict:
     }
 
 
-def _merge_profile(base: dict, row: dict, media_items: list[dict]) -> None:
+def _merge_alias(base: dict, row: dict) -> None:
     name = clean(row.get("scientificName"))
     aliases = list(base.get("sourceScientificNames") or [])
     seen_aliases = {clean(v).casefold() for v in aliases if clean(v)}
     if name and name.casefold() not in seen_aliases:
         aliases.append(name)
     base["sourceScientificNames"] = aliases
-    existing = list(base.get("mediaItems") or [])
-    seen_urls = {clean(item.get("identifier")) for item in existing if clean(item.get("identifier"))}
-    for item in media_items:
-        url = clean(item.get("identifier"))
-        if url and url not in seen_urls:
-            existing.append(item)
-            seen_urls.add(url)
-    base["mediaItems"] = existing
-    if existing:
-        base["media"] = existing[0]
 
 
 def build(
@@ -224,12 +231,16 @@ def build(
     max_media_candidates: int = 4,
     delay_seconds: float = 0.05,
     searcher: Callable[[str, str | None, int], dict] | None = None,
+    commons_finder: Callable[[str], tuple[dict | None, str]] | None = None,
 ) -> dict:
     if max_media_candidates < 0:
         raise ValueError("max_media_candidates cannot be negative")
     searcher = searcher or _http_occurrence_search
+    commons_finder = commons_finder or _default_commons_finder
     grouped: dict[str, dict] = {}
     present_input = resolver_blocked = media_candidates = media_vn = global_fallback_taxa = 0
+    commons_attempted = commons_added = 0
+    commons_reasons: dict[str, int] = {}
     media_errors: list[dict] = []
 
     for row in read_ndjson(resolved_checklist):
@@ -244,6 +255,11 @@ def build(
         if not taxon_key:
             resolver_blocked += 1
             continue
+
+        if taxon_key in grouped:
+            _merge_alias(grouped[taxon_key], row)
+            continue
+
         items: list[dict] = []
         if fetch_media and max_media_candidates:
             try:
@@ -253,22 +269,49 @@ def build(
                 media_candidates += len(items)
                 media_vn += sum(1 for item in items if clean(item.get("countryCode")).upper() == "VN")
             except (RuntimeError, urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as exc:
-                media_errors.append({"acceptedTaxonId": taxon_key, "scientificName": clean(row.get("scientificName")), "error": str(exc)})
-        if taxon_key not in grouped:
-            grouped[taxon_key] = profile_from_resolution(row, items)
-        else:
-            _merge_profile(grouped[taxon_key], row, items)
+                media_errors.append({
+                    "acceptedTaxonId": taxon_key,
+                    "scientificName": clean(row.get("scientificName")),
+                    "error": str(exc),
+                })
+
+            if not items:
+                commons_attempted += 1
+                canonical_name = clean(resolution.get("acceptedCanonicalName")) or clean(resolution.get("acceptedScientificName"))
+                try:
+                    commons_item, commons_reason = commons_finder(canonical_name)
+                except (RuntimeError, urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as exc:
+                    commons_item, commons_reason = None, "wikimedia-api-error"
+                    media_errors.append({
+                        "acceptedTaxonId": taxon_key,
+                        "scientificName": canonical_name,
+                        "error": str(exc),
+                    })
+                if commons_item:
+                    items = [commons_item]
+                    commons_added += 1
+                    media_candidates += 1
+                else:
+                    commons_reasons[commons_reason] = int(commons_reasons.get(commons_reason, 0)) + 1
+
+        grouped[taxon_key] = profile_from_resolution(row, items)
         if delay_seconds > 0 and fetch_media:
             time.sleep(delay_seconds)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     digest = hashlib.sha256()
     records_with_media = 0
+    missing_media_records: list[dict] = []
     with gzip.open(output_path, "wt", encoding="utf-8", newline="\n") as out:
         for key in sorted(grouped, key=lambda v: (len(v), v)):
             record = grouped[key]
             if record.get("mediaItems"):
                 records_with_media += 1
+            else:
+                missing_media_records.append({
+                    "acceptedTaxonId": key,
+                    "scientificName": clean(record.get("species") or record.get("scientificName")),
+                })
             line = json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n"
             out.write(line)
             digest.update(line.encode("utf-8"))
@@ -276,7 +319,7 @@ def build(
     metadata = {
         "schemaVersion": 1,
         "sourceId": "gbif",
-        "source": "GBIF Backbone Taxonomy + GBIF occurrence media discovery",
+        "source": "GBIF Backbone Taxonomy + GBIF occurrence media + exact Wikidata/Commons fallback",
         "datasetDoi": GBIF_BACKBONE_DOI,
         "version": GBIF_BACKBONE_VERSION,
         "license": "CC-BY-4.0",
@@ -286,9 +329,14 @@ def build(
         "recordCount": len(grouped),
         "recordsWithMedia": records_with_media,
         "recordsWithoutMedia": len(grouped) - records_with_media,
+        "recordsWithoutMediaDetails": missing_media_records,
         "mediaCandidates": media_candidates,
         "vietnamMediaCandidates": media_vn,
         "globalFallbackTaxa": global_fallback_taxa,
+        "wikimediaCommonsFallbackAttempted": commons_attempted,
+        "wikimediaCommonsFallbackAdded": commons_added,
+        "wikimediaCommonsFallbackReasons": commons_reasons,
+        "wikimediaCommonsFallbackPolicy": "exact P225 -> P18; Commons CC0-1.0 or CC-BY-4.0 only",
         "mediaSearchErrors": len(media_errors),
         "mediaSearchErrorDetails": media_errors[:100],
         "normalizedNdjsonSha256": digest.hexdigest(),
@@ -328,6 +376,7 @@ def main() -> None:
         "recordsWithMedia": meta["recordsWithMedia"],
         "recordsWithoutMedia": meta["recordsWithoutMedia"],
         "mediaCandidates": meta["mediaCandidates"],
+        "wikimediaCommonsFallbackAdded": meta["wikimediaCommonsFallbackAdded"],
         "resolverBlockedPresentRows": meta["resolverBlockedPresentRows"],
     }, ensure_ascii=False))
 
