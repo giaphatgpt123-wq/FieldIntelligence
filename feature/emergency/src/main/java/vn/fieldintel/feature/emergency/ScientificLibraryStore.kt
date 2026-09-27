@@ -202,7 +202,16 @@ class ScientificLibraryStore(context: Context) {
                 val v2=requireSchema(db)>=2
                 val where=StringBuilder()
                 val args=mutableListOf<String>()
-                if(needle.isBlank()) where.append("1=1") else {
+                if(needle.isBlank()) {
+                    where.append("1=1")
+                } else if(v2) {
+                    val scientificPrefix="${escapeLike(needle)}%"
+                    val vernacularContains="%${escapeLike(needle)}%"
+                    where.append("(t.scientific_name_search LIKE ? ESCAPE '\\' OR EXISTS (")
+                    where.append("SELECT 1 FROM vernacular_name sv WHERE sv.source_id=t.source_id AND sv.source_record_id=t.source_record_id ")
+                    where.append("AND sv.vernacular_name COLLATE NOCASE LIKE ? ESCAPE '\\'))")
+                    args+=scientificPrefix;args+=vernacularContains
+                } else {
                     where.append("t.scientific_name_search LIKE ? ESCAPE '\\'")
                     args+="${escapeLike(needle)}%"
                 }
@@ -312,7 +321,7 @@ class ScientificLibraryStore(context: Context) {
     private fun searchKey(query:String,group:String,limit:Int):SearchKey?{
         val needle=query.trim().lowercase()
         if(needle.isBlank()&&group=="Tất cả")return null
-        return SearchKey(needle,group,limit.coerceIn(1,500))
+        return SearchKey(needle,group,limit.coerceIn(1,1000))
     }
     private data class SearchKey(val query:String,val group:String,val limit:Int)
 
