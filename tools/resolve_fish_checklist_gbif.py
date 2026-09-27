@@ -22,6 +22,12 @@ from typing import Callable
 API_URL = "https://api.gbif.org/v2/species/match"
 GBIF_BACKBONE_KEY = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c"
 USER_AGENT = "FieldIntelligence/1.0 scientific-library-builder"
+BLOCKING_PROCESSING_FLAGS = {
+    "NO_MATCH",
+    "MULTIPLE_MATCHES_SAME_CONFIDENCE",
+    "LOW_CONFIDENCE",
+    "NO_LOWEST_DENOMINATOR",
+}
 
 
 def clean(value: object) -> str:
@@ -40,7 +46,8 @@ def _http_match(scientific_name: str, checklist_key: str, retries: int = 4) -> d
     query = urllib.parse.urlencode({
         "scientificName": scientific_name,
         "kingdom": "Animalia",
-        "taxonRank": "species",
+        "taxonRank": "SPECIES",
+        "strict": "true",
         "checklistKey": checklist_key,
     })
     request = urllib.request.Request(
@@ -78,6 +85,9 @@ def classify_match(scientific_name: str, response: dict, checklist_key: str) -> 
     accepted = response.get("acceptedUsage") or usage
     diagnostics = response.get("diagnostics") or {}
     match_type = clean(diagnostics.get("matchType")).upper()
+    issues = [clean(v) for v in diagnostics.get("issues") or [] if clean(v)]
+    processing_flags = [clean(v).upper() for v in diagnostics.get("processingFlags") or [] if clean(v)]
+    blocking_flags = sorted(set(processing_flags) & BLOCKING_PROCESSING_FLAGS)
     try:
         confidence = int(diagnostics.get("confidence", 0) or 0)
     except (TypeError, ValueError):
@@ -90,6 +100,9 @@ def classify_match(scientific_name: str, response: dict, checklist_key: str) -> 
     if not usage or not accepted_key:
         status = "unmatched"
         reason = "no_usage_or_accepted_taxon"
+    elif blocking_flags:
+        status = "review"
+        reason = "processing_flags_" + "+".join(blocking_flags)
     elif accepted_rank != "SPECIES":
         status = "review"
         reason = f"accepted_rank_{accepted_rank or 'missing'}"
@@ -132,7 +145,8 @@ def classify_match(scientific_name: str, response: dict, checklist_key: str) -> 
         "matchType": match_type,
         "confidence": confidence,
         "synonym": bool(response.get("synonym", False)),
-        "issues": list(response.get("issues") or []),
+        "issues": issues,
+        "processingFlags": processing_flags,
         "classification": response.get("classification") or [],
     }
     digest_payload = json.dumps(evidence, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
