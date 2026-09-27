@@ -41,11 +41,11 @@ class ScientificMediaCacheTest(unittest.TestCase):
             "gbifOccurrenceKey": "123",
         }
         self.assertEqual(
-            "https://api.gbif.org/v1/image/cache/1200x/occurrence/123/media/14959baaa98af1141f91775766c5008d",
+            "https://api.gbif.org/v1/image/cache/1600x/occurrence/123/media/14959baaa98af1141f91775766c5008d",
             module.download_url_for_item(item),
         )
         with self.assertRaises(ValueError):
-            module.gbif_resized_download_url(item, width=1201)
+            module.gbif_resized_download_url(item, width=1601)
 
     def test_non_gbif_media_keeps_original_download_url(self):
         item = {
