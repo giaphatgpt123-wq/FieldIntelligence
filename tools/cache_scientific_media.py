@@ -79,7 +79,10 @@ def is_eligible_media(item: dict) -> bool:
     identifier = str(item.get("identifier") or "").strip()
     license_id = str(item.get("license") or "").strip()
     media_type = str(item.get("mediaType") or item.get("type") or "").strip().casefold()
-    return bool(identifier and license_id in ALLOWED_LICENSES and (not media_type or "image" in media_type))
+    is_image = media_type in {"stillimage", "image"} or media_type in ALLOWED_CONTENT_TYPES
+    if not media_type:
+        is_image = Path(urllib.parse.urlparse(identifier).path).suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}
+    return bool(identifier and license_id in ALLOWED_LICENSES and is_image)
 
 
 def media_items(record: dict):
