@@ -50,15 +50,20 @@ def media_item(row:Dict[str,str])->dict:
         "license":first(row,"mediaLicense","license"),
     }
 
-def normalize(row:Dict[str,str],dataset_doi:str,publisher:str,license_id:str,media_rows:List[Dict[str,str]]|None=None)->dict:
-    source_record_id=first(row,"occurrenceID","gbifID","taxonID","taxonKey","id")
-    scientific=first(row,"scientificName","acceptedScientificName","species")
+def normalize(row:Dict[str,str],dataset_doi:str,publisher:str,license_id:str,media_rows:List[Dict[str,str]]|None=None,collapse_to_accepted_taxon:bool=False)->dict:
+    if collapse_to_accepted_taxon:
+        source_record_id=first(row,"acceptedTaxonKey","taxonKey","acceptedNameUsageID","taxonID","gbifID","occurrenceID","id")
+        scientific=first(row,"acceptedScientificName","scientificName","species")
+    else:
+        source_record_id=first(row,"occurrenceID","gbifID","taxonID","taxonKey","id")
+        scientific=first(row,"scientificName","acceptedScientificName","species")
     joined=[media_item(m) for m in (media_rows or []) if first(m,"identifier","accessURI")]
     legacy=media_item(row)
     if not joined and legacy["identifier"]: joined=[legacy]
+    accepted_id=first(row,"acceptedTaxonKey","acceptedNameUsageID")
     return {
         "schemaVersion":1,"sourceId":"gbif","sourceRecordId":source_record_id,
-        "scientificName":scientific,"acceptedNameUsageId":first(row,"acceptedTaxonKey","acceptedNameUsageID"),
+        "scientificName":scientific,"acceptedNameUsageId":accepted_id or (source_record_id if collapse_to_accepted_taxon else ""),
         "taxonomicStatus":first(row,"taxonomicStatus"),"kingdom":first(row,"kingdom"),
         "phylum":first(row,"phylum"),"class":first(row,"class"),"order":first(row,"order"),
         "family":first(row,"family"),"genus":first(row,"genus"),"species":first(row,"species"),
@@ -81,28 +86,70 @@ def validate_provenance(dataset_doi:str,publisher:str,license_id:str)->None:
     if not publisher.strip(): raise SystemExit("GBIF import requires the dataset publisher")
     if license_id not in ALLOWED_LICENSES: raise SystemExit("Unsupported GBIF licence")
 
-def build(input_path:Path,output_path:Path,metadata_path:Path,dataset_doi:str,publisher:str,license_id:str,multimedia_path:Path|None=None)->dict:
+def _merge_taxon_record(base:dict,incoming:dict,max_media_per_taxon:int)->None:
+    base["occurrenceEvidenceCount"]=int(base.get("occurrenceEvidenceCount",1))+1
+    if not clean(base.get("vernacularName")) and clean(incoming.get("vernacularName")):
+        base["vernacularName"]=incoming["vernacularName"]
+    existing=list(base.get("mediaItems") or [])
+    seen={(clean(item.get("identifier")),clean(item.get("license"))) for item in existing if clean(item.get("identifier"))}
+    for item in incoming.get("mediaItems") or []:
+        key=(clean(item.get("identifier")),clean(item.get("license")))
+        if not key[0] or key in seen: continue
+        if len(existing)>=max_media_per_taxon: break
+        existing.append(item); seen.add(key)
+    base["mediaItems"]=existing
+    if existing:
+        base["media"]=existing[0]
+
+def build(input_path:Path,output_path:Path,metadata_path:Path,dataset_doi:str,publisher:str,license_id:str,multimedia_path:Path|None=None,collapse_to_accepted_taxon:bool=False,max_media_per_taxon:int=50)->dict:
     validate_provenance(dataset_doi,publisher,license_id)
+    if max_media_per_taxon < 1: raise SystemExit("max_media_per_taxon must be at least 1")
     output_path.parent.mkdir(parents=True,exist_ok=True)
     media_by_gbif:dict[str,List[Dict[str,str]]]={}
     if multimedia_path:
         for row in read_delimited(multimedia_path):
             gbif_id=first(row,"gbifID")
             if gbif_id: media_by_gbif.setdefault(gbif_id,[]).append(row)
-    seen=set(); groups={}; count=0; records_with_media=0; sha=hashlib.sha256()
-    with gzip.open(output_path,"wt",encoding="utf-8",newline="\n") as out:
+
+    source_row_count=0
+    records:list[dict]=[]
+    if collapse_to_accepted_taxon:
+        grouped:dict[str,dict]={}
         for row in read_delimited(input_path):
-            record=normalize(row,dataset_doi,publisher,license_id,media_by_gbif.get(first(row,"gbifID"),[]))
+            source_row_count+=1
+            record=normalize(row,dataset_doi,publisher,license_id,media_by_gbif.get(first(row,"gbifID"),[]),True)
+            if not valid(record): continue
+            key=clean(record["sourceRecordId"]).casefold()
+            if key not in grouped:
+                record["occurrenceEvidenceCount"]=1
+                if len(record.get("mediaItems") or [])>max_media_per_taxon:
+                    record["mediaItems"]=record["mediaItems"][:max_media_per_taxon]
+                    record["media"]=record["mediaItems"][0]
+                grouped[key]=record
+            else:
+                _merge_taxon_record(grouped[key],record,max_media_per_taxon)
+        records=list(grouped.values())
+    else:
+        seen=set()
+        for row in read_delimited(input_path):
+            source_row_count+=1
+            record=normalize(row,dataset_doi,publisher,license_id,media_by_gbif.get(first(row,"gbifID"),[]),False)
             if not valid(record): continue
             key=(record["sourceRecordId"].lower(),record["scientificName"].lower())
             if key in seen: continue
-            seen.add(key)
-            if record["mediaItems"]: records_with_media+=1
+            seen.add(key); records.append(record)
+
+    groups={}; records_with_media=0; sha=hashlib.sha256()
+    with gzip.open(output_path,"wt",encoding="utf-8",newline="\n") as out:
+        for record in records:
+            if record.get("mediaItems"): records_with_media+=1
             line=json.dumps(record,ensure_ascii=False,separators=(",",":"))+"\n"
-            out.write(line); sha.update(line.encode("utf-8")); count+=1
+            out.write(line); sha.update(line.encode("utf-8"))
             group=record["libraryGroup"]; groups[group]=groups.get(group,0)+1
+
     metadata={"schemaVersion":1,"sourceId":"gbif","datasetDoi":dataset_doi,"publisher":publisher,
-        "license":license_id,"nonCommercialRestriction":ALLOWED_LICENSES[license_id],"recordCount":count,
+        "license":license_id,"nonCommercialRestriction":ALLOWED_LICENSES[license_id],"recordCount":len(records),
+        "sourceRowCount":source_row_count,"collapseToAcceptedTaxon":collapse_to_accepted_taxon,
         "recordsWithMedia":records_with_media,"multimediaRows":sum(map(len,media_by_gbif.values())),
         "groupCounts":groups,"normalizedNdjsonSha256":sha.hexdigest(),
         "safety":{"taxonomyDoesNotIdentifyPhotos":True,"occurrenceDoesNotProveCurrentPresence":True,
@@ -117,6 +164,8 @@ def main()->None:
     p.add_argument("--multimedia",type=Path); p.add_argument("--metadata",required=True,type=Path)
     p.add_argument("--dataset-doi",required=True); p.add_argument("--publisher",required=True)
     p.add_argument("--license",required=True,choices=sorted(ALLOWED_LICENSES))
-    a=p.parse_args(); meta=build(a.input,a.output,a.metadata,a.dataset_doi,a.publisher,a.license,a.multimedia)
-    print(json.dumps({"recordCount":meta["recordCount"],"groupCounts":meta["groupCounts"]},ensure_ascii=False))
+    p.add_argument("--collapse-to-accepted-taxon",action="store_true",help="Build one library profile per accepted GBIF taxon instead of one record per occurrence")
+    p.add_argument("--max-media-per-taxon",type=int,default=50)
+    a=p.parse_args(); meta=build(a.input,a.output,a.metadata,a.dataset_doi,a.publisher,a.license,a.multimedia,a.collapse_to_accepted_taxon,a.max_media_per_taxon)
+    print(json.dumps({"recordCount":meta["recordCount"],"sourceRowCount":meta["sourceRowCount"],"groupCounts":meta["groupCounts"],"collapseToAcceptedTaxon":meta["collapseToAcceptedTaxon"]},ensure_ascii=False))
 if __name__=="__main__": main()
