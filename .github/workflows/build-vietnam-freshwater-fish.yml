@@ -10,6 +10,10 @@ on:
       - "tools/test_build_scientific_sqlite.py"
       - "tools/build_fishbase_vietnam_audit.py"
       - "tools/build_vietnam_freshwater_fish_checklist.py"
+      - "tools/resolve_fish_checklist_gbif.py"
+      - "tools/test_resolve_fish_checklist_gbif.py"
+      - "tools/audit_resolved_fish_library_coverage.py"
+      - "tools/test_audit_resolved_fish_library_coverage.py"
       - "tools/audit_fish_checklist_coverage.py"
       - "tools/test_audit_fish_checklist_coverage.py"
       - "tools/attach_fish_coverage_report.py"
@@ -61,11 +65,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run fish ingestion, reconciliation, merge and offline-media tests
+      - name: Run fish ingestion, resolver, reconciliation, merge and offline-media tests
         run: |
           python3 -m unittest \
             tools.test_build_gbif_library \
             tools.test_build_scientific_sqlite \
+            tools.test_resolve_fish_checklist_gbif \
+            tools.test_audit_resolved_fish_library_coverage \
             tools.test_audit_fish_checklist_coverage \
             tools.test_reconcile_fish_checklist_taxonomy \
             tools.test_merge_scientific_ndjson \
@@ -172,6 +178,30 @@ jobs:
           print(report)
           PY
 
+      - name: Resolve checklist names independently against GBIF Backbone
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/resolve_fish_checklist_gbif.py \
+            --checklist build/fish-real/audit/vietnam-freshwater-fish.ndjson \
+            --output build/fish-real/audit/resolved-checklist.ndjson \
+            --report build/fish-real/audit/resolver-report.json \
+            --delay-seconds 0.05
+          python3 - <<'PY'
+          import json
+          report=json.load(open('build/fish-real/audit/resolver-report.json',encoding='utf-8'))
+          assert report['total']==772, report
+          assert report['presentInput']==736, report
+          assert report['reviewInput']==29, report
+          assert report['excludedInput']==7, report
+          assert report['presentResolved']==736, report
+          assert report['presentNeedsReview']==0, report
+          assert report['presentUnmatched']==0, report
+          assert report['uniqueAcceptedPresentTaxa']>0, report
+          print({k:report[k] for k in ('total','presentResolved','presentNeedsReview','presentUnmatched','uniqueAcceptedPresentTaxa')})
+          PY
+
       - name: Build real GBIF fish pack when an audited DwC-A is supplied
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.gbif_dwca_url != '' }}
         env:
@@ -194,8 +224,8 @@ jobs:
           args=(--input "$occurrence" --output build/fish-real/fish.ndjson.gz --metadata build/fish-real/fish.meta.json --dataset-doi "$GBIF_DOWNLOAD_DOI" --publisher "$GBIF_PUBLISHER" --license "$GBIF_DATASET_LICENSE" --collapse-to-accepted-taxon --max-media-per-taxon 50)
           if [ -n "$multimedia" ]; then args+=(--multimedia "$multimedia"); fi
           python3 tools/build_gbif_library.py "${args[@]}"
-          python3 tools/audit_fish_checklist_coverage.py \
-            --checklist build/fish-real/audit/vietnam-freshwater-fish.ndjson \
+          python3 tools/audit_resolved_fish_library_coverage.py \
+            --resolved-checklist build/fish-real/audit/resolved-checklist.ndjson \
             --taxonomy build/fish-real/fish.ndjson.gz \
             --output build/fish-real/audit/reconciled.ndjson \
             --report build/fish-real/audit/coverage-report.json
@@ -208,6 +238,8 @@ jobs:
           assert report['excludedInput']==7, report
           assert report['resolvedPresentChecklistCount']==736, report
           assert report['unresolvedPresentChecklistCount']==0, report
+          assert report['resolverBlockedPresentCount']==0, report
+          assert report['missingLibraryPresentCount']==0, report
           assert report['reconciledPresentTaxonCount']>0, report
           print(report)
           PY
@@ -302,6 +334,8 @@ jobs:
             build/fish-real/ingestion-report.json
             build/fish-real/audit/fishbase-report.json
             build/fish-real/audit/normalized-report.json
+            build/fish-real/audit/resolver-report.json
+            build/fish-real/audit/resolved-checklist.ndjson
             build/fish-real/audit/coverage-report.json
             build/fish-real/audit/reconciled.ndjson
           if-no-files-found: error
