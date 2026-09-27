@@ -32,6 +32,30 @@ class ScientificMediaCacheTest(unittest.TestCase):
         accepted = list(module.media_items(record))
         self.assertEqual(["https://example.org/a.jpg", "https://example.org/d.webp"], [x["identifier"] for x in accepted])
 
+    def test_gbif_media_uses_deterministic_1200px_cache_url(self):
+        item = {
+            "identifier": "https://example.org/a.jpg",
+            "license": "CC-BY-4.0",
+            "mediaType": "StillImage",
+            "sourceProvider": "GBIF occurrence media",
+            "gbifOccurrenceKey": "123",
+        }
+        self.assertEqual(
+            "https://api.gbif.org/v1/image/cache/1200x/occurrence/123/media/14959baaa98af1141f91775766c5008d",
+            module.download_url_for_item(item),
+        )
+        with self.assertRaises(ValueError):
+            module.gbif_resized_download_url(item, width=1201)
+
+    def test_non_gbif_media_keeps_original_download_url(self):
+        item = {
+            "identifier": "https://upload.wikimedia.org/example.jpg",
+            "license": "CC-BY-4.0",
+            "mediaType": "StillImage",
+            "sourceProvider": "Wikimedia Commons",
+        }
+        self.assertEqual(item["identifier"], module.download_url_for_item(item))
+
     def test_extension_gate(self):
         self.assertEqual(".jpg", module.extension_for("image/jpeg", "https://example.org/noext"))
         self.assertEqual(".png", module.extension_for("application/octet-stream", "https://example.org/pic.png"))
@@ -72,6 +96,35 @@ class ScientificMediaCacheTest(unittest.TestCase):
             self.assertEqual(2, metrics["rejectedBeforeDownload"])
             self.assertEqual(1, metrics["skippedPerRecordLimit"])
             self.assertEqual(2, metrics["uniqueCachedFiles"])
+            self.assertEqual(0, metrics["gbifResizedDownloads"])
+
+    def test_build_downloads_gbif_derivative_but_preserves_original_source_identifier(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "fish.ndjson.gz"
+            media_dir = root / "media"
+            manifest_path = root / "manifest.json"
+            original = "https://example.org/a.jpg"
+            item = {
+                "identifier": original,
+                "license": "CC-BY-4.0",
+                "mediaType": "StillImage",
+                "sourceProvider": "GBIF occurrence media",
+                "gbifOccurrenceKey": "123",
+            }
+            record = {"sourceId":"gbif","sourceRecordId":"1","scientificName":"Channa striata","mediaItems":[item]}
+            with gzip.open(source, "wt", encoding="utf-8") as handle:
+                handle.write(json.dumps(record) + "\n")
+            expected_download = module.download_url_for_item(item)
+            with patch.object(module, "download_image", return_value=(b"fish-image", ".jpg", expected_download)) as mocked:
+                result = module.build(source, media_dir, manifest_path, max_bytes=1024, max_per_record=1, max_total_bytes=4096)
+            mocked.assert_called_once_with(expected_download, max_bytes=1024)
+            entry = result["records"][0]
+            self.assertEqual(original, entry["sourceIdentifier"])
+            self.assertEqual(expected_download, entry["downloadIdentifier"])
+            self.assertEqual("CC-BY-4.0", entry["license"])
+            self.assertEqual(1, result["metrics"]["gbifResizedDownloads"])
+            self.assertTrue(result["safety"]["publisherIdentifierPreserved"])
 
     def test_build_aborts_before_exceeding_total_pack_size(self):
         with tempfile.TemporaryDirectory() as tmp:
