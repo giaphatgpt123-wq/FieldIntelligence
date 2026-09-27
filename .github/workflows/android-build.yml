@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
   workflow_run:
-    workflows: ["Build Vietnam Freshwater Fish Library Auto"]
+    workflows: ["Build Vietnam Freshwater Fish Library Auto", "Enrich Missing Freshwater Fish Images"]
     types: [completed]
 
 permissions:
@@ -48,6 +48,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          FISH_TRIGGER_RUN: ${{ github.event.workflow_run.id }}
         run: |
           set -euo pipefail
           mkdir -p build/scientific-library app/src/main/assets/scientific-library
@@ -67,13 +68,16 @@ jobs:
             --source-meta build/scientific-library/wfo-taxonomy.meta.json \
             --output build/scientific-library/wfo-taxonomy.sqlite
 
-          fish_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-freshwater-fish-partial&per_page=100" \
-            --jq '[.artifacts[] | select(.expired == false and .workflow_run.head_branch == "main")] | sort_by(.created_at) | reverse | .[0].workflow_run.id // empty')"
+          fish_run="${FISH_TRIGGER_RUN:-}"
+          if [ -z "$fish_run" ]; then
+            fish_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-freshwater-fish-partial&per_page=100" \
+              --jq '[.artifacts[] | select(.expired == false and .workflow_run.head_branch == "main")] | sort_by(.created_at) | reverse | .[0].workflow_run.id // empty')"
+          fi
           if [ -n "$fish_run" ]; then
             run_state="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${fish_run}" --jq '[.conclusion,.path,.head_branch] | @tsv')"
             IFS=$'\t' read -r conclusion workflow_path head_branch <<<"$run_state"
             case "$workflow_path" in
-              .github/workflows/build-vietnam-freshwater-fish-auto.yml) trusted_workflow=true ;;
+              .github/workflows/build-vietnam-freshwater-fish-auto.yml|.github/workflows/enrich-missing-freshwater-fish-images.yml) trusted_workflow=true ;;
               *) trusted_workflow=false ;;
             esac
             if [ "$conclusion" != "success" ] || [ "$trusted_workflow" != "true" ] || [ "$head_branch" != "main" ]; then

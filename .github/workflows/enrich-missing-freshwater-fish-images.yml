@@ -1,0 +1,113 @@
+name: Enrich Missing Freshwater Fish Images
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - "tools/enrich_missing_fish_media.py"
+      - "tools/test_enrich_missing_fish_media.py"
+      - ".github/workflows/enrich-missing-freshwater-fish-images.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: fish-image-enrichment-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify enrichment code
+        run: python3 -m unittest tools.test_enrich_missing_fish_media tools.test_enrich_inaturalist_fish_media tools.test_enrich_wikidata_commons_fish_media
+      - name: Download latest audited fish artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          run_id="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-freshwater-fish-partial&per_page=100" \
+            --jq '[.artifacts[] | select(.expired == false and .workflow_run.head_branch == "main")] | sort_by(.created_at) | reverse | .[0].workflow_run.id // empty')"
+          test -n "$run_id"
+          state="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}" --jq '[.conclusion,.path,.head_branch] | @tsv')"
+          IFS=$'\t' read -r conclusion path branch <<< "$state"
+          test "$conclusion" = success
+          case "$path" in
+            .github/workflows/build-vietnam-freshwater-fish-auto.yml|.github/workflows/enrich-missing-freshwater-fish-images.yml) ;;
+            *) echo "Unexpected fish artifact producer: $path" >&2; exit 1 ;;
+          esac
+          test "$branch" = main
+          mkdir -p build/fish-real
+          gh run download "$run_id" --repo "$GITHUB_REPOSITORY" \
+            --name FieldIntelligence-freshwater-fish-partial --dir build/fish-real
+          test -s build/fish-real/fish.ndjson.gz
+          test -s build/fish-real/fish.meta.json
+          test -s build/fish-real/audit/reconciled.ndjson
+          mv build/fish-real/fish.ndjson.gz build/fish-real/base.ndjson.gz
+          echo "$run_id" > build/fish-real/base-run-id.txt
+      - name: Find new licensed images for missing fish only
+        run: |
+          set -euo pipefail
+          python3 -m tools.enrich_missing_fish_media \
+            --input build/fish-real/base.ndjson.gz \
+            --output build/fish-real/fish.ndjson.gz \
+            --metadata build/fish-real/fish.meta.json \
+            --report build/fish-real/media-enrichment-report.json
+      - name: Rebuild and verify offline fish library
+        run: |
+          set -euo pipefail
+          python3 tools/build_scientific_sqlite.py \
+            --input build/fish-real/fish.ndjson.gz \
+            --source-meta build/fish-real/fish.meta.json \
+            --output build/fish-real/fish.sqlite
+          python3 tools/cache_scientific_media.py \
+            --input build/fish-real/fish.ndjson.gz \
+            --media-dir build/fish-real/media \
+            --manifest build/fish-real/scientific-media.manifest.json \
+            --max-per-record 1 --max-bytes 5242880 --max-total-bytes 268435456
+          python3 tools/attach_scientific_media_manifest.py \
+            --database build/fish-real/fish.sqlite \
+            --manifest build/fish-real/scientific-media.manifest.json
+          python3 tools/attach_fish_coverage_report.py \
+            --database build/fish-real/fish.sqlite \
+            --reconciled build/fish-real/audit/reconciled.ndjson \
+            --coverage build/fish-real/audit/coverage-report.json \
+            --expect-total 772 --expect-present 736 --expect-review 29 --expect-excluded 7 --allow-incomplete
+          python3 - <<'PY'
+          import json, sqlite3
+          from pathlib import Path
+          root=Path('build/fish-real')
+          enrichment=json.loads((root/'media-enrichment-report.json').read_text())
+          with sqlite3.connect(root/'fish.sqlite') as db:
+              meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
+              assert db.execute('pragma integrity_check').fetchone()[0]=='ok'
+          assert meta['fishTaxa']==715 and meta['fishPresentChecklistResolved']==715
+          assert meta['fishPresentChecklistUnresolved']==21
+          assert 0 < meta['fishWithLocalMedia'] <= meta['fishTaxa']
+          report={**enrichment, 'fishTaxa':meta['fishTaxa'],
+                  'fishWithLocalMedia':meta['fishWithLocalMedia'],
+                  'localMediaBlobCount':meta['localMediaBlobCount'],
+                  'fishPresentChecklistResolved':meta['fishPresentChecklistResolved'],
+                  'fishPresentChecklistUnresolved':meta['fishPresentChecklistUnresolved'],
+                  'completeRelease':False}
+          (root/'ingestion-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+          print({k:v for k,v in report.items() if k!='errors'})
+          PY
+      - name: Upload audited enriched fish artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FieldIntelligence-freshwater-fish-partial
+          path: |
+            build/fish-real/fish.ndjson.gz
+            build/fish-real/fish.sqlite
+            build/fish-real/fish.meta.json
+            build/fish-real/scientific-media.manifest.json
+            build/fish-real/ingestion-report.json
+            build/fish-real/media-enrichment-report.json
+            build/fish-real/audit/**
+          if-no-files-found: error
+          retention-days: 30
