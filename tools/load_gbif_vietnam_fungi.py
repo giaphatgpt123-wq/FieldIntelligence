@@ -5,6 +5,7 @@ This produces taxonomy and provenance only. It never infers identity, edibility 
 """
 import argparse
 import json
+import re
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -16,9 +17,17 @@ LICENSES = {'CC0-1.0', 'CC-BY-4.0', 'CC-BY-NC-4.0',
             'https://creativecommons.org/licenses/by-nc/4.0/'}
 
 
+def canonical_license(value):
+    raw=str(value or '').strip()
+    if raw in LICENSES:return raw
+    match=re.fullmatch(r'https?://creativecommons\.org/(publicdomain/zero/1\.0|licenses/by/4\.0|licenses/by-nc/4\.0)/(?:legalcode)?/?',raw,re.I)
+    return {'publicdomain/zero/1.0':'CC0-1.0','licenses/by/4.0':'CC-BY-4.0',
+            'licenses/by-nc/4.0':'CC-BY-NC-4.0'}.get(match.group(1).lower()) if match else ''
+
+
 def normalize(occurrence):
     if (str(occurrence.get('kingdom') or '').casefold() != 'fungi' or occurrence.get('countryCode') != 'VN'
-            or str(occurrence.get('license') or '') not in LICENSES):
+            or not canonical_license(occurrence.get('license'))):
         return None
     species = str(occurrence.get('species') or '').strip()
     key = occurrence.get('speciesKey')
@@ -27,7 +36,7 @@ def normalize(occurrence):
     media = []
     for item in occurrence.get('media') or []:
         url = str(item.get('identifier') or '').strip()
-        license_id = str(item.get('license') or '').strip()
+        license_id = canonical_license(item.get('license'))
         if url.startswith('https://') and license_id in LICENSES and str(item.get('type') or '').casefold() in ('stillimage', 'image'):
             media.append({'identifier':url, 'mediaType':'StillImage', 'license':license_id,
                           'references':f"https://www.gbif.org/occurrence/{occurrence['key']}",
