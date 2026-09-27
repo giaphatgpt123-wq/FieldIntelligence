@@ -1,4 +1,5 @@
 import gzip
+import hashlib
 import importlib.util
 import json
 import tempfile
@@ -61,12 +62,13 @@ class CommonsFishMediaTest(unittest.TestCase):
         self.assertIsNone(item)
         self.assertEqual("wikidata-exact-taxon-without-allowed-commons-image", reason)
 
-    def test_enrich_only_fills_missing_media(self):
+    def test_enrich_only_fills_missing_media_and_updates_metadata_hash(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             input_path = root / "in.ndjson.gz"
             output_path = root / "out.ndjson.gz"
             report_path = root / "report.json"
+            metadata_path = root / "fish.meta.json"
             rows = [
                 {"scientificName": "A a", "species": "A a", "mediaItems": [{"identifier": "https://example/a.jpg", "license": "CC0-1.0"}]},
                 {"scientificName": "B b", "species": "B b", "mediaItems": []},
@@ -75,6 +77,11 @@ class CommonsFishMediaTest(unittest.TestCase):
             with gzip.open(input_path, "wt", encoding="utf-8") as handle:
                 for row in rows:
                     handle.write(json.dumps(row) + "\n")
+            metadata_path.write_text(json.dumps({
+                "normalizedNdjsonSha256": "oldhash",
+                "recordsWithMedia": 1,
+                "recordsWithoutMedia": 2,
+            }), encoding="utf-8")
 
             def finder(name):
                 if name == "B b":
@@ -88,17 +95,33 @@ class CommonsFishMediaTest(unittest.TestCase):
                     }, "matched")
                 return None, "wikidata-no-exact-p225"
 
-            report = module.enrich(input_path, output_path, report_path, finder=finder, delay_seconds=0)
+            report = module.enrich(
+                input_path,
+                output_path,
+                report_path,
+                metadata_path=metadata_path,
+                finder=finder,
+                delay_seconds=0,
+            )
             self.assertEqual(3, report["recordCount"])
             self.assertEqual(1, report["alreadyHadMedia"])
             self.assertEqual(2, report["fallbackAttempted"])
             self.assertEqual(1, report["fallbackAdded"])
             self.assertEqual(1, report["remainingWithoutMedia"])
+            self.assertEqual(2, report["recordsWithMedia"])
             with gzip.open(output_path, "rt", encoding="utf-8") as handle:
-                out = [json.loads(line) for line in handle if line.strip()]
+                raw_lines = [line for line in handle if line.strip()]
+                out = [json.loads(line) for line in raw_lines]
             self.assertEqual("https://example/a.jpg", out[0]["mediaItems"][0]["identifier"])
             self.assertEqual("https://upload.wikimedia.org/b.jpg", out[1]["mediaItems"][0]["identifier"])
             self.assertEqual([], out[2]["mediaItems"])
+            expected_hash = hashlib.sha256("".join(raw_lines).encode("utf-8")).hexdigest()
+            meta = json.loads(metadata_path.read_text(encoding="utf-8"))
+            self.assertEqual("oldhash", meta["gbifOnlyNdjsonSha256"])
+            self.assertEqual(expected_hash, meta["normalizedNdjsonSha256"])
+            self.assertEqual(2, meta["recordsWithMedia"])
+            self.assertEqual(1, meta["recordsWithoutMedia"])
+            self.assertEqual(1, meta["wikimediaCommonsFallbackAdded"])
 
 
 if __name__ == "__main__":
