@@ -82,11 +82,13 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     val context=LocalContext.current;val uriHandler=LocalUriHandler.current
     val store=remember(context){ScientificLibraryStore(context.applicationContext)};val storeStatus=remember{store.status()}
     val mediaStore=remember(context){ScientificMediaStore(context.applicationContext)}
-    val localMediaIds by produceState<Set<String>>(emptySet(),storeStatus.installed){value=if(storeStatus.installed)withContext(Dispatchers.IO){mediaStore.localMediaRecordIds()}else emptySet()}
+    val localMediaIds=mediaStore.localMediaRecordIds()
     val localFishWithMedia by produceState(0L,storeStatus.installed,localMediaIds.size){value=if(storeStatus.installed)withContext(Dispatchers.IO){mediaStore.fishWithLocalMediaCount()}else 0L}
     LaunchedEffect(store){repeat(30){if(storeStatus.installed)return@LaunchedEffect;delay(1000L);store.status()}}
     var confirmDelete by remember{mutableStateOf<String?>(null)};var selectedObservation by remember{mutableStateOf<String?>(null)}
     var query by remember{mutableStateOf("")};var group by remember{mutableStateOf("Tất cả")};var selectedCollectionId by remember{mutableStateOf<String?>(null)};var selectedId by remember{mutableStateOf<String?>(null)}
+    var visibleFishLimit by remember{mutableIntStateOf(FISH_PAGE_SIZE)}
+    LaunchedEffect(query,group,selectedCollectionId){visibleFishLimit=FISH_PAGE_SIZE}
 
     if(confirmDelete!=null)AlertDialog(onDismissRequest={confirmDelete=null},title={Text("Xóa ghi nhận?")},text={Text("Ảnh và ghi chú sẽ bị xóa khỏi ứng dụng trên máy này.")},confirmButton={TextButton(onClick={val id=confirmDelete;confirmDelete=null;if(id!=null){onDeleteObservation(id);selectedObservation=null}}){Text("XÓA")}},dismissButton={TextButton(onClick={confirmDelete=null}){Text("HỦY")}})
     observations.firstOrNull{it.id==selectedObservation}?.let{observation->ObservationDetail(observation,onBack={selectedObservation=null},onDelete={confirmDelete=observation.id});return}
@@ -95,13 +97,12 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     if(selected!=null){Column(verticalArrangement=Arrangement.spacedBy(14.dp)){OutlinedButton(onClick={selectedId=null},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(18.dp)){Text("←  QUAY LẠI THƯ VIỆN",fontWeight=FontWeight.Bold)};SpeciesDetailCard(selected,uriHandler)};return}
 
     val selectedCollection=LibraryCollections.byId(selectedCollectionId)
-    val fishLimit=300
     val curatedResults=selectedCollectionId?.let{id->
         when(id){
             "freshwater-fish"->{
                 val starter=SpeciesCatalog.search(query,"Cá nước ngọt")
-                val external=if(storeStatus.installed&&localMediaIds.isNotEmpty())store.search(query,"Cá nước ngọt",fishLimit).filter{it.id in localMediaIds}else emptyList()
-                (starter+external).distinctBy{it.scientificName.lowercase(Locale.ROOT)}
+                val external=if(storeStatus.installed)store.search(query,"Cá nước ngọt",FISH_QUERY_LIMIT).filter{it.id in localMediaIds}else emptyList()
+                (external+starter).distinctBy{it.scientificName.lowercase(Locale.ROOT)}
             }
             "wfo-plants"->if(storeStatus.installed&&query.trim().length>=2)store.search(query,"Thực vật",80) else emptyList()
             else->{val needle=query.trim().lowercase(Locale.ROOT);LibraryCollections.recordsFor(id).filter{r->needle.isBlank()||r.vietnameseName.lowercase(Locale.ROOT).contains(needle)||r.scientificName.lowercase(Locale.ROOT).contains(needle)}}
@@ -110,14 +111,16 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     val starterResults=remember(query,group){SpeciesCatalog.search(query,group)}
     val groupBrowseAllowed=group=="Cá nước ngọt"
     val externalSearchRequested=selectedCollectionId==null&&storeStatus.installed&&(query.trim().length>=2||groupBrowseAllowed)
-    val externalLimit=if(groupBrowseAllowed)fishLimit else 80
+    val externalLimit=if(groupBrowseAllowed)FISH_QUERY_LIMIT else 80
     val externalRaw=if(externalSearchRequested)store.search(query,group,externalLimit) else emptyList()
     val externalResults=externalRaw.filter{it.group!="Cá nước ngọt"||it.id in localMediaIds}
     val externalSearching=externalSearchRequested&&store.isSearching(query,group,externalLimit)
     val externalSearchCompleted=externalSearchRequested&&store.isSearchCompleted(query,group,externalLimit)
-    val results=if(selectedCollection!=null)curatedResults else (starterResults+externalResults).distinctBy{it.scientificName.lowercase(Locale.ROOT)}
+    val results=if(selectedCollection!=null)curatedResults else if(groupBrowseAllowed)(externalResults+starterResults).distinctBy{it.scientificName.lowercase(Locale.ROOT)} else (starterResults+externalResults).distinctBy{it.scientificName.lowercase(Locale.ROOT)}
     val totalCount=if(storeStatus.installed&&storeStatus.recordCount>0)storeStatus.recordCount else SpeciesCatalog.records.size.toLong()
     val displayedFishCount=if(localFishWithMedia>0)localFishWithMedia else SpeciesCatalog.records.count{it.group=="Cá nước ngọt"}.toLong()
+    val fishViewActive=selectedCollectionId=="freshwater-fish"||groupBrowseAllowed
+    val visibleResultLimit=if(fishViewActive)visibleFishLimit else 80
 
     Column(verticalArrangement=Arrangement.spacedBy(16.dp)){
         LibraryHero(totalCount,storeStatus,localFishWithMedia,observations.size)
@@ -132,7 +135,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
             Row(verticalAlignment=Alignment.CenterVertically){Column(Modifier.weight(1f)){Text(if(selectedCollection==null)"TRA CỨU KHOA HỌC" else selectedCollection.label.uppercase(Locale.ROOT),fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleLarge);if(selectedCollection!=null)Text(selectedCollection.subtitle,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)};Surface(shape=RoundedCornerShape(999.dp),color=if(storeStatus.installed)Color(0x263EEA91) else Color(0x332F3436)){Text(if(selectedCollectionId=="wfo-plants")"WFO OFFLINE" else if(selectedCollectionId=="freshwater-fish"&&localFishWithMedia>0)"FISH + ẢNH OFFLINE" else if(selectedCollection!=null)"CURATED" else if(storeStatus.installed)"DATABASE READY" else "STARTER DATA",Modifier.padding(horizontal=10.dp,vertical=6.dp),color=if(storeStatus.installed||selectedCollection!=null)FieldColors.primary else FieldColors.onSurfaceVariant,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.labelSmall)}}
             OutlinedTextField(value=query,onValueChange={query=it.take(120)},label={Text(if(selectedCollectionId=="wfo-plants")"Tên khoa học hoặc chi (từ 2 ký tự)" else if(selectedCollectionId=="freshwater-fish")"Lọc cá theo tên Việt hoặc tên khoa học" else if(selectedCollection!=null)"Lọc trong bộ sưu tập" else if(storeStatus.installed)"Tên Việt hoặc tên khoa học (từ 2 ký tự)" else "Tên Việt hoặc tên khoa học")},leadingIcon={Text("⌕",style=MaterialTheme.typography.headlineSmall)},modifier=Modifier.fillMaxWidth().heightIn(min=60.dp),singleLine=true,shape=RoundedCornerShape(20.dp))
             Text(when{
-                selectedCollectionId=="freshwater-fish"&&localFishWithMedia>0->"${formatCount(localFishWithMedia)} hồ sơ cá có ảnh offline đã kiểm SHA/license • ${formatCount(storeStatus.fishPendingMedia)} hồ sơ nguồn đang chờ media"
+                selectedCollectionId=="freshwater-fish"&&localFishWithMedia>0->"${formatCount(localFishWithMedia)} hồ sơ cá có ảnh offline đã kiểm SHA/license • duyệt theo lô $FISH_PAGE_SIZE hồ sơ"
                 selectedCollectionId=="freshwater-fish"->"Đang dùng ${displayedFishCount} hồ sơ cá lõi; gói cá khoa học có ảnh offline chưa được cài"
                 selectedCollectionId=="wfo-plants"->if(storeStatus.installed)"${formatCount(storeStatus.recordCount)} tên phân loại offline • tối đa 80 kết quả mỗi truy vấn" else "Đang nạp dữ liệu WFO; thử mở lại thư viện sau ít phút"
                 selectedCollection!=null->"${selectedCollection.recordIds.size} hồ sơ đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
@@ -142,19 +145,27 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         }}
 
         when{
-            selectedCollectionId=="freshwater-fish"&&storeStatus.installed&&store.isSearching(query,"Cá nước ngọt",fishLimit)->SearchStatusBanner("ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…")
+            selectedCollectionId=="freshwater-fish"&&storeStatus.installed&&store.isSearching(query,"Cá nước ngọt",FISH_QUERY_LIMIT)->SearchStatusBanner("ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…")
             selectedCollectionId=="wfo-plants"&&!storeStatus.installed->SearchStatusBanner("ĐANG NẠP THƯ VIỆN WFO OFFLINE…")
             selectedCollectionId=="wfo-plants"&&store.isSearching(query,"Thực vật",80)->SearchStatusBanner("ĐANG TÌM TRONG WFO OFFLINE…")
             selectedCollection!=null&&results.isEmpty()->SafetyBanner("${selectedCollection.label}: chưa có hồ sơ đủ điều kiện trong bộ dữ liệu hiện tại. Ứng dụng không tự gắn nhãn y khoa/độc tính chỉ từ taxonomy.")
-            selectedCollection!=null->{Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(fishLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
+            selectedCollection!=null->{Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(visibleResultLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}};if(fishViewActive)FishLoadMoreButton(visibleFishLimit,results.size){visibleFishLimit=(visibleFishLimit+FISH_PAGE_SIZE).coerceAtMost(FISH_QUERY_LIMIT)}}
             storeStatus.installed&&query.isBlank()&&!groupBrowseAllowed->{SafetyBanner("Các hồ sơ nổi bật dưới đây có tên tiếng Việt. Nhập từ 2 ký tự để tra thêm ${formatCount(storeStatus.recordCount)} tên khoa học offline.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
             storeStatus.installed&&query.trim().length<2&&!groupBrowseAllowed->{SafetyBanner("Nhập ít nhất 2 ký tự để tra dữ liệu khoa học. Kết quả tiếng Việt có sẵn bên dưới.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
             externalSearching->SearchStatusBanner(if(groupBrowseAllowed)"ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…" else "ĐANG TÌM TRONG THƯ VIỆN OFFLINE…")
             externalSearchCompleted&&results.isEmpty()->SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
             results.isEmpty()->SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy trong dữ liệu không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
-            else->{Text("KẾT QUẢ • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(if(groupBrowseAllowed)fishLimit else 80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
+            else->{Text("KẾT QUẢ • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(visibleResultLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}};if(fishViewActive)FishLoadMoreButton(visibleFishLimit,results.size){visibleFishLimit=(visibleFishLimit+FISH_PAGE_SIZE).coerceAtMost(FISH_QUERY_LIMIT)}}
         }
         HorizontalDivider();ObservationSection(observations){selectedObservation=it};DataProvenanceCard(storeStatus,localFishWithMedia)
+    }
+}
+
+@Composable
+private fun FishLoadMoreButton(shown:Int,total:Int,onMore:()->Unit){
+    if(shown>=total)return
+    OutlinedButton(onClick=onMore,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(18.dp),border=BorderStroke(1.dp,Color(0x8845E58C))){
+        Text("HIỆN THÊM ${minOf(FISH_PAGE_SIZE,total-shown)} • ĐÃ HIỆN ${minOf(shown,total)}/$total",fontWeight=FontWeight.Black)
     }
 }
 
@@ -189,7 +200,7 @@ private fun LibraryCollectionGrid(selectedId:String?,fishCount:Long,onSelect:(St
 @Composable
 private fun SpeciesDetailCard(selected:SpeciesRecord,uriHandler:androidx.compose.ui.platform.UriHandler){
     val context=LocalContext.current
-    val localMedia by produceState<List<ScientificLocalMedia>>(emptyList(),selected.id){value=withContext(Dispatchers.IO){ScientificMediaStore(context.applicationContext).loadForRecord(selected.id,2)}}
+    val localMedia by produceState<List<ScientificLocalMedia>>(emptyList(),selected.id){value=withContext(Dispatchers.IO){ScientificMediaStore(context.applicationContext).loadForRecord(selected.id,3)}}
     val collections=LibraryCollections.items.filter{selected.id in it.recordIds}
     Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(28.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33)),border=BorderStroke(1.dp,Color(0x3345E58C))){Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
         Surface(shape=RoundedCornerShape(20.dp),color=Color(0x2245E58C)){Text(groupIcon(selected.group),Modifier.padding(16.dp),style=MaterialTheme.typography.headlineLarge)};Text(selected.vietnameseName,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Black);Text(selected.scientificName,fontWeight=FontWeight.Bold,color=FieldColors.primary,style=MaterialTheme.typography.titleMedium);Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){InfoChip(selected.group);InfoChip(if(localMedia.isNotEmpty())"ẢNH OFFLINE" else if(selected.sourceScope.contains("Ảnh tham chiếu có license"))"MEDIA METADATA" else "TAXONOMY")}
@@ -224,3 +235,5 @@ private fun DataProvenanceCard(status:ScientificLibraryStatus,localFishWithMedia
 @Composable private fun SafetyBanner(text:String){Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF2E2520),border=BorderStroke(1.dp,Color(0x33FFC857))){Text(text,Modifier.fillMaxWidth().padding(14.dp),color=Color(0xFFFFC857),fontWeight=FontWeight.Medium)}}
 private fun formatCount(value:Long):String=when{value>=1_000_000->String.format(Locale.US,"%.2fM",value/1_000_000.0);value>=1_000->String.format(Locale.US,"%.1fK",value/1_000.0);else->value.toString()}
 private fun groupIcon(group:String):String=when(group){"Thực vật"->"🌿";"Động vật"->"🐾";"Cá nước ngọt"->"🐟";"Côn trùng"->"🐝";"Nấm"->"🍄";else->"◈"}
+private const val FISH_QUERY_LIMIT=1000
+private const val FISH_PAGE_SIZE=80
