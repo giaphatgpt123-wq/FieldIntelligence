@@ -17,12 +17,29 @@ def write_ndjson(path: Path, rows):
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
-def response(usage_name, usage_key, accepted_name=None, accepted_key=None, match_type="EXACT", confidence=99, rank="SPECIES", kingdom="Animalia", synonym=False):
+def response(
+    usage_name,
+    usage_key,
+    accepted_name=None,
+    accepted_key=None,
+    match_type="EXACT",
+    confidence=99,
+    rank="SPECIES",
+    kingdom="Animalia",
+    synonym=False,
+    issues=None,
+    processing_flags=None,
+):
     usage = {"key": str(usage_key), "name": usage_name, "rank": rank, "status": "SYNONYM" if synonym else "ACCEPTED"}
     data = {
         "usage": usage,
         "classification": [{"key": "1", "name": kingdom, "rank": "KINGDOM"}],
-        "diagnostics": {"matchType": match_type, "confidence": confidence},
+        "diagnostics": {
+            "matchType": match_type,
+            "confidence": confidence,
+            "issues": issues or [],
+            "processingFlags": processing_flags or [],
+        },
         "synonym": synonym,
     }
     if accepted_key is not None:
@@ -43,19 +60,36 @@ class GbifFishResolverTest(unittest.TestCase):
         self.assertTrue(evidence["synonym"])
         self.assertEqual(64, len(evidence["evidenceSha256"]))
 
-    def test_fuzzy_or_wrong_rank_stays_review(self):
-        fuzzy = module.classify_match(
+    def test_non_exact_or_wrong_rank_stays_review(self):
+        canonical = module.classify_match(
             "Channa striata",
-            response("Channa striata", 999, match_type="FUZZY", confidence=96),
+            response("Channa striata", 999, match_type="CANONICAL", confidence=96),
             module.GBIF_BACKBONE_KEY,
         )
-        self.assertEqual("review", fuzzy["status"])
+        self.assertEqual("review", canonical["status"])
         higher = module.classify_match(
             "Channa striata",
             response("Channa", 100, match_type="EXACT", confidence=99, rank="GENUS"),
             module.GBIF_BACKBONE_KEY,
         )
         self.assertEqual("review", higher["status"])
+
+    def test_blocking_processing_flag_stays_review_and_is_preserved(self):
+        evidence = module.classify_match(
+            "Channa striata",
+            response(
+                "Channa striata",
+                999,
+                match_type="EXACT",
+                confidence=99,
+                issues=["TAXON_MATCH_NAME_AND_ID_AMBIGUOUS"],
+                processing_flags=["MULTIPLE_MATCHES_SAME_CONFIDENCE"],
+            ),
+            module.GBIF_BACKBONE_KEY,
+        )
+        self.assertEqual("review", evidence["status"])
+        self.assertIn("MULTIPLE_MATCHES_SAME_CONFIDENCE", evidence["processingFlags"])
+        self.assertIn("TAXON_MATCH_NAME_AND_ID_AMBIGUOUS", evidence["issues"])
 
     def test_build_counts_present_blockers_without_auto_accepting_them(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -71,7 +105,7 @@ class GbifFishResolverTest(unittest.TestCase):
             ])
             answers = {
                 "Channa striata": response("Channa striata", 999),
-                "Oldus synonymus": response("Oldus synonymus", 111, "Acceptedus fish", 222, match_type="FUZZY", confidence=90, synonym=True),
+                "Oldus synonymus": response("Oldus synonymus", 111, "Acceptedus fish", 222, match_type="CANONICAL", confidence=90, synonym=True),
                 "Possible fish": response("Possible fish", 333),
                 "Rejected fish": response("Rejected fish", 444),
             }
