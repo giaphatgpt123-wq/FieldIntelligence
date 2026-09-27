@@ -11,6 +11,7 @@ on:
       - "tools/test_load_gbif_vietnam_fungi.py"
       - "data/scientific/specialist_evidence.json"
       - "data/scientific/official_medicinal_taxa.json"
+      - "feature/emergency/src/main/java/vn/fieldintel/feature/emergency/ScientificLibraryStore.kt"
       - ".github/workflows/build-vietnam-fungi-offline.yml"
   schedule:
     - cron: '41 2 * * 0'
