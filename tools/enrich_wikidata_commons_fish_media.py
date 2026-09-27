@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import gzip
+import hashlib
 import html
 import json
 import re
@@ -154,9 +155,11 @@ def find_exact_taxon_image(
                 if not url.startswith("https://"):
                     continue
                 meta = info.get("extmetadata") or {}
+
                 def mv(key: str) -> str:
                     value = meta.get(key) or {}
                     return clean(value.get("value") if isinstance(value, dict) else value)
+
                 license_id = canonical_license(mv("LicenseShortName"), mv("LicenseUrl"))
                 if license_id not in ALLOWED_LICENSES:
                     continue
@@ -201,6 +204,7 @@ def enrich(
     input_path: Path,
     output_path: Path,
     report_path: Path,
+    metadata_path: Path | None = None,
     finder: Callable[[str], tuple[dict | None, str]] = find_exact_taxon_image,
     delay_seconds: float = 0.05,
 ) -> dict:
@@ -212,6 +216,7 @@ def enrich(
         "remainingWithoutMedia": 0,
         "reasons": {},
     }
+    digest = hashlib.sha256()
     with _open_input(input_path) as source, _open_output(output_path) as target:
         for line in source:
             if not line.strip():
@@ -241,10 +246,28 @@ def enrich(
                     report["reasons"][reason] = int(report["reasons"].get(reason, 0)) + 1
                 if delay_seconds > 0:
                     time.sleep(delay_seconds)
-            target.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
+            encoded = (json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
+            target.write(encoded.decode("utf-8"))
+            digest.update(encoded)
 
+    report["recordsWithMedia"] = report["recordCount"] - report["remainingWithoutMedia"]
+    report["normalizedNdjsonSha256"] = digest.hexdigest()
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    if metadata_path is not None:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        previous_hash = clean(metadata.get("normalizedNdjsonSha256"))
+        if previous_hash:
+            metadata["gbifOnlyNdjsonSha256"] = previous_hash
+        metadata["normalizedNdjsonSha256"] = report["normalizedNdjsonSha256"]
+        metadata["recordsWithMedia"] = report["recordsWithMedia"]
+        metadata["recordsWithoutMedia"] = report["remainingWithoutMedia"]
+        metadata["wikimediaCommonsFallbackAttempted"] = report["fallbackAttempted"]
+        metadata["wikimediaCommonsFallbackAdded"] = report["fallbackAdded"]
+        metadata["wikimediaCommonsFallbackRemainingWithoutMedia"] = report["remainingWithoutMedia"]
+        metadata["wikimediaCommonsFallbackPolicy"] = "exact-P225-to-P18; CC0-1.0 or CC-BY-4.0 only"
+        metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
 
 
@@ -253,9 +276,16 @@ def main() -> None:
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--report", required=True, type=Path)
+    parser.add_argument("--metadata", type=Path)
     parser.add_argument("--delay-seconds", type=float, default=0.05)
     args = parser.parse_args()
-    print(json.dumps(enrich(args.input, args.output, args.report, delay_seconds=args.delay_seconds), ensure_ascii=False))
+    print(json.dumps(enrich(
+        args.input,
+        args.output,
+        args.report,
+        metadata_path=args.metadata,
+        delay_seconds=args.delay_seconds,
+    ), ensure_ascii=False))
 
 
 if __name__ == "__main__":
