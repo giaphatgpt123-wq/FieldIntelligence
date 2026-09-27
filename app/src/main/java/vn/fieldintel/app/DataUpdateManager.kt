@@ -1,6 +1,8 @@
 package vn.fieldintel.app
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import org.json.JSONObject
 import java.io.File
 import java.security.MessageDigest
@@ -25,6 +27,17 @@ class DataUpdateManager(private val context: Context) {
     private val staging = File(root, "staging").apply { mkdirs() }
     private val active = File(root, "active").apply { mkdirs() }
     private val previous = File(root, "previous").apply { mkdirs() }
+
+    /** Updates are deliberately restricted to an unmetered Wi‑Fi network. */
+    fun isWifiAvailable(): Boolean {
+        val manager = context.getSystemService(ConnectivityManager::class.java) ?: return false
+        val network = manager.activeNetwork ?: return false
+        val capabilities = manager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+    }
+
+    fun shouldCheckOnWifi(): Boolean = isWifiAvailable()
 
     fun parseManifest(json: String): DataUpdateManifest {
         val o = JSONObject(json)
