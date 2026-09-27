@@ -71,7 +71,7 @@ def eligible_media_item(media: dict, occurrence: dict) -> dict | None:
     if not identifier.startswith("https://"):
         return None
     media_type = clean(media.get("type") or media.get("mediaType") or "StillImage")
-    if media_type and "image" not in media_type.casefold():
+    if media_type.casefold() not in {"stillimage", "image"} and not media_type.casefold().startswith("image/"):
         return None
     license_id = canonical_media_license(media.get("license") or occurrence.get("license"))
     if license_id not in CANONICAL_MEDIA_LICENSES:

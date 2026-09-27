@@ -42,6 +42,15 @@ def resolved_row(name: str, taxon_id: str, accepted: str, presence="present"):
 
 
 class ResolvedGbifFishBuilderTest(unittest.TestCase):
+    def test_rejects_video_even_when_type_contains_image(self):
+        occurrence = {"license": "CC-BY-4.0"}
+        self.assertIsNone(module.eligible_media_item(
+            {"type": "MovingImage", "identifier": "https://example.org/video.mp4"}, occurrence,
+        ))
+        self.assertIsNotNone(module.eligible_media_item(
+            {"type": "StillImage", "identifier": "https://example.org/fish.jpg"}, occurrence,
+        ))
+
     def test_license_normalization(self):
         self.assertEqual("CC-BY-4.0", module.canonical_media_license("https://creativecommons.org/licenses/by/4.0/legalcode"))
         self.assertEqual("CC-BY-NC-4.0", module.canonical_media_license("CC BY-NC 4.0"))

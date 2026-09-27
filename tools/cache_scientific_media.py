@@ -126,7 +126,7 @@ def extension_for(content_type: str, url: str) -> str | None:
     return ALLOWED_CONTENT_TYPES.get(mimetypes.guess_type(url)[0] or "")
 
 
-def download_image(url: str, max_bytes: int, timeout: int = 20) -> tuple[bytes, str, str]:
+def download_image(url: str, max_bytes: int, timeout: int = 8) -> tuple[bytes, str, str]:
     validate_public_https_url(url)
     opener = urllib.request.build_opener(SafeRedirectHandler())
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "image/jpeg,image/png,image/webp"})
