@@ -38,7 +38,7 @@ jobs:
           unzip -t dist/app-release.apk >/dev/null
           unzip -p dist/app-release.apk assets/scientific-library/FieldIntelligence-WFO-mobile.zip > dist/scientific-library.zip
           python3 - <<'PY'
-          import json, os, sqlite3, tempfile, zipfile
+          import json, sqlite3, tempfile, zipfile
           from pathlib import Path
           with zipfile.ZipFile('dist/scientific-library.zip') as z:
               assert z.testzip() is None
@@ -79,7 +79,7 @@ jobs:
                       assert fish_taxa == accepted_present, (fish_taxa, accepted_present)
                       if gate_version == 1:
                           assert unresolved == 0 and present_local == accepted_present, (unresolved, present_local, accepted_present)
-          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
+          with open('dist/fish-release.env', 'w', encoding='utf-8') as env:
               env.write(f'FISH_TAXA={fish_taxa}\n')
               env.write(f'FISH_LOCAL={fish_local}\n')
               env.write(f'FISH_BLOBS={local_blobs}\n')
@@ -90,6 +90,7 @@ jobs:
               env.write(f'FISH_COVERAGE_GATE={gate_version}\n')
           print({'packRecords': count, 'fishTaxa': fish_taxa, 'fishWithLocalMedia': fish_local, 'confirmedPresentChecklistResolved': resolved, 'acceptedPresentTaxa': accepted_present, 'acceptedPresentTaxaWithOfflineImage': present_local, 'localMediaBlobCount': local_blobs})
           PY
+          source dist/fish-release.env
           short_sha="${SOURCE_SHA:0:12}"
           mv dist/app-release.apk "dist/FieldIntelligence-${short_sha}.apk"
           mv dist/app-debug.apk "dist/FieldIntelligence-Upgrade-Installed-${short_sha}.apk"
