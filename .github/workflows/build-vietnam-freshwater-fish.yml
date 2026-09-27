@@ -106,12 +106,13 @@ jobs:
               for r in rows:
                   r['class']=r.pop('class_'); w.writerow(r)
           PY
-          python3 tools/build_gbif_library.py --input build/fish/occurrence.txt --output build/fish/fish.ndjson.gz --metadata build/fish/fish.meta.json --dataset-doi 10.15468/dl.fixture --publisher "FieldIntelligence CI fixture" --license CC-BY-4.0
+          python3 tools/build_gbif_library.py --input build/fish/occurrence.txt --output build/fish/fish.ndjson.gz --metadata build/fish/fish.meta.json --dataset-doi 10.15468/dl.fixture --publisher "FieldIntelligence CI fixture" --license CC-BY-4.0 --collapse-to-accepted-taxon
           python3 tools/build_scientific_sqlite.py --input build/fish/fish.ndjson.gz --source-meta build/fish/fish.meta.json --output build/fish/fish.sqlite
           python3 - <<'PY'
           import json,sqlite3
           db=sqlite3.connect('build/fish/fish.sqlite')
           meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
+          source=json.load(open('build/fish/fish.meta.json',encoding='utf-8'))
           report={
             'taxa':db.execute("select count(*) from taxon where library_group='Cá nước ngọt'").fetchone()[0],
             'media':db.execute('select count(*) from species_media').fetchone()[0],
@@ -119,12 +120,16 @@ jobs:
             'rejectedMedia':meta.get('rejectedMediaCount',0),
             'vernacular':db.execute('select count(*) from vernacular_name').fetchone()[0],
             'occurrence':db.execute('select count(*) from occurrence_summary').fetchone()[0],
+            'sourceRows':source.get('sourceRowCount',0),
+            'collapsedToAcceptedTaxon':source.get('collapseToAcceptedTaxon',False),
             'integrity':db.execute('pragma integrity_check').fetchone()[0],
           }
           db.close()
           assert report['taxa']==2,report
           assert report['media']==1,report
           assert report['vernacular']==2,report
+          assert report['sourceRows']==2,report
+          assert report['collapsedToAcceptedTaxon'] is True,report
           assert report['integrity']=='ok',report
           open('build/fish/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
           print(report)
@@ -149,7 +154,7 @@ jobs:
           occurrence="$(find build/fish-real/dwca -type f \( -name occurrence.txt -o -name occurrences.txt \) | head -1)"
           multimedia="$(find build/fish-real/dwca -type f -name multimedia.txt | head -1 || true)"
           test -s "$occurrence"
-          args=(--input "$occurrence" --output build/fish-real/fish.ndjson.gz --metadata build/fish-real/fish.meta.json --dataset-doi "$GBIF_DOWNLOAD_DOI" --publisher "$GBIF_PUBLISHER" --license "$GBIF_DATASET_LICENSE")
+          args=(--input "$occurrence" --output build/fish-real/fish.ndjson.gz --metadata build/fish-real/fish.meta.json --dataset-doi "$GBIF_DOWNLOAD_DOI" --publisher "$GBIF_PUBLISHER" --license "$GBIF_DATASET_LICENSE" --collapse-to-accepted-taxon --max-media-per-taxon 50)
           if [ -n "$multimedia" ]; then args+=(--multimedia "$multimedia"); fi
           python3 tools/build_gbif_library.py "${args[@]}"
           python3 tools/build_scientific_sqlite.py --input build/fish-real/fish.ndjson.gz --source-meta build/fish-real/fish.meta.json --output build/fish-real/fish.sqlite
@@ -177,9 +182,13 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import json, sqlite3
+          source=json.load(open('build/fish-real/fish.meta.json',encoding='utf-8'))
           db=sqlite3.connect('build/fish-real/fish.sqlite')
           meta={k:json.loads(v) for k,v in db.execute('select key,value from meta')}
           report={
+            'sourceRows':source.get('sourceRowCount',0),
+            'collapsedTaxa':source.get('recordCount',0),
+            'collapsedToAcceptedTaxon':source.get('collapseToAcceptedTaxon',False),
             'fishTaxa':meta.get('fishTaxa',0),
             'fishWithMedia':meta.get('fishWithMedia',0),
             'fishWith2PlusMedia':meta.get('fishWith2PlusMedia',0),
@@ -194,6 +203,8 @@ jobs:
             'integrity':db.execute('pragma integrity_check').fetchone()[0],
           }
           db.close()
+          assert report['collapsedToAcceptedTaxon'] is True, report
+          assert report['sourceRows'] >= report['collapsedTaxa'] > 0, report
           assert report['fishTaxa'] > 0, report
           assert report['sourceDoi'], report
           assert report['fishWithLocalMedia'] > 0, report
