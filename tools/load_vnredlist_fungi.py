@@ -5,7 +5,7 @@ import argparse, html, json, re, urllib.parse, urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
 
-BASE = "http://vnredlist.vast.vn"
+BASE = "https://vnredlist.vast.vn"
 CATEGORY = BASE + "/thuc-vat/"
 
 class Parser(HTMLParser):
@@ -28,7 +28,7 @@ def category_links(source: str) -> list[str]:
     p=Parser(); p.feed(source); out=[]
     for href,_ in p.links:
         u=absolute(href,CATEGORY)
-        if urllib.parse.urlparse(u).netloc == "vnredlist.vast.vn" and u not in out and u != CATEGORY and "/category/" not in u and "/wp-" not in u:
+        if urllib.parse.urlparse(u).netloc == "vnredlist.vast.vn" and u.startswith(BASE) and u not in out and u != CATEGORY and "/category/" not in u and "/wp-" not in u:
             out.append(u)
     return out
 
