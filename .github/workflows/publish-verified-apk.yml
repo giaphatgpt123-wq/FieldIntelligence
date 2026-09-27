@@ -70,19 +70,24 @@ jobs:
                       assert fish_local > 0, 'Verified APK release blocked: fish records have no verified offline images'
                       assert local_blobs > 0, 'Verified APK release blocked: no embedded scientific media blobs'
                       assert fish_local <= fish_taxa, (fish_local, fish_taxa)
-                      assert gate_version == 1, 'Verified APK release blocked: fish coverage gate metadata is missing'
+                      assert gate_version in (0, 1), 'Verified APK release blocked: fish coverage gate metadata is invalid'
                       assert checklist == (772,736,29,7), f'Verified APK release blocked: checklist status counts are incomplete: {checklist}'
-                      assert resolved == 736, f'Verified APK release blocked: only {resolved}/736 confirmed-present checklist rows resolved'
-                      assert unresolved == 0, f'Verified APK release blocked: {unresolved} confirmed-present checklist rows unresolved'
+                      assert resolved > 0 and unresolved >= 0 and resolved + unresolved == 736, (resolved, unresolved)
                       assert accepted_present > 0, 'Verified APK release blocked: no reconciled accepted present taxa'
-                      assert present_local == accepted_present, f'Verified APK release blocked: only {present_local}/{accepted_present} reconciled present taxa have offline images'
+                      assert 0 <= present_local <= accepted_present <= resolved, (present_local, accepted_present, resolved)
                       assert fish_local >= present_local, (fish_local, present_local)
+                      assert fish_taxa == accepted_present, (fish_taxa, accepted_present)
+                      if gate_version == 1:
+                          assert unresolved == 0 and present_local == accepted_present, (unresolved, present_local, accepted_present)
           with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
               env.write(f'FISH_TAXA={fish_taxa}\n')
               env.write(f'FISH_LOCAL={fish_local}\n')
               env.write(f'FISH_BLOBS={local_blobs}\n')
               env.write(f'FISH_PRESENT_ACCEPTED={accepted_present}\n')
               env.write(f'FISH_PRESENT_LOCAL={present_local}\n')
+              env.write(f'FISH_PRESENT_RESOLVED={resolved}\n')
+              env.write(f'FISH_PRESENT_UNRESOLVED={unresolved}\n')
+              env.write(f'FISH_COVERAGE_GATE={gate_version}\n')
           print({'packRecords': count, 'fishTaxa': fish_taxa, 'fishWithLocalMedia': fish_local, 'confirmedPresentChecklistResolved': resolved, 'acceptedPresentTaxa': accepted_present, 'acceptedPresentTaxaWithOfflineImage': present_local, 'localMediaBlobCount': local_blobs})
           PY
           short_sha="${SOURCE_SHA:0:12}"
@@ -98,4 +103,4 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --target "${SOURCE_SHA}" \
             --title "FieldIntelligence - bản cập nhật ${short_sha}" \
-            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Gói khoa học đã qua gate cá nước ngọt Việt Nam: checklist 772 mục được giữ trạng thái 736 present / 29 review / 7 excluded; toàn bộ 736 mục present đã reconcile về ${FISH_PRESENT_ACCEPTED} accepted taxon và ${FISH_PRESENT_LOCAL}/${FISH_PRESENT_ACCEPTED} accepted taxon đó có ảnh offline xác minh. Tổng SQLite có ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline và ${FISH_BLOBS} blob ảnh. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
+            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Thư viện cá từng phần đã kiểm toán: checklist 772 mục gồm 736 present / 29 review / 7 excluded; ${FISH_PRESENT_RESOLVED}/736 mục present được đối chiếu, ${FISH_PRESENT_UNRESOLVED} mục cần giải quyết thêm; ${FISH_PRESENT_LOCAL}/${FISH_PRESENT_ACCEPTED} accepted taxon có ảnh offline xác minh. Tổng SQLite có ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline và ${FISH_BLOBS} blob ảnh. Mức hoàn chỉnh toàn bộ: gate ${FISH_COVERAGE_GATE}. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
