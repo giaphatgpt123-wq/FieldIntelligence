@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
   workflow_run:
-    workflows: ["Build Vietnam Freshwater Fish Library Auto", "Enrich Missing Freshwater Fish Images"]
+    workflows: ["Build Vietnam Freshwater Fish Library Auto", "Enrich Missing Freshwater Fish Images", "Build Vietnam Fungi Offline"]
     types: [completed]
 
 permissions:
@@ -48,7 +48,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          FISH_TRIGGER_RUN: ${{ github.event.workflow_run.id }}
+          FISH_TRIGGER_RUN: ${{ github.event.workflow_run.name != 'Build Vietnam Fungi Offline' && github.event.workflow_run.id || '' }}
         run: |
           set -euo pipefail
           mkdir -p build/scientific-library app/src/main/assets/scientific-library
@@ -105,6 +105,30 @@ jobs:
             echo "none" > build/scientific-library/fish-source-run.txt
           fi
 
+          fungi_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-vietnam-fungi-offline&per_page=100" \
+            --jq '[.artifacts[] | select(.expired == false and .workflow_run.head_branch == "main")] | sort_by(.created_at) | reverse | .[0].workflow_run.id // empty')"
+          if [ -n "$fungi_run" ]; then
+            fungi_state="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${fungi_run}" --jq '[.conclusion,.path,.head_branch] | @tsv')"
+            IFS=$'\t' read -r fungi_conclusion fungi_path fungi_branch <<<"$fungi_state"
+            test "$fungi_conclusion" = success
+            test "$fungi_path" = .github/workflows/build-vietnam-fungi-offline.yml
+            test "$fungi_branch" = main
+            mkdir -p build/fungi-artifact
+            gh run download "$fungi_run" --repo "$GITHUB_REPOSITORY" \
+              --name FieldIntelligence-vietnam-fungi-offline --dir build/fungi-artifact
+            test -s build/fungi-artifact/fungi.sqlite
+            python3 tools/merge_scientific_sqlite.py \
+              --target build/scientific-library/wfo-taxonomy.sqlite \
+              --source build/fungi-artifact/fungi.sqlite \
+              --source-label "WFO + audited fish + licensed Vietnam fungi"
+            echo "$fungi_run" > build/scientific-library/fungi-source-run.txt
+          fi
+          if [ -n "$fish_run" ]; then
+            python3 tools/propagate_fish_coverage_meta.py \
+              --target build/scientific-library/wfo-taxonomy.sqlite \
+              --source "$fish_sqlite"
+          fi
+
           python3 tools/build_specialist_evidence_sqlite.py \
             --input data/scientific/specialist_evidence.json \
             --output build/scientific-library/specialist-evidence.sqlite
@@ -122,6 +146,11 @@ jobs:
               fish_taxa = int(meta.get('fishTaxa', 0) or 0)
               fish_local = int(meta.get('fishWithLocalMedia', 0) or 0)
               local_blobs = int(meta.get('localMediaBlobCount', 0) or 0)
+              fungi = db.execute("SELECT COUNT(*) FROM taxon WHERE library_group='Nấm'").fetchone()[0]
+              fungi_local = db.execute("""SELECT COUNT(*) FROM taxon t WHERE t.library_group='Nấm'
+                AND EXISTS(SELECT 1 FROM species_media_local m WHERE m.source_id=t.source_id AND m.source_record_id=t.source_record_id)""").fetchone()[0]
+              if (root / 'fungi-source-run.txt').exists():
+                  assert fungi > 0 and fungi_local > 0 and fungi_local <= fungi, (fungi, fungi_local)
               if fish_taxa:
                   assert fish_local > 0, meta
                   assert local_blobs > 0, meta
