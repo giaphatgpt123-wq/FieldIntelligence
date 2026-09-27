@@ -1,154 +1,42 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "principle": "maximal_coverage_with_provenance",
-    "rules": [
-      "Every imported record must retain source identity and source record identity when available.",
-      "Taxonomy sources do not prove edibility, toxicity, efficacy or treatment.",
-      "Medicinal or safety claims remain separate evidence records and must never be promoted from taxonomy metadata.",
-      "Bulk redistribution is allowed only when reuse rights are explicit; otherwise use metadata-only or operator-reviewed import."
-    ]
+    "requireScientificNameMatch": true,
+    "preserveSourceUrl": true,
+    "preserveImageUrlAndAttribution": true,
+    "downloadOnlyLicensedMedia": true,
+    "medicalClaimsRequireIndependentReview": true
   },
-  "sources": [
-    {
-      "id": "wfo-taxonomic-backbone",
-      "name": "World Flora Online Taxonomic Backbone",
-      "authority": "World Flora Online Consortium",
-      "domains": ["taxonomy", "plants"],
-      "priority": "A1",
-      "ingestPolicy": "bulk_allowed",
-      "rightsStatus": "CC0-1.0",
-      "url": "https://www.worldfloraonline.org/downloadData"
+  "collections": {
+    "freshwater-fish-vietnam": {
+      "label": "Cá nước ngọt Việt Nam",
+      "sources": [
+        {"id": "fishbase", "kind": "taxonomy-and-occurrence", "url": "https://www.fishbase.se/", "licenseRequired": true},
+        {"id": "gbif", "kind": "taxonomy-and-licensed-media", "url": "https://www.gbif.org/", "licenseRequired": true},
+        {"id": "inat", "kind": "research-grade-licensed-media", "url": "https://www.inaturalist.org/", "licenseRequired": true},
+        {"id": "commons-wikidata", "kind": "taxon-linked-licensed-media", "url": "https://commons.wikimedia.org/", "licenseRequired": true}
+      ],
+      "excludedByDefault": ["unverified-social-media", "commercial-catalogue-without-license"]
     },
-    {
-      "id": "kew-powo",
-      "name": "Plants of the World Online",
-      "authority": "Royal Botanic Gardens, Kew",
-      "domains": ["taxonomy", "plants", "distribution", "morphology"],
-      "priority": "A1",
-      "ingestPolicy": "metadata_reference",
-      "rightsStatus": "REVIEW_SOURCE_TERMS",
-      "url": "https://powo.science.kew.org/"
+    "medicinal-plants-vietnam": {
+      "label": "Cây thuốc Việt Nam",
+      "sources": [
+        {"id": "tracuuduoclieu", "kind": "reference-content-and-image", "url": "https://tracuuduoclieu.vn/", "licenseRequired": true, "medicalReviewRequired": true},
+        {"id": "gbif", "kind": "taxonomy-and-licensed-media", "url": "https://www.gbif.org/", "licenseRequired": true},
+        {"id": "eol", "kind": "reference-content-and-media", "url": "https://eol.org/", "licenseRequired": true, "medicalReviewRequired": true},
+        {"id": "commons-wikidata", "kind": "taxon-linked-licensed-media", "url": "https://commons.wikimedia.org/", "licenseRequired": true}
+      ],
+      "excludedByDefault": ["uncited-treatment-claim", "commercial-product-page"]
     },
-    {
-      "id": "gbif",
-      "name": "Global Biodiversity Information Facility",
-      "authority": "GBIF Secretariat and dataset publishers",
-      "domains": ["taxonomy", "occurrence", "specimens", "biodiversity"],
-      "priority": "A1",
-      "ingestPolicy": "dataset_license_required",
-      "rightsStatus": "PER_DATASET_LICENSE",
-      "url": "https://www.gbif.org/"
-    },
-    {
-      "id": "prc-vietnam-genebank",
-      "name": "Cơ sở dữ liệu nguồn gen cây trồng Việt Nam",
-      "authority": "Trung tâm Tài nguyên thực vật",
-      "domains": ["agriculture", "germplasm", "crops", "vietnam"],
-      "priority": "A1",
-      "ingestPolicy": "operator_review_required",
-      "rightsStatus": "REVIEW_REUSE_TERMS",
-      "url": "https://csdl.prc.org.vn/"
-    },
-    {
-      "id": "moh-traditional-medicine",
-      "name": "Cục Quản lý Y, Dược cổ truyền",
-      "authority": "Bộ Y tế Việt Nam",
-      "domains": ["traditional_medicine", "medicinal_materials", "regulation", "vietnam"],
-      "priority": "A1",
-      "ingestPolicy": "curated_reference_only",
-      "rightsStatus": "REVIEW_DOCUMENT_TERMS",
-      "url": "https://ydct.moh.gov.vn/"
-    },
-    {
-      "id": "vietnam-pharmacopoeia",
-      "name": "Dược điển Việt Nam",
-      "authority": "Bộ Y tế Việt Nam",
-      "domains": ["pharmacopoeia", "medicinal_materials", "quality_standard", "vietnam"],
-      "priority": "A1",
-      "ingestPolicy": "curated_reference_only",
-      "rightsStatus": "REVIEW_DOCUMENT_TERMS",
-      "url": "https://moh.gov.vn/"
-    },
-    {
-      "id": "nimm-vietnam",
-      "name": "Viện Dược liệu",
-      "authority": "Viện Dược liệu, Bộ Y tế",
-      "domains": ["medicinal_plants", "medicinal_materials", "research", "vietnam"],
-      "priority": "A1",
-      "ingestPolicy": "curated_reference_only",
-      "rightsStatus": "REVIEW_SOURCE_TERMS",
-      "url": "https://vienduoclieu.org.vn/"
-    },
-    {
-      "id": "who-medicinal-plants",
-      "name": "WHO medicinal plant monographs and Vietnam medicinal plant references",
-      "authority": "World Health Organization",
-      "domains": ["medicinal_plants", "monographs", "safety", "quality"],
-      "priority": "A1",
-      "ingestPolicy": "curated_reference_only",
-      "rightsStatus": "REVIEW_PUBLICATION_TERMS",
-      "url": "https://www.who.int/"
-    },
-    {
-      "id": "ema-hmpc",
-      "name": "HMPC herbal monographs",
-      "authority": "European Medicines Agency",
-      "domains": ["herbal_medicines", "safety", "traditional_use", "evidence"],
-      "priority": "A2",
-      "ingestPolicy": "curated_reference_only",
-      "rightsStatus": "REVIEW_SOURCE_TERMS",
-      "url": "https://www.ema.europa.eu/"
-    },
-    {
-      "id": "fao-wiews-glis",
-      "name": "FAO WIEWS / GLIS",
-      "authority": "Food and Agriculture Organization of the United Nations",
-      "domains": ["agriculture", "plant_genetic_resources", "genebanks"],
-      "priority": "A2",
-      "ingestPolicy": "dataset_terms_required",
-      "rightsStatus": "REVIEW_DATASET_TERMS",
-      "url": "https://www.fao.org/wiews/"
-    },
-    {
-      "id": "worldveg-genebank",
-      "name": "World Vegetable Center Genebank",
-      "authority": "World Vegetable Center",
-      "domains": ["vegetables", "germplasm", "agriculture"],
-      "priority": "A2",
-      "ingestPolicy": "dataset_terms_required",
-      "rightsStatus": "REVIEW_DATASET_TERMS",
-      "url": "https://www.worldveg.org/"
-    },
-    {
-      "id": "irri",
-      "name": "International Rice Research Institute",
-      "authority": "IRRI",
-      "domains": ["rice", "agriculture", "germplasm", "crop_health"],
-      "priority": "A2",
-      "ingestPolicy": "dataset_terms_required",
-      "rightsStatus": "REVIEW_DATASET_TERMS",
-      "url": "https://www.irri.org/"
-    },
-    {
-      "id": "icrisat-genebank",
-      "name": "ICRISAT Genebank",
-      "authority": "ICRISAT",
-      "domains": ["dryland_crops", "germplasm", "agriculture"],
-      "priority": "A2",
-      "ingestPolicy": "dataset_terms_required",
-      "rightsStatus": "REVIEW_DATASET_TERMS",
-      "url": "https://genebank.icrisat.org/"
-    },
-    {
-      "id": "cip-genebank",
-      "name": "CIP Genebank",
-      "authority": "International Potato Center",
-      "domains": ["potato", "sweet_potato", "germplasm", "agriculture"],
-      "priority": "A2",
-      "ingestPolicy": "dataset_terms_required",
-      "rightsStatus": "REVIEW_DATASET_TERMS",
-      "url": "https://genebank.cipotato.org/"
+    "plants-vegetables-tubers": {
+      "label": "Thực vật, rau và củ",
+      "sources": [
+        {"id": "gbif", "kind": "taxonomy-and-licensed-media", "url": "https://www.gbif.org/", "licenseRequired": true},
+        {"id": "eol", "kind": "reference-content-and-media", "url": "https://eol.org/", "licenseRequired": true},
+        {"id": "inat", "kind": "research-grade-licensed-media", "url": "https://www.inaturalist.org/", "licenseRequired": true},
+        {"id": "commons-wikidata", "kind": "taxon-linked-licensed-media", "url": "https://commons.wikimedia.org/", "licenseRequired": true}
+      ],
+      "excludedByDefault": ["uncited-edibility-claim", "unclear-cultivar-identity"]
     }
-  ]
+  }
 }
