@@ -38,7 +38,7 @@ jobs:
           unzip -t dist/app-release.apk >/dev/null
           unzip -p dist/app-release.apk assets/scientific-library/FieldIntelligence-WFO-mobile.zip > dist/scientific-library.zip
           python3 - <<'PY'
-          import json, sqlite3, tempfile, zipfile
+          import json, os, sqlite3, tempfile, zipfile
           from pathlib import Path
           with zipfile.ZipFile('dist/scientific-library.zip') as z:
               assert z.testzip() is None
@@ -48,7 +48,22 @@ jobs:
                   path = Path(directory) / 'wfo-taxonomy.sqlite'
                   path.write_bytes(z.read('wfo-taxonomy.sqlite'))
                   with sqlite3.connect(path) as db:
-                      assert db.execute('SELECT COUNT(*) FROM taxon').fetchone()[0] == 38100
+                      count = db.execute('SELECT COUNT(*) FROM taxon').fetchone()[0]
+                      assert count >= 38100, count
+                      assert db.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
+                      meta = {k: json.loads(v) for k, v in db.execute('SELECT key,value FROM meta')}
+                      fish_taxa = int(meta.get('fishTaxa', 0) or 0)
+                      fish_local = int(meta.get('fishWithLocalMedia', 0) or 0)
+                      local_blobs = int(meta.get('localMediaBlobCount', 0) or 0)
+                      assert fish_taxa > 0, 'Verified APK release blocked: no real freshwater-fish taxa merged into scientific SQLite'
+                      assert fish_local > 0, 'Verified APK release blocked: fish records have no verified offline images'
+                      assert local_blobs > 0, 'Verified APK release blocked: no embedded scientific media blobs'
+                      assert fish_local <= fish_taxa, (fish_local, fish_taxa)
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
+              env.write(f'FISH_TAXA={fish_taxa}\n')
+              env.write(f'FISH_LOCAL={fish_local}\n')
+              env.write(f'FISH_BLOBS={local_blobs}\n')
+          print({'packRecords': count, 'fishTaxa': fish_taxa, 'fishWithLocalMedia': fish_local, 'localMediaBlobCount': local_blobs})
           PY
           short_sha="${SOURCE_SHA:0:12}"
           mv dist/app-release.apk "dist/FieldIntelligence-${short_sha}.apk"
@@ -63,4 +78,4 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --target "${SOURCE_SHA}" \
             --title "FieldIntelligence - bản cập nhật ${short_sha}" \
-            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Thư viện WFO và cá nước ngọt đã tích hợp; ảnh tĩnh có model Google AIY Plants gợi ý tên trong phạm vi 2.101 nhãn thực vật, không xác định ăn được/độc tính. Camera quét nhiều vùng cần detector riêng."
+            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Gói khoa học có WFO và dữ liệu cá nước ngọt đã qua gate: ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline xác minh, ${FISH_BLOBS} blob ảnh được nhúng. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
