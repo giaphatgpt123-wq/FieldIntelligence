@@ -64,7 +64,11 @@ jobs:
           if [ -n "$fish_run" ]; then
             run_state="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${fish_run}" --jq '[.conclusion,.path,.head_branch] | @tsv')"
             IFS=$'\t' read -r conclusion workflow_path head_branch <<<"$run_state"
-            if [ "$conclusion" != "success" ] || [ "$workflow_path" != ".github/workflows/build-vietnam-freshwater-fish.yml" ] || [ "$head_branch" != "main" ]; then
+            case "$workflow_path" in
+              .github/workflows/build-vietnam-freshwater-fish.yml|.github/workflows/build-vietnam-freshwater-fish-auto.yml) trusted_workflow=true ;;
+              *) trusted_workflow=false ;;
+            esac
+            if [ "$conclusion" != "success" ] || [ "$trusted_workflow" != "true" ] || [ "$head_branch" != "main" ]; then
               echo "::error::Latest fish artifact is not from a successful trusted main-branch fish workflow run."
               exit 1
             fi
