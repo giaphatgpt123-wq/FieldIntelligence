@@ -33,7 +33,7 @@ jobs:
           with urllib.request.urlopen(url,timeout=30) as r: data=json.load(r)
           print({'gbifCount':data.get('count'), 'sample':[{'kingdom':x.get('kingdom'),'rank':x.get('taxonRank'),'country':x.get('countryCode'),'license':x.get('license'),'speciesKey':x.get('speciesKey'),'media':[(m.get('type'),m.get('license'),str(m.get('identifier',''))[:6]) for m in (x.get('media') or [])[:2]]} for x in data.get('results',[])[:4]]})
           PY
-          python3 tools/load_gbif_vietnam_fungi.py --pages 3 --max-records 60 --output build/fungi/fungi.ndjson
+          python3 tools/load_gbif_vietnam_fungi.py --pages 10 --output build/fungi/fungi.ndjson
           python3 tools/build_scientific_sqlite.py --input build/fungi/fungi.ndjson --output build/fungi/fungi.sqlite
           python3 tools/cache_scientific_media.py --input build/fungi/fungi.ndjson --media-dir build/fungi/media --manifest build/fungi/scientific-media.manifest.json --max-per-record 1 --max-total-bytes 134217728
           python3 tools/attach_scientific_media_manifest.py --database build/fungi/fungi.sqlite --manifest build/fungi/scientific-media.manifest.json
