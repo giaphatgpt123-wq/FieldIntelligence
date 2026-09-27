@@ -1,6 +1,9 @@
 package vn.fieldintel.feature.emergency
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -29,16 +35,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Resolves a selected visual candidate to an exact scientific-name taxonomy record when available.
- * Visual confidence is intentionally kept separate from taxonomy, specialist evidence and safety.
+ * Resolves a selected visual candidate to the same species in the offline taxonomy pack.
+ * Canonical model labels may omit authorship; the resolver accepts that representation without
+ * falling back to a neighbouring species. Visual confidence remains separate from taxonomy/safety.
  */
 @Composable
 fun StillImageScientificMatchPanel(detection: VisualDetection) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val store = remember(context) { ScientificLibraryStore(context.applicationContext) }
+    val mediaStore = remember(context) { ScientificMediaStore(context.applicationContext) }
     val scientificName = detection.scientificName?.trim().orEmpty()
     var record by remember(detection) { mutableStateOf<SpeciesRecord?>(null) }
+    var localMedia by remember(detection) { mutableStateOf<List<ScientificLocalMedia>>(emptyList()) }
     var loading by remember(detection) { mutableStateOf(scientificName.isNotBlank()) }
     var lookupFinished by remember(detection) { mutableStateOf(false) }
 
@@ -47,17 +56,18 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
             loading = false
             lookupFinished = true
             record = null
+            localMedia = emptyList()
             return@LaunchedEffect
         }
         loading = true
         lookupFinished = false
-        val starter = SpeciesCatalog.records.firstOrNull {
-            it.scientificName.equals(scientificName, ignoreCase = true)
+        val matched = withContext(Dispatchers.IO) {
+            ScientificNameResolver.resolve(store, scientificName)
         }
-        record = starter ?: withContext(Dispatchers.IO) {
-            store.findByScientificNames(listOf(scientificName), limit = 8)
-                .firstOrNull { it.scientificName.equals(scientificName, ignoreCase = true) }
-        }
+        record = matched
+        localMedia = if (matched != null) {
+            withContext(Dispatchers.IO) { mediaStore.loadForRecord(matched.id, 3) }
+        } else emptyList()
         loading = false
         lookupFinished = true
     }
@@ -93,7 +103,8 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
                     Text("HỒ SƠ TAXONOMY", fontWeight = FontWeight.Black, color = FieldColors.primary)
                     Text(matched.vietnameseName, fontWeight = FontWeight.Bold)
                     Text(matched.scientificName, color = FieldColors.primary)
-                    Text("Nhóm: ${matched.group}", color = FieldColors.onSurfaceVariant)
+                    Text("Nhóm: ${matched.group} • ${localMedia.size} ảnh tham chiếu offline", color = FieldColors.onSurfaceVariant)
+                    CompactReferenceMedia(localMedia)
                     Text("Nguồn: ${matched.sourceName}", fontWeight = FontWeight.Bold)
                     Text(matched.sourceScope, color = FieldColors.onSurfaceVariant)
                     if (matched.sourceUrl.isNotBlank()) {
@@ -107,8 +118,40 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
                     InteractionSafetyPanel(matched.scientificName)
                 }
                 lookupFinished -> Text(
-                    "Chưa tìm thấy hồ sơ taxonomy khớp chính xác trong dữ liệu offline hiện có. Không tự thay bằng loài gần giống.",
+                    "Chưa tìm thấy đúng loài trong taxonomy offline. Ứng dụng không tự thay bằng loài gần giống hoặc cùng chi.",
                     color = Color(0xFFFFD166)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompactReferenceMedia(media: List<ScientificLocalMedia>) {
+    val item = media.firstOrNull() ?: return
+    val bitmap by produceState<Bitmap?>(null, item.sha256) {
+        value = withContext(Dispatchers.IO) {
+            BitmapFactory.decodeByteArray(item.bytes, 0, item.bytes.size)
+        }
+    }
+    if (bitmap != null) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF071A20))
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Image(
+                    bitmap!!.asImageBitmap(),
+                    contentDescription = "Ảnh tham chiếu khoa học offline",
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 180.dp, max = 300.dp),
+                    contentScale = ContentScale.Fit
+                )
+                Text(
+                    "Ảnh tham chiếu • ${item.license}",
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+                    color = FieldColors.primary,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
