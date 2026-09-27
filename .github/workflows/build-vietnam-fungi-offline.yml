@@ -8,6 +8,7 @@ on:
       - "tools/load_gbif_vietnam_fungi.py"
       - "tools/load_official_medicinal_media.py"
       - "data/scientific/specialist_evidence.json"
+      - "data/scientific/official_medicinal_taxa.json"
       - ".github/workflows/build-vietnam-fungi-offline.yml"
   schedule:
     - cron: '41 2 * * 0'
@@ -39,7 +40,7 @@ jobs:
       - name: Collect official medicinal taxa with licensed reference images
         run: |
           mkdir -p build/medicinal
-          python3 tools/load_official_medicinal_media.py --input data/scientific/specialist_evidence.json --output build/medicinal/medicinal.ndjson
+          python3 tools/load_official_medicinal_media.py --input data/scientific/official_medicinal_taxa.json --output build/medicinal/medicinal.ndjson
           python3 tools/validate_medicinal_plant_records.py --input build/medicinal/medicinal.ndjson --output build/medicinal/gate.json
           python3 tools/build_scientific_sqlite.py --input build/medicinal/medicinal.ndjson --output build/medicinal/medicinal.sqlite
           python3 tools/cache_scientific_media.py --input build/medicinal/medicinal.ndjson --media-dir build/medicinal/media --manifest build/medicinal/scientific-media.manifest.json --max-per-record 1 --max-total-bytes 33554432
