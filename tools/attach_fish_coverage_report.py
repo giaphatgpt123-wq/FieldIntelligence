@@ -9,7 +9,7 @@ def clean(value):
     return str(value or "").strip()
 
 
-def attach(database: Path, reconciled_path: Path, coverage_path: Path, expected_total: int, expected_present: int, expected_review: int, expected_excluded: int):
+def attach(database: Path, reconciled_path: Path, coverage_path: Path, expected_total: int, expected_present: int, expected_review: int, expected_excluded: int, allow_incomplete: bool = False):
     coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
     expected = {
         "total": expected_total,
@@ -20,9 +20,13 @@ def attach(database: Path, reconciled_path: Path, coverage_path: Path, expected_
     for key, value in expected.items():
         if int(coverage.get(key, -1)) != value:
             raise ValueError(f"coverage mismatch for {key}: {coverage.get(key)} != {value}")
-    if int(coverage.get("resolvedPresentChecklistCount", 0)) != expected_present:
+    resolved_count = int(coverage.get("resolvedPresentChecklistCount", 0))
+    unresolved_count = int(coverage.get("unresolvedPresentChecklistCount", -1))
+    if resolved_count + unresolved_count != expected_present or resolved_count <= 0:
+        raise ValueError("confirmed-present checklist coverage is inconsistent")
+    if not allow_incomplete and resolved_count != expected_present:
         raise ValueError("not every confirmed-present checklist row resolved")
-    if int(coverage.get("unresolvedPresentChecklistCount", -1)) != 0:
+    if not allow_incomplete and unresolved_count != 0:
         raise ValueError("confirmed-present checklist still has unresolved names")
 
     present_taxa = set()
@@ -34,6 +38,8 @@ def attach(database: Path, reconciled_path: Path, coverage_path: Path, expected_
             if clean(row.get("presenceStatus")).casefold() != "present":
                 continue
             reconciliation = row.get("reconciliation") or {}
+            if reconciliation.get("status") != "matched" and allow_incomplete:
+                continue
             if reconciliation.get("status") != "matched":
                 raise ValueError(f"unresolved confirmed-present taxon: {row.get('scientificName')}")
             taxon_id = clean(reconciliation.get("acceptedTaxonId"))
@@ -74,11 +80,11 @@ def attach(database: Path, reconciled_path: Path, coverage_path: Path, expected_
             "fishChecklistPresent": expected_present,
             "fishChecklistReview": expected_review,
             "fishChecklistExcluded": expected_excluded,
-            "fishPresentChecklistResolved": expected_present,
-            "fishPresentChecklistUnresolved": 0,
+            "fishPresentChecklistResolved": resolved_count,
+            "fishPresentChecklistUnresolved": unresolved_count,
             "fishPresentAcceptedTaxa": len(present_taxa),
             "fishPresentTaxaWithLocalMedia": taxa_with_local_media,
-            "fishCoverageGateVersion": 1,
+            "fishCoverageGateVersion": 1 if unresolved_count == 0 and taxa_with_local_media == len(present_taxa) else 0,
         }
         for key, value in metrics.items():
             db.execute("INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)", (key, json.dumps(value)))
@@ -97,9 +103,10 @@ def main():
     p.add_argument("--expect-present", required=True, type=int)
     p.add_argument("--expect-review", required=True, type=int)
     p.add_argument("--expect-excluded", required=True, type=int)
+    p.add_argument("--allow-incomplete", action="store_true")
     a = p.parse_args()
-    metrics = attach(a.database, a.reconciled, a.coverage, a.expect_total, a.expect_present, a.expect_review, a.expect_excluded)
-    if metrics["fishPresentTaxaWithLocalMedia"] != metrics["fishPresentAcceptedTaxa"]:
+    metrics = attach(a.database, a.reconciled, a.coverage, a.expect_total, a.expect_present, a.expect_review, a.expect_excluded, a.allow_incomplete)
+    if not a.allow_incomplete and metrics["fishPresentTaxaWithLocalMedia"] != metrics["fishPresentAcceptedTaxa"]:
         raise SystemExit(
             f"offline-image coverage incomplete: {metrics['fishPresentTaxaWithLocalMedia']}/{metrics['fishPresentAcceptedTaxa']} confirmed-present accepted taxa"
         )
