@@ -15,9 +15,11 @@ spec.loader.exec_module(module)
 
 def write_tsv(path: Path, rows):
     fields = [
-        "gbifID", "scientificName", "kingdom", "class", "family", "genus",
-        "basisOfRecord", "countryCode", "decimalLatitude", "decimalLongitude", "datasetKey",
-        "order", "mediaType", "identifier", "creator", "rightsHolder", "mediaLicense"
+        "gbifID", "occurrenceID", "taxonID", "taxonKey", "acceptedTaxonKey",
+        "scientificName", "acceptedScientificName", "taxonomicStatus", "vernacularName",
+        "kingdom", "class", "family", "genus", "basisOfRecord", "countryCode",
+        "decimalLatitude", "decimalLongitude", "datasetKey", "order", "mediaType",
+        "identifier", "creator", "rightsHolder", "mediaLicense"
     ]
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, delimiter="\t")
@@ -38,6 +40,8 @@ class GbifScientificLibraryAdapterTest(unittest.TestCase):
             ])
             result = module.build(source, output, meta, "10.15468/dl.test", "Test publisher", "CC-BY-4.0")
             self.assertEqual(2, result["recordCount"])
+            self.assertEqual(2, result["sourceRowCount"])
+            self.assertFalse(result["collapseToAcceptedTaxon"])
             self.assertEqual(1, result["groupCounts"]["Côn trùng"])
             self.assertEqual(1, result["groupCounts"]["Nấm"])
             with gzip.open(output, "rt", encoding="utf-8") as handle:
@@ -45,7 +49,6 @@ class GbifScientificLibraryAdapterTest(unittest.TestCase):
             self.assertTrue(all(r["provenance"]["license"] == "CC-BY-4.0" for r in rows))
             self.assertTrue(all(r["provenance"]["datasetDoi"] == "10.15468/dl.test" for r in rows))
             self.assertTrue(all("danger" not in r and "edible" not in r and "treatment" not in r for r in rows))
-
 
     def test_fish_is_grouped_separately_and_media_provenance_is_preserved(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -97,6 +100,48 @@ class GbifScientificLibraryAdapterTest(unittest.TestCase):
             self.assertEqual(2, len(record["mediaItems"]))
             self.assertEqual("https://example.org/a.jpg", record["media"]["identifier"])
             self.assertEqual(["A", "B"], [item["creator"] for item in record["mediaItems"]])
+
+    def test_collapsed_species_mode_merges_occurrences_by_accepted_taxon(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "occurrence.txt"
+            output = root / "fish.ndjson.gz"
+            meta = root / "fish.meta.json"
+            write_tsv(source, [
+                {
+                    "gbifID": "occ-1", "taxonKey": "111", "acceptedTaxonKey": "999",
+                    "scientificName": "Ophicephalus striatus Bloch, 1793",
+                    "acceptedScientificName": "Channa striata (Bloch, 1793)",
+                    "taxonomicStatus": "SYNONYM", "vernacularName": "Cá lóc",
+                    "kingdom": "Animalia", "class": "Actinopterygii", "order": "Anabantiformes",
+                    "mediaType": "StillImage", "identifier": "https://example.org/a.jpg",
+                    "creator": "A", "mediaLicense": "CC-BY-4.0", "countryCode": "VN"
+                },
+                {
+                    "gbifID": "occ-2", "taxonKey": "999", "acceptedTaxonKey": "999",
+                    "scientificName": "Channa striata (Bloch, 1793)",
+                    "acceptedScientificName": "Channa striata (Bloch, 1793)",
+                    "taxonomicStatus": "ACCEPTED", "kingdom": "Animalia", "class": "Actinopterygii",
+                    "order": "Anabantiformes", "mediaType": "StillImage",
+                    "identifier": "https://example.org/b.jpg", "creator": "B",
+                    "mediaLicense": "CC0-1.0", "countryCode": "VN"
+                },
+            ])
+            result = module.build(
+                source, output, meta, "10.15468/dl.collapse", "Fish dataset", "CC-BY-4.0",
+                collapse_to_accepted_taxon=True
+            )
+            self.assertEqual(2, result["sourceRowCount"])
+            self.assertEqual(1, result["recordCount"])
+            self.assertTrue(result["collapseToAcceptedTaxon"])
+            with gzip.open(output, "rt", encoding="utf-8") as handle:
+                record = json.loads(next(handle))
+            self.assertEqual("999", record["sourceRecordId"])
+            self.assertEqual("Channa striata (Bloch, 1793)", record["scientificName"])
+            self.assertEqual(2, record["occurrenceEvidenceCount"])
+            self.assertEqual("Cá lóc", record["vernacularName"])
+            self.assertEqual(2, len(record["mediaItems"]))
+            self.assertEqual({"https://example.org/a.jpg", "https://example.org/b.jpg"}, {m["identifier"] for m in record["mediaItems"]})
 
     def test_noncommercial_license_is_explicit_and_missing_provenance_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
