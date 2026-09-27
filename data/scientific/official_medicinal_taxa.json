@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "scope": "taxonomy-only-official-vietnam-medicinal-listing",
+  "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855",
+  "records": [
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-curcuma-longa-official", "scientificName": "Curcuma longa L.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-zingiber-officinale-official", "scientificName": "Zingiber officinale Rosc.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-achyranthes-aspera-official", "scientificName": "Achyranthes aspera L.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-salvia-miltiorhiza-official", "scientificName": "Salvia miltiorhiza Bunge", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-passiflora-foetida-official", "scientificName": "Passiflora foetida L.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-erythrina-variegata-official", "scientificName": "Erythrina variegata L.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-gleditsia-australis-official", "scientificName": "Gleditsia australis Hemsl.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"},
+    {"sourceId": "moh-traditional-medicine", "evidenceClass": "OFFICIAL_LISTING", "evidenceId": "moh-acorus-gramineus-official", "scientificName": "Acorus gramineus Soland.", "sourceUrl": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855"}
+  ]
+}
