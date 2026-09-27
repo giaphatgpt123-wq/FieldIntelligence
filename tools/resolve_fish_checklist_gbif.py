@@ -40,7 +40,7 @@ def _http_match(scientific_name: str, checklist_key: str, retries: int = 4) -> d
     query = urllib.parse.urlencode({
         "scientificName": scientific_name,
         "kingdom": "Animalia",
-        "taxonRank": "SPECIES",
+        "taxonRank": "species",
         "checklistKey": checklist_key,
     })
     request = urllib.request.Request(
@@ -56,7 +56,7 @@ def _http_match(scientific_name: str, checklist_key: str, retries: int = 4) -> d
                 return json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             last_error = exc
-            if exc.code != 429 and 500 > exc.code:
+            if exc.code != 429 and exc.code < 500:
                 raise
         except (urllib.error.URLError, TimeoutError) as exc:
             last_error = exc
@@ -65,9 +65,10 @@ def _http_match(scientific_name: str, checklist_key: str, retries: int = 4) -> d
     raise RuntimeError(f"GBIF species match failed after {retries} attempts: {last_error}")
 
 
-def _kingdom_name(response: dict) -> str:
+def _classification_name(response: dict, rank: str) -> str:
+    wanted = rank.upper()
     for item in response.get("classification") or []:
-        if clean(item.get("rank")).upper() == "KINGDOM":
+        if clean(item.get("rank")).upper() == wanted:
             return clean(item.get("name"))
     return ""
 
@@ -84,7 +85,7 @@ def classify_match(scientific_name: str, response: dict, checklist_key: str) -> 
     accepted_key = clean(accepted.get("key"))
     accepted_name = clean(accepted.get("name"))
     accepted_rank = clean(accepted.get("rank") or usage.get("rank")).upper()
-    kingdom = _kingdom_name(response)
+    kingdom = _classification_name(response, "KINGDOM")
 
     if not usage or not accepted_key:
         status = "unmatched"
@@ -114,11 +115,20 @@ def classify_match(scientific_name: str, response: dict, checklist_key: str) -> 
         "reason": reason,
         "acceptedTaxonId": accepted_key,
         "acceptedScientificName": accepted_name,
+        "acceptedCanonicalName": clean(accepted.get("canonicalName")),
+        "acceptedAuthorship": clean(accepted.get("authorship")),
+        "acceptedGenericName": clean(accepted.get("genericName")) or _classification_name(response, "GENUS"),
+        "acceptedSpecificEpithet": clean(accepted.get("specificEpithet")),
         "usageTaxonId": clean(usage.get("key")),
         "usageScientificName": clean(usage.get("name")),
         "usageStatus": clean(usage.get("status")),
         "acceptedRank": accepted_rank,
         "kingdom": kingdom,
+        "phylum": _classification_name(response, "PHYLUM"),
+        "class": _classification_name(response, "CLASS"),
+        "order": _classification_name(response, "ORDER"),
+        "family": _classification_name(response, "FAMILY"),
+        "genus": _classification_name(response, "GENUS"),
         "matchType": match_type,
         "confidence": confidence,
         "synonym": bool(response.get("synonym", False)),
