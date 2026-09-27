@@ -9,7 +9,8 @@ import java.util.Locale
  * A model may emit a canonical binomial such as `Channa striata`, while the scientific library may
  * store `Channa striata (Bloch, 1793)`. Resolution is deliberately narrow: exact name or the same
  * canonical binomial followed by authorship. It never falls back to another species/subspecies or
- * a genus neighbour.
+ * a genus neighbour. When the installed scientific pack contains the species it is preferred over
+ * the starter catalog so licensed offline media/provenance stay attached to the selected record.
  */
 object ScientificNameResolver {
     fun matchesCanonical(query: String, candidate: String): Boolean {
@@ -18,15 +19,12 @@ object ScientificNameResolver {
         if (q.isBlank() || c.isBlank()) return false
         if (c.equals(q, ignoreCase = true)) return true
 
-        // Only expand a canonical binomial. A longer model label must match exactly.
         if (q.split(' ').size != 2) return false
         val prefix = "$q "
         if (!c.regionMatches(0, prefix, 0, prefix.length, ignoreCase = true)) return false
 
         val suffix = c.substring(prefix.length).trimStart()
         if (suffix.isBlank()) return false
-        // Authorship commonly starts with '(' / '[' or an uppercase author surname. A lowercase
-        // third epithet is treated as an infraspecific name and is deliberately rejected.
         return suffix.startsWith("(") || suffix.startsWith("[") || suffix.first().isUpperCase()
     }
 
@@ -35,41 +33,44 @@ object ScientificNameResolver {
         val query = searchNormalize(queryText)
         if (query.isBlank()) return null
 
-        SpeciesCatalog.records.firstOrNull { matchesCanonical(queryText, it.scientificName) }?.let { return it }
-
         val database = store.databasePath()
-        if (!database.isFile || database.length() <= 0L) return null
-
-        val storedName = runCatching {
-            SQLiteDatabase.openDatabase(
-                database.absolutePath,
-                null,
-                SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
-            ).use { db ->
-                db.rawQuery(
-                    """
-                    SELECT scientific_name
-                    FROM taxon
-                    WHERE scientific_name_search = ?
-                       OR scientific_name_search LIKE ? ESCAPE '\\'
-                    ORDER BY CASE WHEN scientific_name_search = ? THEN 0 ELSE 1 END,
-                             length(scientific_name_search), scientific_name_search
-                    LIMIT 12
-                    """.trimIndent(),
-                    arrayOf(query, "${escapeLike(query)} %", query)
-                ).use { cursor ->
-                    var match: String? = null
-                    while (cursor.moveToNext() && match == null) {
-                        val candidate = cursor.getString(0)
-                        if (matchesCanonical(queryText, candidate)) match = candidate
+        if (database.isFile && database.length() > 0L) {
+            val storedName = runCatching {
+                SQLiteDatabase.openDatabase(
+                    database.absolutePath,
+                    null,
+                    SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
+                ).use { db ->
+                    db.rawQuery(
+                        """
+                        SELECT scientific_name
+                        FROM taxon
+                        WHERE scientific_name_search = ?
+                           OR scientific_name_search LIKE ? ESCAPE '\\'
+                        ORDER BY CASE WHEN scientific_name_search = ? THEN 0 ELSE 1 END,
+                                 length(scientific_name_search), scientific_name_search
+                        LIMIT 12
+                        """.trimIndent(),
+                        arrayOf(query, "${escapeLike(query)} %", query)
+                    ).use { cursor ->
+                        var match: String? = null
+                        while (cursor.moveToNext() && match == null) {
+                            val candidate = cursor.getString(0)
+                            if (matchesCanonical(queryText, candidate)) match = candidate
+                        }
+                        match
                     }
-                    match
                 }
-            }
-        }.getOrNull() ?: return null
+            }.getOrNull()
 
-        return store.findByScientificNames(listOf(storedName), limit = 8)
-            .firstOrNull { matchesCanonical(queryText, it.scientificName) }
+            if (storedName != null) {
+                store.findByScientificNames(listOf(storedName), limit = 8)
+                    .firstOrNull { matchesCanonical(queryText, it.scientificName) }
+                    ?.let { return it }
+            }
+        }
+
+        return SpeciesCatalog.records.firstOrNull { matchesCanonical(queryText, it.scientificName) }
     }
 
     private fun collapse(value: String): String = value.trim().replace(Regex("\\s+"), " ")
