@@ -51,6 +51,7 @@ def media_item(row:Dict[str,str])->dict:
     }
 
 def normalize(row:Dict[str,str],dataset_doi:str,publisher:str,license_id:str,media_rows:List[Dict[str,str]]|None=None,collapse_to_accepted_taxon:bool=False)->dict:
+    source_scientific=first(row,"scientificName","species")
     if collapse_to_accepted_taxon:
         source_record_id=first(row,"acceptedTaxonKey","taxonKey","acceptedNameUsageID","taxonID","gbifID","occurrenceID","id")
         scientific=first(row,"acceptedScientificName","scientificName","species")
@@ -61,9 +62,15 @@ def normalize(row:Dict[str,str],dataset_doi:str,publisher:str,license_id:str,med
     legacy=media_item(row)
     if not joined and legacy["identifier"]: joined=[legacy]
     accepted_id=first(row,"acceptedTaxonKey","acceptedNameUsageID")
+    source_names=[]
+    for value in (source_scientific, scientific):
+        value=clean(value)
+        if value and value.casefold() not in {name.casefold() for name in source_names}:
+            source_names.append(value)
     return {
         "schemaVersion":1,"sourceId":"gbif","sourceRecordId":source_record_id,
         "scientificName":scientific,"acceptedNameUsageId":accepted_id or (source_record_id if collapse_to_accepted_taxon else ""),
+        "sourceScientificNames":source_names,
         "taxonomicStatus":first(row,"taxonomicStatus"),"kingdom":first(row,"kingdom"),
         "phylum":first(row,"phylum"),"class":first(row,"class"),"order":first(row,"order"),
         "family":first(row,"family"),"genus":first(row,"genus"),"species":first(row,"species"),
@@ -90,6 +97,15 @@ def _merge_taxon_record(base:dict,incoming:dict,max_media_per_taxon:int)->None:
     base["occurrenceEvidenceCount"]=int(base.get("occurrenceEvidenceCount",1))+1
     if not clean(base.get("vernacularName")) and clean(incoming.get("vernacularName")):
         base["vernacularName"]=incoming["vernacularName"]
+    names=list(base.get("sourceScientificNames") or [])
+    seen_names={clean(name).casefold() for name in names if clean(name)}
+    for name in incoming.get("sourceScientificNames") or []:
+        value=clean(name)
+        if value and value.casefold() not in seen_names:
+            names.append(value); seen_names.add(value.casefold())
+    base["sourceScientificNames"]=names
+    if clean(incoming.get("taxonomicStatus")).casefold() in {"accepted","valid"}:
+        base["taxonomicStatus"]=incoming["taxonomicStatus"]
     existing=list(base.get("mediaItems") or [])
     seen={(clean(item.get("identifier")),clean(item.get("license"))) for item in existing if clean(item.get("identifier"))}
     for item in incoming.get("mediaItems") or []:
