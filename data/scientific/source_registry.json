@@ -121,6 +121,14 @@
       "label": "Nấm Việt Nam",
       "sources": [
         {
+          "id": "vnredlist",
+          "kind": "vietnam-red-list-fungi-conservation-and-media",
+          "url": "https://vnredlist.vast.vn/thuc-vat/",
+          "licenseRequired": true,
+          "httpsRequired": true,
+          "publisher": "Vietnam Academy of Science and Technology"
+        },
+        {
           "id": "gbif",
           "kind": "taxonomy-and-licensed-media",
           "url": "https://www.gbif.org/",
