@@ -29,7 +29,13 @@ class OfficialMedicinalTests(unittest.TestCase):
         self.assertEqual(len(items),1)
         self.assertEqual(items[0]['libraryGroup'],'Cây thuốc')
         self.assertNotIn('medicalClaims',items[0])
-        self.assertEqual(rows(evidence,lambda _: {'results':[{**occurrence,'countryCode':'US'}]}),[])
+        calls=[]
+        def global_fallback(url):
+            calls.append(url)
+            return {'results':[{**occurrence,'countryCode':'US'}]}
+        self.assertEqual(len(rows(evidence,global_fallback)),1)
+        self.assertEqual(len(calls),2)
+        self.assertEqual(rows(evidence,lambda _: {'results':[{**occurrence,'species':'Different species'}]}),[])
 
 
 if __name__=='__main__':unittest.main()
