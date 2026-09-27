@@ -3,7 +3,7 @@
 import argparse,html,json,re,urllib.parse,urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
-BASE='https://tracuuduoclieu.vn'; INDEX=BASE+'/danh-luc-cay-thuoc/'
+BASE='https://tracuuduoclieu.vn'; INDEX=BASE+'/danh-luc-cay-thuoc'
 class P(HTMLParser):
  def __init__(self): super().__init__();self.links=[];self.img=[];self.text=[]
  def handle_starttag(self,t,a):
@@ -22,11 +22,18 @@ def links(s):
   if urllib.parse.urlparse(u).netloc=='tracuuduoclieu.vn' and u.endswith('.html') and u not in o:o.append(u)
  return o
 def parse(u,s):
- p=P();p.feed(s);t=' '.join(p.text); title=p.text[0] if p.text else ''
+ p=P();p.feed(s);t=' '.join(p.text)
+ title_match=re.search(r'<h1[^>]*>(.*?)</h1>',s,re.I|re.S)
+ title=html.unescape(re.sub(r'<[^>]+>','',title_match.group(1))).strip() if title_match else ''
+ vietnamese=re.search(r'Tên tiếng Việt\s*[:：-]\s*(.*?)(?=\s+(?:Tên khoa học|Họ|Công dụng)\s*[:：-]|$)',t,re.I)
+ if vietnamese:title=vietnamese.group(1).strip()
  sci=''
  for pat in (r'Tên khoa học\s*[:：-]\s*([^.;|]+)',r'Danh pháp\s*[:：-]\s*([^.;|]+)'):
   m=re.search(pat,t,re.I)
-  if m:sci=m.group(1).strip();break
+  if m:
+   candidate=m.group(1).strip()
+   name=re.match(r'([A-Z][a-z]+\s+[a-z][a-z-]+)',candidate)
+   if name:sci=name.group(1);break
  imgs=[absu(x,u) for x in p.img if '/wp-content/uploads/' in absu(x,u)]
  return {'schemaVersion':1,'sourceId':'tracuuduoclieu','sourceRecordId':u.rstrip('/').split('/')[-1],'scientificName':sci,'vernacularName':title,'libraryGroup':'Cây thuốc','sourceRecordUrl':u,'imageUrls':list(dict.fromkeys(imgs)),'provenance':{'authority':'Tracuuduoclieu.vn','sourceUrl':u,'license':'site-terms-review-required','medicalReviewRequired':True}}
 def main():

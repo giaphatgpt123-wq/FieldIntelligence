@@ -109,11 +109,11 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         }
     }.orEmpty()
     val starterResults=remember(query,group){SpeciesCatalog.search(query,group)}
-    val groupBrowseAllowed=group=="Cá nước ngọt"
+    val groupBrowseAllowed=group in setOf("Cá nước ngọt","Nấm","Cây thuốc")
     val externalSearchRequested=selectedCollectionId==null&&storeStatus.installed&&(query.trim().length>=2||groupBrowseAllowed)
     val externalLimit=if(groupBrowseAllowed)FISH_QUERY_LIMIT else 80
     val externalRaw=if(externalSearchRequested)store.search(query,group,externalLimit) else emptyList()
-    val externalResults=externalRaw.filter{it.group!="Cá nước ngọt"||it.id in localMediaIds}
+    val externalResults=externalRaw.filter{it.group !in setOf("Cá nước ngọt","Nấm","Cây thuốc")||it.id in localMediaIds}
     val externalSearching=externalSearchRequested&&store.isSearching(query,group,externalLimit)
     val externalSearchCompleted=externalSearchRequested&&store.isSearchCompleted(query,group,externalLimit)
     val results=if(selectedCollection!=null)curatedResults else if(groupBrowseAllowed)(externalResults+starterResults).distinctBy{it.scientificName.lowercase(Locale.ROOT)} else (starterResults+externalResults).distinctBy{it.scientificName.lowercase(Locale.ROOT)}
@@ -184,7 +184,7 @@ private fun LibraryHero(totalCount:Long,status:ScientificLibraryStatus,localFish
 
 @Composable
 private fun LibraryGroupGrid(selected:String,fishCount:Long,onSelect:(String)->Unit){
-    val items=listOf(Triple("Tất cả","◈","Tất cả nguồn"),Triple("Thực vật","🌿","Cây • cỏ • taxonomy"),Triple("Động vật","🐾","Động vật hoang dã"),Triple("Cá nước ngọt","🐟","${formatCount(fishCount)} hồ sơ sẵn sàng"),Triple("Côn trùng","🐝","Côn trùng • chân khớp"),Triple("Nấm","🍄","Nấm • taxonomy"))
+    val items=listOf(Triple("Tất cả","◈","Tất cả nguồn"),Triple("Thực vật","🌿","Cây • cỏ • taxonomy"),Triple("Động vật","🐾","Động vật hoang dã"),Triple("Cá nước ngọt","🐟","${formatCount(fishCount)} hồ sơ sẵn sàng"),Triple("Côn trùng","🐝","Côn trùng • chân khớp"),Triple("Nấm","🍄","Nấm có ảnh offline"),Triple("Cây thuốc","🌱","Danh mục chính thức • có ảnh"))
     Text("PHÂN LOẠI NHANH",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
     items.chunked(2).forEach{row->Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){row.forEach{(name,icon,subtitle)->Card(onClick={onSelect(name)},modifier=Modifier.weight(1f).heightIn(min=112.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=if(selected==name)Color(0xFF17473E) else Color(0xFF102C33)),border=BorderStroke(1.dp,if(selected==name)Color(0x7745E58C) else Color.White.copy(alpha=.06f))){Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){Text(icon,style=MaterialTheme.typography.headlineMedium);Text(name,fontWeight=FontWeight.Black);Text(subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant)}}};if(row.size==1)Spacer(Modifier.weight(1f))}}
 }
@@ -234,6 +234,6 @@ private fun DataProvenanceCard(status:ScientificLibraryStatus,localFishWithMedia
 @Composable private fun SearchStatusBanner(text:String){Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF12323A),border=BorderStroke(1.dp,Color(0x3345E58C))){Row(Modifier.fillMaxWidth().padding(14.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)){CircularProgressIndicator(modifier=Modifier.size(22.dp),strokeWidth=2.dp,color=FieldColors.primary);Text(text,color=FieldColors.primary,fontWeight=FontWeight.Bold)}}}
 @Composable private fun SafetyBanner(text:String){Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF2E2520),border=BorderStroke(1.dp,Color(0x33FFC857))){Text(text,Modifier.fillMaxWidth().padding(14.dp),color=Color(0xFFFFC857),fontWeight=FontWeight.Medium)}}
 private fun formatCount(value:Long):String=when{value>=1_000_000->String.format(Locale.US,"%.2fM",value/1_000_000.0);value>=1_000->String.format(Locale.US,"%.1fK",value/1_000.0);else->value.toString()}
-private fun groupIcon(group:String):String=when(group){"Thực vật"->"🌿";"Động vật"->"🐾";"Cá nước ngọt"->"🐟";"Côn trùng"->"🐝";"Nấm"->"🍄";else->"◈"}
+private fun groupIcon(group:String):String=when(group){"Thực vật"->"🌿";"Động vật"->"🐾";"Cá nước ngọt"->"🐟";"Côn trùng"->"🐝";"Nấm"->"🍄";"Cây thuốc"->"🌱";else->"◈"}
 private const val FISH_QUERY_LIMIT=1000
 private const val FISH_PAGE_SIZE=80

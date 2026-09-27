@@ -43,6 +43,12 @@ def make_db(path: Path, source_id: str, record_id: str, scientific: str, group: 
       basis_of_record TEXT NOT NULL DEFAULT '',dataset_key TEXT NOT NULL DEFAULT '',
       PRIMARY KEY(source_id,source_record_id)
     ) WITHOUT ROWID;
+    CREATE TABLE source_reference(
+      source_id TEXT NOT NULL,source_record_id TEXT NOT NULL,source_url TEXT NOT NULL,
+      retrieved_at TEXT NOT NULL DEFAULT '',content_sha256 TEXT NOT NULL DEFAULT '',
+      offline_state TEXT NOT NULL DEFAULT 'metadata-only',
+      PRIMARY KEY(source_id,source_record_id,source_url)
+    ) WITHOUT ROWID;
     """)
     for key, value in {"schemaVersion":2,"scope":"taxonomy-media-occurrence","recordCount":1}.items():
         db.execute("INSERT INTO meta VALUES(?,?)",(key,json.dumps(value)))
@@ -51,6 +57,8 @@ def make_db(path: Path, source_id: str, record_id: str, scientific: str, group: 
         "","Actinopterygii" if group=="Cá nước ngọt" else "","","","","",group,
         "test-authority","CC-BY-4.0" if group=="Cá nước ngọt" else "CC0-1.0","taxonomy-media-occurrence","test-v1","10.15468/dl.test" if group=="Cá nước ngọt" else "10.5281/zenodo.test"
     ))
+    db.execute("INSERT INTO source_reference(source_id,source_record_id,source_url) VALUES(?,?,?)",
+               (source_id,record_id,'https://example.org/source/'+record_id))
     if with_media:
         media_url="https://example.org/fish.jpg"; payload=b"offline-fish-image"; digest=hashlib.sha256(payload).hexdigest()
         db.execute("INSERT INTO species_media VALUES(?,?,?,?,?,?,?,?,?,?)",(source_id,record_id,media_url,"StillImage","","","","Tester","Collection","CC-BY-4.0"))
@@ -84,6 +92,7 @@ class MergeScientificSqliteTest(unittest.TestCase):
                 self.assertEqual({("wfo","w1"),("gbif","g1")},set(db.execute("SELECT source_id,source_record_id FROM taxon")))
                 self.assertEqual(("Cá lóc",),db.execute("SELECT vernacular_name FROM vernacular_name").fetchone())
                 self.assertEqual(1,db.execute("SELECT COUNT(*) FROM scientific_media_blob").fetchone()[0])
+                self.assertEqual(2,db.execute("SELECT COUNT(*) FROM source_reference").fetchone()[0])
                 meta={k:json.loads(v) for k,v in db.execute("SELECT key,value FROM meta")}
                 self.assertEqual("fieldintelligence-merged-scientific-library",meta["sourceId"])
                 self.assertEqual("requires-verified-offline-media-for-main-library",meta["fishPublishRule"])
