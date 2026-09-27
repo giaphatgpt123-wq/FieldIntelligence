@@ -61,6 +61,10 @@ class ScientificLibraryImportManager(private val context: Context) {
         context.contentResolver.openInputStream(uri)?.use(::importBundle)
             ?: error("Không thể mở gói ZIP đã chọn")
 
+    /** Background updater entry point; keeps the same validation and atomic activation path. */
+    fun importBundle(file: File): BundleImportResult =
+        file.inputStream().use(::importBundle)
+
     /** Installs the source-verified pack packaged inside the APK on a clean installation. */
     fun installBundledIfMissing(): BundleImportResult? {
         val directory = libraryDirectory()
