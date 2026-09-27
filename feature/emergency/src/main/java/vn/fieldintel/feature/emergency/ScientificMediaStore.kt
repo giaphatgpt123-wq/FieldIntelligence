@@ -20,7 +20,10 @@ data class ScientificLocalMedia(
     val mimeType: String,
     val license: String,
     val sourceIdentifier: String,
-    val sha256: String
+    val sha256: String,
+    val creator: String = "",
+    val rightsHolder: String = "",
+    val referencesUrl: String = ""
 )
 
 /** Reads optional content-addressed reference images embedded in scientific schema-v2 SQLite. */
@@ -78,9 +81,15 @@ class ScientificMediaStore(context: Context) {
                 db.rawQuery(
                     """
                     SELECT b.media_blob, b.mime_type, l.media_license,
-                           l.source_identifier, b.sha256, b.size_bytes
+                           l.source_identifier, b.sha256, b.size_bytes,
+                           COALESCE(m.creator,''), COALESCE(m.rights_holder,''),
+                           COALESCE(m.references_url,'')
                     FROM species_media_local l
                     JOIN scientific_media_blob b ON b.sha256 = l.sha256
+                    LEFT JOIN species_media m
+                      ON m.source_id=l.source_id
+                     AND m.source_record_id=l.source_record_id
+                     AND m.media_identifier=l.source_identifier
                     WHERE l.source_id = ? AND l.source_record_id = ?
                     ORDER BY l.source_identifier
                     LIMIT ${limit.coerceIn(1, MAX_MEDIA_PER_PROFILE)}
@@ -95,13 +104,27 @@ class ScientificMediaStore(context: Context) {
                             val sourceIdentifier = cursor.getString(3).orEmpty()
                             val expectedSha = cursor.getString(4).orEmpty().lowercase(Locale.ROOT)
                             val expectedSize = cursor.getLong(5)
+                            val creator = cursor.getString(6).orEmpty()
+                            val rightsHolder = cursor.getString(7).orEmpty()
+                            val referencesUrl = cursor.getString(8).orEmpty()
                             if (bytes.isEmpty() || bytes.size.toLong() != expectedSize || expectedSize > MAX_MEDIA_BYTES) continue
                             if (mimeType !in ALLOWED_MIME_TYPES || license !in ALLOWED_LICENSES) continue
                             val actualSha = MessageDigest.getInstance("SHA-256")
                                 .digest(bytes)
                                 .joinToString("") { "%02x".format(it) }
                             if (actualSha != expectedSha) continue
-                            add(ScientificLocalMedia(bytes, mimeType, license, sourceIdentifier, expectedSha))
+                            add(
+                                ScientificLocalMedia(
+                                    bytes = bytes,
+                                    mimeType = mimeType,
+                                    license = license,
+                                    sourceIdentifier = sourceIdentifier,
+                                    sha256 = expectedSha,
+                                    creator = creator,
+                                    rightsHolder = rightsHolder,
+                                    referencesUrl = referencesUrl
+                                )
+                            )
                         }
                     }
                 }
