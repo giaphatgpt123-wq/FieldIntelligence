@@ -33,21 +33,23 @@ def rows(evidence, fetch):
         if not match or match.group(1) in seen:continue
         species=match.group(1)
         seen.add(species)
-        query=urllib.parse.urlencode({'country':'VN','scientificName':species,'mediaType':'StillImage','limit':300})
         media=[]
-        for occ in fetch(f'{API}?{query}').get('results',[]):
-            if occ.get('countryCode')!='VN' or occ.get('kingdom')!='Plantae' or not canonical_license(occ.get('license')):
-                continue
-            if occ.get('species')!=species:
-                continue
-            for image in occ.get('media') or []:
-                url=image.get('identifier') or ''
-                license_id=canonical_license(image.get('license'))
-                if url.startswith('https://') and license_id and str(image.get('type') or '').casefold() in ('stillimage','image'):
-                    media.append({'identifier':url,'mediaType':'StillImage','license':license_id,
-                                  'references':f"https://www.gbif.org/occurrence/{occ['key']}",
-                                  'creator':image.get('creator') or '', 'rightsHolder':image.get('rightsHolder') or '',
-                                  'sourceProvider':'GBIF occurrence media','gbifOccurrenceKey':str(occ['key'])})
+        for vietnam_only in (True,False):
+            params={'scientificName':species,'mediaType':'StillImage','limit':300}
+            if vietnam_only:params['country']='VN'
+            for occ in fetch(f'{API}?{urllib.parse.urlencode(params)}').get('results',[]):
+                if (vietnam_only and occ.get('countryCode')!='VN') or occ.get('kingdom')!='Plantae' or not canonical_license(occ.get('license')):
+                    continue
+                if occ.get('species')!=species:continue
+                for image in occ.get('media') or []:
+                    url=image.get('identifier') or ''
+                    license_id=canonical_license(image.get('license'))
+                    if url.startswith('https://') and license_id and str(image.get('type') or '').casefold() in ('stillimage','image'):
+                        media.append({'identifier':url,'mediaType':'StillImage','license':license_id,
+                                      'references':f"https://www.gbif.org/occurrence/{occ['key']}",
+                                      'creator':image.get('creator') or '', 'rightsHolder':image.get('rightsHolder') or '',
+                                      'sourceProvider':'GBIF occurrence media','gbifOccurrenceKey':str(occ['key'])})
+                if media:break
             if media:break
         if not media:continue
         source=item['sourceUrl']
