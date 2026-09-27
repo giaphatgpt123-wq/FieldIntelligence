@@ -55,15 +55,35 @@ jobs:
                       fish_taxa = int(meta.get('fishTaxa', 0) or 0)
                       fish_local = int(meta.get('fishWithLocalMedia', 0) or 0)
                       local_blobs = int(meta.get('localMediaBlobCount', 0) or 0)
+                      checklist = (
+                          int(meta.get('fishChecklistReported',0) or 0),
+                          int(meta.get('fishChecklistPresent',0) or 0),
+                          int(meta.get('fishChecklistReview',0) or 0),
+                          int(meta.get('fishChecklistExcluded',0) or 0),
+                      )
+                      resolved = int(meta.get('fishPresentChecklistResolved',0) or 0)
+                      unresolved = int(meta.get('fishPresentChecklistUnresolved',-1))
+                      accepted_present = int(meta.get('fishPresentAcceptedTaxa',0) or 0)
+                      present_local = int(meta.get('fishPresentTaxaWithLocalMedia',0) or 0)
+                      gate_version = int(meta.get('fishCoverageGateVersion',0) or 0)
                       assert fish_taxa > 0, 'Verified APK release blocked: no real freshwater-fish taxa merged into scientific SQLite'
                       assert fish_local > 0, 'Verified APK release blocked: fish records have no verified offline images'
                       assert local_blobs > 0, 'Verified APK release blocked: no embedded scientific media blobs'
                       assert fish_local <= fish_taxa, (fish_local, fish_taxa)
+                      assert gate_version == 1, 'Verified APK release blocked: fish coverage gate metadata is missing'
+                      assert checklist == (772,736,29,7), f'Verified APK release blocked: checklist status counts are incomplete: {checklist}'
+                      assert resolved == 736, f'Verified APK release blocked: only {resolved}/736 confirmed-present checklist rows resolved'
+                      assert unresolved == 0, f'Verified APK release blocked: {unresolved} confirmed-present checklist rows unresolved'
+                      assert accepted_present > 0, 'Verified APK release blocked: no reconciled accepted present taxa'
+                      assert present_local == accepted_present, f'Verified APK release blocked: only {present_local}/{accepted_present} reconciled present taxa have offline images'
+                      assert fish_local >= present_local, (fish_local, present_local)
           with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as env:
               env.write(f'FISH_TAXA={fish_taxa}\n')
               env.write(f'FISH_LOCAL={fish_local}\n')
               env.write(f'FISH_BLOBS={local_blobs}\n')
-          print({'packRecords': count, 'fishTaxa': fish_taxa, 'fishWithLocalMedia': fish_local, 'localMediaBlobCount': local_blobs})
+              env.write(f'FISH_PRESENT_ACCEPTED={accepted_present}\n')
+              env.write(f'FISH_PRESENT_LOCAL={present_local}\n')
+          print({'packRecords': count, 'fishTaxa': fish_taxa, 'fishWithLocalMedia': fish_local, 'confirmedPresentChecklistResolved': resolved, 'acceptedPresentTaxa': accepted_present, 'acceptedPresentTaxaWithOfflineImage': present_local, 'localMediaBlobCount': local_blobs})
           PY
           short_sha="${SOURCE_SHA:0:12}"
           mv dist/app-release.apk "dist/FieldIntelligence-${short_sha}.apk"
@@ -78,4 +98,4 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --target "${SOURCE_SHA}" \
             --title "FieldIntelligence - bản cập nhật ${short_sha}" \
-            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Gói khoa học có WFO và dữ liệu cá nước ngọt đã qua gate: ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline xác minh, ${FISH_BLOBS} blob ảnh được nhúng. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
+            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Gói khoa học đã qua gate cá nước ngọt Việt Nam: checklist 772 mục được giữ trạng thái 736 present / 29 review / 7 excluded; toàn bộ 736 mục present đã reconcile về ${FISH_PRESENT_ACCEPTED} accepted taxon và ${FISH_PRESENT_LOCAL}/${FISH_PRESENT_ACCEPTED} accepted taxon đó có ảnh offline xác minh. Tổng SQLite có ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline và ${FISH_BLOBS} blob ảnh. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
