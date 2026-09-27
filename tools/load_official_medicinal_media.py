@@ -12,6 +12,14 @@ LICENSES = {'CC0-1.0','CC-BY-4.0','CC-BY-NC-4.0',
             'https://creativecommons.org/licenses/by/4.0/',
             'https://creativecommons.org/licenses/by-nc/4.0/'}
 
+
+def canonical_license(value):
+    raw=str(value or '').strip()
+    if raw in LICENSES:return raw
+    match=re.fullmatch(r'https?://creativecommons\.org/(publicdomain/zero/1\.0|licenses/by/4\.0|licenses/by-nc/4\.0)/(?:legalcode)?/?',raw,re.I)
+    return {'publicdomain/zero/1.0':'CC0-1.0','licenses/by/4.0':'CC-BY-4.0',
+            'licenses/by-nc/4.0':'CC-BY-NC-4.0'}.get(match.group(1).lower()) if match else ''
+
 API = 'https://api.gbif.org/v1/occurrence/search'
 
 
@@ -28,14 +36,15 @@ def rows(evidence, fetch):
         query=urllib.parse.urlencode({'country':'VN','scientificName':species,'mediaType':'StillImage','limit':300})
         media=[]
         for occ in fetch(f'{API}?{query}').get('results',[]):
-            if occ.get('countryCode')!='VN' or occ.get('kingdom')!='Plantae' or occ.get('license') not in LICENSES:
+            if occ.get('countryCode')!='VN' or occ.get('kingdom')!='Plantae' or not canonical_license(occ.get('license')):
                 continue
             if occ.get('species')!=species:
                 continue
             for image in occ.get('media') or []:
                 url=image.get('identifier') or ''
-                if url.startswith('https://') and image.get('license') in LICENSES and str(image.get('type') or '').casefold() in ('stillimage','image'):
-                    media.append({'identifier':url,'mediaType':'StillImage','license':image['license'],
+                license_id=canonical_license(image.get('license'))
+                if url.startswith('https://') and license_id and str(image.get('type') or '').casefold() in ('stillimage','image'):
+                    media.append({'identifier':url,'mediaType':'StillImage','license':license_id,
                                   'references':f"https://www.gbif.org/occurrence/{occ['key']}",
                                   'creator':image.get('creator') or '', 'rightsHolder':image.get('rightsHolder') or '',
                                   'sourceProvider':'GBIF occurrence media','gbifOccurrenceKey':str(occ['key'])})
