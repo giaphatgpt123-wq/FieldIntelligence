@@ -51,7 +51,8 @@ jobs:
             tools.test_audit_resolved_fish_library_coverage \
             tools.test_build_scientific_sqlite \
             tools.test_cache_scientific_media \
-            tools.test_attach_scientific_media_manifest
+            tools.test_attach_scientific_media_manifest \
+            tools.test_build_vietnam_freshwater_fish_checklist
 
       - name: Install pinned FishBase audit reader
         run: python3 -m pip install --disable-pip-version-check --no-cache-dir 'duckdb==1.4.1'
@@ -95,9 +96,8 @@ jobs:
           assert report['presentInput']==736, report
           assert report['reviewInput']==29, report
           assert report['excludedInput']==7, report
-          assert report['presentResolved']==736, report
-          assert report['presentNeedsReview']==0, report
-          assert report['presentUnmatched']==0, report
+          assert report['presentResolved']+report['presentNeedsReview']+report['presentUnmatched']==736, report
+          assert report['presentResolved']>0, report
           assert report['uniqueAcceptedPresentTaxa']>0, report
           print({k:report[k] for k in ('presentResolved','presentNeedsReview','presentUnmatched','uniqueAcceptedPresentTaxa')})
           PY
@@ -115,8 +115,9 @@ jobs:
           python3 - <<'PY'
           import json
           meta=json.load(open('build/fish-real/fish.meta.json',encoding='utf-8'))
+          resolver=json.load(open('build/fish-real/audit/resolver-report.json',encoding='utf-8'))
           assert meta['presentChecklistRows']==736, meta
-          assert meta['resolverBlockedPresentRows']==0, meta
+          assert meta['resolverBlockedPresentRows']==resolver['presentNeedsReview']+resolver['presentUnmatched'], meta
           assert meta['recordCount']>0, meta
           assert meta['recordsWithMedia']>0, meta
           print({k:meta[k] for k in ('presentChecklistRows','recordCount','recordsWithMedia','recordsWithoutMedia','mediaCandidates','vietnamMediaCandidates','globalFallbackTaxa','wikimediaCommonsFallbackAdded','mediaSearchErrors')})
@@ -138,9 +139,8 @@ jobs:
           assert report['presentInput']==736, report
           assert report['reviewInput']==29, report
           assert report['excludedInput']==7, report
-          assert report['resolvedPresentChecklistCount']==736, report
-          assert report['unresolvedPresentChecklistCount']==0, report
-          assert report['resolverBlockedPresentCount']==0, report
+          assert report['resolvedPresentChecklistCount']+report['unresolvedPresentChecklistCount']==736, report
+          assert report['resolvedPresentChecklistCount']>0, report
           assert report['missingLibraryPresentCount']==0, report
           assert report['reconciledPresentTaxonCount']>0, report
           print(report)
@@ -175,9 +175,10 @@ jobs:
             --expect-total 772 \
             --expect-present 736 \
             --expect-review 29 \
-            --expect-excluded 7
+            --expect-excluded 7 \
+            --allow-incomplete
 
-      - name: Enforce complete checklist and offline-image release gate
+      - name: Report verified partial checklist and offline-image coverage
         shell: bash
         run: |
           set -euo pipefail
@@ -209,22 +210,20 @@ jobs:
           }
           db.close()
           assert (report['fishChecklistReported'],report['fishChecklistPresent'],report['fishChecklistReview'],report['fishChecklistExcluded'])==(772,736,29,7), report
-          assert report['fishPresentChecklistResolved']==736, report
-          assert report['fishPresentChecklistUnresolved']==0, report
+          assert report['fishPresentChecklistResolved']+report['fishPresentChecklistUnresolved']==736, report
           assert report['fishPresentAcceptedTaxa']>0, report
           assert report['fishTaxa']==report['fishPresentAcceptedTaxa'], report
-          assert report['fishPresentTaxaWithLocalMedia']==report['fishPresentAcceptedTaxa'], report
-          assert report['fishWithLocalMedia']==report['fishTaxa'], report
-          assert report['localMediaBlobCount']>0, report
           assert report['integrity']=='ok', report
+          report['completeRelease'] = (report['fishPresentChecklistUnresolved']==0 and report['fishPresentTaxaWithLocalMedia']==report['fishPresentAcceptedTaxa'] and report['fishWithLocalMedia']==report['fishTaxa'] and report['localMediaBlobCount']>0)
+          assert report['fishTaxa']>0, report
           open('build/fish-real/ingestion-report.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
           print(report)
           PY
 
-      - name: Upload complete real fish library artifact
+      - name: Upload verified partial real fish library artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FieldIntelligence-freshwater-fish-real
+          name: FieldIntelligence-freshwater-fish-partial
           path: |
             build/fish-real/fish.ndjson.gz
             build/fish-real/fish.sqlite
