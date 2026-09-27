@@ -8,26 +8,39 @@ import java.util.Locale
  *
  * A model may emit a canonical binomial such as `Channa striata`, while the scientific library may
  * store `Channa striata (Bloch, 1793)`. Resolution is deliberately narrow: exact name or the same
- * canonical name followed by authorship. It never falls back to another species or genus neighbour.
+ * canonical binomial followed by authorship. It never falls back to another species/subspecies or
+ * a genus neighbour.
  */
 object ScientificNameResolver {
     fun matchesCanonical(query: String, candidate: String): Boolean {
-        val q = normalize(query)
-        val c = normalize(candidate)
+        val q = collapse(query)
+        val c = collapse(candidate)
         if (q.isBlank() || c.isBlank()) return false
-        return c == q || c.startsWith("$q (") || c.startsWith("$q ") && q.split(' ').size >= 2
+        if (c.equals(q, ignoreCase = true)) return true
+
+        // Only expand a canonical binomial. A longer model label must match exactly.
+        if (q.split(' ').size != 2) return false
+        val prefix = "$q "
+        if (!c.regionMatches(0, prefix, 0, prefix.length, ignoreCase = true)) return false
+
+        val suffix = c.substring(prefix.length).trimStart()
+        if (suffix.isBlank()) return false
+        // Authorship commonly starts with '(' / '[' or an uppercase author surname. A lowercase
+        // third epithet is treated as an infraspecific name and is deliberately rejected.
+        return suffix.startsWith("(") || suffix.startsWith("[") || suffix.first().isUpperCase()
     }
 
     fun resolve(store: ScientificLibraryStore, scientificName: String): SpeciesRecord? {
-        val query = normalize(scientificName)
+        val queryText = collapse(scientificName)
+        val query = searchNormalize(queryText)
         if (query.isBlank()) return null
 
-        SpeciesCatalog.records.firstOrNull { matchesCanonical(query, it.scientificName) }?.let { return it }
+        SpeciesCatalog.records.firstOrNull { matchesCanonical(queryText, it.scientificName) }?.let { return it }
 
         val database = store.databasePath()
         if (!database.isFile || database.length() <= 0L) return null
 
-        val exactStoredName = runCatching {
+        val storedName = runCatching {
             SQLiteDatabase.openDatabase(
                 database.absolutePath,
                 null,
@@ -41,21 +54,26 @@ object ScientificNameResolver {
                        OR scientific_name_search LIKE ? ESCAPE '\\'
                     ORDER BY CASE WHEN scientific_name_search = ? THEN 0 ELSE 1 END,
                              length(scientific_name_search), scientific_name_search
-                    LIMIT 1
+                    LIMIT 12
                     """.trimIndent(),
                     arrayOf(query, "${escapeLike(query)} %", query)
-                ).use { cursor -> if (cursor.moveToFirst()) cursor.getString(0) else null }
+                ).use { cursor ->
+                    var match: String? = null
+                    while (cursor.moveToNext() && match == null) {
+                        val candidate = cursor.getString(0)
+                        if (matchesCanonical(queryText, candidate)) match = candidate
+                    }
+                    match
+                }
             }
         }.getOrNull() ?: return null
 
-        if (!matchesCanonical(query, exactStoredName)) return null
-        return store.findByScientificNames(listOf(exactStoredName), limit = 8)
-            .firstOrNull { matchesCanonical(query, it.scientificName) }
+        return store.findByScientificNames(listOf(storedName), limit = 8)
+            .firstOrNull { matchesCanonical(queryText, it.scientificName) }
     }
 
-    private fun normalize(value: String): String = value.trim()
-        .replace(Regex("\\s+"), " ")
-        .lowercase(Locale.ROOT)
+    private fun collapse(value: String): String = value.trim().replace(Regex("\\s+"), " ")
+    private fun searchNormalize(value: String): String = collapse(value).lowercase(Locale.ROOT)
 
     private fun escapeLike(value: String): String = value
         .replace("\\", "\\\\")
