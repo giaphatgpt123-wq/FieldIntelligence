@@ -78,7 +78,7 @@ class ResolvedGbifFishBuilderTest(unittest.TestCase):
         self.assertEqual(["https://images.example/vn.jpg", "https://images.example/global.jpg"], [m["identifier"] for m in items])
         self.assertEqual([("999", "VN", 50), ("999", None, 50)], calls)
 
-    def test_build_deduplicates_synonyms_to_one_accepted_profile(self):
+    def test_build_deduplicates_synonyms_and_looks_up_media_once(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             checklist = root / "resolved.ndjson"
@@ -90,8 +90,11 @@ class ResolvedGbifFishBuilderTest(unittest.TestCase):
                 resolved_row("Possible fish", "555", "Possible fish", presence="review"),
             ]
             write_ndjson(checklist, rows)
+            calls = []
+            commons_calls = []
 
             def searcher(taxon_key, country, limit):
+                calls.append((taxon_key, country, limit))
                 if country == "VN":
                     return {"results": [{
                         "key": 10,
@@ -105,6 +108,10 @@ class ResolvedGbifFishBuilderTest(unittest.TestCase):
                     }]}
                 return {"results": []}
 
+            def commons_finder(name):
+                commons_calls.append(name)
+                return None, "should-not-be-called"
+
             meta = module.build(
                 checklist,
                 output,
@@ -113,6 +120,7 @@ class ResolvedGbifFishBuilderTest(unittest.TestCase):
                 max_media_candidates=2,
                 delay_seconds=0,
                 searcher=searcher,
+                commons_finder=commons_finder,
             )
             with gzip.open(output, "rt", encoding="utf-8") as handle:
                 records = [json.loads(line) for line in handle if line.strip()]
@@ -128,6 +136,73 @@ class ResolvedGbifFishBuilderTest(unittest.TestCase):
             self.assertEqual(1, meta["recordsWithMedia"])
             self.assertEqual(0, meta["recordsWithoutMedia"])
             self.assertEqual(0, meta["resolverBlockedPresentRows"])
+            self.assertEqual([("999", "VN", 50), ("999", None, 50)], calls)
+            self.assertEqual([], commons_calls)
+
+    def test_commons_fallback_fills_taxon_when_gbif_media_is_empty(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            checklist = root / "resolved.ndjson"
+            output = root / "fish.ndjson.gz"
+            meta_path = root / "fish.meta.json"
+            write_ndjson(checklist, [resolved_row("Channa striata", "999", "Channa striata")])
+            calls = []
+
+            def searcher(taxon_key, country, limit):
+                return {"results": []}
+
+            def commons_finder(name):
+                calls.append(name)
+                return ({
+                    "mediaType": "StillImage",
+                    "identifier": "https://upload.wikimedia.org/channa.jpg",
+                    "references": "https://commons.wikimedia.org/wiki/File:Channa.jpg",
+                    "creator": "Author",
+                    "rightsHolder": "Collection",
+                    "license": "CC-BY-4.0",
+                    "sourceProvider": "Wikimedia Commons",
+                    "mappingEvidence": "exact-P225-to-P18",
+                }, "matched")
+
+            meta = module.build(
+                checklist,
+                output,
+                meta_path,
+                fetch_media=True,
+                max_media_candidates=2,
+                delay_seconds=0,
+                searcher=searcher,
+                commons_finder=commons_finder,
+            )
+            with gzip.open(output, "rt", encoding="utf-8") as handle:
+                record = json.loads(next(line for line in handle if line.strip()))
+            self.assertEqual(["Channa striata"], calls)
+            self.assertEqual("Wikimedia Commons", record["mediaItems"][0]["sourceProvider"])
+            self.assertEqual(1, meta["wikimediaCommonsFallbackAttempted"])
+            self.assertEqual(1, meta["wikimediaCommonsFallbackAdded"])
+            self.assertEqual(1, meta["recordsWithMedia"])
+            self.assertEqual(0, meta["recordsWithoutMedia"])
+
+    def test_missing_media_is_reported_by_taxon(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            checklist = root / "resolved.ndjson"
+            output = root / "fish.ndjson.gz"
+            meta_path = root / "fish.meta.json"
+            write_ndjson(checklist, [resolved_row("Rare fish", "777", "Rare fish")])
+            meta = module.build(
+                checklist,
+                output,
+                meta_path,
+                fetch_media=True,
+                delay_seconds=0,
+                searcher=lambda taxon_key, country, limit: {"results": []},
+                commons_finder=lambda name: (None, "wikidata-no-exact-p225"),
+            )
+            self.assertEqual(1, meta["recordsWithoutMedia"])
+            self.assertEqual("777", meta["recordsWithoutMediaDetails"][0]["acceptedTaxonId"])
+            self.assertEqual("Rare fish", meta["recordsWithoutMediaDetails"][0]["scientificName"])
+            self.assertEqual({"wikidata-no-exact-p225": 1}, meta["wikimediaCommonsFallbackReasons"])
 
     def test_blocked_present_row_is_counted_not_silently_emitted(self):
         with tempfile.TemporaryDirectory() as tmp:
