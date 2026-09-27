@@ -377,6 +377,10 @@ class ScientificLibraryImportManager(private val context: Context) {
                 require(meta["imageIdentificationIncluded"] != "true") { "Gói evidence chứa claim nhận dạng ảnh không được phép" }
             }
 
+            if (type == PackType.TAXONOMY) {
+                validateDeclaredFishPack(db, meta, actualTables)
+            }
+
             val table = if (type == PackType.TAXONOMY) "taxon" else "evidence"
             val actualCount = db.rawQuery("SELECT COUNT(*) FROM $table", null).use { cursor ->
                 require(cursor.moveToFirst()) { "Không đọc được số lượng hồ sơ" }
@@ -389,6 +393,40 @@ class ScientificLibraryImportManager(private val context: Context) {
             }
             return actualCount
         }
+    }
+
+    private fun validateDeclaredFishPack(db: SQLiteDatabase, meta: Map<String, String>, actualTables: Set<String>) {
+        if (!meta.containsKey("fishCoverageGateVersion")) return
+        val hasLocalMediaTables = setOf("species_media_local", "scientific_media_blob").all(actualTables::contains)
+        val observedFishTaxa = db.rawQuery(
+            "SELECT COUNT(*) FROM taxon WHERE library_group=?",
+            arrayOf(FISH_GROUP)
+        ).use { cursor ->
+            require(cursor.moveToFirst()) { "Không đếm được taxon cá" }
+            cursor.getLong(0)
+        }
+        val observedFishTaxaWithLocalMedia = if (hasLocalMediaTables) {
+            db.rawQuery(
+                """
+                SELECT COUNT(*) FROM taxon t
+                WHERE t.library_group=? AND EXISTS (
+                    SELECT 1 FROM species_media_local l
+                    WHERE l.source_id=t.source_id AND l.source_record_id=t.source_record_id
+                )
+                """.trimIndent(),
+                arrayOf(FISH_GROUP)
+            ).use { cursor ->
+                require(cursor.moveToFirst()) { "Không đếm được ảnh offline của cá" }
+                cursor.getLong(0)
+            }
+        } else 0L
+
+        FishPackGate.validateIfDeclared(
+            meta = meta,
+            hasLocalMediaTables = hasLocalMediaTables,
+            observedFishTaxa = observedFishTaxa,
+            observedFishTaxaWithLocalMedia = observedFishTaxaWithLocalMedia
+        )
     }
 
     private fun File.sha256(): String {
@@ -416,6 +454,7 @@ class ScientificLibraryImportManager(private val context: Context) {
 
     companion object {
         private const val MANIFEST_NAME = "scientific-library.manifest.json"
+        private const val FISH_GROUP = "Cá nước ngọt"
         private val ACCEPTED_BUNDLE_NAMES = setOf(
             "FieldIntelligence-WFO-scientific-library",
             "FieldIntelligence-WFO-mobile-selected-genera"
