@@ -309,7 +309,7 @@ class ScientificLibraryStore(context: Context) {
         return schemaVersion?:error("Missing scientific schema version")
     }
 
-    private fun readMeta(db:SQLiteDatabase):Map<String,String>=db.rawQuery("SELECT key,value FROM meta",null)
+    private fun readMeta(db:SQLiteDatabase):Map<String,String> = db.rawQuery("SELECT key,value FROM meta",null)
         .use{cursor->buildMap{while(cursor.moveToNext())put(cursor.getString(0),cursor.getString(1))}}
     private fun Map<String,String>.stringValue(key:String):String=this[key]?.trimJsonString().orEmpty()
     private fun Map<String,String>.longValue(key:String):Long=stringValue(key).toLongOrNull()?:0L
