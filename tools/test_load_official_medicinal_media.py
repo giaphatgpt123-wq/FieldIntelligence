@@ -1,8 +1,19 @@
 import unittest
+import json
+from pathlib import Path
 from tools.load_official_medicinal_media import canonical_license, rows
 
 
 class OfficialMedicinalTests(unittest.TestCase):
+    def test_curated_vietnam_list_is_taxonomy_only(self):
+        path=Path(__file__).resolve().parents[1]/'data/scientific/official_medicinal_taxa.json'
+        items=json.loads(path.read_text(encoding='utf-8'))['records']
+        self.assertGreaterEqual(len(items),8)
+        self.assertEqual(len({item['scientificName'].split()[:2][0]+' '+item['scientificName'].split()[1] for item in items}),len(items))
+        for item in items:
+            self.assertEqual(item['sourceId'],'moh-traditional-medicine')
+            self.assertTrue(item['sourceUrl'].startswith('https://emohbackup.moh.gov.vn/'))
+            self.assertFalse({'medicalClaims','uses','treatment','dosage'} & item.keys())
     def test_normalizes_gbif_cc_license_urls(self):
         self.assertEqual(canonical_license('http://creativecommons.org/licenses/by/4.0/'),'CC-BY-4.0')
     def test_restricts_to_official_listing_and_vietnam_licensed_media(self):
