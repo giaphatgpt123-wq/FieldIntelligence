@@ -29,10 +29,8 @@ class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : Corouti
             if (preferences.getLong("installedVersion", 0) >= version) return@runCatching Result.success()
             val target = File(applicationContext.cacheDir, "scientific-library-${version}.zip")
             try {
-                val data = fetch(UpdateConfig.LIBRARY_PACKAGE_URL, size)
-                require(data.size.toLong() == size) { "Sai kích thước thư viện" }
-                require(MessageDigest.getInstance("SHA-256").digest(data).joinToString("") { "%02x".format(it) } == digest) { "Sai SHA-256 thư viện" }
-                target.writeBytes(data)
+                val actual = downloadToFile(UpdateConfig.LIBRARY_PACKAGE_URL, target, size)
+                require(actual == digest) { "Sai SHA-256 thư viện" }
                 ScientificLibraryImportManager(applicationContext).importBundle(target)
                 preferences.edit().putLong("installedVersion", version).apply()
             } finally { target.delete() }
@@ -59,6 +57,33 @@ class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : Corouti
                 }
             }
             return output.toByteArray()
+        } finally { connection.disconnect() }
+    }
+
+
+    private fun downloadToFile(address: String, target: File, expectedBytes: Long): String {
+        require(address.startsWith("https://"))
+        val connection = URL(address).openConnection() as HttpURLConnection
+        try {
+            connection.connectTimeout = 15_000
+            connection.readTimeout = 45_000
+            connection.instanceFollowRedirects = true
+            require(connection.responseCode in 200..299) { "HTTP ${connection.responseCode}" }
+            val hash = MessageDigest.getInstance("SHA-256")
+            var total = 0L
+            connection.inputStream.use { input -> target.outputStream().use { output ->
+                val buffer = ByteArray(64 * 1024)
+                while (true) {
+                    val n = input.read(buffer)
+                    if (n < 0) break
+                    total += n
+                    require(total <= expectedBytes) { "Gói vượt kích thước khai báo" }
+                    hash.update(buffer, 0, n)
+                    output.write(buffer, 0, n)
+                }
+            } }
+            require(total == expectedBytes) { "Sai kích thước thư viện" }
+            return hash.digest().joinToString("") { "%02x".format(it) }
         } finally { connection.disconnect() }
     }
 
