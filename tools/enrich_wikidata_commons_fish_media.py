@@ -2,8 +2,9 @@
 """Fill missing fish reference images using an exact Wikidata taxon -> Commons mapping.
 
 This is a conservative media fallback only. Taxonomy remains GBIF-authoritative. A Wikimedia image
-is accepted only when a Wikidata item has P225 exactly equal to the GBIF canonical scientific name,
-has a P18 image claim, and Commons reports a machine-readable CC0 or CC BY 4.0 licence.
+is accepted only when a Wikidata item is explicitly a taxon (P31=Q16521), has P225 exactly equal to
+the GBIF canonical scientific name, has a P18 image claim, and Commons reports a machine-readable
+CC0 or CC BY 4.0 licence.
 """
 from __future__ import annotations
 
@@ -24,6 +25,7 @@ WIKIDATA_API = "https://www.wikidata.org/w/api.php"
 COMMONS_API = "https://commons.wikimedia.org/w/api.php"
 USER_AGENT = "FieldIntelligence/1.0 scientific-library-builder"
 ALLOWED_LICENSES = {"CC0-1.0", "CC-BY-4.0"}
+TAXON_ENTITY_ID = "Q16521"
 
 
 def clean(value: object) -> str:
@@ -119,6 +121,13 @@ def _claim_values(entity: dict, property_id: str) -> list[object]:
     return values
 
 
+def _is_taxon_entity(entity: dict) -> bool:
+    for value in _claim_values(entity, "P31"):
+        if isinstance(value, dict) and clean(value.get("id")) == TAXON_ENTITY_ID:
+            return True
+    return False
+
+
 def find_exact_taxon_image(
     scientific_name: str,
     search_wikidata: Callable[[str], dict] = _search_wikidata,
@@ -136,10 +145,10 @@ def find_exact_taxon_image(
     for entity_id in ids:
         entity = entities.get(entity_id) or {}
         names = [clean(v) for v in _claim_values(entity, "P225") if clean(v)]
-        if any(name.casefold() == wanted for name in names):
+        if _is_taxon_entity(entity) and any(name.casefold() == wanted for name in names):
             exact_candidates.append((entity_id, entity))
     if not exact_candidates:
-        return None, "wikidata-no-exact-p225"
+        return None, "wikidata-no-exact-taxon-p225"
 
     for entity_id, entity in exact_candidates:
         images = [clean(v) for v in _claim_values(entity, "P18") if clean(v)]
@@ -180,9 +189,10 @@ def find_exact_taxon_image(
                     "licenseOriginal": mv("LicenseShortName") or mv("LicenseUrl"),
                     "sourceProvider": "Wikimedia Commons",
                     "wikidataItem": entity_id,
+                    "wikidataInstanceOf": TAXON_ENTITY_ID,
                     "wikidataScientificNameProperty": "P225",
                     "wikimediaImageProperty": "P18",
-                    "mappingEvidence": "exact-P225-to-P18",
+                    "mappingEvidence": "P31-taxon+exact-P225-to-P18",
                 }, "matched")
     return None, "wikidata-exact-taxon-without-allowed-commons-image"
 
@@ -266,7 +276,7 @@ def enrich(
         metadata["wikimediaCommonsFallbackAttempted"] = report["fallbackAttempted"]
         metadata["wikimediaCommonsFallbackAdded"] = report["fallbackAdded"]
         metadata["wikimediaCommonsFallbackRemainingWithoutMedia"] = report["remainingWithoutMedia"]
-        metadata["wikimediaCommonsFallbackPolicy"] = "exact-P225-to-P18; CC0-1.0 or CC-BY-4.0 only"
+        metadata["wikimediaCommonsFallbackPolicy"] = "P31=Q16521 taxon; exact-P225-to-P18; CC0-1.0 or CC-BY-4.0 only"
         metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report
 
