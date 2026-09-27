@@ -80,6 +80,9 @@ jobs:
               --target build/scientific-library/wfo-taxonomy.sqlite \
               --source "$fish_sqlite" \
               --source-label "WFO 2026-06 + verified Vietnam freshwater fish"
+            python3 tools/propagate_fish_coverage_meta.py \
+              --target build/scientific-library/wfo-taxonomy.sqlite \
+              --source "$fish_sqlite"
             echo "$fish_run" > build/scientific-library/fish-source-run.txt
           else
             echo "No non-expired verified real-fish artifact is available; building a WFO-only test APK."
@@ -107,6 +110,15 @@ jobs:
                   assert fish_local > 0, meta
                   assert local_blobs > 0, meta
                   assert fish_local <= fish_taxa, meta
+                  assert int(meta.get('fishCoverageGateVersion', 0) or 0) == 1, meta
+                  assert (int(meta.get('fishChecklistReported',0)), int(meta.get('fishChecklistPresent',0)), int(meta.get('fishChecklistReview',0)), int(meta.get('fishChecklistExcluded',0))) == (772,736,29,7), meta
+                  assert int(meta.get('fishPresentChecklistResolved',0)) == 736, meta
+                  assert int(meta.get('fishPresentChecklistUnresolved',-1)) == 0, meta
+                  accepted_present = int(meta.get('fishPresentAcceptedTaxa',0) or 0)
+                  present_local = int(meta.get('fishPresentTaxaWithLocalMedia',0) or 0)
+                  assert accepted_present > 0, meta
+                  assert present_local == accepted_present, meta
+                  assert fish_local >= present_local, meta
           files = []
           for name, version, scope in [('wfo-taxonomy.sqlite', 2, 'taxonomy-media-occurrence'), ('specialist-evidence.sqlite', 2, 'specialist-evidence-only')]:
               path = root / name
