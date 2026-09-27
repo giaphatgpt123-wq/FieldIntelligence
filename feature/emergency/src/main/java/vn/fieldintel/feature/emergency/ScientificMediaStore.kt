@@ -32,14 +32,13 @@ class ScientificMediaStore(context: Context) {
     )
 
     /**
-     * Returns a Compose-observable shared set. The private observer marker keeps the state-set
-     * distinguishable from Kotlin's immutable emptySet(), so a screen opened before fish media is
-     * installed still retains the observable reference and reacts when SQLite is replaced later.
-     * The marker never matches a scientific-db record ID.
+     * Returns the shared Compose-observable set immediately and refreshes it on the IO scope.
+     * This avoids opening SQLite on the composition thread while preserving the exact state-set
+     * reference when a fish pack is installed/replaced after the screen has already opened.
      */
     fun localMediaRecordIds(): Set<String> {
-        refreshObservedMediaIds(force = true)
         startRevisionWatcher()
+        requestObservedMediaRefresh()
         return OBSERVED_MEDIA_IDS
     }
 
@@ -142,6 +141,18 @@ class ScientificMediaStore(context: Context) {
         }
     }
 
+    private fun requestObservedMediaRefresh() {
+        if (databaseFingerprint() == observedFingerprint) return
+        if (!REFRESH_IN_FLIGHT.compareAndSet(false, true)) return
+        REVISION_WATCHER_SCOPE.launch {
+            try {
+                refreshObservedMediaIds(force = false)
+            } finally {
+                REFRESH_IN_FLIGHT.set(false)
+            }
+        }
+    }
+
     private fun startRevisionWatcher() {
         if (!REVISION_WATCHER_STARTED.compareAndSet(false, true)) return
         REVISION_WATCHER_SCOPE.launch {
@@ -150,7 +161,7 @@ class ScientificMediaStore(context: Context) {
                 val fingerprint = databaseFingerprint()
                 if (fingerprint == observedFingerprint) continue
                 delay(REVISION_SETTLE_MS)
-                refreshObservedMediaIds(force = false)
+                requestObservedMediaRefresh()
             }
         }
     }
@@ -205,7 +216,7 @@ class ScientificMediaStore(context: Context) {
         val actual = db.rawQuery(
             "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('species_media_local','scientific_media_blob')",
             null
-        ).use { cursor -> buildSet { while (cursor.moveToNext()) add(cursor.getString(0)) } }
+        ).use { cursor -> buildSet { while(cursor.moveToNext()) add(cursor.getString(0)) } }
         return actual == required
     }
 
@@ -234,6 +245,7 @@ class ScientificMediaStore(context: Context) {
 
         private val OBSERVED_MEDIA_IDS = mutableStateSetOf(OBSERVER_MARKER)
         private val REVISION_WATCHER_STARTED = AtomicBoolean(false)
+        private val REFRESH_IN_FLIGHT = AtomicBoolean(false)
         private val REVISION_WATCHER_SCOPE = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         @Volatile private var observedFingerprint: String = "uninitialized"
 
