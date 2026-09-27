@@ -13,7 +13,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 REUSABLE_MEDIA_LICENSES = {
     "CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
     "https://creativecommons.org/publicdomain/zero/1.0/",
@@ -85,6 +85,13 @@ def create_schema(db: sqlite3.Connection) -> None:
             basis_of_record TEXT NOT NULL DEFAULT '', dataset_key TEXT NOT NULL DEFAULT '',
             PRIMARY KEY (source_id, source_record_id)
         ) WITHOUT ROWID;
+        CREATE TABLE source_reference (
+            source_id TEXT NOT NULL, source_record_id TEXT NOT NULL,
+            source_url TEXT NOT NULL DEFAULT '', retrieved_at TEXT NOT NULL DEFAULT '',
+            content_sha256 TEXT NOT NULL DEFAULT '', offline_state TEXT NOT NULL DEFAULT 'metadata-only',
+            PRIMARY KEY (source_id, source_record_id, source_url)
+        ) WITHOUT ROWID;
+        CREATE INDEX idx_source_reference_record ON source_reference(source_id, source_record_id);
         """
     )
 
@@ -181,6 +188,16 @@ def build(input_path: Path, output_path: Path, source_meta_path: Path | None = N
                         str(occurrence.get("eventDate") or "").strip(), str(occurrence.get("basisOfRecord") or "").strip(),
                         str(occurrence.get("datasetKey") or "").strip()))
                     occurrence_count += 1
+                provenance = record.get("provenance") or {}
+                source_url = str(record.get("sourceRecordUrl") or provenance.get("sourceUrl") or record.get("sourceUrl") or "").strip()
+                if source_url:
+                    db.execute("""INSERT OR REPLACE INTO source_reference
+                        (source_id,source_record_id,source_url,retrieved_at,content_sha256,offline_state)
+                        VALUES (?,?,?,?,?,?)""", (
+                        source_id, source_record_id, source_url,
+                        str(record.get("retrievedAt") or provenance.get("retrievedAt") or "").strip(),
+                        str(record.get("contentSha256") or provenance.get("contentSha256") or "").strip(),
+                        str(record.get("offlineState") or "metadata-only").strip() or "metadata-only"))
                 if row[5].casefold() in {"accepted", "accepted name", "acceptedname"}:
                     accepted += 1
                 if len(batch) >= batch_size:
