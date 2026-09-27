@@ -2,7 +2,7 @@ package vn.fieldintel.feature.emergency
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.Snapshot
 import java.io.File
 import java.security.MessageDigest
@@ -42,7 +42,7 @@ class ScientificMediaStore(context: Context) {
     fun localMediaRecordIds(): Set<String> {
         startRevisionWatcher()
         requestObservedMediaRefresh()
-        return OBSERVED_MEDIA_IDS
+        return OBSERVED_MEDIA_IDS.keys
     }
 
     fun fishWithLocalMediaCount(): Long {
@@ -201,9 +201,9 @@ class ScientificMediaStore(context: Context) {
                 add(OBSERVER_MARKER)
                 addAll(fresh)
             }
-            if (OBSERVED_MEDIA_IDS != desired) {
+            if (OBSERVED_MEDIA_IDS.keys != desired) {
                 OBSERVED_MEDIA_IDS.clear()
-                OBSERVED_MEDIA_IDS.addAll(desired)
+                desired.forEach { OBSERVED_MEDIA_IDS[it] = Unit }
             }
         }
     }
@@ -266,7 +266,7 @@ class ScientificMediaStore(context: Context) {
         private const val REVISION_SETTLE_MS = 150L
         private const val MISSING_FINGERPRINT = "missing"
 
-        private val OBSERVED_MEDIA_IDS = mutableStateSetOf(OBSERVER_MARKER)
+        private val OBSERVED_MEDIA_IDS = mutableStateMapOf(OBSERVER_MARKER to Unit)
         private val REVISION_WATCHER_STARTED = AtomicBoolean(false)
         private val REFRESH_IN_FLIGHT = AtomicBoolean(false)
         private val REVISION_WATCHER_SCOPE = CoroutineScope(SupervisorJob() + Dispatchers.IO)
