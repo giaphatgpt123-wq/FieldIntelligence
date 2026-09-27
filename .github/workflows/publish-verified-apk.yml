@@ -94,8 +94,13 @@ jobs:
           short_sha="${SOURCE_SHA:0:12}"
           mv dist/app-release.apk "dist/FieldIntelligence-${short_sha}.apk"
           mv dist/app-debug.apk "dist/FieldIntelligence-Upgrade-Installed-${short_sha}.apk"
+          notes="Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Thư viện cá từng phần đã kiểm toán: checklist 772 mục gồm 736 present / 29 review / 7 excluded; ${FISH_PRESENT_RESOLVED}/736 mục present được đối chiếu, ${FISH_PRESENT_UNRESOLVED} mục cần giải quyết thêm; ${FISH_PRESENT_LOCAL}/${FISH_PRESENT_ACCEPTED} accepted taxon có ảnh offline xác minh. Tổng SQLite có ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline và ${FISH_BLOBS} blob ảnh. Mức hoàn chỉnh toàn bộ: gate ${FISH_COVERAGE_GATE}. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
           if gh release view "fieldintel-${short_sha}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
-            echo "Release already exists."
+            gh release upload "fieldintel-${short_sha}" \
+              "dist/FieldIntelligence-${short_sha}.apk" \
+              "dist/FieldIntelligence-Upgrade-Installed-${short_sha}.apk" \
+              --repo "${GITHUB_REPOSITORY}" --clobber
+            gh release edit "fieldintel-${short_sha}" --repo "${GITHUB_REPOSITORY}" --notes "$notes"
             exit 0
           fi
           gh release create "fieldintel-${short_sha}" \
@@ -104,4 +109,4 @@ jobs:
             --repo "${GITHUB_REPOSITORY}" \
             --target "${SOURCE_SHA}" \
             --title "FieldIntelligence - bản cập nhật ${short_sha}" \
-            --notes "Hai APK đã qua CI: Upgrade-Installed cập nhật gói osmtest đã cài với cùng chữ ký; bản còn lại dành cho cài mới. Thư viện cá từng phần đã kiểm toán: checklist 772 mục gồm 736 present / 29 review / 7 excluded; ${FISH_PRESENT_RESOLVED}/736 mục present được đối chiếu, ${FISH_PRESENT_UNRESOLVED} mục cần giải quyết thêm; ${FISH_PRESENT_LOCAL}/${FISH_PRESENT_ACCEPTED} accepted taxon có ảnh offline xác minh. Tổng SQLite có ${FISH_LOCAL}/${FISH_TAXA} taxon cá có ảnh offline và ${FISH_BLOBS} blob ảnh. Mức hoàn chỉnh toàn bộ: gate ${FISH_COVERAGE_GATE}. Model Google AIY Plants chỉ gợi ý tên trong phạm vi nhãn thực vật; không xác định ăn được, độc tính hoặc xử trí y khoa. Camera quét nhiều vùng vẫn cần detector riêng."
+            --notes "$notes"
