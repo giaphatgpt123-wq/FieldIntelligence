@@ -143,6 +143,16 @@ def merge(target: Path, source: Path, source_label: str = "WFO + verified fish")
             (source_id,source_record_id,country_code,state_province,locality,event_date,basis_of_record,dataset_key)
             SELECT source_id,source_record_id,country_code,state_province,locality,event_date,basis_of_record,dataset_key
             FROM incoming.occurrence_summary""")
+        if "source_reference" in incoming_tables:
+            db.execute("""CREATE TABLE IF NOT EXISTS source_reference (
+                source_id TEXT NOT NULL, source_record_id TEXT NOT NULL,
+                source_url TEXT NOT NULL DEFAULT '', retrieved_at TEXT NOT NULL DEFAULT '',
+                content_sha256 TEXT NOT NULL DEFAULT '', offline_state TEXT NOT NULL DEFAULT 'metadata-only',
+                PRIMARY KEY (source_id, source_record_id, source_url)) WITHOUT ROWID""")
+            db.execute("""INSERT OR IGNORE INTO source_reference
+                (source_id,source_record_id,source_url,retrieved_at,content_sha256,offline_state)
+                SELECT source_id,source_record_id,source_url,retrieved_at,content_sha256,offline_state
+                FROM incoming.source_reference""")
 
         if {"scientific_media_blob", "species_media_local"}.issubset(incoming_tables):
             db.execute("""INSERT OR IGNORE INTO scientific_media_blob(sha256,mime_type,size_bytes,media_blob)
