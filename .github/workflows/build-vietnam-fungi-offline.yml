@@ -7,6 +7,8 @@ on:
     paths:
       - "tools/load_gbif_vietnam_fungi.py"
       - "tools/load_official_medicinal_media.py"
+      - "tools/test_load_official_medicinal_media.py"
+      - "tools/test_load_gbif_vietnam_fungi.py"
       - "data/scientific/specialist_evidence.json"
       - "data/scientific/official_medicinal_taxa.json"
       - ".github/workflows/build-vietnam-fungi-offline.yml"
