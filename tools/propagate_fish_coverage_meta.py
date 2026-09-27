@@ -28,15 +28,20 @@ def propagate(target: Path, source: Path):
         missing = [key for key in KEYS if key not in source_meta]
         if missing:
             raise ValueError("fish coverage metadata missing: " + ", ".join(missing))
-        if int(source_meta["fishCoverageGateVersion"]) != 1:
+        gate = int(source_meta["fishCoverageGateVersion"])
+        if gate not in (0, 1):
             raise ValueError("unsupported fish coverage gate version")
-        if int(source_meta["fishPresentChecklistUnresolved"]) != 0:
-            raise ValueError("source fish library has unresolved confirmed-present checklist rows")
-        if int(source_meta["fishPresentChecklistResolved"]) != int(source_meta["fishChecklistPresent"]):
-            raise ValueError("source fish checklist resolution is incomplete")
-        if int(source_meta["fishPresentTaxaWithLocalMedia"]) != int(source_meta["fishPresentAcceptedTaxa"]):
-            raise ValueError("source fish image coverage is incomplete")
-        if int(target_meta.get("fishWithLocalMedia", 0)) < int(source_meta["fishPresentAcceptedTaxa"]):
+        resolved = int(source_meta["fishPresentChecklistResolved"])
+        unresolved = int(source_meta["fishPresentChecklistUnresolved"])
+        accepted = int(source_meta["fishPresentAcceptedTaxa"])
+        local = int(source_meta["fishPresentTaxaWithLocalMedia"])
+        if resolved <= 0 or unresolved < 0 or resolved + unresolved != int(source_meta["fishChecklistPresent"]):
+            raise ValueError("source fish checklist resolution counts are inconsistent")
+        if accepted <= 0 or accepted > resolved or local < 0 or local > accepted:
+            raise ValueError("source fish taxon/media counts are inconsistent")
+        if gate == 1 and (unresolved or local != accepted):
+            raise ValueError("complete fish coverage gate is inconsistent")
+        if int(target_meta.get("fishWithLocalMedia", 0)) < local:
             raise ValueError("merged target does not retain enough fish taxa with local media")
         for key in KEYS:
             dst.execute("INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)", (key, json.dumps(source_meta[key], ensure_ascii=False)))
