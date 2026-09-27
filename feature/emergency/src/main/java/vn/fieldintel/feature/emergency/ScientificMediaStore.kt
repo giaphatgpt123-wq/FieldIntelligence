@@ -30,9 +30,10 @@ class ScientificMediaStore(context: Context) {
     )
 
     /**
-     * Returns a Compose-observable shared set. The set is refreshed automatically when the
-     * installed scientific SQLite file is replaced, so library filtering does not keep stale
-     * media IDs after an in-place data update.
+     * Returns a Compose-observable shared set. The private observer marker keeps the state-set
+     * distinguishable from Kotlin's immutable emptySet(), so a screen opened before fish media is
+     * installed still retains the observable reference and reacts when SQLite is replaced later.
+     * The marker never matches a scientific-db record ID.
      */
     fun localMediaRecordIds(): Set<String> {
         refreshObservedMediaIds(force = true)
@@ -128,13 +129,16 @@ class ScientificMediaStore(context: Context) {
         if (!force && fingerprintBefore == observedFingerprint) return
 
         val fresh = readLocalMediaRecordIds()
-        val fingerprintAfter = databaseFingerprint()
-        observedFingerprint = fingerprintAfter
+        observedFingerprint = databaseFingerprint()
 
         Snapshot.withMutableSnapshot {
-            if (OBSERVED_MEDIA_IDS != fresh) {
+            val desired = buildSet {
+                add(OBSERVER_MARKER)
+                addAll(fresh)
+            }
+            if (OBSERVED_MEDIA_IDS != desired) {
                 OBSERVED_MEDIA_IDS.clear()
-                OBSERVED_MEDIA_IDS.addAll(fresh)
+                OBSERVED_MEDIA_IDS.addAll(desired)
             }
         }
     }
@@ -184,13 +188,14 @@ class ScientificMediaStore(context: Context) {
 
     companion object {
         private const val ID_PREFIX = "scientific-db:"
+        private const val OBSERVER_MARKER = "__fieldintel_scientific_media_observer__"
         private const val MAX_MEDIA_PER_PROFILE = 3
         private const val MAX_MEDIA_BYTES = 5L * 1024L * 1024L
         private const val REVISION_POLL_MS = 1_500L
         private const val REVISION_SETTLE_MS = 150L
         private const val MISSING_FINGERPRINT = "missing"
 
-        private val OBSERVED_MEDIA_IDS = mutableStateSetOf<String>()
+        private val OBSERVED_MEDIA_IDS = mutableStateSetOf(OBSERVER_MARKER)
         private val REVISION_WATCHER_STARTED = AtomicBoolean(false)
         private val REVISION_WATCHER_SCOPE = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         @Volatile private var observedFingerprint: String = "uninitialized"
