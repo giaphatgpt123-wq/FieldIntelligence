@@ -13,6 +13,8 @@ on:
       - "tools/test_build_resolved_gbif_fish_library.py"
       - "tools/enrich_wikidata_commons_fish_media.py"
       - "tools/test_enrich_wikidata_commons_fish_media.py"
+      - "tools/enrich_inaturalist_fish_media.py"
+      - "tools/test_enrich_inaturalist_fish_media.py"
       - "tools/audit_resolved_fish_library_coverage.py"
       - "tools/test_audit_resolved_fish_library_coverage.py"
       - "tools/build_scientific_sqlite.py"
@@ -48,6 +50,7 @@ jobs:
             tools.test_resolve_fish_checklist_gbif \
             tools.test_build_resolved_gbif_fish_library \
             tools.test_enrich_wikidata_commons_fish_media \
+            tools.test_enrich_inaturalist_fish_media \
             tools.test_audit_resolved_fish_library_coverage \
             tools.test_build_scientific_sqlite \
             tools.test_cache_scientific_media \
@@ -120,7 +123,7 @@ jobs:
           assert meta['resolverBlockedPresentRows']==resolver['presentNeedsReview']+resolver['presentUnmatched'], meta
           assert meta['recordCount']>0, meta
           assert meta['recordsWithMedia']>0, meta
-          print({k:meta[k] for k in ('presentChecklistRows','recordCount','recordsWithMedia','recordsWithoutMedia','mediaCandidates','vietnamMediaCandidates','globalFallbackTaxa','wikimediaCommonsFallbackAdded','mediaSearchErrors')})
+          print({k:meta[k] for k in ('presentChecklistRows','recordCount','recordsWithMedia','recordsWithoutMedia','mediaCandidates','vietnamMediaCandidates','globalFallbackTaxa','wikimediaCommonsFallbackAdded','inaturalistFallbackAdded','mediaSearchErrors')})
           PY
 
       - name: Verify every resolved present checklist row is in the production taxonomy

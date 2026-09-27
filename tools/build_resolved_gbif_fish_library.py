@@ -28,6 +28,7 @@ GBIF_BACKBONE_VERSION = "2023-08-28-frozen"
 USER_AGENT = "FieldIntelligence/1.0 scientific-library-builder"
 CANONICAL_MEDIA_LICENSES = {"CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0"}
 _COMMONS_MODULE = None
+_INAT_MODULE = None
 
 
 def clean(value: object) -> str:
@@ -171,6 +172,19 @@ def _default_commons_finder(scientific_name: str) -> tuple[dict | None, str]:
     return _COMMONS_MODULE.find_exact_taxon_image(scientific_name)
 
 
+def _default_inat_finder(scientific_name: str) -> tuple[dict | None, str]:
+    global _INAT_MODULE
+    if _INAT_MODULE is None:
+        module_path = Path(__file__).with_name("enrich_inaturalist_fish_media.py")
+        spec = importlib.util.spec_from_file_location("fieldintel_inaturalist_fish_media", module_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("cannot load iNaturalist fish media fallback")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _INAT_MODULE = module
+    return _INAT_MODULE.find_exact_taxon_image(scientific_name)
+
+
 def profile_from_resolution(row: dict, media_items: list[dict]) -> dict:
     resolution = row.get("taxonomyResolution") or {}
     accepted_id = clean(resolution.get("acceptedTaxonId"))
@@ -232,14 +246,17 @@ def build(
     delay_seconds: float = 0.05,
     searcher: Callable[[str, str | None, int], dict] | None = None,
     commons_finder: Callable[[str], tuple[dict | None, str]] | None = None,
+    inat_finder: Callable[[str], tuple[dict | None, str]] | None = None,
 ) -> dict:
     if max_media_candidates < 0:
         raise ValueError("max_media_candidates cannot be negative")
     searcher = searcher or _http_occurrence_search
     commons_finder = commons_finder or _default_commons_finder
+    inat_finder = inat_finder or _default_inat_finder
     grouped: dict[str, dict] = {}
     present_input = resolver_blocked = media_candidates = media_vn = global_fallback_taxa = 0
     commons_attempted = commons_added = 0
+    inat_attempted = inat_added = 0
     commons_reasons: dict[str, int] = {}
     media_errors: list[dict] = []
 
@@ -294,6 +311,23 @@ def build(
                 else:
                     commons_reasons[commons_reason] = int(commons_reasons.get(commons_reason, 0)) + 1
 
+            if not items:
+                inat_attempted += 1
+                canonical_name = clean(resolution.get("acceptedCanonicalName")) or clean(resolution.get("acceptedScientificName"))
+                try:
+                    inat_item, inat_reason = inat_finder(canonical_name)
+                except (RuntimeError, urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as exc:
+                    inat_item, inat_reason = None, "inaturalist-api-error"
+                    media_errors.append({
+                        "acceptedTaxonId": taxon_key,
+                        "scientificName": canonical_name,
+                        "error": str(exc),
+                    })
+                if inat_item:
+                    items = [inat_item]
+                    inat_added += 1
+                    media_candidates += 1
+
         grouped[taxon_key] = profile_from_resolution(row, items)
         if delay_seconds > 0 and fetch_media:
             time.sleep(delay_seconds)
@@ -319,7 +353,7 @@ def build(
     metadata = {
         "schemaVersion": 1,
         "sourceId": "gbif",
-        "source": "GBIF Backbone Taxonomy + GBIF occurrence media + exact Wikidata/Commons fallback",
+        "source": "GBIF Backbone Taxonomy + GBIF occurrence media + exact Wikidata/Commons and iNaturalist fallbacks",
         "datasetDoi": GBIF_BACKBONE_DOI,
         "version": GBIF_BACKBONE_VERSION,
         "license": "CC-BY-4.0",
@@ -335,6 +369,9 @@ def build(
         "globalFallbackTaxa": global_fallback_taxa,
         "wikimediaCommonsFallbackAttempted": commons_attempted,
         "wikimediaCommonsFallbackAdded": commons_added,
+        "inaturalistFallbackAttempted": inat_attempted,
+        "inaturalistFallbackAdded": inat_added,
+        "inaturalistFallbackPolicy": "exact active fish species + research-grade observation + per-photo CC0/CC-BY/CC-BY-NC license",
         "wikimediaCommonsFallbackReasons": commons_reasons,
         "wikimediaCommonsFallbackPolicy": "exact P225 -> P18; Commons CC0-1.0 or CC-BY-4.0 only",
         "mediaSearchErrors": len(media_errors),
@@ -377,6 +414,7 @@ def main() -> None:
         "recordsWithoutMedia": meta["recordsWithoutMedia"],
         "mediaCandidates": meta["mediaCandidates"],
         "wikimediaCommonsFallbackAdded": meta["wikimediaCommonsFallbackAdded"],
+        "inaturalistFallbackAdded": meta["inaturalistFallbackAdded"],
         "resolverBlockedPresentRows": meta["resolverBlockedPresentRows"],
     }, ensure_ascii=False))
 

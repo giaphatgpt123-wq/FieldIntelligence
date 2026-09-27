@@ -207,11 +207,27 @@ class ResolvedGbifFishBuilderTest(unittest.TestCase):
                 delay_seconds=0,
                 searcher=lambda taxon_key, country, limit: {"results": []},
                 commons_finder=lambda name: (None, "wikidata-no-exact-p225"),
+                inat_finder=lambda name: (None, "inat-no-licensed-research-photo"),
             )
             self.assertEqual(1, meta["recordsWithoutMedia"])
             self.assertEqual("777", meta["recordsWithoutMediaDetails"][0]["acceptedTaxonId"])
             self.assertEqual("Rare fish", meta["recordsWithoutMediaDetails"][0]["scientificName"])
             self.assertEqual({"wikidata-no-exact-p225": 1}, meta["wikimediaCommonsFallbackReasons"])
+
+    def test_inaturalist_fallback_after_commons_has_no_image(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            checklist = root / "resolved.ndjson"
+            output = root / "fish.ndjson.gz"
+            write_ndjson(checklist, [resolved_row("Channa striata", "999", "Channa striata")])
+            meta = module.build(
+                checklist, output, root / "fish.meta.json", fetch_media=True, delay_seconds=0,
+                searcher=lambda taxon_key, country, limit: {"results": []},
+                commons_finder=lambda name: (None, "wikidata-no-exact-p225"),
+                inat_finder=lambda name: ({"mediaType": "StillImage", "identifier": "https://example.org/fish.jpg", "license": "CC-BY-4.0", "sourceProvider": "iNaturalist research-grade observation"}, "matched"),
+            )
+            self.assertEqual(1, meta["inaturalistFallbackAdded"])
+            self.assertEqual(1, meta["recordsWithMedia"])
 
     def test_blocked_present_row_is_counted_not_silently_emitted(self):
         with tempfile.TemporaryDirectory() as tmp:
