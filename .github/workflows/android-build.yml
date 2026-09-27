@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   build:
@@ -35,8 +36,10 @@ jobs:
       - name: Unit tests
         run: gradle --no-daemon test
 
-      - name: Bundle verified WFO mobile library into APK
+      - name: Bundle verified WFO mobile library and latest verified fish artifact into APK
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mkdir -p build/scientific-library app/src/main/assets/scientific-library
@@ -55,6 +58,34 @@ jobs:
             --input build/scientific-library/mobile.ndjson.gz \
             --source-meta build/scientific-library/wfo-taxonomy.meta.json \
             --output build/scientific-library/wfo-taxonomy.sqlite
+
+          fish_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-freshwater-fish-real&per_page=100" \
+            --jq '[.artifacts[] | select(.expired == false and .workflow_run.head_branch == "main")] | sort_by(.created_at) | reverse | .[0].workflow_run.id // empty')"
+          if [ -n "$fish_run" ]; then
+            run_state="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${fish_run}" --jq '[.conclusion,.path,.head_branch] | @tsv')"
+            IFS=$'\t' read -r conclusion workflow_path head_branch <<<"$run_state"
+            if [ "$conclusion" != "success" ] || [ "$workflow_path" != ".github/workflows/build-vietnam-freshwater-fish.yml" ] || [ "$head_branch" != "main" ]; then
+              echo "::error::Latest fish artifact is not from a successful trusted main-branch fish workflow run."
+              exit 1
+            fi
+            rm -rf build/fish-real-artifact
+            mkdir -p build/fish-real-artifact
+            gh run download "$fish_run" --repo "$GITHUB_REPOSITORY" \
+              --name FieldIntelligence-freshwater-fish-real \
+              --dir build/fish-real-artifact
+            fish_sqlite="$(find build/fish-real-artifact -type f -name fish.sqlite -print -quit)"
+            test -n "$fish_sqlite"
+            test -s "$fish_sqlite"
+            python3 tools/merge_scientific_sqlite.py \
+              --target build/scientific-library/wfo-taxonomy.sqlite \
+              --source "$fish_sqlite" \
+              --source-label "WFO 2026-06 + verified Vietnam freshwater fish"
+            echo "$fish_run" > build/scientific-library/fish-source-run.txt
+          else
+            echo "No non-expired verified real-fish artifact is available; building a WFO-only test APK."
+            echo "none" > build/scientific-library/fish-source-run.txt
+          fi
+
           python3 tools/build_specialist_evidence_sqlite.py \
             --input data/scientific/specialist_evidence.json \
             --output build/scientific-library/specialist-evidence.sqlite
@@ -66,8 +97,16 @@ jobs:
           assert source['versionDoi'] == '10.5281/zenodo.20782718'
           with sqlite3.connect(root / 'wfo-taxonomy.sqlite') as db:
               count = db.execute('SELECT COUNT(*) FROM taxon').fetchone()[0]
-              assert count == 38100, count
+              assert count >= 38100, count
               assert db.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
+              meta = {k: json.loads(v) for k, v in db.execute('SELECT key,value FROM meta')}
+              fish_taxa = int(meta.get('fishTaxa', 0) or 0)
+              fish_local = int(meta.get('fishWithLocalMedia', 0) or 0)
+              local_blobs = int(meta.get('localMediaBlobCount', 0) or 0)
+              if fish_taxa:
+                  assert fish_local > 0, meta
+                  assert local_blobs > 0, meta
+                  assert fish_local <= fish_taxa, meta
           files = []
           for name, version, scope in [('wfo-taxonomy.sqlite', 2, 'taxonomy-media-occurrence'), ('specialist-evidence.sqlite', 2, 'specialist-evidence-only')]:
               path = root / name
@@ -80,7 +119,7 @@ jobs:
               archive.writestr('scientific-library.manifest.json', json.dumps(manifest, ensure_ascii=False))
           with zipfile.ZipFile(output) as archive:
               assert archive.testzip() is None
-          print({'packRecords': count, 'packBytes': output.stat().st_size})
+          print({'packRecords': count, 'fishTaxa': fish_taxa, 'fishWithLocalMedia': fish_local, 'localMediaBlobCount': local_blobs, 'packBytes': output.stat().st_size})
           PY
 
       - name: Bundle verified Google AIY Plants model
