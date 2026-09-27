@@ -13,7 +13,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 2
 REUSABLE_MEDIA_LICENSES = {
     "CC0-1.0", "CC-BY-4.0", "CC-BY-NC-4.0",
     "https://creativecommons.org/publicdomain/zero/1.0/",
