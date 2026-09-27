@@ -11,7 +11,7 @@ from pathlib import Path
 STATUS_MAP={
  "present":"present","native":"present","introduced":"present",
  "possible":"review","possibly present":"review",
- "absent":"excluded","misidentification":"excluded","misidentified":"excluded",
+ "absent":"excluded","misidentification":"excluded","misidentified":"excluded", "excluded":"excluded",
 }
 def clean(v): return str(v or "").strip()
 def normalize_status(v):
