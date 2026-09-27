@@ -30,10 +30,10 @@ ALLOWED_LICENSES = {
     "https://creativecommons.org/licenses/by-nc/4.0/",
 }
 ALLOWED_CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp"}
-DEFAULT_MAX_BYTES = 5 * 1024 * 1024
+DEFAULT_MAX_BYTES = 8 * 1024 * 1024
 DEFAULT_MAX_TOTAL_BYTES = 256 * 1024 * 1024
 DEFAULT_MAX_PER_RECORD = 2
-GBIF_IMAGE_CACHE_WIDTH = 1200
+GBIF_IMAGE_CACHE_WIDTH = 1600
 GBIF_IMAGE_CACHE_PREFIX = "https://api.gbif.org/v1/image/cache"
 USER_AGENT = "FieldIntelligence-scientific-media/1.0"
 
@@ -100,7 +100,7 @@ def gbif_resized_download_url(item: dict, width: int = GBIF_IMAGE_CACHE_WIDTH) -
     occurrence_key = str(item.get("gbifOccurrenceKey") or "").strip()
     if provider != "gbif occurrence media" or not occurrence_key or not identifier.startswith("https://"):
         return identifier
-    if width <= 0 or width > 1200:
+    if width <= 0 or width > 1600:
         raise ValueError("GBIF image cache width must be between 1 and 1200")
     digest = hashlib.md5(identifier.encode("utf-8")).hexdigest()
     safe_key = urllib.parse.quote(occurrence_key, safe="")
