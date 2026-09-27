@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.snapshots.Snapshot
 import java.io.File
 import java.security.MessageDigest
+import java.util.Locale
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +25,9 @@ data class ScientificLocalMedia(
 
 /** Reads optional content-addressed reference images embedded in scientific schema-v2 SQLite. */
 class ScientificMediaStore(context: Context) {
+    private val appContext = context.applicationContext
     private val databaseFile = File(
-        File(context.applicationContext.filesDir, ScientificLibraryStore.DIRECTORY_NAME),
+        File(appContext.filesDir, ScientificLibraryStore.DIRECTORY_NAME),
         ScientificLibraryStore.DATABASE_NAME
     )
 
@@ -65,7 +67,6 @@ class ScientificMediaStore(context: Context) {
     }
 
     fun loadForRecord(recordId: String, limit: Int = 2): List<ScientificLocalMedia> {
-        val key = parseRecordId(recordId) ?: return emptyList()
         if (!databaseFile.isFile || databaseFile.length() <= 0L) return emptyList()
         return runCatching {
             SQLiteDatabase.openDatabase(
@@ -74,6 +75,7 @@ class ScientificMediaStore(context: Context) {
                 SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS
             ).use { db ->
                 if (!hasLocalMediaTables(db)) return@use emptyList()
+                val key = parseRecordId(recordId) ?: resolveStarterFishKey(db, recordId) ?: return@use emptyList()
                 db.rawQuery(
                     """
                     SELECT b.media_blob, b.mime_type, l.media_license,
@@ -92,7 +94,7 @@ class ScientificMediaStore(context: Context) {
                             val mimeType = cursor.getString(1).orEmpty()
                             val license = cursor.getString(2).orEmpty()
                             val sourceIdentifier = cursor.getString(3).orEmpty()
-                            val expectedSha = cursor.getString(4).orEmpty().lowercase()
+                            val expectedSha = cursor.getString(4).orEmpty().lowercase(Locale.ROOT)
                             val expectedSize = cursor.getLong(5)
                             if (bytes.isEmpty() || bytes.size.toLong() != expectedSize || expectedSize > MAX_MEDIA_BYTES) continue
                             if (mimeType !in ALLOWED_MIME_TYPES || license !in ALLOWED_LICENSES) continue
@@ -108,6 +110,38 @@ class ScientificMediaStore(context: Context) {
         }.getOrElse { emptyList() }
     }
 
+    /**
+     * Fish starter cards use stable APK IDs while downloaded scientific records use source IDs.
+     * Resolve only an exact canonical fish species, never a neighbouring species/subspecies.
+     */
+    private fun resolveStarterFishKey(db: SQLiteDatabase, recordId: String): Pair<String, String>? {
+        val starter = SpeciesCatalog.records.firstOrNull { it.id == recordId && it.group == FISH_GROUP } ?: return null
+        val canonical = starter.scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ")
+        if (canonical.split(' ').size != 2) return null
+        val needle = canonical.lowercase(Locale.ROOT)
+        return db.rawQuery(
+            """
+            SELECT source_id, source_record_id, scientific_name
+            FROM taxon
+            WHERE library_group = ?
+              AND (scientific_name_search = ? OR scientific_name_search LIKE ? ESCAPE '\\')
+            ORDER BY CASE WHEN scientific_name_search = ? THEN 0 ELSE 1 END,
+                     length(scientific_name_search), scientific_name_search
+            LIMIT 12
+            """.trimIndent(),
+            arrayOf(FISH_GROUP, needle, "${escapeLike(needle)} %", needle)
+        ).use { cursor ->
+            var resolved: Pair<String, String>? = null
+            while (cursor.moveToNext() && resolved == null) {
+                val candidate = cursor.getString(2).orEmpty()
+                if (ScientificNameResolver.matchesCanonical(canonical, candidate)) {
+                    resolved = cursor.getString(0) to cursor.getString(1)
+                }
+            }
+            resolved
+        }
+    }
+
     private fun startRevisionWatcher() {
         if (!REVISION_WATCHER_STARTED.compareAndSet(false, true)) return
         REVISION_WATCHER_SCOPE.launch {
@@ -115,9 +149,6 @@ class ScientificMediaStore(context: Context) {
                 delay(REVISION_POLL_MS)
                 val fingerprint = databaseFingerprint()
                 if (fingerprint == observedFingerprint) continue
-
-                // Data updates replace the SQLite file atomically. Give the rename/copy boundary a
-                // short settle window before opening it read-only, then refresh only if it changed.
                 delay(REVISION_SETTLE_MS)
                 refreshObservedMediaIds(force = false)
             }
@@ -186,8 +217,14 @@ class ScientificMediaStore(context: Context) {
         return body.substring(0, separator) to body.substring(separator + 1)
     }
 
+    private fun escapeLike(value: String): String = value
+        .replace("\\", "\\\\")
+        .replace("%", "\\%")
+        .replace("_", "\\_")
+
     companion object {
         private const val ID_PREFIX = "scientific-db:"
+        private const val FISH_GROUP = "Cá nước ngọt"
         private const val OBSERVER_MARKER = "__fieldintel_scientific_media_observer__"
         private const val MAX_MEDIA_PER_PROFILE = 3
         private const val MAX_MEDIA_BYTES = 5L * 1024L * 1024L
