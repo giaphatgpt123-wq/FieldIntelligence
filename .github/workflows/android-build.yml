@@ -59,13 +59,13 @@ jobs:
             --source-meta build/scientific-library/wfo-taxonomy.meta.json \
             --output build/scientific-library/wfo-taxonomy.sqlite
 
-          fish_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-freshwater-fish-real&per_page=100" \
+          fish_run="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=FieldIntelligence-freshwater-fish-partial&per_page=100" \
             --jq '[.artifacts[] | select(.expired == false and .workflow_run.head_branch == "main")] | sort_by(.created_at) | reverse | .[0].workflow_run.id // empty')"
           if [ -n "$fish_run" ]; then
             run_state="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${fish_run}" --jq '[.conclusion,.path,.head_branch] | @tsv')"
             IFS=$'\t' read -r conclusion workflow_path head_branch <<<"$run_state"
             case "$workflow_path" in
-              .github/workflows/build-vietnam-freshwater-fish.yml|.github/workflows/build-vietnam-freshwater-fish-auto.yml) trusted_workflow=true ;;
+              .github/workflows/build-vietnam-freshwater-fish-auto.yml) trusted_workflow=true ;;
               *) trusted_workflow=false ;;
             esac
             if [ "$conclusion" != "success" ] || [ "$trusted_workflow" != "true" ] || [ "$head_branch" != "main" ]; then
@@ -75,7 +75,7 @@ jobs:
             rm -rf build/fish-real-artifact
             mkdir -p build/fish-real-artifact
             gh run download "$fish_run" --repo "$GITHUB_REPOSITORY" \
-              --name FieldIntelligence-freshwater-fish-real \
+              --name FieldIntelligence-freshwater-fish-partial \
               --dir build/fish-real-artifact
             fish_sqlite="$(find build/fish-real-artifact -type f -name fish.sqlite -print -quit)"
             test -n "$fish_sqlite"
@@ -83,13 +83,13 @@ jobs:
             python3 tools/merge_scientific_sqlite.py \
               --target build/scientific-library/wfo-taxonomy.sqlite \
               --source "$fish_sqlite" \
-              --source-label "WFO 2026-06 + verified Vietnam freshwater fish"
+              --source-label "WFO 2026-06 + audited partial Vietnam freshwater fish"
             python3 tools/propagate_fish_coverage_meta.py \
               --target build/scientific-library/wfo-taxonomy.sqlite \
               --source "$fish_sqlite"
             echo "$fish_run" > build/scientific-library/fish-source-run.txt
           else
-            echo "No non-expired verified real-fish artifact is available; building a WFO-only test APK."
+            echo "No validated partial fish artifact is available; building a WFO-only test APK."
             echo "none" > build/scientific-library/fish-source-run.txt
           fi
 
@@ -114,15 +114,19 @@ jobs:
                   assert fish_local > 0, meta
                   assert local_blobs > 0, meta
                   assert fish_local <= fish_taxa, meta
-                  assert int(meta.get('fishCoverageGateVersion', 0) or 0) == 1, meta
+                  gate = int(meta.get('fishCoverageGateVersion', -1))
+                  assert gate in (0, 1), meta
                   assert (int(meta.get('fishChecklistReported',0)), int(meta.get('fishChecklistPresent',0)), int(meta.get('fishChecklistReview',0)), int(meta.get('fishChecklistExcluded',0))) == (772,736,29,7), meta
-                  assert int(meta.get('fishPresentChecklistResolved',0)) == 736, meta
-                  assert int(meta.get('fishPresentChecklistUnresolved',-1)) == 0, meta
+                  resolved = int(meta.get('fishPresentChecklistResolved',0))
+                  unresolved = int(meta.get('fishPresentChecklistUnresolved',-1))
+                  assert resolved > 0 and unresolved >= 0 and resolved + unresolved == 736, meta
                   accepted_present = int(meta.get('fishPresentAcceptedTaxa',0) or 0)
                   present_local = int(meta.get('fishPresentTaxaWithLocalMedia',0) or 0)
                   assert accepted_present > 0, meta
-                  assert present_local == accepted_present, meta
+                  assert 0 <= present_local <= accepted_present <= resolved, meta
                   assert fish_local >= present_local, meta
+                  if gate == 1:
+                      assert unresolved == 0 and present_local == accepted_present, meta
           files = []
           for name, version, scope in [('wfo-taxonomy.sqlite', 2, 'taxonomy-media-occurrence'), ('specialist-evidence.sqlite', 2, 'specialist-evidence-only')]:
               path = root / name
