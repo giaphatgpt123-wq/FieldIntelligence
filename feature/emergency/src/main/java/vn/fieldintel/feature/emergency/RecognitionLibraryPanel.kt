@@ -2,6 +2,7 @@ package vn.fieldintel.feature.emergency
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.content.Context
 import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -124,6 +125,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
 
     Column(verticalArrangement=Arrangement.spacedBy(16.dp)){
         LibraryHero(totalCount,storeStatus,localFishWithMedia,observations.size)
+        LibrarySyncStatus(context)
         LibraryGroupGrid(group,displayedFishCount){group=it;selectedCollectionId=null}
         LibraryCollectionGrid(selectedCollectionId,displayedFishCount){id->selectedCollectionId=if(selectedCollectionId==id)null else id;group="Tất cả";query=if(selectedCollectionId=="wfo-plants")"Mangifera" else ""}
         if(selectedCollectionId=="wfo-plants"){
@@ -181,6 +183,29 @@ private fun LibraryHero(totalCount:Long,status:ScientificLibraryStatus,localFish
 }
 
 @Composable private fun MetricBox(value:String,label:String,modifier:Modifier=Modifier){Surface(modifier,RoundedCornerShape(18.dp),Color(0x8F0A2025),border=BorderStroke(1.dp,Color.White.copy(alpha=.09f))){Column(Modifier.padding(vertical=12.dp,horizontal=8.dp),horizontalAlignment=Alignment.CenterHorizontally){Text(value,fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium,color=FieldColors.primary);Text(label,style=MaterialTheme.typography.labelSmall,color=Color.White.copy(alpha=.65f))}}}
+
+@Composable
+private fun LibrarySyncStatus(context:Context){
+    val status by produceState("Đang chờ kiểm tra khi có Wi-Fi",context){
+        while(true){
+            val prefs=context.getSharedPreferences("scientific-library-sync",Context.MODE_PRIVATE)
+            val last=prefs.getLong("lastSuccessAt",0L)
+            val time=if(last>0L)" • ${SimpleDateFormat("dd/MM HH:mm",Locale.getDefault()).format(Date(last))}" else ""
+            value=when(prefs.getString("state",null)){
+                "checking"->"Đang kiểm tra bản cập nhật qua Wi-Fi"
+                "downloading"->"Đang tải thư viện qua Wi-Fi"
+                "installing"->"Đang kiểm tra và cài thư viện offline"
+                "ready"->"Đã kiểm tra cập nhật thư viện$time"
+                "error"->"Cập nhật gặp lỗi: ${prefs.getString("lastError","không rõ nguyên nhân")}; sẽ thử lại khi có Wi-Fi"
+                else->"Đang chờ kiểm tra khi có Wi-Fi$time"
+            }
+            delay(5000L)
+        }
+    }
+    Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF12323A)){
+        Text(status,Modifier.fillMaxWidth().padding(12.dp),color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+    }
+}
 
 @Composable
 private fun LibraryGroupGrid(selected:String,fishCount:Long,onSelect:(String)->Unit){
