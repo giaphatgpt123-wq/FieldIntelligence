@@ -7,6 +7,10 @@ package vn.fieldintel.feature.emergency
  * evidence-gated. When validated offline SQLite packs are available, those collections are
  * replaced by runtime records resolved from specialist evidence -> canonical scientific name ->
  * taxonomy. The starter catalog remains the explicit fallback when the external packs are absent.
+ *
+ * User-facing ordering is governed by [LibraryRules]: Vietnamese, practical collections appear
+ * before global/taxonomy-oriented collections. This must not be used to infer edibility, toxicity
+ * or medicinal value.
  */
 data class LibraryCollection(
     val id: String,
@@ -23,14 +27,14 @@ object LibraryCollections {
             id = "wfo-plants",
             label = "Thực vật",
             icon = "🌿",
-            subtitle = "Ưu tiên tên Việt đã đối chiếu • ảnh theo từng hồ sơ",
+            subtitle = "Tên Việt ưu tiên • ảnh đúng loài • xem dữ liệu khoa học khi cần",
             recordIds = emptySet()
         ),
         LibraryCollection(
             id = "traditional-medicine",
             label = "Cây thuốc Đông y",
             icon = "⚕",
-            subtitle = "Chỉ hiện hồ sơ có bằng chứng dược liệu chính thức Việt Nam",
+            subtitle = "Chỉ hiện hồ sơ có nguồn dược liệu chính thức Việt Nam",
             recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE),
             evidenceDomain = EvidenceDomain.VIETNAM_TRADITIONAL_MEDICINE
         ),
@@ -38,7 +42,7 @@ object LibraryCollections {
             id = "herbal-monographs",
             label = "Chuyên khảo dược liệu",
             icon = "▣",
-            subtitle = "Chuyên khảo quản lý quốc tế • không phải hướng dẫn tự điều trị",
+            subtitle = "Nguồn chuyên ngành • nội dung sâu đặt trong phần Xem thêm",
             recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH),
             evidenceDomain = EvidenceDomain.HERBAL_MEDICINE_MONOGRAPH
         ),
@@ -46,49 +50,49 @@ object LibraryCollections {
             id = "vegetables",
             label = "Rau",
             icon = "🥬",
-            subtitle = "Phân loại điều hướng • không suy ra ăn được",
+            subtitle = "Ưu tiên loại thường gặp ở Việt Nam • tên Việt và ảnh đặt trước",
             recordIds = setOf("centella-asiatica")
         ),
         LibraryCollection(
             id = "roots-rhizomes",
             label = "Củ / thân rễ",
             icon = "◉",
-            subtitle = "Nhóm hình thái nông nghiệp lõi",
+            subtitle = "Tách rõ từng loài • không gộp các biến thể có đặc điểm khác nhau",
             recordIds = setOf("zingiber-officinale", "curcuma-longa")
         ),
         LibraryCollection(
             id = "flowers",
             label = "Hoa",
             icon = "🌸",
-            subtitle = "Tên Việt theo loài • ảnh cần đối chiếu trước khi công bố",
+            subtitle = "Hoa thường gặp • tên Việt và ảnh nhận biết đặt trước",
             recordIds = setOf("nerium-oleander")
         ),
         LibraryCollection(
             id = "timber-trees",
             label = "Cây gỗ",
             icon = "🌳",
-            subtitle = "Đang chờ hồ sơ cây gỗ có nguồn đối chiếu",
+            subtitle = "Bổ sung dần theo hồ sơ đã đối chiếu • không hiển thị dữ liệu giả",
             recordIds = emptySet()
         ),
         LibraryCollection(
             id = "fruit-crops",
             label = "Cây ăn quả",
             icon = "🍊",
-            subtitle = "Tên cây đã gắn theo loài • không suy ra phần nào ăn được",
+            subtitle = "Ưu tiên cây thường gặp ở Việt Nam • ảnh và tên Việt đặt trước",
             recordIds = setOf("mangifera-indica", "musa-acuminata", "cocos-nucifera", "carica-papaya", "psidium-guajava", "ananas-comosus", "artocarpus-heterophyllus", "citrus-maxima")
         ),
         LibraryCollection(
             id = "staple-crops",
             label = "Cây lương thực",
             icon = "🌾",
-            subtitle = "Nhóm cây trồng lõi",
+            subtitle = "Nhóm cây lương thực thường gặp • hiển thị ngắn gọn, dễ nhận biết",
             recordIds = setOf("oryza-sativa")
         ),
         LibraryCollection(
             id = "toxic-plants",
             label = "Cây độc",
             icon = "⚠",
-            subtitle = "Chỉ hiện khi có bằng chứng độc tính chuyên ngành",
+            subtitle = "Nhận biết và cảnh báo rõ • chỉ hiện khi có bằng chứng chuyên ngành",
             recordIds = SpecialistEvidenceCatalog.speciesIdsFor(EvidenceDomain.TOXICOLOGY),
             evidenceDomain = EvidenceDomain.TOXICOLOGY
         ),
@@ -96,28 +100,28 @@ object LibraryCollections {
             id = "mushrooms",
             label = "Nấm",
             icon = "🍄",
-            subtitle = "Ảnh và tên theo từng loài • chưa đủ dữ liệu để xác định ăn được",
+            subtitle = "Ảnh nhiều góc • ưu tiên phần dễ nhầm và cảnh báo an toàn",
             recordIds = setOf("ganoderma-lucidum", "termitomyces-clypeatus")
         ),
         LibraryCollection(
             id = "insects",
             label = "Côn trùng",
             icon = "🐝",
-            subtitle = "Tra tên và ảnh côn trùng",
+            subtitle = "Ưu tiên loài thường gặp • nhận biết nhanh bằng tên Việt và ảnh",
             recordIds = setOf("apis-cerana", "aedes-aegypti", "vespa-tropica")
         ),
         LibraryCollection(
             id = "freshwater-fish",
             label = "Cá nước ngọt",
             icon = "🐟",
-            subtitle = "20 hồ sơ tên loài • một số loài chịu nước lợ",
+            subtitle = "Cá nước ngọt Việt Nam • tên Việt, ảnh và đặc điểm nhận biết",
             recordIds = FreshwaterFishCatalog.records.mapTo(linkedSetOf()) { it.id }
         ),
         LibraryCollection(
             id = "animals",
             label = "Động vật",
             icon = "🐾",
-            subtitle = "Tra tên và ảnh động vật",
+            subtitle = "Ưu tiên loài thường gặp • nhận biết và cảnh báo khi cần",
             recordIds = setOf("macaca-fascicularis", "varanus-salvator")
         )
     )
@@ -126,19 +130,20 @@ object LibraryCollections {
     val items: List<LibraryCollection>
         get() {
             val runtimeState = LibraryCollectionRuntime.state
-            return baseItems.map { item ->
+            val resolved = baseItems.map { item ->
                 if (item.evidenceDomain == null && item.id !in REVIEWED_IDS) return@map item
 
                 val runtime = LibraryCollectionRuntime.recordsFor(item.id)
                 val statusLabel = when (runtimeState) {
                     LibraryCollectionRuntimeState.IDLE -> "CHỜ KHỞI TẠO"
-                    LibraryCollectionRuntimeState.LOADING -> "ĐANG NẠP SQLITE"
-                    LibraryCollectionRuntimeState.SQLITE_READY -> "SQLITE READY"
-                    LibraryCollectionRuntimeState.FALLBACK -> "FALLBACK BỘ LÕI"
+                    LibraryCollectionRuntimeState.LOADING -> "ĐANG NẠP DỮ LIỆU"
+                    LibraryCollectionRuntimeState.SQLITE_READY -> "DỮ LIỆU OFFLINE SẴN SÀNG"
+                    LibraryCollectionRuntimeState.FALLBACK -> "ĐANG DÙNG BỘ LÕI"
                 }
                 val withStatus = item.copy(subtitle = "${item.subtitle} • $statusLabel")
                 if (runtime == null) withStatus else withStatus.copy(recordIds = runtime.mapTo(linkedSetOf()) { it.id })
             }
+            return LibraryRules.orderedCollections(resolved)
         }
 
     fun byId(id: String?): LibraryCollection? = items.firstOrNull { it.id == id }
