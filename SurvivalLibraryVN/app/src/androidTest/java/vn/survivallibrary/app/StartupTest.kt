@@ -18,4 +18,14 @@ class StartupTest {
             }
         }
     }
+
+    @Test
+    fun mainActivityReachesResumedState() {
+        ActivityScenario.launch(MainAppActivity::class.java).use { scenario ->
+            scenario.moveToState(Lifecycle.State.RESUMED)
+            scenario.onActivity { activity ->
+                assertFalse("Main activity must stay alive", activity.isFinishing)
+            }
+        }
+    }
 }
