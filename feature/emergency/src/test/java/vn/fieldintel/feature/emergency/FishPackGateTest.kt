@@ -32,8 +32,8 @@ class FishPackGateTest {
     fun verifiedPartialFishPackWithMissingImagesRemainsInstallable() {
         val partial = completeMeta().toMutableMap().apply {
             put("fishCoverageGateVersion", "0")
-            put("fishPresentChecklistResolved", "720")
-            put("fishPresentChecklistUnresolved", "16")
+            put("fishPresentChecklistResolved", "715")
+            put("fishPresentChecklistUnresolved", "21")
             put("fishPresentAcceptedTaxa", "715")
             put("fishPresentTaxaWithLocalMedia", "434")
             put("fishTaxa", "715")
