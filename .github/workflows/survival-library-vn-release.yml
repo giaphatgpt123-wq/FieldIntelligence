@@ -83,7 +83,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES="Beta v$APP_VERSION fixes repeated Android package/signature conflicts. From this version the beta package is vn.survivallibrary.vn and the direct-test APK uses one stable AOSP development signing certificate. v0.1.0/v0.2.0 remain separate old beta packages. Development signing only; not for production/Play Store."
+          NOTES="Beta v$APP_VERSION của Thư viện Sinh tồn Việt Nam. Package beta ổn định: vn.survivallibrary.vn. APK dùng chữ ký beta cố định để cập nhật đè giữa các bản thử nghiệm. Dữ liệu DEMO không được coi là nội dung sinh tồn đã kiểm chứng."
           if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 SurvivalLibraryVN.signature.txt SurvivalLibraryVN.badging.txt --clobber -R "${{ github.repository }}"
           else
