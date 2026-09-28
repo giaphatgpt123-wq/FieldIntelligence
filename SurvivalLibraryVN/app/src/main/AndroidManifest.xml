@@ -11,7 +11,10 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
-        <!-- Main UI remains native-only at startup for real-device stability. -->
+        <activity
+            android:name=".RecordDetailActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainAppActivity"
             android:exported="true">
@@ -21,7 +24,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Kept as a recovery diagnostic screen, but no longer shown during normal startup. -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />
