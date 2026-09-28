@@ -21,9 +21,9 @@ object LibraryCollections {
     private val baseItems: List<LibraryCollection> = listOf(
         LibraryCollection(
             id = "wfo-plants",
-            label = "Kho thực vật WFO",
+            label = "Thực vật",
             icon = "🌿",
-            subtitle = "Tra cứu tên phân loại offline theo chi • chưa xác định mẫu vật",
+            subtitle = "Ưu tiên tên Việt đã đối chiếu • ảnh theo từng hồ sơ",
             recordIds = emptySet()
         ),
         LibraryCollection(
@@ -82,14 +82,14 @@ object LibraryCollections {
             id = "mushrooms",
             label = "Nấm",
             icon = "🍄",
-            subtitle = "Taxonomy nấm • không suy ra ăn được",
+            subtitle = "Ảnh và tên theo từng loài • chưa đủ dữ liệu để xác định ăn được",
             recordIds = setOf("ganoderma-lucidum", "termitomyces-clypeatus")
         ),
         LibraryCollection(
             id = "insects",
             label = "Côn trùng",
             icon = "🐝",
-            subtitle = "Taxonomy côn trùng",
+            subtitle = "Tra tên và ảnh côn trùng",
             recordIds = setOf("apis-cerana", "aedes-aegypti", "vespa-tropica")
         ),
         LibraryCollection(
@@ -103,7 +103,7 @@ object LibraryCollections {
             id = "animals",
             label = "Động vật",
             icon = "🐾",
-            subtitle = "Taxonomy động vật",
+            subtitle = "Tra tên và ảnh động vật",
             recordIds = setOf("macaca-fascicularis", "varanus-salvator")
         )
     )
