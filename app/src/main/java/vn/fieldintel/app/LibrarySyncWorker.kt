@@ -36,14 +36,40 @@ class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : Corouti
                 preferences.edit().putString("state", "ready").putLong("lastSuccessAt", System.currentTimeMillis()).apply()
                 return@runCatching Result.success()
             }
+            val importer = ScientificLibraryImportManager(applicationContext)
+            if (preferences.getString("installedSha256", null) == digest &&
+                importer.installBundledIfMissing() == null) {
+                preferences.edit().putLong("installedVersion", version)
+                    .putLong("lastSuccessAt", System.currentTimeMillis()).putString("state", "ready").apply()
+                return@runCatching Result.success()
+            }
+            if (preferences.getLong("installedVersion", 0L) == 0L) {
+                val bundledDigest = MessageDigest.getInstance("SHA-256")
+                applicationContext.assets.open("scientific-library/FieldIntelligence-WFO-mobile.zip").use { input ->
+                    val buffer = ByteArray(64 * 1024)
+                    while (true) {
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        bundledDigest.update(buffer, 0, count)
+                    }
+                }
+                val bundledSha = bundledDigest.digest().joinToString("") { "%02x".format(it) }
+                if (bundledSha == digest) {
+                    importer.installBundledIfMissing()
+                    preferences.edit().putLong("installedVersion", version).putString("installedSha256", digest)
+                        .putLong("lastSuccessAt", System.currentTimeMillis()).putString("state", "ready").apply()
+                    return@runCatching Result.success()
+                }
+            }
             val target = File(applicationContext.cacheDir, "scientific-library-${version}.zip")
             try {
                 preferences.edit().putString("state", "downloading").apply()
                 val actual = downloadToFile(UpdateConfig.LIBRARY_PACKAGE_URL, target, size)
                 require(actual == digest) { "Sai SHA-256 thư viện" }
                 preferences.edit().putString("state", "installing").apply()
-                ScientificLibraryImportManager(applicationContext).importBundle(target)
-                preferences.edit().putLong("installedVersion", version).putLong("lastSuccessAt", System.currentTimeMillis()).putString("state", "ready").apply()
+                importer.importBundle(target)
+                preferences.edit().putLong("installedVersion", version).putString("installedSha256", digest)
+                    .putLong("lastSuccessAt", System.currentTimeMillis()).putString("state", "ready").apply()
             } finally { target.delete() }
             Result.success()
         }.getOrElse { failure ->
