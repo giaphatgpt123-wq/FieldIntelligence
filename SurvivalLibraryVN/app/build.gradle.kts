@@ -9,14 +9,13 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        // Stable beta package from v0.2.1 onward. This intentionally differs from
-        // the old ephemeral-signed beta package vn.survivallibrary.app so the
-        // migration build can install without Android signature/package conflict.
+        // Stable beta package from v0.2.1 onward. Keep this package unchanged so
+        // beta APKs can update in place without Android package/signature conflict.
         applicationId = "vn.survivallibrary.vn"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.2.1"
+        versionCode = 4
+        versionName = "0.3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -42,6 +41,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.7.8")
     implementation("androidx.compose.foundation:foundation:1.7.8")
     implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     debugImplementation("androidx.compose.ui:ui-tooling:1.7.8")
     testImplementation("junit:junit:4.13.2")
 }
