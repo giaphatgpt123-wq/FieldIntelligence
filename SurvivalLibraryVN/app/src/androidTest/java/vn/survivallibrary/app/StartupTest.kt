@@ -19,18 +19,22 @@ class StartupTest {
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse("Main activity must stay alive", activity.isFinishing)
-                assertTrue(
-                    "Home title must be visible in the rendered native hierarchy",
-                    containsText(activity.window.decorView, "THƯ VIỆN SINH TỒN")
-                )
-                assertTrue(
-                    "Need section must render",
-                    containsText(activity.window.decorView, "Tìm theo nhu cầu")
-                )
-                assertTrue(
-                    "Camera action must render",
-                    containsText(activity.window.decorView, "Nhận dạng nhanh bằng camera")
-                )
+                assertTrue("Home title must be visible", containsText(activity.window.decorView, "THƯ VIỆN SINH TỒN"))
+                assertTrue("Need section must render", containsText(activity.window.decorView, "Tìm theo nhu cầu"))
+                assertTrue("Camera action must render", containsText(activity.window.decorView, "Nhận dạng nhanh bằng camera"))
+            }
+        }
+    }
+
+    @Test
+    fun recordDetailScreenReachesResumedStateAndRendersSafetySections() {
+        ActivityScenario.launch(RecordDetailActivity::class.java).use { scenario ->
+            scenario.moveToState(Lifecycle.State.RESUMED)
+            scenario.onActivity { activity ->
+                assertFalse("Record detail activity must stay alive", activity.isFinishing)
+                assertTrue("Detail title must render", containsText(activity.window.decorView, "Hồ sơ"))
+                assertTrue("Recognition section must render", containsText(activity.window.decorView, "Nhận biết"))
+                assertTrue("Safety section must render", containsText(activity.window.decorView, "Lưu ý an toàn"))
             }
         }
     }
