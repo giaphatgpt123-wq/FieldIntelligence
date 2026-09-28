@@ -4,6 +4,7 @@ on:
   push:
     branches: [survival-library-vn]
     paths:
+      - 'SurvivalLibraryVN/**'
       - '.github/workflows/survival-library-vn-release.yml'
   workflow_dispatch:
 
@@ -29,6 +30,14 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Resolve app version
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' SurvivalLibraryVN/app/build.gradle.kts | head -n1)
+          test -n "$VERSION"
+          echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "RELEASE_TAG=survival-library-vn-v$VERSION" >> "$GITHUB_ENV"
+
       - name: Test
         run: gradle -p SurvivalLibraryVN :app:testDebugUnitTest --stacktrace
 
@@ -40,18 +49,17 @@ jobs:
           test -s SurvivalLibraryVN.apk
           sha256sum SurvivalLibraryVN.apk > SurvivalLibraryVN.apk.sha256
 
-      - name: Publish stable GitHub Release asset
+      - name: Publish GitHub Release asset
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          TAG='survival-library-vn-v0.1.0'
-          if gh release view "$TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
-            gh release upload "$TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 --clobber -R "${{ github.repository }}"
+          if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 --clobber -R "${{ github.repository }}"
           else
-            gh release create "$TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 \
+            gh release create "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 \
               --target survival-library-vn \
-              --title 'Thư viện Sinh tồn Việt Nam v0.1.0' \
-              --notes 'Bản thử nghiệm Android mới, package vn.survivallibrary.app. Không Map/GPS. Dùng để kiểm tra khung UI và cấu trúc ứng dụng.' \
+              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION" \
+              --notes "Bản Android mới của Thư viện Sinh tồn Việt Nam. Package vn.survivallibrary.app. Không Map/GPS. APK này được build và test tự động trước khi phát hành." \
               -R "${{ github.repository }}"
           fi
