@@ -131,6 +131,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         LibraryHero(totalCount,storeStatus,localFishWithMedia,observations.size)
         LibrarySyncStatus(context)
         LibraryGroupGrid(group,displayedFishCount){group=it;selectedCollectionId=null}
+        LibraryProgressBoard(storeStatus,localMediaIds,localFishWithMedia)
         LibraryCollectionGrid(selectedCollectionId,displayedFishCount){id->selectedCollectionId=if(selectedCollectionId==id)null else id;group="Tất cả";query=""}
         if(selectedCollectionId=="wfo-plants"){
             Text("Có thể tìm theo tên Việt. Tra theo tên khoa học khi cần:",color=FieldColors.onSurfaceVariant)
@@ -164,6 +165,39 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
             else->{Text("KẾT QUẢ • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(visibleResultLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}};if(fishViewActive)FishLoadMoreButton(visibleFishLimit,results.size){visibleFishLimit=(visibleFishLimit+FISH_PAGE_SIZE).coerceAtMost(FISH_QUERY_LIMIT)}}
         }
         HorizontalDivider();ObservationSection(observations){selectedObservation=it};DataProvenanceCard(storeStatus,localFishWithMedia)
+    }
+}
+
+@Composable
+private fun LibraryProgressBoard(status:ScientificLibraryStatus,mediaIds:Set<String>,fishWithMedia:Long){
+    var expanded by remember{mutableStateOf(false)}
+    Card(modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33))){
+        Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+            OutlinedButton(onClick={expanded=!expanded},modifier=Modifier.fillMaxWidth().heightIn(min=52.dp)){
+                Text(if(expanded)"ẨN BẢNG TIẾN ĐỘ" else "XEM TIẾN ĐỘ NHẬP LIỆU",fontWeight=FontWeight.Bold)
+            }
+            if(expanded){
+                Text("TẤT CẢ DANH MỤC",fontWeight=FontWeight.Black)
+                Text("Số hồ sơ gắn nhãn không đồng nghĩa đã có ảnh đúng, công dụng hoặc cách dùng được kiểm chứng. Một hồ sơ có thể thuộc nhiều danh mục.",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+                LibraryCollections.items.forEach{item->
+                    val count=when(item.id){
+                        "wfo-plants"->if(status.installed)status.recordCount else SpeciesCatalog.countByGroup("Thực vật").toLong()
+                        "freshwater-fish"->if(status.fishTaxa>0)status.fishTaxa else item.recordIds.size.toLong()
+                        else->item.recordIds.size.toLong()
+                    }
+                    val media=when(item.id){
+                        "wfo-plants"->null // Global taxonomy includes records without curated category or verified photo.
+                        "freshwater-fish"->if(fishWithMedia>0)fishWithMedia else item.recordIds.count{it in mediaIds}.toLong()
+                        else->item.recordIds.count{it in mediaIds}.toLong()
+                    }
+                    Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
+                        Text("${item.icon} ${item.label}",modifier=Modifier.weight(1f),fontWeight=FontWeight.Bold)
+                        Text("$count ${if(item.id=="wfo-plants")"bản ghi" else "hồ sơ"} • ảnh: ${media?.toString()?:"chưa đo"}",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+                    }
+                }
+                Text("Chưa đo: ảnh đúng loài, tên Việt đã đối chiếu, công dụng/cách dùng, hồ sơ hoàn chỉnh. Chưa đặt mục tiêu nên không hiển thị tỷ lệ %.",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+            }
+        }
     }
 }
 

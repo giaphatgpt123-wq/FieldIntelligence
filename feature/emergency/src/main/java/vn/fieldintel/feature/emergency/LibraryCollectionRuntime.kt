@@ -59,11 +59,12 @@ object LibraryCollectionRuntime {
             val evidenceStore = SpecialistEvidenceStore(appContext)
             // This code already runs on the dedicated loader thread, so use the blocking taxonomy
             // status check here. UI callers use ScientificLibraryStore.status(), which is async.
-            val ready = evidenceStore.status().installed && taxonomyStore.isInstalledBlocking()
-            val resolved = if (!ready) {
+            val taxonomyReady = taxonomyStore.isInstalledBlocking()
+            val evidenceReady = evidenceStore.status().installed && taxonomyReady
+            val resolved = if (!taxonomyReady) {
                 emptyMap()
             } else {
-                LibraryCollections.evidenceCollections().associate { collection ->
+                val evidence = if (!evidenceReady) emptyMap() else LibraryCollections.evidenceCollections().associate { collection ->
                     val domain = requireNotNull(collection.evidenceDomain)
                     val names = evidenceStore.scientificNamesFor(domain, limit = 5000)
                     val external = taxonomyStore.findByScientificNames(names, limit = 1000)
@@ -72,11 +73,18 @@ object LibraryCollectionRuntime {
                         .distinctBy { it.scientificName.trim().lowercase() }
                         .sortedBy { it.scientificName.lowercase() }
                 }
+                val reviewed = LibraryCollections.reviewedCollections().associate { collection ->
+                    collection.id to (taxonomyStore.reviewedCollectionRecords(collection.id) +
+                        LibraryCollections.starterRecordsFor(collection.id))
+                        .distinctBy { it.scientificName.split(' ').take(2).joinToString(" ").lowercase() }
+                        .sortedBy { it.vietnameseName.lowercase() }
+                }
+                evidence + reviewed
             }
 
             Snapshot.withMutableSnapshot {
                 recordsByCollection = resolved
-                state = if (ready) {
+                state = if (evidenceReady) {
                     LibraryCollectionRuntimeState.SQLITE_READY
                 } else {
                     LibraryCollectionRuntimeState.FALLBACK

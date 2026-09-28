@@ -57,11 +57,25 @@ object LibraryCollections {
             recordIds = setOf("zingiber-officinale", "curcuma-longa")
         ),
         LibraryCollection(
+            id = "flowers",
+            label = "Hoa",
+            icon = "🌸",
+            subtitle = "Tên Việt theo loài • ảnh cần đối chiếu trước khi công bố",
+            recordIds = setOf("nerium-oleander")
+        ),
+        LibraryCollection(
+            id = "timber-trees",
+            label = "Cây gỗ",
+            icon = "🌳",
+            subtitle = "Đang chờ hồ sơ cây gỗ có nguồn đối chiếu",
+            recordIds = emptySet()
+        ),
+        LibraryCollection(
             id = "fruit-crops",
-            label = "Quả / cây ăn quả",
-            icon = "●",
-            subtitle = "Nhóm cây trồng lõi • không phải hướng dẫn sử dụng",
-            recordIds = setOf("mangifera-indica", "musa-acuminata", "cocos-nucifera", "carica-papaya", "psidium-guajava")
+            label = "Cây ăn quả",
+            icon = "🍊",
+            subtitle = "Tên cây đã gắn theo loài • không suy ra phần nào ăn được",
+            recordIds = setOf("mangifera-indica", "musa-acuminata", "cocos-nucifera", "carica-papaya", "psidium-guajava", "ananas-comosus", "artocarpus-heterophyllus", "citrus-maxima")
         ),
         LibraryCollection(
             id = "staple-crops",
@@ -113,7 +127,7 @@ object LibraryCollections {
         get() {
             val runtimeState = LibraryCollectionRuntime.state
             return baseItems.map { item ->
-                if (item.evidenceDomain == null) return@map item
+                if (item.evidenceDomain == null && item.id !in REVIEWED_IDS) return@map item
 
                 val runtime = LibraryCollectionRuntime.recordsFor(item.id)
                 val statusLabel = when (runtimeState) {
@@ -131,7 +145,7 @@ object LibraryCollections {
 
     fun recordsFor(id: String): List<SpeciesRecord> {
         val base = baseItems.firstOrNull { it.id == id } ?: return emptyList()
-        if (base.evidenceDomain != null) {
+        if (base.evidenceDomain != null || id in REVIEWED_IDS) {
             LibraryCollectionRuntime.recordsFor(id)?.let { return it }
         }
         return starterRecordsFor(id)
@@ -143,4 +157,6 @@ object LibraryCollections {
     }
 
     internal fun evidenceCollections(): List<LibraryCollection> = baseItems.filter { it.evidenceDomain != null }
+    internal fun reviewedCollections(): List<LibraryCollection> = baseItems.filter { it.id in REVIEWED_IDS }
+    private val REVIEWED_IDS = setOf("flowers", "timber-trees", "fruit-crops")
 }

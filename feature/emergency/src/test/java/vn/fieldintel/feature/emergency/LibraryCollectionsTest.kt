@@ -62,7 +62,12 @@ class LibraryCollectionsTest {
 
     @Test
     fun curatedCollectionsExposeExpectedCoreGroups() {
+        assertTrue(LibraryCollections.items.map { it.id }.containsAll(listOf("flowers", "timber-trees", "fruit-crops")))
+        assertEquals("Hoa", LibraryCollections.byId("flowers")?.label)
+        assertEquals("Cây gỗ", LibraryCollections.byId("timber-trees")?.label)
+        assertEquals("Cây ăn quả", LibraryCollections.byId("fruit-crops")?.label)
         assertTrue(LibraryCollections.recordsFor("fruit-crops").any { it.id == "mangifera-indica" })
+        assertTrue(LibraryCollections.recordsFor("timber-trees").isEmpty())
         assertTrue(LibraryCollections.recordsFor("staple-crops").any { it.id == "oryza-sativa" })
         assertTrue(LibraryCollections.recordsFor("mushrooms").all { it.group == "Nấm" })
         assertTrue(LibraryCollections.recordsFor("insects").all { it.group == "Côn trùng" })

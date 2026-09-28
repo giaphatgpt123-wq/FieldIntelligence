@@ -137,6 +137,10 @@ jobs:
               --source "$fish_sqlite"
           fi
 
+          python3 tools/attach_reviewed_collections.py \
+            --database build/scientific-library/wfo-taxonomy.sqlite \
+            --reviewed-csv data/reviewed-collections.csv
+
           python3 tools/build_specialist_evidence_sqlite.py \
             --input data/scientific/specialist_evidence.json \
             --output build/scientific-library/specialist-evidence.sqlite

@@ -154,6 +154,25 @@ class ScientificLibraryStore(context: Context) {
         loaded.forEach{recordCache[it.id]=it};return loaded
     }
 
+    /** Exact, reviewer-linked category rows packaged with the validated taxonomy database. */
+    fun reviewedCollectionRecords(collectionId:String):List<SpeciesRecord>{
+        if(collectionId !in setOf("flowers","timber-trees","fruit-crops")||!databaseFile.isFile)return emptyList()
+        return runCatching { openReadOnly().use { db ->
+            val exists=db.rawQuery("SELECT 1 FROM sqlite_master WHERE type='table' AND name='reviewed_collection'",null)
+                .use { it.moveToFirst() }
+            if(!exists)return@use emptyList()
+            val v2=requireSchema(db)>=2
+            val references=v2&&hasSourceReferences(db)
+            val sql="SELECT ${recordProjection(v2,references)}, c.vietnamese_name FROM taxon t " +
+                "JOIN reviewed_collection c ON c.source_id=t.source_id AND c.source_record_id=t.source_record_id " +
+                "WHERE c.collection_id=? ORDER BY c.vietnamese_name LIMIT 2000"
+            db.rawQuery(sql,arrayOf(collectionId)).use { cursor -> buildList {
+                while(cursor.moveToNext())add(cursor.toSpeciesRecord(v2,references).copy(
+                    vietnameseName=cursor.getString(cursor.columnCount-1)))
+            } }
+        } }.getOrElse { emptyList() }.also { records -> records.forEach { recordCache[it.id]=it } }
+    }
+
     private fun startRevisionWatcher(){
         scope.launch{
             while(isActive){

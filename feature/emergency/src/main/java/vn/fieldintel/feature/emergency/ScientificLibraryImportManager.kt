@@ -389,6 +389,17 @@ class ScientificLibraryImportManager(private val context: Context) {
 
             if (type == PackType.TAXONOMY) {
                 validateDeclaredFishPack(db, meta, actualTables)
+                if ("reviewed_collection" in actualTables) {
+                    val invalid = db.rawQuery("""SELECT COUNT(*) FROM reviewed_collection c
+                        LEFT JOIN taxon t ON t.source_id=c.source_id AND t.source_record_id=c.source_record_id
+                        WHERE c.collection_id NOT IN ('flowers','timber-trees','fruit-crops')
+                           OR t.source_id IS NULL OR t.library_group != 'Thực vật'
+                           OR trim(c.vietnamese_name)='' OR c.source_url NOT LIKE 'https://%'
+                           OR trim(c.reviewed_by)=''""".trimIndent(), null).use { cursor ->
+                        require(cursor.moveToFirst()); cursor.getLong(0)
+                    }
+                    require(invalid == 0L) { "Danh mục Hoa/Cây gỗ/Cây ăn quả có dữ liệu thiếu duyệt hoặc sai nguồn" }
+                }
             }
 
             val table = if (type == PackType.TAXONOMY) "taxon" else "evidence"
