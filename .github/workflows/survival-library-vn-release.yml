@@ -44,7 +44,7 @@ jobs:
       - name: Build unsigned release APK
         run: gradle -p SurvivalLibraryVN :app:assembleRelease --stacktrace
 
-      - name: Sign beta APK with stable AOSP development test key
+      - name: Sign standalone APK with stable test key
         shell: bash
         run: |
           set -euo pipefail
@@ -69,27 +69,27 @@ jobs:
           "$APKSIGNER" sign \
             --key "$RUNNER_TEMP/testkey.pk8" \
             --cert "$RUNNER_TEMP/testkey.x509.pem" \
-            --out SurvivalLibraryVN.apk \
+            --out SurvivalLibraryVN-Full.apk \
             "$RUNNER_TEMP/SurvivalLibraryVN-aligned.apk"
 
-          "$APKSIGNER" verify --verbose --print-certs SurvivalLibraryVN.apk | tee SurvivalLibraryVN.signature.txt
-          "$AAPT" dump badging SurvivalLibraryVN.apk | tee SurvivalLibraryVN.badging.txt
-          grep -q "package: name='vn.survivallibrary.vn'" SurvivalLibraryVN.badging.txt
-          sha256sum SurvivalLibraryVN.apk > SurvivalLibraryVN.apk.sha256
-          test -s SurvivalLibraryVN.apk
+          "$APKSIGNER" verify --verbose --print-certs SurvivalLibraryVN-Full.apk | tee SurvivalLibraryVN-Full.signature.txt
+          "$AAPT" dump badging SurvivalLibraryVN-Full.apk | tee SurvivalLibraryVN-Full.badging.txt
+          grep -q "package: name='vn.survivallibrary.full'" SurvivalLibraryVN-Full.badging.txt
+          sha256sum SurvivalLibraryVN-Full.apk > SurvivalLibraryVN-Full.apk.sha256
+          test -s SurvivalLibraryVN-Full.apk
 
       - name: Publish GitHub Release asset
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES="Beta v$APP_VERSION của Thư viện Sinh tồn Việt Nam. Package beta ổn định: vn.survivallibrary.vn. APK dùng chữ ký beta cố định để cập nhật đè giữa các bản thử nghiệm. Dữ liệu DEMO không được coi là nội dung sinh tồn đã kiểm chứng."
+          NOTES="Bản cài đặt đầy đủ sạch v$APP_VERSION của Thư viện Sinh tồn Việt Nam. Package riêng vn.survivallibrary.full để tránh toàn bộ dữ liệu/cache/database của bản beta cũ. Có thể cài song song để kiểm tra trước khi xóa bản cũ."
           if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 SurvivalLibraryVN.signature.txt SurvivalLibraryVN.badging.txt --clobber -R "${{ github.repository }}"
+            gh release upload "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt --clobber -R "${{ github.repository }}"
           else
-            gh release create "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 SurvivalLibraryVN.signature.txt SurvivalLibraryVN.badging.txt \
+            gh release create "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt \
               --target survival-library-vn \
-              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION" \
+              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Full" \
               --notes "$NOTES" \
               -R "${{ github.repository }}"
           fi
