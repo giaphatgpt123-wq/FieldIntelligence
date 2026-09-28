@@ -29,6 +29,23 @@ class FishPackGateTest {
     }
 
     @Test
+    fun verifiedPartialFishPackWithMissingImagesRemainsInstallable() {
+        val partial = completeMeta().toMutableMap().apply {
+            put("fishCoverageGateVersion", "0")
+            put("fishPresentChecklistResolved", "720")
+            put("fishPresentChecklistUnresolved", "16")
+            put("fishPresentAcceptedTaxa", "715")
+            put("fishPresentTaxaWithLocalMedia", "434")
+            put("fishTaxa", "715")
+            put("fishWithLocalMedia", "434")
+        }
+        FishPackGate.validateIfDeclared(partial, true, 715, 434)
+        assertThrows(IllegalArgumentException::class.java) {
+            FishPackGate.validateIfDeclared(partial, true, 715, 433)
+        }
+    }
+
+    @Test
     fun genericTaxonomyPackWithoutFishGateIsUnaffected() {
         FishPackGate.validateIfDeclared(
             meta = mapOf("recordCount" to "2000"),
