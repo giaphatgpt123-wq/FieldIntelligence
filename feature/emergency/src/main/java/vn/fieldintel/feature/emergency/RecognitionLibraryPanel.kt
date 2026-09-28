@@ -105,7 +105,11 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                 val external=if(storeStatus.installed)store.search(query,"Cá nước ngọt",FISH_QUERY_LIMIT).filter{it.id in localMediaIds}else emptyList()
                 (external+starter).distinctBy{it.scientificName.lowercase(Locale.ROOT)}
             }
-            "wfo-plants"->if(storeStatus.installed&&query.trim().length>=2)store.search(query,"Thực vật",80) else emptyList()
+            "wfo-plants"->{
+                val starter=SpeciesCatalog.search(query,"Thực vật")
+                val external=if(storeStatus.installed&&query.trim().length>=2)store.search(query,"Thực vật",80) else emptyList()
+                (starter+external).distinctBy{it.scientificName.split(' ').take(2).joinToString(" ").lowercase(Locale.ROOT)}
+            }
             else->{val needle=query.trim().lowercase(Locale.ROOT);LibraryCollections.recordsFor(id).filter{r->needle.isBlank()||r.vietnameseName.lowercase(Locale.ROOT).contains(needle)||r.scientificName.lowercase(Locale.ROOT).contains(needle)}}
         }
     }.orEmpty()
@@ -127,32 +131,32 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
         LibraryHero(totalCount,storeStatus,localFishWithMedia,observations.size)
         LibrarySyncStatus(context)
         LibraryGroupGrid(group,displayedFishCount){group=it;selectedCollectionId=null}
-        LibraryCollectionGrid(selectedCollectionId,displayedFishCount){id->selectedCollectionId=if(selectedCollectionId==id)null else id;group="Tất cả";query=if(selectedCollectionId=="wfo-plants")"Mangifera" else ""}
+        LibraryCollectionGrid(selectedCollectionId,displayedFishCount){id->selectedCollectionId=if(selectedCollectionId==id)null else id;group="Tất cả";query=""}
         if(selectedCollectionId=="wfo-plants"){
-            Text("TRA THEO CHI • CHỌN MỘT NHÓM",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
+            Text("Có thể tìm theo tên Việt. Tra theo tên khoa học khi cần:",color=FieldColors.onSurfaceVariant)
             Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),horizontalArrangement=Arrangement.spacedBy(8.dp)){listOf("Mangifera","Musa","Citrus","Dioscorea","Zingiber","Curcuma","Ficus","Nepenthes").forEach{genus->FilterChip(selected=query.equals(genus,ignoreCase=true),onClick={query=genus},label={Text(genus)})}}
         }
 
         Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(26.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF0C272C)),border=BorderStroke(1.dp,Color(0x3345E58C))){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-            Row(verticalAlignment=Alignment.CenterVertically){Column(Modifier.weight(1f)){Text(if(selectedCollection==null)"TRA CỨU KHOA HỌC" else selectedCollection.label.uppercase(Locale.ROOT),fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleLarge);if(selectedCollection!=null)Text(selectedCollection.subtitle,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)};Surface(shape=RoundedCornerShape(999.dp),color=if(storeStatus.installed)Color(0x263EEA91) else Color(0x332F3436)){Text(if(selectedCollectionId=="wfo-plants")"WFO OFFLINE" else if(selectedCollectionId=="freshwater-fish"&&localFishWithMedia>0)"FISH + ẢNH OFFLINE" else if(selectedCollection!=null)"CURATED" else if(storeStatus.installed)"DATABASE READY" else "STARTER DATA",Modifier.padding(horizontal=10.dp,vertical=6.dp),color=if(storeStatus.installed||selectedCollection!=null)FieldColors.primary else FieldColors.onSurfaceVariant,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.labelSmall)}}
-            OutlinedTextField(value=query,onValueChange={query=it.take(120)},label={Text(if(selectedCollectionId=="wfo-plants")"Tên khoa học hoặc chi (từ 2 ký tự)" else if(selectedCollectionId=="freshwater-fish")"Lọc cá theo tên Việt hoặc tên khoa học" else if(selectedCollection!=null)"Lọc trong bộ sưu tập" else if(storeStatus.installed)"Tên Việt hoặc tên khoa học (từ 2 ký tự)" else "Tên Việt hoặc tên khoa học")},leadingIcon={Text("⌕",style=MaterialTheme.typography.headlineSmall)},modifier=Modifier.fillMaxWidth().heightIn(min=60.dp),singleLine=true,shape=RoundedCornerShape(20.dp))
+            Row(verticalAlignment=Alignment.CenterVertically){Column(Modifier.weight(1f)){Text(if(selectedCollection==null)"TÌM THEO TÊN VIỆT" else selectedCollection.label.uppercase(Locale.ROOT),fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleLarge);if(selectedCollection!=null)Text(selectedCollection.subtitle,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)};Surface(shape=RoundedCornerShape(999.dp),color=if(storeStatus.installed)Color(0x263EEA91) else Color(0x332F3436)){Text(if(storeStatus.installed)"DÙNG ĐƯỢC KHI MẤT MẠNG" else "DỮ LIỆU CƠ BẢN",Modifier.padding(horizontal=10.dp,vertical=6.dp),color=if(storeStatus.installed||selectedCollection!=null)FieldColors.primary else FieldColors.onSurfaceVariant,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.labelSmall)}}
+            OutlinedTextField(value=query,onValueChange={query=it.take(120)},label={Text("Nhập tên Việt (ví dụ: nghệ vàng, cá rô đồng)")},leadingIcon={Text("⌕",style=MaterialTheme.typography.headlineSmall)},modifier=Modifier.fillMaxWidth().heightIn(min=60.dp),singleLine=true,shape=RoundedCornerShape(20.dp))
             Text(when{
                 selectedCollectionId=="freshwater-fish"&&localFishWithMedia>0->"${formatCount(localFishWithMedia)} hồ sơ cá có ảnh offline đã kiểm SHA/license • duyệt theo lô $FISH_PAGE_SIZE hồ sơ"
                 selectedCollectionId=="freshwater-fish"->"Đang dùng ${displayedFishCount} hồ sơ cá lõi; gói cá khoa học có ảnh offline chưa được cài"
-                selectedCollectionId=="wfo-plants"->if(storeStatus.installed)"${formatCount(storeStatus.recordCount)} tên phân loại offline • tối đa 80 kết quả mỗi truy vấn" else "Đang nạp dữ liệu WFO; thử mở lại thư viện sau ít phút"
+                selectedCollectionId=="wfo-plants"->if(storeStatus.installed)"Tên Việt đã đối chiếu hiện trước; hồ sơ chưa có tên Việt sẽ ghi rõ. Có thể tra cứu khi mất mạng." else "Đang nạp thư viện thực vật; thử mở lại sau ít phút"
                 selectedCollection!=null->"${selectedCollection.recordIds.size} hồ sơ đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
-                storeStatus.installed->"Đang dùng gói khoa học offline • ${formatCount(storeStatus.recordCount)} hồ sơ taxonomy"
+                storeStatus.installed->"Đã lưu ${formatCount(storeStatus.recordCount)} hồ sơ trên máy; một số hồ sơ chưa có tên Việt hoặc ảnh rõ."
                 else->"Chưa cài gói SQLite khoa học lớn • đang dùng ${SpeciesCatalog.records.size} hồ sơ lõi trong APK"
             },color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
         }}
 
         when{
             selectedCollectionId=="freshwater-fish"&&storeStatus.installed&&store.isSearching(query,"Cá nước ngọt",FISH_QUERY_LIMIT)->SearchStatusBanner("ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…")
-            selectedCollectionId=="wfo-plants"&&!storeStatus.installed->SearchStatusBanner("ĐANG NẠP THƯ VIỆN WFO OFFLINE…")
-            selectedCollectionId=="wfo-plants"&&store.isSearching(query,"Thực vật",80)->SearchStatusBanner("ĐANG TÌM TRONG WFO OFFLINE…")
+            selectedCollectionId=="wfo-plants"&&!storeStatus.installed->SearchStatusBanner("ĐANG NẠP THƯ VIỆN THỰC VẬT…")
+            selectedCollectionId=="wfo-plants"&&store.isSearching(query,"Thực vật",80)->SearchStatusBanner("ĐANG TÌM TÊN THỰC VẬT…")
             selectedCollection!=null&&results.isEmpty()->SafetyBanner("${selectedCollection.label}: chưa có hồ sơ đủ điều kiện trong bộ dữ liệu hiện tại. Ứng dụng không tự gắn nhãn y khoa/độc tính chỉ từ taxonomy.")
             selectedCollection!=null->{Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(visibleResultLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}};if(fishViewActive)FishLoadMoreButton(visibleFishLimit,results.size){visibleFishLimit=(visibleFishLimit+FISH_PAGE_SIZE).coerceAtMost(FISH_QUERY_LIMIT)}}
-            storeStatus.installed&&query.isBlank()&&!groupBrowseAllowed->{SafetyBanner("Các hồ sơ nổi bật dưới đây có tên tiếng Việt. Nhập từ 2 ký tự để tra thêm ${formatCount(storeStatus.recordCount)} tên khoa học offline.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
+            storeStatus.installed&&query.isBlank()&&!groupBrowseAllowed->{SafetyBanner("Chọn nhóm hoặc nhập tên Việt để tìm. Những loài chưa được đối chiếu tên Việt sẽ được ghi rõ.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
             storeStatus.installed&&query.trim().length<2&&!groupBrowseAllowed->{SafetyBanner("Nhập ít nhất 2 ký tự để tra dữ liệu khoa học. Kết quả tiếng Việt có sẵn bên dưới.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
             externalSearching->SearchStatusBanner(if(groupBrowseAllowed)"ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…" else "ĐANG TÌM TRONG THƯ VIỆN OFFLINE…")
             externalSearchCompleted&&results.isEmpty()->SafetyBanner("Không tìm thấy hồ sơ phù hợp. Không tìm thấy không đồng nghĩa mẫu vật an toàn hoặc không tồn tại.")
@@ -175,7 +179,7 @@ private fun FishLoadMoreButton(shown:Int,total:Int,onMore:()->Unit){
 private fun LibraryHero(totalCount:Long,status:ScientificLibraryStatus,localFishWithMedia:Long,observationCount:Int){
     Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(30.dp),colors=CardDefaults.cardColors(containerColor=Color.Transparent),border=BorderStroke(1.dp,Color(0x3345E58C))){Box(Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(Color(0xFF123E37),Color(0xFF102A31),Color(0xFF071A20)))).padding(20.dp)){
         Canvas(Modifier.matchParentSize()){val c=Color(0x2245E58C);drawCircle(c,radius=size.minDimension*.42f,center=Offset(size.width*.86f,size.height*.18f));drawCircle(Color(0x1139C6B0),radius=size.minDimension*.28f,center=Offset(size.width*.72f,size.height*.88f))}
-        Column(verticalArrangement=Arrangement.spacedBy(14.dp)){Row(verticalAlignment=Alignment.CenterVertically){Surface(shape=RoundedCornerShape(16.dp),color=Color(0x263EEA91)){Text("◈",Modifier.padding(13.dp),color=FieldColors.primary,style=MaterialTheme.typography.headlineMedium)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f)){Text("THƯ VIỆN KHOA HỌC",fontWeight=FontWeight.Black,style=MaterialTheme.typography.headlineSmall);Text("Taxonomy • media • nguồn • cảnh báo • ghi nhận",color=Color.White.copy(alpha=.72f))};Surface(shape=RoundedCornerShape(999.dp),color=Color(0xB7123932),border=BorderStroke(1.dp,Color(0x5545E58C))){Text("OFFLINE",Modifier.padding(horizontal=10.dp,vertical=6.dp),color=FieldColors.primary,fontWeight=FontWeight.Black)}}
+        Column(verticalArrangement=Arrangement.spacedBy(14.dp)){Row(verticalAlignment=Alignment.CenterVertically){Surface(shape=RoundedCornerShape(16.dp),color=Color(0x263EEA91)){Text("◈",Modifier.padding(13.dp),color=FieldColors.primary,style=MaterialTheme.typography.headlineMedium)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f)){Text("THƯ VIỆN LOÀI",fontWeight=FontWeight.Black,style=MaterialTheme.typography.headlineSmall);Text("Tên Việt • ảnh • công dụng • cách dùng",color=Color.White.copy(alpha=.72f))};Surface(shape=RoundedCornerShape(999.dp),color=Color(0xB7123932),border=BorderStroke(1.dp,Color(0x5545E58C))){Text("DÙNG OFFLINE",Modifier.padding(horizontal=10.dp,vertical=6.dp),color=FieldColors.primary,fontWeight=FontWeight.Black)}}
             Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){MetricBox(formatCount(totalCount),"HỒ SƠ",Modifier.weight(1f));MetricBox(if(localFishWithMedia>0)formatCount(localFishWithMedia) else "—","CÁ + ẢNH",Modifier.weight(1f));MetricBox(observationCount.toString(),"GHI NHẬN",Modifier.weight(1f))}
             Text(if(status.installed)"Gói khoa học lớn đã sẵn sàng tra cứu trên thiết bị." else "Gói khoa học lớn chưa được cài; ứng dụng đang dùng bộ lõi.",color=Color.White.copy(alpha=.86f),fontWeight=FontWeight.Bold)
         }
@@ -223,7 +227,10 @@ private fun LibraryCollectionGrid(selectedId:String?,fishCount:Long,onSelect:(St
     LibraryCollections.items.chunked(2).forEach{row->Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){row.forEach{item->val isSelected=selectedId==item.id;val badge=when{item.id=="wfo-plants"->"WFO";item.id=="freshwater-fish"->formatCount(fishCount);else->item.recordIds.size.toString()};Card(onClick={onSelect(item.id)},modifier=Modifier.weight(1f).heightIn(min=124.dp),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=if(isSelected)Color(0xFF3B3725) else Color(0xFF102C33)),border=BorderStroke(1.dp,if(isSelected)Color(0x88FFC857) else Color.White.copy(alpha=.06f))){Column(Modifier.padding(14.dp),verticalArrangement=Arrangement.spacedBy(5.dp)){Row(verticalAlignment=Alignment.CenterVertically){Text(item.icon,style=MaterialTheme.typography.headlineMedium);Spacer(Modifier.weight(1f));Surface(shape=RoundedCornerShape(999.dp),color=Color(0x221FFFFFF)){Text(badge,Modifier.padding(horizontal=8.dp,vertical=4.dp),fontWeight=FontWeight.Black,color=FieldColors.primary)}};Text(item.label,fontWeight=FontWeight.Black);Text(item.subtitle,style=MaterialTheme.typography.bodySmall,color=FieldColors.onSurfaceVariant,maxLines=2)}}};if(row.size==1)Spacer(Modifier.weight(1f))}}
 }
 
-@Composable private fun SpeciesResultCard(record:SpeciesRecord,onClick:()->Unit){Card(onClick=onClick,modifier=Modifier.fillMaxWidth().heightIn(min=94.dp),shape=RoundedCornerShape(20.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF13323A)),border=BorderStroke(1.dp,Color.White.copy(alpha=.05f))){Row(Modifier.fillMaxWidth().padding(15.dp),verticalAlignment=Alignment.CenterVertically){Surface(shape=RoundedCornerShape(16.dp),color=Color(0x2245E58C)){Text(groupIcon(record.group),Modifier.padding(12.dp),style=MaterialTheme.typography.titleLarge)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(3.dp)){Text(record.vietnameseName,fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium,maxLines=2);if(record.vietnameseName==record.scientificName)Text("Tên Việt chưa xác minh",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall) else Text(record.group,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)};Text("›",style=MaterialTheme.typography.headlineSmall,color=FieldColors.primary)}}}
+private fun plainVietnameseName(record:SpeciesRecord):String=record.vietnameseName
+    .replace(Regex("\\s*\\([A-Z][a-z]+ [a-z][a-z-]+\\)"),"").trim()
+
+@Composable private fun SpeciesResultCard(record:SpeciesRecord,onClick:()->Unit){Card(onClick=onClick,modifier=Modifier.fillMaxWidth().heightIn(min=94.dp),shape=RoundedCornerShape(20.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF13323A)),border=BorderStroke(1.dp,Color.White.copy(alpha=.05f))){Row(Modifier.fillMaxWidth().padding(15.dp),verticalAlignment=Alignment.CenterVertically){Surface(shape=RoundedCornerShape(16.dp),color=Color(0x2245E58C)){Text(groupIcon(record.group),Modifier.padding(12.dp),style=MaterialTheme.typography.titleLarge)};Spacer(Modifier.width(12.dp));Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(3.dp)){Text(plainVietnameseName(record),fontWeight=FontWeight.ExtraBold,style=MaterialTheme.typography.titleMedium,maxLines=2);if(record.vietnameseName==record.scientificName)Text("Tên Việt chưa xác minh",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall) else Text(record.group,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)};Text("›",style=MaterialTheme.typography.headlineSmall,color=FieldColors.primary)}}}
 
 @Composable
 private fun SpeciesDetailCard(selected:SpeciesRecord,uriHandler:androidx.compose.ui.platform.UriHandler){
@@ -232,18 +239,23 @@ private fun SpeciesDetailCard(selected:SpeciesRecord,uriHandler:androidx.compose
     val collections=LibraryCollections.items.filter{selected.id in it.recordIds}
     var showMore by remember(selected.id){mutableStateOf(false)}
     Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(28.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33)),border=BorderStroke(1.dp,Color(0x3345E58C))){Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-        Text(selected.vietnameseName,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Black)
+        Text(plainVietnameseName(selected),style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Black)
         if(selected.vietnameseName==selected.scientificName)Text("Tên Việt chưa xác minh cho đúng loài này",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodyMedium)
         ScientificMediaGallery(localMedia,uriHandler,showMore)
         if(localMedia.isEmpty())Text("Chưa có ảnh offline được kiểm tra nguồn cho hồ sơ này.",color=FieldColors.onSurfaceVariant)
-        Text("THÔNG TIN CHÍNH",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
+        Text("CÔNG DỤNG",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
         if(selected.scientificName.startsWith("Curcuma longa ")){
-            Text("Thân rễ Curcuma longa: chuyên khảo EMA ghi nhận cách dùng truyền thống để giảm khó tiêu nhẹ, đầy bụng, chậm tiêu; chỉ áp dụng cho các chế phẩm từ thân rễ được mô tả trong chuyên khảo.",color=FieldColors.onSurfaceVariant)
-            Text("Cách dùng: theo tờ hướng dẫn của chế phẩm dành cho người lớn; nếu triệu chứng nặng lên hoặc kéo dài quá 2 tuần, cần hỏi nhân viên y tế. Không suy liều dùng từ ảnh cây.",color=FieldColors.onSurfaceVariant)
+            Text("Thân rễ nghệ vàng: chuyên khảo ghi nhận cách dùng truyền thống để giảm khó tiêu nhẹ, đầy bụng hoặc chậm tiêu; chỉ áp dụng cho chế phẩm từ đúng bộ phận này.",color=FieldColors.onSurfaceVariant)
+            Text("CÁCH DÙNG",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
+            Text("Theo hướng dẫn của chế phẩm dành cho người lớn. Nếu triệu chứng nặng lên hoặc kéo dài quá 2 tuần, cần hỏi nhân viên y tế.",color=FieldColors.onSurfaceVariant)
             if(showMore)TextButton(onClick={uriHandler.openUri("https://www.ema.europa.eu/en/medicines/herbal/curcumae-longae-rhizoma")}){Text("CHUYÊN KHẢO EMA")}
-        }else Text(if(selected.group=="Cây thuốc"||selected.group=="Thực vật"||selected.group=="Nấm")"Công dụng và cách dùng: chưa có nội dung được kiểm chứng riêng cho đúng loài và bộ phận này." else "Tên địa phương và đặc điểm phân biệt: đang được bổ sung từ nguồn đối chiếu.",color=FieldColors.onSurfaceVariant)
+        }else{
+            Text("Chưa có công dụng được đối chiếu cho đúng loài và đúng bộ phận.",color=FieldColors.onSurfaceVariant)
+            Text("CÁCH DÙNG",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
+            Text("Chưa có hướng dẫn đáng tin cậy cho hồ sơ này.",color=FieldColors.onSurfaceVariant)
+        }
         if(selected.group=="Nấm"||selected.group=="Cây thuốc")Text("Không dùng ảnh tham chiếu để quyết định ăn hoặc sử dụng làm thuốc.",color=Color(0xFFFFC857),style=MaterialTheme.typography.bodySmall)
-        OutlinedButton(onClick={showMore=!showMore},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text(if(showMore)"THU GỌN" else "XEM THÊM: TÊN KHOA HỌC, NGUỒN & CẢNH BÁO",fontWeight=FontWeight.Bold)}
+        OutlinedButton(onClick={showMore=!showMore},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text(if(showMore)"THU GỌN" else "XEM THÊM",fontWeight=FontWeight.Bold)}
         if(showMore){
             Text(selected.scientificName,fontWeight=FontWeight.Bold,color=FieldColors.primary)
             if(collections.isNotEmpty()){Text("BỘ SƯU TẬP",fontWeight=FontWeight.Black);collections.chunked(2).forEach{row->Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){row.forEach{InfoChip(it.label)}}}}
@@ -257,7 +269,7 @@ private fun SpeciesDetailCard(selected:SpeciesRecord,uriHandler:androidx.compose
 @Composable
 private fun ScientificMediaGallery(media:List<ScientificLocalMedia>,uriHandler:androidx.compose.ui.platform.UriHandler,showSourceDetails:Boolean){
     if(media.isEmpty())return
-    Text("HÌNH ẢNH THAM CHIẾU OFFLINE • ${media.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
+    Text("ẢNH LOÀI NÀY • ${media.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium)
     media.forEachIndexed{index,item->
         val bitmap by produceState<Bitmap?>(null,item.sha256){value=withContext(Dispatchers.IO){BitmapFactory.decodeByteArray(item.bytes,0,item.bytes.size)}}
         if(bitmap!=null){Card(shape=RoundedCornerShape(20.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF071A20)),border=BorderStroke(1.dp,Color.White.copy(alpha=.08f))){Column(verticalArrangement=Arrangement.spacedBy(8.dp)){Image(bitmap!!.asImageBitmap(),"Ảnh tham chiếu offline ${index+1}",Modifier.fillMaxWidth().heightIn(min=220.dp,max=360.dp),contentScale=ContentScale.Fit);Column(Modifier.padding(horizontal=12.dp,vertical=10.dp),verticalArrangement=Arrangement.spacedBy(4.dp)){Text("Ảnh tham chiếu ${index+1} • lưu offline",fontWeight=FontWeight.Bold,color=FieldColors.primary);if(showSourceDetails){Text("Giấy phép: ${item.license}",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall);val host=remember(item.sourceIdentifier){runCatching{URI(item.sourceIdentifier).host}.getOrNull().orEmpty()};if(host.isNotBlank())Text("Nguồn ảnh: $host",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall);if(item.sourceIdentifier.startsWith("https://"))TextButton(onClick={uriHandler.openUri(item.sourceIdentifier)}){Text("XEM NGUỒN ẢNH")}}}}}}
@@ -271,7 +283,19 @@ private fun ScientificMediaGallery(media:List<ScientificLocalMedia>,uriHandler:a
 @Composable private fun ObservationDetail(observation:ObservationUi,onBack:()->Unit,onDelete:()->Unit){Column(verticalArrangement=Arrangement.spacedBy(14.dp)){OutlinedButton(onClick=onBack,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(18.dp)){Text("←  QUAY LẠI GHI NHẬN",fontWeight=FontWeight.Bold)};Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33))){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){Text(observation.note,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.Bold);val thumbnail=remember(observation.photoPath){val bounds=BitmapFactory.Options().apply{inJustDecodeBounds=true};BitmapFactory.decodeFile(observation.photoPath,bounds);val options=BitmapFactory.Options().apply{inSampleSize=generateSequence(1){it*2}.first{s->maxOf(bounds.outWidth,bounds.outHeight)/s<=768}};BitmapFactory.decodeFile(observation.photoPath,options)};if(thumbnail!=null)Image(thumbnail.asImageBitmap(),"Ảnh ghi nhận offline",Modifier.fillMaxWidth().heightIn(min=280.dp,max=420.dp),contentScale=ContentScale.Fit);SafetyBanner("CHƯA XÁC ĐỊNH • ghi chú người dùng • chưa xác minh");OutlinedButton(onClick=onDelete,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(16.dp)){Text("Xóa ghi nhận")}}}}}
 
 @Composable
-private fun DataProvenanceCard(status:ScientificLibraryStatus,localFishWithMedia:Long){Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF0D242A))){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(7.dp)){Text("NGUỒN & TÍNH TOÀN VẸN",fontWeight=FontWeight.Black);if(status.installed){Text("Scientific library • ${status.sourceVersion.ifBlank{"offline"}}",fontWeight=FontWeight.Bold);if(status.sourceLicense.isNotBlank())Text("License: ${status.sourceLicense}",color=FieldColors.onSurfaceVariant);if(status.sourceDoi.isNotBlank())Text("DOI: ${status.sourceDoi}",color=FieldColors.onSurfaceVariant);Text("Phạm vi: ${status.scope}. Taxonomy/media tách khỏi lớp y khoa, độc tính và thực phẩm.",color=FieldColors.onSurfaceVariant);if(status.fishTaxa>0)Text("Cá: ${formatCount(localFishWithMedia)} có ảnh offline / ${formatCount(status.fishTaxa)} taxon • ${formatCount(status.fishPendingMedia)} đang chờ media nguồn",color=FieldColors.primary,fontWeight=FontWeight.Bold)}else Text("Chưa cài gói SQLite khoa học ngoài APK. Bộ lõi vẫn giữ nguồn riêng theo từng hồ sơ.",color=FieldColors.onSurfaceVariant)}}}
+private fun DataProvenanceCard(status:ScientificLibraryStatus,localFishWithMedia:Long){
+    var expanded by remember{mutableStateOf(false)}
+    Card(Modifier.fillMaxWidth(),shape=RoundedCornerShape(24.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF0D242A))){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(7.dp)){
+        OutlinedButton(onClick={expanded=!expanded},modifier=Modifier.fillMaxWidth().heightIn(min=56.dp)){Text(if(expanded)"THU GỌN THÔNG TIN DỮ LIỆU" else "XEM THÊM VỀ NGUỒN DỮ LIỆU")}
+        if(expanded){if(status.installed){
+            Text("Phiên bản dữ liệu: ${status.sourceVersion.ifBlank{"chưa ghi"}}")
+            if(status.sourceLicense.isNotBlank())Text("Giấy phép dữ liệu: ${status.sourceLicense}",color=FieldColors.onSurfaceVariant)
+            if(status.sourceDoi.isNotBlank())Text("Mã nguồn xuất bản: ${status.sourceDoi}",color=FieldColors.onSurfaceVariant)
+            Text("Phạm vi: ${status.scope}. Nguồn phân loại và ảnh không thay thế bằng chứng về công dụng.",color=FieldColors.onSurfaceVariant)
+            if(status.fishTaxa>0)Text("Cá: ${formatCount(localFishWithMedia)} có ảnh lưu trong máy / ${formatCount(status.fishTaxa)} hồ sơ; ${formatCount(status.fishPendingMedia)} đang chờ ảnh.",color=FieldColors.primary)
+        }else Text("Chưa có gói dữ liệu lớn trên máy. Thư viện cơ bản vẫn dùng được.",color=FieldColors.onSurfaceVariant)}
+    }}
+}
 
 @Composable private fun SearchStatusBanner(text:String){Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF12323A),border=BorderStroke(1.dp,Color(0x3345E58C))){Row(Modifier.fillMaxWidth().padding(14.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)){CircularProgressIndicator(modifier=Modifier.size(22.dp),strokeWidth=2.dp,color=FieldColors.primary);Text(text,color=FieldColors.primary,fontWeight=FontWeight.Bold)}}}
 @Composable private fun SafetyBanner(text:String){Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF2E2520),border=BorderStroke(1.dp,Color(0x33FFC857))){Text(text,Modifier.fillMaxWidth().padding(14.dp),color=Color(0xFFFFC857),fontWeight=FontWeight.Medium)}}
