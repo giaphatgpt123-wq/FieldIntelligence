@@ -380,7 +380,7 @@ class MainAppActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             setPadding(dp(4), dp(6), dp(4), dp(6))
-            background = paper
+            setBackgroundColor(paper)
         }
         val items = listOf(
             Triple("⌂", "Trang chủ", true),
