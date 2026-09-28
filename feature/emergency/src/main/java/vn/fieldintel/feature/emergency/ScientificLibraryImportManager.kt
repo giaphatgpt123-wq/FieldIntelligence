@@ -57,16 +57,22 @@ class ScientificLibraryImportManager(private val context: Context) {
     )
 
     /** Imports the GitHub Actions artifact ZIP containing both required SQLite files and manifest. */
-    fun importBundle(uri: Uri): BundleImportResult =
+    fun importBundle(uri: Uri): BundleImportResult = synchronized(INSTALL_LOCK) {
         context.contentResolver.openInputStream(uri)?.use(::importBundle)
             ?: error("Không thể mở gói ZIP đã chọn")
+    }
 
     /** Background updater entry point; keeps the same validation and atomic activation path. */
-    fun importBundle(file: File): BundleImportResult =
+    fun importBundle(file: File): BundleImportResult = synchronized(INSTALL_LOCK) {
         file.inputStream().use(::importBundle)
+    }
 
     /** Installs the source-verified pack packaged inside the APK on a clean installation. */
-    fun installBundledIfMissing(): BundleImportResult? {
+    fun installBundledIfMissing(): BundleImportResult? = synchronized(INSTALL_LOCK) {
+        installBundledIfMissingLocked()
+    }
+
+    private fun installBundledIfMissingLocked(): BundleImportResult? {
         val directory = libraryDirectory()
         val valid = PackType.entries.associateWith { type ->
             File(directory, type.fileName).takeIf { it.isFile && runCatching { validate(it, type) }.isSuccess }
@@ -163,14 +169,14 @@ class ScientificLibraryImportManager(private val context: Context) {
         }
     }
 
-    fun import(uri: Uri, type: PackType): ImportResult {
+    fun import(uri: Uri, type: PackType): ImportResult = synchronized(INSTALL_LOCK) {
         val directory = libraryDirectory()
         val staging = File(directory, ".${type.fileName}.incoming")
         staging.delete()
         val copied = copyBounded(uri, staging, type.maxBytes)
         require(copied > 0L) { "Gói dữ liệu rỗng" }
 
-        return try {
+        try {
             val recordCount = validate(staging, type)
             activateSingle(staging, type, recordCount)
         } finally {
@@ -457,6 +463,7 @@ class ScientificLibraryImportManager(private val context: Context) {
     }
 
     companion object {
+        private val INSTALL_LOCK = Any()
         private const val MANIFEST_NAME = "scientific-library.manifest.json"
         private const val FISH_GROUP = "Cá nước ngọt"
         private val ACCEPTED_BUNDLE_NAMES = setOf(
