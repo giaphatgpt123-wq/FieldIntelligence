@@ -6,12 +6,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 /**
- * Local-first storage for the app. Production rows are never seeded as verified
- * content by the APK. They are installed only through a validated data package.
+ * Local-first storage for the app.
  *
- * Schema repair is intentionally idempotent because beta builds may have opened
- * databases created by older intermediate schemas. Startup must never fail only
- * because a column already exists or an old table is missing a newer column.
+ * Startup reads are deliberately fail-soft: an old or partially migrated beta
+ * database must not be able to terminate the whole application. Write paths
+ * remain strict so invalid packages are never silently installed.
  */
 class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
@@ -19,11 +18,6 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        ensureSchema(db)
-    }
-
-    override fun onOpen(db: SQLiteDatabase) {
-        super.onOpen(db)
         ensureSchema(db)
     }
 
@@ -180,13 +174,15 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             false
         }
 
-    fun favoriteIds(): Set<String> {
+    fun favoriteIds(): Set<String> = try {
         val result = linkedSetOf<String>()
         readableDatabase.query("favorites", arrayOf("record_id"), null, null, null, null, "saved_at DESC").use { cursor ->
             val index = cursor.getColumnIndexOrThrow("record_id")
             while (cursor.moveToNext()) result += cursor.getString(index)
         }
-        return result
+        result
+    } catch (_: Exception) {
+        emptySet()
     }
 
     fun setFavorite(recordId: String, favorite: Boolean) {
@@ -201,7 +197,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         }
     }
 
-    fun installedPackageStates(): List<InstalledPackageState> {
+    fun installedPackageStates(): List<InstalledPackageState> = try {
         val result = mutableListOf<InstalledPackageState>()
         readableDatabase.query(
             "content_packages",
@@ -227,7 +223,9 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                 )
             }
         }
-        return result
+        result
+    } catch (_: Exception) {
+        emptyList()
     }
 
     fun installVerifiedPackage(manifest: LibraryPackageManifest, records: List<LibraryPackageRecord>): Int {
@@ -255,12 +253,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                     put("source_count", record.sourceCount)
                     put("updated_at", installedAt)
                 }
-                val rowId = database.insertWithOnConflict(
-                    "library_records",
-                    null,
-                    values,
-                    SQLiteDatabase.CONFLICT_REPLACE
-                )
+                val rowId = database.insertWithOnConflict("library_records", null, values, SQLiteDatabase.CONFLICT_REPLACE)
                 require(rowId != -1L) { "Không thể ghi hồ sơ ${record.id}" }
             }
 
@@ -274,12 +267,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                 put("checksum", manifest.sha256.lowercase())
                 put("source_uri", manifest.sourceUri)
             }
-            val packageRow = database.insertWithOnConflict(
-                "content_packages",
-                null,
-                packageValues,
-                SQLiteDatabase.CONFLICT_REPLACE
-            )
+            val packageRow = database.insertWithOnConflict("content_packages", null, packageValues, SQLiteDatabase.CONFLICT_REPLACE)
             require(packageRow != -1L) { "Không thể ghi trạng thái gói ${manifest.packageId}" }
 
             val meta = ContentValues().apply {
@@ -316,16 +304,20 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         writableDatabase.insertWithOnConflict("library_meta", null, values, SQLiteDatabase.CONFLICT_REPLACE)
     }
 
-    fun getMeta(key: String): String? = readableDatabase.query(
-        "library_meta",
-        arrayOf("meta_value"),
-        "meta_key = ?",
-        arrayOf(key),
-        null,
-        null,
-        null,
-        "1"
-    ).use { cursor -> if (cursor.moveToFirst()) cursor.getString(0) else null }
+    fun getMeta(key: String): String? = try {
+        readableDatabase.query(
+            "library_meta",
+            arrayOf("meta_value"),
+            "meta_key = ?",
+            arrayOf(key),
+            null,
+            null,
+            null,
+            "1"
+        ).use { cursor -> if (cursor.moveToFirst()) cursor.getString(0) else null }
+    } catch (_: Exception) {
+        null
+    }
 
     fun publishedCount(): Int = scalarCount("SELECT COUNT(*) FROM library_records WHERE published = 1")
 
@@ -333,12 +325,16 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         "SELECT COUNT(*) FROM library_records WHERE verification_state IN ('DA_KIEM_CHUNG','DA_PHAT_HANH')"
     )
 
-    private fun scalarCount(sql: String): Int = readableDatabase.rawQuery(sql, null).use { cursor ->
-        if (cursor.moveToFirst()) cursor.getInt(0) else 0
+    private fun scalarCount(sql: String): Int = try {
+        readableDatabase.rawQuery(sql, null).use { cursor ->
+            if (cursor.moveToFirst()) cursor.getInt(0) else 0
+        }
+    } catch (_: Exception) {
+        0
     }
 
     companion object {
         private const val DB_NAME = "survival_library_vn.db"
-        private const val DB_VERSION = 4
+        private const val DB_VERSION = 5
     }
 }
