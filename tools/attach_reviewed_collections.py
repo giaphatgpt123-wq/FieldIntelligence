@@ -2,11 +2,12 @@
 """Attach reviewed Vietnamese collection membership to an existing taxonomy pack.
 
 CSV columns: collection_id,scientific_name,vietnamese_name,source_url,reviewed_by.
-Only exact scientific names already present in the pack are accepted. A blank review field
-or an ambiguous scientific name blocks the entire batch; no taxonomy row is invented.
+Only one accepted species-level binomial already present in the pack is accepted. Author
+abbreviations can differ between sources; ambiguous names still block the whole batch.
 """
 import argparse
 import csv
+import re
 import sqlite3
 from pathlib import Path
 
@@ -54,12 +55,24 @@ def attach(db_path: Path, csv_path: Path, goals_path: Path | None = None) -> dic
             if key in seen:
                 raise ValueError(f"Dòng {index}: trùng phân loại")
             seen.add(key)
-            matches = db.execute(
-                "SELECT source_id,source_record_id FROM taxon WHERE scientific_name_search=?",
-                (scientific.casefold(),),
+            words = scientific.split()
+            if len(words) < 2 or not all(re.fullmatch(r"[A-Za-z-]+", word) for word in words[:2]):
+                raise ValueError(f"Dòng {index}: tên khoa học không có chi và loài: {scientific}")
+            binomial = " ".join(words[:2]).casefold()
+            candidates = db.execute(
+                """SELECT source_id,source_record_id,scientific_name_search FROM taxon
+                   WHERE library_group='Thực vật' AND lower(taxonomic_status) IN
+                     ('accepted','accepted name','acceptedname')
+                     AND (scientific_name_search=? OR scientific_name_search LIKE ?)""",
+                (binomial, binomial + " %"),
             ).fetchall()
+            matches = [row[:2] for row in candidates if
+                       len(row[2].split()) >= 2 and
+                       " ".join(row[2].split()[:2]) == binomial and
+                       (len(row[2].split()) == 2 or row[2].split()[2] not in
+                        {"subsp.", "subsp", "var.", "var", "f.", "f"})]
             if len(matches) != 1:
-                raise ValueError(f"Dòng {index}: tên khoa học không có đúng một bản ghi: {scientific}")
+                raise ValueError(f"Dòng {index}: {scientific} có {len(matches)} bản ghi loài được chấp nhận; cần đối chiếu thủ công")
             approved.append((category, *matches[0], vietnamese, source, reviewer))
         with db:
             db.execute("""CREATE TABLE IF NOT EXISTS reviewed_collection (

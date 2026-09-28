@@ -14,12 +14,12 @@ class ReviewedCollectionsTest(unittest.TestCase):
             goals_path = Path(temporary) / "goals.csv"
             goals_path.write_text("collection_id,target_count\nflowers,1000\n")
             with sqlite3.connect(db_path) as db:
-                db.execute("CREATE TABLE taxon (source_id TEXT, source_record_id TEXT, scientific_name_search TEXT)")
-                db.executemany("INSERT INTO taxon VALUES ('wfo',?,?)", [(str(i), f"floris species{i}") for i in range(1, 52)])
+                db.execute("CREATE TABLE taxon (source_id TEXT, source_record_id TEXT, scientific_name_search TEXT, library_group TEXT, taxonomic_status TEXT)")
+                db.executemany("INSERT INTO taxon VALUES ('wfo',?,?,'Thực vật','accepted')", [(str(i), f"floris species{chr(97+i//26)}{chr(97+i%26)}") for i in range(1, 52)])
             header = "collection_id,scientific_name,vietnamese_name,source_url,reviewed_by\n"
             def batch(count):
                 csv_path.write_text(header + "".join(
-                    f"flowers,Floris species{i},Hoa {i},https://example.org/{i},reviewer\n"
+                    f"flowers,Floris species{chr(97+i//26)}{chr(97+i%26)},Hoa {i},https://example.org/{i},reviewer\n"
                     for i in range(1, count + 1)))
                 return attach(db_path, csv_path, goals_path)["flowers"]
             self.assertEqual(batch(50), 50)
@@ -34,8 +34,8 @@ class ReviewedCollectionsTest(unittest.TestCase):
             csv_path = Path(temporary) / "reviewed.csv"
             goals_path = Path(temporary) / "goals.csv"
             with sqlite3.connect(db_path) as db:
-                db.execute("CREATE TABLE taxon (source_id TEXT, source_record_id TEXT, scientific_name_search TEXT)")
-                db.execute("INSERT INTO taxon VALUES ('wfo','1','mangifera indica l.')")
+                db.execute("CREATE TABLE taxon (source_id TEXT, source_record_id TEXT, scientific_name_search TEXT, library_group TEXT, taxonomic_status TEXT)")
+                db.execute("INSERT INTO taxon VALUES ('wfo','1','mangifera indica','Thực vật','accepted')")
             csv_path.write_text("collection_id,scientific_name,vietnamese_name,source_url,reviewed_by\n"
                                 "fruit-crops,Mangifera indica L.,Xoài,https://example.org/review,nguyen\n")
             goals_path.write_text("collection_id,target_count\nfruit-crops,1000\nflowers,\n")
