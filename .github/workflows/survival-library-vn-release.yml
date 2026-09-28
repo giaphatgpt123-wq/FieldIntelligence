@@ -1,11 +1,6 @@
 name: Publish SurvivalLibraryVN APK
 
 on:
-  push:
-    branches: [survival-library-vn]
-    paths:
-      - 'SurvivalLibraryVN/**'
-      - '.github/workflows/survival-library-vn-release.yml'
   workflow_dispatch:
 
 permissions:
@@ -14,52 +9,5 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-
-      - name: Set up Gradle 8.9
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.9'
-
-      - name: Resolve app version
-        run: |
-          set -euo pipefail
-          VERSION=$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' SurvivalLibraryVN/app/build.gradle.kts | head -n1)
-          test -n "$VERSION"
-          echo "APP_VERSION=$VERSION" >> "$GITHUB_ENV"
-          echo "RELEASE_TAG=survival-library-vn-v$VERSION" >> "$GITHUB_ENV"
-
-      - name: Test
-        run: gradle -p SurvivalLibraryVN :app:testDebugUnitTest --stacktrace
-
-      - name: Build APK
-        run: |
-          set -euo pipefail
-          gradle -p SurvivalLibraryVN :app:assembleDebug --stacktrace
-          cp SurvivalLibraryVN/app/build/outputs/apk/debug/app-debug.apk SurvivalLibraryVN.apk
-          test -s SurvivalLibraryVN.apk
-          sha256sum SurvivalLibraryVN.apk > SurvivalLibraryVN.apk.sha256
-
-      - name: Publish GitHub Release asset
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
-            gh release upload "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 --clobber -R "${{ github.repository }}"
-          else
-            gh release create "$RELEASE_TAG" SurvivalLibraryVN.apk SurvivalLibraryVN.apk.sha256 \
-              --target survival-library-vn \
-              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION" \
-              --notes "Bản Android mới của Thư viện Sinh tồn Việt Nam. Package vn.survivallibrary.app. Không Map/GPS. APK này được build và test tự động trước khi phát hành." \
-              -R "${{ github.repository }}"
-          fi
+      - run: echo "Release workflow temporarily paused during signing migration."
