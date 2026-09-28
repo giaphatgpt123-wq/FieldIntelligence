@@ -30,7 +30,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,14 +52,12 @@ private val UpdateWarn = Color(0xFFFFE9B6)
 fun SurvivalLibraryRoot() {
     val context = LocalContext.current
     val appContext = context.applicationContext
-    val statusDb = remember { OfflineLibraryDb(appContext) }
-    DisposableEffect(statusDb) { onDispose { statusDb.close() } }
 
     var showUpdateCenter by remember { mutableStateOf(false) }
 
     var libraryRunning by remember { mutableStateOf(false) }
     var libraryResult by remember { mutableStateOf<UpdateRunResult?>(null) }
-    var installed by remember { mutableStateOf(statusDb.installedPackageStates()) }
+    var installed by remember { mutableStateOf<List<InstalledPackageState>>(emptyList()) }
 
     var appChecking by remember { mutableStateOf(false) }
     var appDownloading by remember { mutableStateOf(false) }
@@ -70,15 +67,20 @@ fun SurvivalLibraryRoot() {
 
     val mainHandler = remember { Handler(Looper.getMainLooper()) }
 
+    fun readInstalledPackages(): List<InstalledPackageState> = runCatching {
+        OfflineLibraryDb(appContext).use { it.installedPackageStates() }
+    }.getOrDefault(emptyList())
+
     fun runLibraryUpdate() {
         if (libraryRunning) return
         libraryRunning = true
         libraryResult = null
         Thread {
             val next = LibraryUpdateEngine.checkAndUpdate(appContext)
+            val nextInstalled = readInstalledPackages()
             mainHandler.post {
                 libraryResult = next
-                installed = statusDb.installedPackageStates()
+                installed = nextInstalled
                 libraryRunning = false
             }
         }.start()
@@ -137,7 +139,10 @@ fun SurvivalLibraryRoot() {
     Box(Modifier.fillMaxSize()) {
         PremiumSurvivalApp()
         ExtendedFloatingActionButton(
-            onClick = { showUpdateCenter = true },
+            onClick = {
+                installed = readInstalledPackages()
+                showUpdateCenter = true
+            },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 14.dp, bottom = 86.dp),
