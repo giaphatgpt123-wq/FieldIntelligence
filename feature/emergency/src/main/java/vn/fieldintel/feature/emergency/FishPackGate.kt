@@ -18,7 +18,7 @@ object FishPackGate {
         if (!meta.containsKey("fishCoverageGateVersion")) return
 
         val version = requiredLong(meta, "fishCoverageGateVersion")
-        require(version == 1L) { "Fish coverage gate version không được hỗ trợ: $version" }
+        require(version == 0L || version == 1L) { "Fish coverage gate version không được hỗ trợ: $version" }
 
         val reported = requiredLong(meta, "fishChecklistReported")
         val present = requiredLong(meta, "fishChecklistPresent")
@@ -41,27 +41,33 @@ object FishPackGate {
         require(reported == present + review + excluded) {
             "Fish checklist không nhất quán: $reported != $present + $review + $excluded"
         }
-        require(resolved == present && unresolved == 0L) {
-            "Fish checklist chưa resolve đầy đủ: resolved=$resolved, present=$present, unresolved=$unresolved"
+        require(resolved > 0L && unresolved >= 0L && resolved + unresolved == present) {
+            "Fish checklist không nhất quán: resolved=$resolved, present=$present, unresolved=$unresolved"
         }
-        require(acceptedTaxa in 1..present) {
+        require(acceptedTaxa in 1..resolved) {
             "Số accepted fish taxa không hợp lệ: $acceptedTaxa"
         }
         require(fishTaxa == acceptedTaxa) {
             "fishTaxa không khớp accepted taxa: $fishTaxa != $acceptedTaxa"
         }
-        require(acceptedWithMedia == acceptedTaxa) {
-            "Fish accepted taxa chưa đủ ảnh local: $acceptedWithMedia/$acceptedTaxa"
+        require(acceptedWithMedia in 0..acceptedTaxa) {
+            "Số accepted fish taxa có ảnh không hợp lệ: $acceptedWithMedia/$acceptedTaxa"
         }
-        require(fishWithLocalMedia == fishTaxa) {
-            "fishWithLocalMedia không khớp fishTaxa: $fishWithLocalMedia/$fishTaxa"
+        require(fishWithLocalMedia in 1..fishTaxa && fishWithLocalMedia >= acceptedWithMedia) {
+            "fishWithLocalMedia không hợp lệ: $fishWithLocalMedia/$fishTaxa"
         }
         require(hasLocalMediaTables) { "Fish pack thiếu bảng media offline bắt buộc" }
         require(observedFishTaxa == fishTaxa) {
             "Số taxon cá thực tế không khớp meta: $observedFishTaxa != $fishTaxa"
         }
-        require(observedFishTaxaWithLocalMedia == fishTaxa) {
-            "SQLite cá thực tế chưa đủ ảnh offline: $observedFishTaxaWithLocalMedia/$fishTaxa"
+        require(observedFishTaxaWithLocalMedia == fishWithLocalMedia) {
+            "SQLite cá thực tế không khớp số ảnh offline: $observedFishTaxaWithLocalMedia/$fishWithLocalMedia"
+        }
+        if (version == 1L) {
+            require(resolved == present && unresolved == 0L) { "Fish checklist chưa resolve đầy đủ" }
+            require(acceptedWithMedia == acceptedTaxa && fishWithLocalMedia == fishTaxa) {
+                "Fish coverage gate hoàn chỉnh nhưng thiếu ảnh offline"
+            }
         }
     }
 
