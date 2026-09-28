@@ -1,0 +1,1 @@
+Beta signing migration documentation.
