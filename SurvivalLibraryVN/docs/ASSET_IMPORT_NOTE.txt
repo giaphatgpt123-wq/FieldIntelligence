@@ -1,0 +1,1 @@
+Binary UI artwork is imported through Git blob API. Do not edit generated JPG files as text.
