@@ -44,11 +44,11 @@ fun EmergencyScreen(
  mapCredit:String?=null,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",
  onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},mapCoverage:String?=null,imageStatus:String="Chưa chọn ảnh",
  imagePreview:android.graphics.Bitmap?=null,onPickImage:()->Unit={},onCameraImage:()->Unit={},observations:List<ObservationUi> = emptyList(),
- saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={}
+ saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},onImportLibrary:()->Unit={}
 ){
  MaterialTheme(colorScheme=FieldColors){
   CompositionLocalProvider(LocalContentColor provides Color.White) {
-  FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onToggleTrack,onFinishTrack,onClearTrack,updateStatus,onCheckUpdate,onRollbackUpdate,mapCoverage,imageStatus,imagePreview,onPickImage,onCameraImage,observations,saveStatus,onSaveObservation,onDeleteObservation)
+  FieldIntelligenceHome(position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onToggleTrack,onFinishTrack,onClearTrack,updateStatus,onCheckUpdate,onRollbackUpdate,mapCoverage,imageStatus,imagePreview,onPickImage,onCameraImage,observations,saveStatus,onSaveObservation,onDeleteObservation,onImportLibrary)
   }
  }
 }
@@ -62,11 +62,11 @@ fun FieldIntelligenceHome(
  mapCredit:String?=null,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},updateStatus:String="Sẵn sàng",
  onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},mapCoverage:String?=null,imageStatus:String="Chưa chọn ảnh",
  imagePreview:android.graphics.Bitmap?=null,onPickImage:()->Unit={},onCameraImage:()->Unit={},observations:List<ObservationUi> = emptyList(),
- saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={}
+ saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},onImportLibrary:()->Unit={}
 ){
  var selected by remember{mutableStateOf<AppSection?>(null)}
  if(selected!=null){
-  SectionScreen(selected!!,position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onBack={selected=null},onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,mapCoverage=mapCoverage,imageStatus=imageStatus,imagePreview=imagePreview,onPickImage=onPickImage,onCameraImage=onCameraImage,observations=observations,saveStatus=saveStatus,onSaveObservation=onSaveObservation,onDeleteObservation=onDeleteObservation,onSelect={selected=it})
+  SectionScreen(selected!!,position,recording,trackCount,trackDistanceM,trackStartedAt,trackBackRemainingM,trackBackBearingDeg,offTrackM,breadcrumbCount,breadcrumb,mapPackAvailable,mapPackFiles,mapPackBytes,mapPoints,mapLines,mapPolygons,mapCredit,onBack={selected=null},onToggleTrack=onToggleTrack,onFinishTrack=onFinishTrack,onClearTrack=onClearTrack,updateStatus=updateStatus,onCheckUpdate=onCheckUpdate,onRollbackUpdate=onRollbackUpdate,mapCoverage=mapCoverage,imageStatus=imageStatus,imagePreview=imagePreview,onPickImage=onPickImage,onCameraImage=onCameraImage,observations=observations,saveStatus=saveStatus,onSaveObservation=onSaveObservation,onDeleteObservation=onDeleteObservation,onImportLibrary=onImportLibrary,onSelect={selected=it})
   return
  }
  Scaffold(containerColor=Color.Transparent,bottomBar={FieldBottomBar(onSelect={selected=it},current=selected)}){pad->
@@ -94,7 +94,7 @@ fun SectionScreen(
  mapCredit:String?=null,onBack:()->Unit,onToggleTrack:()->Unit={},onFinishTrack:()->Unit={},onClearTrack:()->Unit={},
  updateStatus:String="Sẵn sàng",onCheckUpdate:()->Unit={},onRollbackUpdate:()->Unit={},mapCoverage:String?=null,
  imageStatus:String="Chưa chọn ảnh",imagePreview:android.graphics.Bitmap?=null,onPickImage:()->Unit={},onCameraImage:()->Unit={},
- observations:List<ObservationUi> = emptyList(),saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},
+ observations:List<ObservationUi> = emptyList(),saveStatus:String="",onSaveObservation:(String)->Unit={},onDeleteObservation:(String)->Unit={},onImportLibrary:()->Unit={},
  onSelect:(AppSection?)->Unit={}
 ){
  var confirmClear by remember { mutableStateOf(false) }
@@ -124,7 +124,7 @@ fun SectionScreen(
         AppSection.SURVIVAL->{SurvivalPanel()}
     AppSection.EMERGENCY->{EmergencyPanel()}
     AppSection.PREP->{PreparationPanel()}
-    AppSection.LIBRARY->{SpeciesLibraryPanel(observations,onDeleteObservation)}
+    AppSection.LIBRARY->{SpeciesLibraryPanel(observations,onDeleteObservation,onImportLibrary)}
     AppSection.TRAINING->{TrainingPanel()}
     AppSection.SETTINGS->{UpdateSettingsPanel(mapPackAvailable,mapPackFiles,mapPackBytes,updateStatus,onCheckUpdate,onRollbackUpdate)}
    }

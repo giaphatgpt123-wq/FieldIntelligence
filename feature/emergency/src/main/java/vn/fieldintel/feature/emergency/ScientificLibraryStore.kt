@@ -30,7 +30,9 @@ data class ScientificLibraryStatusSnapshot(
     val scope: String = "taxonomy-only",
     val fishTaxa: Long = 0,
     val fishWithMedia: Long = 0,
-    val fishPendingMedia: Long = 0
+    val fishPendingMedia: Long = 0,
+    val reviewedCounts: Map<String, Long> = emptyMap(),
+    val collectionTargets: Map<String, Long> = emptyMap()
 )
 
 class ScientificLibraryStatus internal constructor() {
@@ -44,11 +46,14 @@ class ScientificLibraryStatus internal constructor() {
     var fishTaxa by mutableStateOf(0L); internal set
     var fishWithMedia by mutableStateOf(0L); internal set
     var fishPendingMedia by mutableStateOf(0L); internal set
+    var reviewedCounts by mutableStateOf<Map<String,Long>>(emptyMap()); internal set
+    var collectionTargets by mutableStateOf<Map<String,Long>>(emptyMap()); internal set
 
     internal fun publish(value: ScientificLibraryStatusSnapshot) {
         installed=value.installed; recordCount=value.recordCount; acceptedRecordCount=value.acceptedRecordCount
         sourceVersion=value.sourceVersion; sourceDoi=value.sourceDoi; sourceLicense=value.sourceLicense; scope=value.scope
         fishTaxa=value.fishTaxa; fishWithMedia=value.fishWithMedia; fishPendingMedia=value.fishPendingMedia
+        reviewedCounts=value.reviewedCounts; collectionTargets=value.collectionTargets
     }
 }
 
@@ -218,11 +223,21 @@ class ScientificLibraryStore(context: Context) {
                     installed=true,recordCount=meta.longValue("recordCount"),acceptedRecordCount=meta.longValue("acceptedRecordCount"),
                     sourceVersion=meta.stringValue("sourceVersion"),sourceDoi=meta.stringValue("sourceDoi"),
                     sourceLicense=meta.stringValue("sourceLicense"),scope=meta.stringValue("scope").ifBlank{"taxonomy-only"},
-                    fishTaxa=meta.longValue("fishTaxa"),fishWithMedia=meta.longValue("fishWithMedia"),fishPendingMedia=meta.longValue("fishPendingMedia")
+                    fishTaxa=meta.longValue("fishTaxa"),fishWithMedia=meta.longValue("fishWithMedia"),fishPendingMedia=meta.longValue("fishPendingMedia"),
+                    reviewedCounts=if(hasTable(db,"reviewed_collection"))db.rawQuery(
+                        "SELECT collection_id,COUNT(*) FROM reviewed_collection GROUP BY collection_id",null
+                    ).use{cursor->buildMap{while(cursor.moveToNext())put(cursor.getString(0),cursor.getLong(1))}} else emptyMap(),
+                    collectionTargets=if(hasTable(db,"reviewed_collection_goal"))db.rawQuery(
+                        "SELECT collection_id,target_count FROM reviewed_collection_goal",null
+                    ).use{cursor->buildMap{while(cursor.moveToNext())put(cursor.getString(0),cursor.getLong(1))}} else emptyMap()
                 )
             }
         }.getOrElse{ScientificLibraryStatusSnapshot(false)}
     }
+
+    private fun hasTable(db:SQLiteDatabase,name:String):Boolean=db.rawQuery(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=? LIMIT 1",arrayOf(name)
+    ).use{it.moveToFirst()}
 
     private fun searchBlocking(needle:String,group:String,safeLimit:Int):List<SpeciesRecord>{
         if(!databaseFile.isFile)return emptyList()

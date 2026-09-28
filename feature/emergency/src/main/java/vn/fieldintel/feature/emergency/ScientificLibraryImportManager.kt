@@ -400,6 +400,12 @@ class ScientificLibraryImportManager(private val context: Context) {
                     }
                     require(invalid == 0L) { "Danh mục Hoa/Cây gỗ/Cây ăn quả có dữ liệu thiếu duyệt hoặc sai nguồn" }
                 }
+                if ("reviewed_collection_goal" in actualTables) {
+                    val invalidGoals = db.rawQuery("""SELECT COUNT(*) FROM reviewed_collection_goal
+                        WHERE collection_id NOT IN ('flowers','timber-trees','fruit-crops') OR target_count<=0""",null)
+                        .use { cursor -> require(cursor.moveToFirst()); cursor.getLong(0) }
+                    require(invalidGoals == 0L) { "Mục tiêu danh mục không hợp lệ" }
+                }
             }
 
             val table = if (type == PackType.TAXONOMY) "taxon" else "evidence"

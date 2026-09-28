@@ -82,6 +82,7 @@ object LibraryCollectionRuntime {
                 evidence + reviewed
             }
 
+            if (activeFingerprint.get() != fingerprint) return@thread
             Snapshot.withMutableSnapshot {
                 recordsByCollection = resolved
                 state = if (evidenceReady) {

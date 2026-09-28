@@ -14,12 +14,28 @@ COLLECTIONS = {"flowers", "timber-trees", "fruit-crops"}
 FIELDS = {"collection_id", "scientific_name", "vietnamese_name", "source_url", "reviewed_by"}
 
 
-def attach(db_path: Path, csv_path: Path) -> dict[str, int]:
+def attach(db_path: Path, csv_path: Path, goals_path: Path | None = None) -> dict[str, int]:
     with csv_path.open(encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         if not FIELDS.issubset(reader.fieldnames or []):
             raise ValueError("Thiếu cột duyệt danh mục")
         rows = list(reader)
+    goals = []
+    if goals_path is not None:
+        with goals_path.open(encoding="utf-8-sig", newline="") as handle:
+            reader = csv.DictReader(handle)
+            if not {"collection_id", "target_count"}.issubset(reader.fieldnames or []):
+                raise ValueError("Thiếu cột mục tiêu danh mục")
+            for row in reader:
+                category = (row["collection_id"] or "").strip()
+                raw = (row["target_count"] or "").strip()
+                if category not in COLLECTIONS or any(g[0] == category for g in goals):
+                    raise ValueError("Danh mục mục tiêu không hợp lệ hoặc trùng")
+                if raw:
+                    count = int(raw)
+                    if count <= 0:
+                        raise ValueError("Mục tiêu phải lớn hơn 0")
+                    goals.append((category, count))
     db = sqlite3.connect(db_path)
     try:
         if db.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
@@ -52,6 +68,10 @@ def attach(db_path: Path, csv_path: Path) -> dict[str, int]:
                 PRIMARY KEY(collection_id,source_id,source_record_id))""")
             db.execute("DELETE FROM reviewed_collection WHERE collection_id IN (?,?,?)", tuple(sorted(COLLECTIONS)))
             db.executemany("INSERT INTO reviewed_collection VALUES (?,?,?,?,?,?)", approved)
+            db.execute("""CREATE TABLE IF NOT EXISTS reviewed_collection_goal (
+                collection_id TEXT PRIMARY KEY, target_count INTEGER NOT NULL CHECK(target_count>0))""")
+            db.execute("DELETE FROM reviewed_collection_goal")
+            db.executemany("INSERT INTO reviewed_collection_goal VALUES (?,?)", goals)
         return {category: sum(row[0] == category for row in approved) for category in sorted(COLLECTIONS)}
     finally:
         db.close()
@@ -61,5 +81,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("--reviewed-csv", type=Path, required=True)
+    parser.add_argument("--goals-csv", type=Path)
     args = parser.parse_args()
-    print(attach(args.database, args.reviewed_csv))
+    print(attach(args.database, args.reviewed_csv, args.goals_csv))

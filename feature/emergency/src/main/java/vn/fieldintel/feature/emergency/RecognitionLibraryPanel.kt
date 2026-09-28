@@ -79,7 +79,7 @@ fun RecognitionPanel(imageStatus:String,preview:Bitmap?,saveStatus:String,onPick
 }
 
 @Composable
-fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteObservation:(String)->Unit={}){
+fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteObservation:(String)->Unit={},onImportBundle:()->Unit={}){
     val context=LocalContext.current;val uriHandler=LocalUriHandler.current
     val store=remember(context){ScientificLibraryStore(context.applicationContext)};val storeStatus=remember{store.status()}
     val mediaStore=remember(context){ScientificMediaStore(context.applicationContext)}
@@ -125,11 +125,12 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
     val totalCount=if(storeStatus.installed&&storeStatus.recordCount>0)storeStatus.recordCount else SpeciesCatalog.records.size.toLong()
     val displayedFishCount=if(localFishWithMedia>0)localFishWithMedia else SpeciesCatalog.records.count{it.group=="Cá nước ngọt"}.toLong()
     val fishViewActive=selectedCollectionId=="freshwater-fish"||groupBrowseAllowed
-    val visibleResultLimit=if(fishViewActive)visibleFishLimit else 80
+    val pagedCollection=selectedCollection!=null&&selectedCollectionId!="wfo-plants"
+    val visibleResultLimit=if(fishViewActive||pagedCollection)visibleFishLimit else 80
 
     Column(verticalArrangement=Arrangement.spacedBy(16.dp)){
         LibraryHero(totalCount,storeStatus,localFishWithMedia,observations.size)
-        LibrarySyncStatus(context)
+        LibrarySyncStatus(context,onImportBundle)
         LibraryGroupGrid(group,displayedFishCount){group=it;selectedCollectionId=null}
         LibraryProgressBoard(storeStatus,localMediaIds,localFishWithMedia)
         LibraryCollectionGrid(selectedCollectionId,displayedFishCount){id->selectedCollectionId=if(selectedCollectionId==id)null else id;group="Tất cả";query=""}
@@ -145,7 +146,11 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
                 selectedCollectionId=="freshwater-fish"&&localFishWithMedia>0->"${formatCount(localFishWithMedia)} hồ sơ cá có ảnh offline đã kiểm SHA/license • duyệt theo lô $FISH_PAGE_SIZE hồ sơ"
                 selectedCollectionId=="freshwater-fish"->"Đang dùng ${displayedFishCount} hồ sơ cá lõi; gói cá khoa học có ảnh offline chưa được cài"
                 selectedCollectionId=="wfo-plants"->if(storeStatus.installed)"Tên Việt đã đối chiếu hiện trước; hồ sơ chưa có tên Việt sẽ ghi rõ. Có thể tra cứu khi mất mạng." else "Đang nạp thư viện thực vật; thử mở lại sau ít phút"
-                selectedCollection!=null->"${selectedCollection.recordIds.size} hồ sơ đã gắn nhãn điều hướng • nhãn không thay thế bằng chứng an toàn/công dụng"
+                selectedCollection!=null->{
+                    val newlyLoaded=storeStatus.reviewedCounts[selectedCollection.id]
+                    if(newlyLoaded!=null)"Đã nạp $newlyLoaded hồ sơ đã duyệt • đang hiển thị ${selectedCollection.recordIds.size} hồ sơ kể cả bộ lõi"
+                    else "${selectedCollection.recordIds.size} hồ sơ lõi • chưa có đợt nạp được duyệt"
+                }
                 storeStatus.installed->"Đã lưu ${formatCount(storeStatus.recordCount)} hồ sơ trên máy; một số hồ sơ chưa có tên Việt hoặc ảnh rõ."
                 else->"Chưa cài gói SQLite khoa học lớn • đang dùng ${SpeciesCatalog.records.size} hồ sơ lõi trong APK"
             },color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
@@ -155,8 +160,9 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
             selectedCollectionId=="freshwater-fish"&&storeStatus.installed&&store.isSearching(query,"Cá nước ngọt",FISH_QUERY_LIMIT)->SearchStatusBanner("ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…")
             selectedCollectionId=="wfo-plants"&&!storeStatus.installed->SearchStatusBanner("ĐANG NẠP THƯ VIỆN THỰC VẬT…")
             selectedCollectionId=="wfo-plants"&&store.isSearching(query,"Thực vật",80)->SearchStatusBanner("ĐANG TÌM TÊN THỰC VẬT…")
+            selectedCollection!=null&&results.isEmpty()&&LibraryCollectionRuntime.state==LibraryCollectionRuntimeState.LOADING->SearchStatusBanner("ĐANG ĐỌC ${selectedCollection.label.uppercase(Locale.ROOT)} VỪA NẠP…")
             selectedCollection!=null&&results.isEmpty()->SafetyBanner("${selectedCollection.label}: chưa có hồ sơ đủ điều kiện trong bộ dữ liệu hiện tại. Ứng dụng không tự gắn nhãn y khoa/độc tính chỉ từ taxonomy.")
-            selectedCollection!=null->{Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(visibleResultLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}};if(fishViewActive)FishLoadMoreButton(visibleFishLimit,results.size){visibleFishLimit=(visibleFishLimit+FISH_PAGE_SIZE).coerceAtMost(FISH_QUERY_LIMIT)}}
+            selectedCollection!=null->{Text("${selectedCollection.label.uppercase(Locale.ROOT)} • ${results.size}",fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium);results.take(visibleResultLimit).forEach{r->SpeciesResultCard(r){selectedId=r.id}};if(fishViewActive||pagedCollection)FishLoadMoreButton(visibleFishLimit,results.size){visibleFishLimit+=FISH_PAGE_SIZE}}
             storeStatus.installed&&query.isBlank()&&!groupBrowseAllowed->{SafetyBanner("Chọn nhóm hoặc nhập tên Việt để tìm. Những loài chưa được đối chiếu tên Việt sẽ được ghi rõ.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
             storeStatus.installed&&query.trim().length<2&&!groupBrowseAllowed->{SafetyBanner("Nhập ít nhất 2 ký tự để tra dữ liệu khoa học. Kết quả tiếng Việt có sẵn bên dưới.");results.take(80).forEach{r->SpeciesResultCard(r){selectedId=r.id}}}
             externalSearching->SearchStatusBanner(if(groupBrowseAllowed)"ĐANG NẠP CÁ CÓ ẢNH OFFLINE TỪ SQLITE…" else "ĐANG TÌM TRONG THƯ VIỆN OFFLINE…")
@@ -170,7 +176,7 @@ fun SpeciesLibraryPanel(observations:List<ObservationUi> = emptyList(),onDeleteO
 
 @Composable
 private fun LibraryProgressBoard(status:ScientificLibraryStatus,mediaIds:Set<String>,fishWithMedia:Long){
-    var expanded by remember{mutableStateOf(false)}
+    var expanded by remember{mutableStateOf(true)}
     Card(modifier=Modifier.fillMaxWidth(),shape=RoundedCornerShape(22.dp),colors=CardDefaults.cardColors(containerColor=Color(0xFF102C33))){
         Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
             OutlinedButton(onClick={expanded=!expanded},modifier=Modifier.fillMaxWidth().heightIn(min=52.dp)){
@@ -178,6 +184,7 @@ private fun LibraryProgressBoard(status:ScientificLibraryStatus,mediaIds:Set<Str
             }
             if(expanded){
                 Text("TẤT CẢ DANH MỤC",fontWeight=FontWeight.Black)
+                if(LibraryCollectionRuntime.state==LibraryCollectionRuntimeState.LOADING)Text("Đang đọc dữ liệu vừa cập nhật trên máy…",color=FieldColors.primary)
                 Text("Số hồ sơ gắn nhãn không đồng nghĩa đã có ảnh đúng, công dụng hoặc cách dùng được kiểm chứng. Một hồ sơ có thể thuộc nhiều danh mục.",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
                 LibraryCollections.items.forEach{item->
                     val count=when(item.id){
@@ -192,7 +199,14 @@ private fun LibraryProgressBoard(status:ScientificLibraryStatus,mediaIds:Set<Str
                     }
                     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,verticalAlignment=Alignment.CenterVertically){
                         Text("${item.icon} ${item.label}",modifier=Modifier.weight(1f),fontWeight=FontWeight.Bold)
-                        Text("$count ${if(item.id=="wfo-plants")"bản ghi" else "hồ sơ"} • ảnh: ${media?.toString()?:"chưa đo"}",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+                        val loaded=status.reviewedCounts[item.id]
+                        val goal=status.collectionTargets[item.id]
+                        Column(horizontalAlignment=Alignment.End){
+                            if(item.id in setOf("flowers","timber-trees","fruit-crops")){
+                                Text("Đã nạp ${loaded?:0L}${goal?.let{" / $it"}?:""}",color=FieldColors.primary,fontWeight=FontWeight.Bold)
+                                Text("Hiển thị $count (gồm bộ lõi)",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+                            }else Text("$count ${if(item.id=="wfo-plants")"bản ghi" else "hồ sơ"} • ảnh: ${media?.toString()?:"chưa đo"}",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+                        }
                     }
                 }
                 Text("Chưa đo: ảnh đúng loài, tên Việt đã đối chiếu, công dụng/cách dùng, hồ sơ hoàn chỉnh. Chưa đặt mục tiêu nên không hiển thị tỷ lệ %.",color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
@@ -223,8 +237,8 @@ private fun LibraryHero(totalCount:Long,status:ScientificLibraryStatus,localFish
 @Composable private fun MetricBox(value:String,label:String,modifier:Modifier=Modifier){Surface(modifier,RoundedCornerShape(18.dp),Color(0x8F0A2025),border=BorderStroke(1.dp,Color.White.copy(alpha=.09f))){Column(Modifier.padding(vertical=12.dp,horizontal=8.dp),horizontalAlignment=Alignment.CenterHorizontally){Text(value,fontWeight=FontWeight.Black,style=MaterialTheme.typography.titleMedium,color=FieldColors.primary);Text(label,style=MaterialTheme.typography.labelSmall,color=Color.White.copy(alpha=.65f))}}}
 
 @Composable
-private fun LibrarySyncStatus(context:Context){
-    val status by produceState("Đang chờ kiểm tra khi có Wi-Fi",context){
+private fun LibrarySyncStatus(context:Context,onImportBundle:()->Unit){
+    val status by produceState("Chọn gói dữ liệu để cập nhật",context){
         while(true){
             val prefs=context.getSharedPreferences("scientific-library-sync",Context.MODE_PRIVATE)
             val last=prefs.getLong("lastSuccessAt",0L)
@@ -235,15 +249,16 @@ private fun LibrarySyncStatus(context:Context){
                 "installing"->"Đang kiểm tra và cài thư viện offline"
                 "ready"->"Đã kiểm tra cập nhật thư viện$time"
                 "error"->"Cập nhật gặp lỗi: ${prefs.getString("lastError","không rõ nguyên nhân")}; sẽ thử lại khi có Wi-Fi"
-                else->"Đang chờ kiểm tra khi có Wi-Fi$time"
+                else->"Gói trên máy vẫn dùng được. Cài từng đợt dữ liệu mới để xem ngay.$time"
             }
             delay(5000L)
         }
     }
     Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF12323A)){
         Column(Modifier.fillMaxWidth().padding(12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)){
-            Text("TỰ NẠP THƯ VIỆN QUA WI-FI • ĐANG BẬT",color=FieldColors.primary,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.labelMedium)
+            Text("CẬP NHẬT THƯ VIỆN THEO TỪNG ĐỢT",color=FieldColors.primary,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.labelMedium)
             Text(status,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick=onImportBundle,modifier=Modifier.fillMaxWidth().heightIn(min=52.dp)){Text("NẠP GÓI DỮ LIỆU MỚI")}
         }
     }
 }
