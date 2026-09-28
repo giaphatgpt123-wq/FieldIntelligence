@@ -8,19 +8,28 @@ import android.database.sqlite.SQLiteOpenHelper
 /**
  * Local-first storage for the app. Production rows are never seeded as verified
  * content by the APK. They are installed only through a validated data package.
+ *
+ * Schema repair is intentionally idempotent because beta builds may have opened
+ * databases created by older intermediate schemas. Startup must never fail only
+ * because a column already exists or an old table is missing a newer column.
  */
 class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
-        createCoreTables(db)
-        createPackageTables(db)
+        ensureSchema(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) createPackageTables(db)
-        if (oldVersion < 3) {
-            db.execSQL("ALTER TABLE library_records ADD COLUMN package_id TEXT NOT NULL DEFAULT ''")
-            db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_package ON library_records(package_id)")
-        }
+        ensureSchema(db)
+    }
+
+    override fun onOpen(db: SQLiteDatabase) {
+        super.onOpen(db)
+        ensureSchema(db)
+    }
+
+    private fun ensureSchema(db: SQLiteDatabase) {
+        createCoreTables(db)
+        createPackageTables(db)
     }
 
     private fun createCoreTables(db: SQLiteDatabase) {
@@ -29,10 +38,10 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             CREATE TABLE IF NOT EXISTS library_records (
                 id TEXT PRIMARY KEY,
                 package_id TEXT NOT NULL DEFAULT '',
-                vietnamese_name TEXT NOT NULL,
-                category_id TEXT NOT NULL,
-                usage_level TEXT NOT NULL,
-                verification_state TEXT NOT NULL,
+                vietnamese_name TEXT NOT NULL DEFAULT '',
+                category_id TEXT NOT NULL DEFAULT '',
+                usage_level TEXT NOT NULL DEFAULT 'CHUA_PHAN_LOAI',
+                verification_state TEXT NOT NULL DEFAULT 'CHUA_CO',
                 summary TEXT NOT NULL DEFAULT '',
                 published INTEGER NOT NULL DEFAULT 0,
                 high_risk INTEGER NOT NULL DEFAULT 0,
@@ -41,25 +50,40 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             )
             """.trimIndent()
         )
+        ensureColumn(db, "library_records", "package_id", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "vietnamese_name", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "category_id", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "usage_level", "TEXT NOT NULL DEFAULT 'CHUA_PHAN_LOAI'")
+        ensureColumn(db, "library_records", "verification_state", "TEXT NOT NULL DEFAULT 'CHUA_CO'")
+        ensureColumn(db, "library_records", "summary", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "published", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "library_records", "high_risk", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "library_records", "source_count", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "library_records", "updated_at", "INTEGER NOT NULL DEFAULT 0")
+
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_category ON library_records(category_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_published ON library_records(published)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_package ON library_records(package_id)")
+
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS favorites (
                 record_id TEXT PRIMARY KEY,
-                saved_at INTEGER NOT NULL
+                saved_at INTEGER NOT NULL DEFAULT 0
             )
             """.trimIndent()
         )
+        ensureColumn(db, "favorites", "saved_at", "INTEGER NOT NULL DEFAULT 0")
+
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS library_meta (
                 meta_key TEXT PRIMARY KEY,
-                meta_value TEXT NOT NULL
+                meta_value TEXT NOT NULL DEFAULT ''
             )
             """.trimIndent()
         )
+        ensureColumn(db, "library_meta", "meta_value", "TEXT NOT NULL DEFAULT ''")
     }
 
     private fun createPackageTables(db: SQLiteDatabase) {
@@ -67,8 +91,8 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             """
             CREATE TABLE IF NOT EXISTS content_packages (
                 package_id TEXT PRIMARY KEY,
-                version INTEGER NOT NULL,
-                status TEXT NOT NULL,
+                version INTEGER NOT NULL DEFAULT 0,
+                status TEXT NOT NULL DEFAULT 'NOT_INSTALLED',
                 record_count INTEGER NOT NULL DEFAULT 0,
                 verified_count INTEGER NOT NULL DEFAULT 0,
                 installed_at INTEGER NOT NULL DEFAULT 0,
@@ -77,6 +101,14 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             )
             """.trimIndent()
         )
+        ensureColumn(db, "content_packages", "version", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "content_packages", "status", "TEXT NOT NULL DEFAULT 'NOT_INSTALLED'")
+        ensureColumn(db, "content_packages", "record_count", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "content_packages", "verified_count", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "content_packages", "installed_at", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "content_packages", "checksum", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "content_packages", "source_uri", "TEXT NOT NULL DEFAULT ''")
+
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS record_sources (
@@ -90,18 +122,27 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             )
             """.trimIndent()
         )
+        ensureColumn(db, "record_sources", "title", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_sources", "publisher", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_sources", "uri", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_sources", "checked_at", "INTEGER NOT NULL DEFAULT 0")
+
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS field_verification (
                 record_id TEXT NOT NULL,
                 field_key TEXT NOT NULL,
-                status TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT '',
                 note TEXT NOT NULL DEFAULT '',
                 updated_at INTEGER NOT NULL DEFAULT 0,
                 PRIMARY KEY(record_id, field_key)
             )
             """.trimIndent()
         )
+        ensureColumn(db, "field_verification", "status", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "field_verification", "note", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "field_verification", "updated_at", "INTEGER NOT NULL DEFAULT 0")
+
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS record_media (
@@ -115,9 +156,29 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             )
             """.trimIndent()
         )
+        ensureColumn(db, "record_media", "local_path", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "source_uri", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "verified", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "record_media", "angle_label", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "checksum", "TEXT NOT NULL DEFAULT ''")
+
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_sources_record ON record_sources(record_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_media_record ON record_media(record_id)")
     }
+
+    private fun ensureColumn(db: SQLiteDatabase, table: String, column: String, definition: String) {
+        if (hasColumn(db, table, column)) return
+        db.execSQL("ALTER TABLE $table ADD COLUMN $column $definition")
+    }
+
+    private fun hasColumn(db: SQLiteDatabase, table: String, column: String): Boolean =
+        db.rawQuery("PRAGMA table_info($table)", null).use { cursor ->
+            val nameIndex = cursor.getColumnIndex("name")
+            while (cursor.moveToNext()) {
+                if (nameIndex >= 0 && cursor.getString(nameIndex) == column) return@use true
+            }
+            false
+        }
 
     fun favoriteIds(): Set<String> {
         val result = linkedSetOf<String>()
@@ -278,6 +339,6 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
 
     companion object {
         private const val DB_NAME = "survival_library_vn.db"
-        private const val DB_VERSION = 3
+        private const val DB_VERSION = 4
     }
 }
