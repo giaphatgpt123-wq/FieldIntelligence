@@ -9,11 +9,14 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "vn.survivallibrary.app"
+        // Stable beta package from v0.2.1 onward. This intentionally differs from
+        // the old ephemeral-signed beta package vn.survivallibrary.app so the
+        // migration build can install without Android signature/package conflict.
+        applicationId = "vn.survivallibrary.vn"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.2.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
