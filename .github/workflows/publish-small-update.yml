@@ -1,0 +1,30 @@
+name: Publish Small Update to GitHub Release
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-small-update.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Download verified small APK artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p updates/test updates/main
+          gh run download 36392081324 -R "${{ github.repository }}" -n Small-update-installed-test-app -D updates/test
+          gh run download 36392081324 -R "${{ github.repository }}" -n Small-update-installed-main-app -D updates/main
+          mv updates/test/app-debug.apk updates/FieldIntelligence-CapNhat-Nhe-TEST.apk
+          mv updates/main/app-release.apk updates/FieldIntelligence-CapNhat-Nhe-CHINH.apk
+          test "$(stat -c%s updates/FieldIntelligence-CapNhat-Nhe-TEST.apk)" -lt 50000000
+          test "$(stat -c%s updates/FieldIntelligence-CapNhat-Nhe-CHINH.apk)" -lt 50000000
+      - name: Attach APKs to existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload fieldintel-482ddc210722 updates/FieldIntelligence-CapNhat-Nhe-TEST.apk updates/FieldIntelligence-CapNhat-Nhe-CHINH.apk --clobber -R "${{ github.repository }}"
