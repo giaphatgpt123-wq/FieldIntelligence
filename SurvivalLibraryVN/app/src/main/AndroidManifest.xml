@@ -5,10 +5,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/app_icon_demo"
-        android:roundIcon="@drawable/app_icon_demo"
+        android:icon="@drawable/ic_app_logo"
+        android:roundIcon="@drawable/ic_app_logo"
         android:label="Thư viện Sinh tồn Việt Nam"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -19,6 +20,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".MainAppActivity"
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"
