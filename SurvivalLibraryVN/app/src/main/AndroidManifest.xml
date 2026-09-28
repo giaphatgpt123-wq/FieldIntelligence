@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_app_logo"
-        android:roundIcon="@drawable/ic_app_logo"
+        android:icon="@drawable/app_icon_demo"
+        android:roundIcon="@drawable/app_icon_demo"
         android:label="Thư viện Sinh tồn Việt Nam"
         android:supportsRtl="true">
         <activity
