@@ -48,9 +48,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          KEY_BASE='https://android.googlesource.com/platform/build/+/refs/tags/android-11.0.0_r29/target/product/security'
-          curl -fsSL "$KEY_BASE/testkey.pk8?format=TEXT" | base64 --decode > "$RUNNER_TEMP/testkey.pk8"
-          curl -fsSL "$KEY_BASE/testkey.x509.pem?format=TEXT" | base64 --decode > "$RUNNER_TEMP/testkey.x509.pem"
+          KEY_BASE='https://raw.githubusercontent.com/aosp-mirror/platform_build/main/target/product/security'
+          curl --retry 5 --retry-all-errors --connect-timeout 15 -fsSL "$KEY_BASE/testkey.pk8" -o "$RUNNER_TEMP/testkey.pk8"
+          curl --retry 5 --retry-all-errors --connect-timeout 15 -fsSL "$KEY_BASE/testkey.x509.pem" -o "$RUNNER_TEMP/testkey.x509.pem"
           test -s "$RUNNER_TEMP/testkey.pk8"
           test -s "$RUNNER_TEMP/testkey.x509.pem"
 
