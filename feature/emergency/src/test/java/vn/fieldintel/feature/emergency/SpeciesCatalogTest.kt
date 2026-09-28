@@ -12,7 +12,7 @@ class SpeciesCatalogTest {
         assertEquals("centella-asiatica", SpeciesCatalog.search("rau ma").single().id)
         assertEquals("oryza-sativa", SpeciesCatalog.search("lua").single().id)
         assertEquals("zingiber-officinale", SpeciesCatalog.search("gung").single().id)
-        assertTrue(SpeciesCatalog.search("nghe").map { it.id }.containsAll(listOf("curcuma-longa", "curcuma-zedoaria")))
+        assertEquals("curcuma-longa", SpeciesCatalog.search("nghe").single().id)
         assertEquals("cymbopogon-citratus", SpeciesCatalog.search("sa").single().id)
         assertEquals("carica-papaya", SpeciesCatalog.search("du du").single().id)
         assertEquals("psidium-guajava", SpeciesCatalog.search("psidium guajava").single().id)
@@ -49,6 +49,13 @@ class SpeciesCatalogTest {
         assertTrue(tea.sourceScope.contains("không dùng hồ sơ taxonomy", ignoreCase = true))
     }
 
+    @Test fun domesticNamesKeepTurmericSpeciesAndFungusDistinct() {
+        assertEquals("Nghệ vàng", SpeciesCatalog.search("nghe vang").single().vietnameseName)
+        assertEquals("Nghệ đen (nga truật)", SpeciesCatalog.search("nghe den").single().vietnameseName)
+        assertEquals("ganoderma-lucidum", SpeciesCatalog.search("nam linh chi").single().id)
+        assertTrue(SpeciesCatalog.search("nghe").map { it.id }.containsAll(listOf("curcuma-longa", "curcuma-zedoaria")))
+    }
+
     @Test fun agricultureAndMedicinalExpansionKeepsTaxonomySeparateFromUseClaims() {
         val ids = SpeciesCatalog.records.map { it.id }.toSet()
         assertTrue(setOf(
@@ -56,8 +63,7 @@ class SpeciesCatalogTest {
             "cymbopogon-citratus", "carica-papaya", "psidium-guajava"
         ).all { it in ids })
         assertTrue(SpeciesCatalog.records.filter { it.id in ids }.all { it.sourceUrl.startsWith("https://") })
-        assertTrue(SpeciesCatalog.search("Curcuma longa").single().sourceScope.contains("công dụng và cách dùng cần chứng cứ riêng", ignoreCase = true))
-        assertEquals("curcuma-zedoaria", SpeciesCatalog.search("nghe den").single().id)
+        assertTrue(SpeciesCatalog.search("Curcuma longa").single().sourceScope.contains("không suy ra", ignoreCase = true))
     }
 
     @Test fun sourceProvenanceAndUnknownBehaviorRemainExplicit() {
