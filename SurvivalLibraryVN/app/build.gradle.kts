@@ -9,13 +9,13 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        // Stable beta package from v0.2.1 onward. Keep this package unchanged so
-        // beta APKs can update in place without Android package/signature conflict.
-        applicationId = "vn.survivallibrary.vn"
+        // Clean standalone package. It installs separately from the broken beta
+        // package so no old database/cache/update state can affect first launch.
+        applicationId = "vn.survivallibrary.full"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
-        versionName = "0.7.2"
+        versionCode = 1
+        versionName = "0.8.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
