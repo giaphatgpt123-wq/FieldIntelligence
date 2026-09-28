@@ -203,7 +203,10 @@ private fun LibrarySyncStatus(context:Context){
         }
     }
     Surface(shape=RoundedCornerShape(16.dp),color=Color(0xFF12323A)){
-        Text(status,Modifier.fillMaxWidth().padding(12.dp),color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+        Column(Modifier.fillMaxWidth().padding(12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)){
+            Text("TỰ NẠP THƯ VIỆN QUA WI-FI • ĐANG BẬT",color=FieldColors.primary,fontWeight=FontWeight.Bold,style=MaterialTheme.typography.labelMedium)
+            Text(status,color=FieldColors.onSurfaceVariant,style=MaterialTheme.typography.bodySmall)
+        }
     }
 }
 
