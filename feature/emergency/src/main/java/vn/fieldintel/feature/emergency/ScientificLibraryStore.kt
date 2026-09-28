@@ -57,6 +57,14 @@ private class ScientificSearchState {
     var completed by mutableStateOf(false)
 }
 
+/** Vietnamese names checked against domestic sources, keyed by exact binomial. */
+private data class DomesticName(val label:String,val source:String)
+private val domesticNames=mapOf(
+    "Curcuma longa" to DomesticName("Nghệ vàng","https://sokhcn.cantho.gov.vn/default.aspx?nid=17522&pid=57"),
+    "Curcuma zedoaria" to DomesticName("Nghệ đen (nga truật)","https://tracuuduoclieu.vn/curcuma-zedoaria-berg-roscoe.html"),
+    "Ganoderma lucidum" to DomesticName("Nấm linh chi (Ganoderma lucidum)","https://vafs.gov.vn/vn/gia-tri-duoc-lieu-va-cai-thien-chat-luong-trong-nuoi-trong-nhan-tao-nam-linh-chi-viet-nam/")
+)
+
 /** Read-only offline scientific taxonomy/media store. Reference media is not identification evidence. */
 class ScientificLibraryStore(context: Context) {
     private val appContext=context.applicationContext
@@ -212,8 +220,16 @@ class ScientificLibraryStore(context: Context) {
                     val vernacularContains="%${escapeLike(needle)}%"
                     where.append("(t.scientific_name_search LIKE ? ESCAPE '\\' OR EXISTS (")
                     where.append("SELECT 1 FROM vernacular_name sv WHERE sv.source_id=t.source_id AND sv.source_record_id=t.source_record_id ")
-                    where.append("AND sv.vernacular_name COLLATE NOCASE LIKE ? ESCAPE '\\'))")
+                    where.append("AND sv.vernacular_name COLLATE NOCASE LIKE ? ESCAPE '\\')")
                     args+=scientificPrefix;args+=vernacularContains
+                    val domesticMatches=domesticNames.filter { (binomial, entry) ->
+                        SpeciesCatalog.search(needle).any { it.scientificName.startsWith("$binomial ") && it.vietnameseName==entry.label }
+                    }.keys
+                    domesticMatches.forEach { binomial ->
+                        where.append(" OR t.scientific_name_search LIKE ? ESCAPE '\\'")
+                        args+="${escapeLike(binomial.lowercase(Locale.ROOT))}%"
+                    }
+                    where.append(")")
                 } else {
                     where.append("t.scientific_name_search LIKE ? ESCAPE '\\'")
                     args+="${escapeLike(needle)}%"
@@ -299,13 +315,14 @@ class ScientificLibraryStore(context: Context) {
         }
         val recordReference=if(references)getString(19).orEmpty() else ""
         val sourceUrl=when{recordReference.startsWith("https://")->recordReference;doi.isNotBlank()->"https://doi.org/$doi";mediaReference.startsWith("https://")->mediaReference;else->""}
+        val binomial=scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ")
+        val domestic=domesticNames[binomial]
         val starterFishName=if(group=="Cá nước ngọt"&&vernacular.isBlank()){
-            val binomial=scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ").lowercase(Locale.ROOT)
             FreshwaterFishCatalog.records.firstOrNull{
-                it.scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ").lowercase(Locale.ROOT)==binomial
+                it.scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ").equals(binomial,ignoreCase=true)
             }?.vietnameseName.orEmpty()
         }else ""
-        return SpeciesRecord("$ID_PREFIX$sourceId|$sourceRecordId",vernacular.ifBlank{starterFishName.ifBlank{scientificName}},scientificName,group,authority,sourceUrl,provenance)
+        return SpeciesRecord("$ID_PREFIX$sourceId|$sourceRecordId",domestic?.label?:vernacular.ifBlank{starterFishName.ifBlank{scientificName}},scientificName,group,authority,sourceUrl,provenance+(domestic?.let{" • Tên Việt đối chiếu: ${it.source}"}.orEmpty()))
     }
 
     private fun openReadOnly():SQLiteDatabase=SQLiteDatabase.openDatabase(databaseFile.absolutePath,null,SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS)
