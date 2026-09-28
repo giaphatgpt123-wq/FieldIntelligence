@@ -44,6 +44,38 @@ data class LibraryPackageManifest(
     val sourceUri: String
 )
 
+data class LibraryPackageRecord(
+    val id: String,
+    val vietnameseName: String,
+    val categoryId: String,
+    val usageLevel: UsageLevel,
+    val verificationState: VerificationState,
+    val summary: String,
+    val highRisk: Boolean,
+    val sourceCount: Int,
+    val published: Boolean,
+    val vietnamRelevant: Boolean,
+    val verifiedVietnameseName: Boolean,
+    val verifiedIdentitySource: Boolean,
+    val verifiedMedia: Boolean,
+    val hasUsageClaim: Boolean,
+    val verifiedUsageSource: Boolean,
+    val verifiedSafetySource: Boolean
+) {
+    fun quality(): RecordQuality = RecordQuality(
+        vietnamRelevant = vietnamRelevant,
+        usageLevel = usageLevel,
+        verificationState = verificationState,
+        verifiedVietnameseName = verifiedVietnameseName,
+        verifiedIdentitySource = verifiedIdentitySource,
+        verifiedMedia = verifiedMedia,
+        hasUsageClaim = hasUsageClaim,
+        verifiedUsageSource = verifiedUsageSource,
+        highRisk = highRisk,
+        verifiedSafetySource = verifiedSafetySource
+    )
+}
+
 data class PackageValidationResult(
     val valid: Boolean,
     val blockers: List<String>
@@ -85,6 +117,8 @@ object LibraryDataPackages {
         )
     )
 
+    fun descriptor(packageId: String): LibraryPackageDescriptor? = catalog.firstOrNull { it.packageId == packageId }
+
     fun merge(installed: List<InstalledPackageState>): List<LibraryPackageUiState> {
         val byId = installed.associateBy { it.packageId }
         return catalog.map { descriptor -> LibraryPackageUiState(descriptor, byId[descriptor.packageId]) }
@@ -99,6 +133,32 @@ object LibraryDataPackages {
             if (manifest.verifiedCount < 0 || manifest.verifiedCount > manifest.recordCount) add("Số hồ sơ kiểm chứng không hợp lệ")
             if (!manifest.sha256.matches(Regex("^[a-fA-F0-9]{64}$"))) add("Thiếu hoặc sai SHA-256")
             if (!manifest.sourceUri.startsWith("https://")) add("Nguồn cập nhật phải dùng HTTPS")
+        }
+        return PackageValidationResult(valid = blockers.isEmpty(), blockers = blockers)
+    }
+
+    fun validateRecords(manifest: LibraryPackageManifest, records: List<LibraryPackageRecord>): PackageValidationResult {
+        val descriptor = descriptor(manifest.packageId)
+        val blockers = buildList {
+            if (descriptor == null) {
+                add("Không tìm thấy cấu hình cho gói ${manifest.packageId}")
+                return@buildList
+            }
+            if (records.size != manifest.recordCount) add("Số hồ sơ thực tế không khớp manifest")
+            if (records.map { it.id }.distinct().size != records.size) add("Gói có ID hồ sơ bị trùng")
+            if (records.any { it.id.isBlank() || it.id.startsWith("demo-") }) add("Gói chứa ID hồ sơ không hợp lệ")
+            if (records.any { it.vietnameseName.isBlank() }) add("Gói có hồ sơ thiếu tên tiếng Việt")
+            if (records.any { it.sourceCount <= 0 }) add("Gói có hồ sơ thiếu nguồn kiểm chứng")
+            if (descriptor.categoryIds.isNotEmpty() && records.any { it.categoryId !in descriptor.categoryIds }) {
+                add("Gói chứa hồ sơ ngoài phạm vi danh mục được phép")
+            }
+            val verified = records.count { it.verificationState.rank >= VerificationState.DA_KIEM_CHUNG.rank }
+            if (verified != manifest.verifiedCount) add("Số hồ sơ kiểm chứng không khớp manifest")
+            records.forEach { record ->
+                if (!record.published) add("${record.id}: hồ sơ chưa ở trạng thái phát hành")
+                val decision = LibraryRules.publicationDecision(record.quality())
+                if (!decision.publishable) add("${record.id}: ${decision.blockers.joinToString("; ")}")
+            }
         }
         return PackageValidationResult(valid = blockers.isEmpty(), blockers = blockers)
     }
