@@ -45,7 +45,7 @@ jobs:
         run: |
           sudo chmod 666 /dev/kvm || true
 
-      - name: Runtime launcher smoke test on Android emulator
+      - name: Runtime launcher and main-screen smoke tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
@@ -95,13 +95,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES="Bản cài đầy đủ Safe Start v$APP_VERSION. Launcher đầu tiên chạy Android native, không mở Compose/SQLite/network khi khởi động. Release chỉ được phát hành sau khi Activity launcher chạy thành công trên Android emulator. Package: vn.survivallibrary.full."
+          NOTES="Bản ổn định nền native v$APP_VERSION. Cả màn hình launcher và màn hình chính đều chạy Android native, không khởi tạo Compose/SQLite/network khi mở. Release chỉ được phát hành sau khi cả hai Activity đều đạt runtime smoke test trên Android emulator. Package: vn.survivallibrary.full."
           if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt --clobber -R "${{ github.repository }}"
           else
             gh release create "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt \
               --target survival-library-vn \
-              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Safe Start" \
+              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Native Stable" \
               --notes "$NOTES" \
               -R "${{ github.repository }}"
           fi
