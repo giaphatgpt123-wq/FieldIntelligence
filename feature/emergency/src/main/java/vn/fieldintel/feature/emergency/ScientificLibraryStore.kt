@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import java.io.File
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -298,7 +299,13 @@ class ScientificLibraryStore(context: Context) {
         }
         val recordReference=if(references)getString(19).orEmpty() else ""
         val sourceUrl=when{recordReference.startsWith("https://")->recordReference;doi.isNotBlank()->"https://doi.org/$doi";mediaReference.startsWith("https://")->mediaReference;else->""}
-        return SpeciesRecord("$ID_PREFIX$sourceId|$sourceRecordId",vernacular.ifBlank{scientificName},scientificName,group,authority,sourceUrl,provenance)
+        val starterFishName=if(group=="Cá nước ngọt"&&vernacular.isBlank()){
+            val binomial=scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ").lowercase(Locale.ROOT)
+            FreshwaterFishCatalog.records.firstOrNull{
+                it.scientificName.trim().split(Regex("\\s+")).take(2).joinToString(" ").lowercase(Locale.ROOT)==binomial
+            }?.vietnameseName.orEmpty()
+        }else ""
+        return SpeciesRecord("$ID_PREFIX$sourceId|$sourceRecordId",vernacular.ifBlank{starterFishName.ifBlank{scientificName}},scientificName,group,authority,sourceUrl,provenance)
     }
 
     private fun openReadOnly():SQLiteDatabase=SQLiteDatabase.openDatabase(databaseFile.absolutePath,null,SQLiteDatabase.OPEN_READONLY or SQLiteDatabase.NO_LOCALIZED_COLLATORS)
