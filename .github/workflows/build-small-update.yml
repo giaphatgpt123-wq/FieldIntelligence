@@ -1,0 +1,54 @@
+name: Build Small Installed-App Update
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/build-small-update.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Bundle verified plant recognition model
+        run: |
+          set -euo pipefail
+          mkdir -p app/src/main/assets/visual-model
+          curl -fL --retry 3 'https://tfhub.dev/google/lite-model/aiy/vision/classifier/plants_V1/3?lite-format=tflite' -o app/src/main/assets/visual-model/aiy-plants-v1.tflite
+          echo '9ff2cc02d066fc266045ce299f04fb76907d9313d576881b61c255aa19433521  app/src/main/assets/visual-model/aiy-plants-v1.tflite' | sha256sum -c -
+          python3 - <<'PY'
+          import zipfile
+          p='app/src/main/assets/visual-model/aiy-plants-v1.tflite'
+          with zipfile.ZipFile(p) as z:
+              names=z.read('probability-labels-en.txt').decode().splitlines()
+          open('app/src/main/assets/visual-model/aiy-plants-v1.labels.txt','w').write('\n'.join(names)+'\n')
+          PY
+      - name: Build small signed update APKs
+        run: gradle --no-daemon :app:assembleDebug :app:assembleRelease
+      - name: Verify no large bundled library
+        run: |
+          set -euo pipefail
+          for apk in app/build/outputs/apk/{debug,release}/*.apk; do
+            ! unzip -Z1 "$apk" | grep -q 'assets/scientific-library/FieldIntelligence-WFO-mobile.zip'
+            unzip -Z1 "$apk" | grep -q 'assets/visual-model/aiy-plants-v1.tflite'
+            test "$(stat -c%s "$apk")" -lt 50000000
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Small-update-installed-test-app
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Small-update-installed-main-app
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
