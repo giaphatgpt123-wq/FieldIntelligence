@@ -1,6 +1,7 @@
 package vn.survivallibrary.app
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -16,25 +17,22 @@ import android.widget.ScrollView
 import android.widget.Space
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 /**
  * Native, demo-style home screen.
- *
- * Runtime stability remains the priority: this screen uses only Android Views and bundled
- * drawables. It does not open SQLite, network, updater or Compose during startup.
+ * Runtime stability remains the priority: no Compose, SQLite or network is opened during startup.
  */
 class MainAppActivity : Activity() {
 
     private val forest = Color.rgb(18, 63, 44)
     private val forest2 = Color.rgb(29, 90, 61)
-    private val forestSoft = Color.rgb(56, 111, 78)
     private val cream = Color.rgb(247, 243, 232)
     private val paper = Color.rgb(255, 254, 250)
     private val sage = Color.rgb(233, 241, 228)
-    private val sage2 = Color.rgb(218, 232, 214)
     private val muted = Color.rgb(99, 111, 102)
     private val ink = Color.rgb(25, 35, 29)
-    private val gold = Color.rgb(225, 198, 126)
     private val warning = Color.rgb(255, 236, 185)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,17 +40,22 @@ class MainAppActivity : Activity() {
         window.statusBarColor = cream
         window.navigationBarColor = paper
         title = "Thư viện Sinh tồn Việt Nam"
-        setContentView(buildScreen())
+
+        val root = buildScreen()
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, bars.top, 0, bars.bottom)
+            insets
+        }
+        setContentView(root)
+        ViewCompat.requestApplyInsets(root)
     }
 
     private fun buildScreen(): View {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(cream)
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
 
         val scroll = ScrollView(this).apply {
@@ -62,47 +65,39 @@ class MainAppActivity : Activity() {
         }
         val content = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(16), dp(12), dp(16), dp(26))
+            setPadding(dp(15), dp(10), dp(15), dp(24))
         }
 
         content.addView(buildHeader())
-        content.addView(space(12))
+        content.addView(space(10))
         content.addView(buildHero())
-        content.addView(space(14))
+        content.addView(space(12))
         content.addView(buildSearchBar())
-        content.addView(space(24))
+        content.addView(space(22))
 
         content.addView(sectionTitle("Tìm theo nhu cầu", "Chọn nhanh theo tình huống thực tế"))
-        content.addView(space(12))
+        content.addView(space(10))
         content.addView(buildNeedGrid())
-        content.addView(space(26))
+        content.addView(space(24))
 
         content.addView(sectionTitle("Thường dùng ở Việt Nam", "Ưu tiên nội dung quen thuộc, dễ nhận biết"))
-        content.addView(space(12))
+        content.addView(space(10))
         content.addView(buildPopularRow())
-        content.addView(space(12))
+        content.addView(space(10))
         content.addView(buildUsageFilters())
-        content.addView(space(26))
+        content.addView(space(24))
 
         content.addView(sectionTitle("Khám phá theo danh mục", "Tiếng Việt trước · ảnh trước · chi tiết khi cần"))
-        content.addView(space(12))
+        content.addView(space(10))
         content.addView(buildCategoryGrid())
-        content.addView(space(22))
+        content.addView(space(20))
         content.addView(buildCameraCard())
-        content.addView(space(18))
+        content.addView(space(16))
         content.addView(buildDataNotice())
 
         scroll.addView(content)
-        root.addView(scroll, LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            0,
-            1f
-        ))
-        root.addView(buildBottomNav(), LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            dp(72)
-        ))
-
+        root.addView(scroll, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+        root.addView(buildBottomNav(), LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(70)))
         return root
     }
 
@@ -113,9 +108,10 @@ class MainAppActivity : Activity() {
         }
 
         val logo = ImageView(this).apply {
-            setImageResource(R.drawable.app_icon_demo)
-            scaleType = ImageView.ScaleType.CENTER_CROP
+            setImageResource(R.drawable.ic_app_logo)
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
             background = roundedSolid(paper, 14)
+            setPadding(dp(4), dp(4), dp(4), dp(4))
             clipToOutline = true
         }
         row.addView(logo, LinearLayout.LayoutParams(dp(48), dp(48)))
@@ -124,19 +120,11 @@ class MainAppActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(10), 0, 0, 0)
         }
-        titles.addView(text("THƯ VIỆN SINH TỒN", 20f, forest, true))
-        titles.addView(text("Hiểu thiên nhiên · sống an toàn hơn", 11.5f, muted, false))
+        titles.addView(text("THƯ VIỆN SINH TỒN", 19f, forest, true))
+        titles.addView(text("Thiên nhiên Việt Nam · hiểu để an toàn", 10.8f, muted, false).apply { setPadding(0, dp(2), 0, 0) })
         row.addView(titles, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
 
-        val search = TextView(this).apply {
-            text = "⌕"
-            textSize = 30f
-            gravity = Gravity.CENTER
-            setTextColor(forest)
-            background = roundedSolid(paper, 16)
-            setOnClickListener { toast("Mở tìm kiếm") }
-        }
-        row.addView(search, LinearLayout.LayoutParams(dp(48), dp(48)))
+        row.addView(iconButton(NativeIcon.SEARCH) { toast("Mở tìm kiếm") }, LinearLayout.LayoutParams(dp(46), dp(46)))
         return row
     }
 
@@ -145,94 +133,73 @@ class MainAppActivity : Activity() {
             background = roundedSolid(forest, 24)
             clipToOutline = true
         }
-
-        val image = ImageView(this).apply {
+        frame.addView(ImageView(this).apply {
             setImageResource(R.drawable.hero_scene)
             scaleType = ImageView.ScaleType.CENTER_CROP
-        }
-        frame.addView(image, FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        ))
+        }, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
-        val shade = View(this).apply {
-            background = GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                intArrayOf(Color.TRANSPARENT, Color.argb(55, 0, 0, 0), Color.argb(205, 8, 35, 23))
-            )
-        }
-        frame.addView(shade, FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        ))
+        frame.addView(View(this).apply {
+            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(Color.TRANSPARENT, Color.argb(48, 0, 0, 0), Color.argb(210, 8, 35, 23)))
+        }, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
         val overlay = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.BOTTOM
-            setPadding(dp(18), dp(18), dp(18), dp(18))
+            setPadding(dp(17), dp(17), dp(17), dp(17))
         }
-        overlay.addView(chip("THIÊN NHIÊN VIỆT NAM", paper, forest))
-        overlay.addView(space(8))
-        overlay.addView(text("Hiểu thiên nhiên\nSống an toàn hơn", 29f, Color.WHITE, true).apply {
-            setLineSpacing(0f, 0.95f)
-        })
-        overlay.addView(text("Nhận biết trực quan · tiếng Việt trước · an toàn trước", 12.5f, Color.WHITE, false).apply {
-            setPadding(0, dp(7), 0, 0)
-        })
-        frame.addView(overlay, FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        ))
+        overlay.addView(chip("THIÊN NHIÊN VIỆT NAM", Color.argb(238, 255, 254, 250), forest))
+        overlay.addView(space(7))
+        overlay.addView(text("Hiểu thiên nhiên\nSống an toàn hơn", 27f, Color.WHITE, true).apply { setLineSpacing(0f, 0.96f) })
+        overlay.addView(text("Nhận biết trực quan · tiếng Việt trước · an toàn trước", 11.5f, Color.WHITE, false).apply { setPadding(0, dp(6), 0, 0) })
+        frame.addView(overlay, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
 
-        return frame.apply {
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(222))
-        }
+        return frame.apply { layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(214)) }
     }
 
     private fun buildSearchBar(): View {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(14), 0, dp(10), 0)
+            setPadding(dp(13), 0, dp(10), 0)
             background = roundedStroke(paper, 18, Color.rgb(116, 167, 117), 1)
+            isClickable = true
+            isFocusable = true
             setOnClickListener { toast("Tìm trong thư viện") }
         }
-        row.addView(text("⌕", 24f, forest, true), LinearLayout.LayoutParams(dp(32), ViewGroup.LayoutParams.WRAP_CONTENT))
-        row.addView(text("Tìm cây, rau, nấm, cá, kỹ năng...", 13.5f, muted, false), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        row.addView(NativeIconView(this, NativeIcon.SEARCH, forest), LinearLayout.LayoutParams(dp(23), dp(23)))
+        row.addView(text("Tìm tên, hình ảnh hoặc kỹ năng...", 12.8f, muted, false).apply { setPadding(dp(10), 0, 0, 0) }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         row.addView(chip("TÌM", sage, forest))
-        return row.apply {
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(56))
-        }
+        return row.apply { layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(54)) }
     }
 
     private fun buildNeedGrid(): View {
         val container = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val first = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        first.addView(needCard("💧", "Uống", "Nước và đồ uống an toàn", Color.rgb(221, 239, 234)), weightedCardParams(6))
-        first.addView(needCard("🥬", "Ăn", "Thực phẩm và cách dùng", Color.rgb(235, 240, 215)), weightedCardParams(0))
+        first.addView(needCard(NativeIcon.WATER, "Uống", "Nguồn nước & an toàn", Color.rgb(221, 239, 234)), weightedCardParams(6, 112))
+        first.addView(needCard(NativeIcon.FOOD, "Ăn", "Thực phẩm & cách dùng", Color.rgb(235, 240, 215)), weightedCardParams(0, 112))
         container.addView(first)
-        container.addView(space(10))
+        container.addView(space(9))
 
         val second = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        second.addView(needCard("⛺", "Ở", "Trú ẩn và kỹ năng", Color.rgb(242, 230, 205)), weightedCardParams(6))
-        second.addView(needCard("⚠", "Tránh nguy hiểm", "Cây độc, động vật, sự cố", Color.rgb(247, 225, 205)), weightedCardParams(0))
+        second.addView(needCard(NativeIcon.SHELTER, "Ở", "Trú ẩn & kỹ năng", Color.rgb(242, 230, 205)), weightedCardParams(6, 112))
+        second.addView(needCard(NativeIcon.SHIELD, "Tránh nguy hiểm", "Cây độc, động vật, sự cố", Color.rgb(247, 225, 205)), weightedCardParams(0, 112))
         container.addView(second)
         return container
     }
 
-    private fun needCard(icon: String, title: String, subtitle: String, color: Int): View {
+    private fun needCard(icon: NativeIcon, title: String, subtitle: String, color: Int): View {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.BOTTOM
-            setPadding(dp(14), dp(14), dp(14), dp(14))
-            background = roundedSolid(color, 20)
+            setPadding(dp(13), dp(12), dp(13), dp(12))
+            background = roundedSolid(color, 19)
             isClickable = true
             isFocusable = true
             setOnClickListener { toast(title) }
-            addView(text(icon, 27f, forest, false))
-            addView(space(8))
-            addView(text(title, 19f, forest, true))
-            addView(text(subtitle, 10.5f, muted, false).apply { setPadding(0, dp(4), 0, 0) })
+            addView(NativeIconView(this@MainAppActivity, icon, forest), LinearLayout.LayoutParams(dp(27), dp(27)))
+            addView(space(6))
+            addView(text(title, 17f, forest, true))
+            addView(text(subtitle, 10.2f, muted, false).apply { setPadding(0, dp(3), 0, 0) })
         }
     }
 
@@ -241,63 +208,48 @@ class MainAppActivity : Activity() {
             isHorizontalScrollBarEnabled = false
             overScrollMode = View.OVER_SCROLL_NEVER
         }
-        val row = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setPadding(0, 0, dp(4), 0)
-        }
-        row.addView(photoCard(R.drawable.rau_muong_demo, "Rau muống", "Thường dùng", "DEMO", forest2), fixedCardParams(158, 10))
-        row.addView(photoCard(R.drawable.carrot_demo, "Cà rốt", "Thường dùng", "DEMO", Color.rgb(179, 109, 38)), fixedCardParams(158, 10))
-        row.addView(photoCard(R.drawable.leaf_demo, "Lá thực vật", "Nhận biết mẫu", "DEMO", Color.rgb(87, 129, 77)), fixedCardParams(158, 0))
+        val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, 0, dp(4), 0) }
+        row.addView(photoCard(R.drawable.rau_muong_demo, "Rau muống", "Thường dùng", "rau-muong", forest2), fixedCardParams(152, 9))
+        row.addView(photoCard(R.drawable.carrot_demo, "Cà rốt", "Thường dùng", "ca-rot", Color.rgb(179, 109, 38)), fixedCardParams(152, 9))
+        row.addView(photoCard(R.drawable.leaf_demo, "Lá thực vật", "Nhận biết mẫu", "la-thuc-vat", Color.rgb(87, 129, 77)), fixedCardParams(152, 0))
         scroller.addView(row)
         return scroller
     }
 
-    private fun photoCard(imageRes: Int, title: String, usage: String, badge: String, accent: Int): View {
+    private fun photoCard(imageRes: Int, title: String, usage: String, recordId: String, accent: Int): View {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = roundedSolid(paper, 18)
             isClickable = true
             isFocusable = true
-            setOnClickListener { toast(title) }
+            setOnClickListener { openDetail(recordId, title, imageRes, usage) }
         }
-        val image = ImageView(this).apply {
+        card.addView(ImageView(this).apply {
             setImageResource(imageRes)
             scaleType = ImageView.ScaleType.CENTER_CROP
             background = roundedSolid(sage, 18)
             clipToOutline = true
-        }
-        card.addView(image, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(118)))
+        }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(110)))
 
-        val body = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(dp(11), dp(9), dp(11), dp(11))
-        }
-        val top = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-        }
-        top.addView(text(title, 15f, ink, true), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        top.addView(chip(badge, warning, Color.rgb(116, 86, 17)))
+        val body = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(10), dp(9), dp(10), dp(10)) }
+        val top = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        top.addView(text(title, 14.5f, ink, true), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        top.addView(chip("DEMO", warning, Color.rgb(116, 86, 17)))
         body.addView(top)
-        body.addView(text(usage, 11f, accent, true).apply { setPadding(0, dp(5), 0, 0) })
-        body.addView(text("Ảnh · nguồn · mức sử dụng", 9.5f, muted, false).apply { setPadding(0, dp(2), 0, 0) })
+        body.addView(text(usage, 10.8f, accent, true).apply { setPadding(0, dp(4), 0, 0) })
+        body.addView(text("Ảnh · nguồn · mức sử dụng", 9f, muted, false).apply { setPadding(0, dp(2), 0, 0) })
         card.addView(body)
         return card
     }
 
     private fun buildUsageFilters(): View {
-        val scroll = HorizontalScrollView(this).apply {
-            isHorizontalScrollBarEnabled = false
-        }
+        val scroll = HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false }
         val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         val labels = listOf("Thường dùng", "Hay dùng", "Ít dùng", "Hiếm dùng", "Xem thêm")
         labels.forEachIndexed { index, label ->
-            row.addView(
-                chip(label, if (index == 0) forest else paper, if (index == 0) Color.WHITE else forest),
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(38)).apply {
-                    if (index != labels.lastIndex) marginEnd = dp(8)
-                }
-            )
+            row.addView(chip(label, if (index == 0) forest else paper, if (index == 0) Color.WHITE else forest), LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36)).apply {
+                if (index != labels.lastIndex) marginEnd = dp(7)
+            })
         }
         scroll.addView(row)
         return scroll
@@ -305,42 +257,38 @@ class MainAppActivity : Activity() {
 
     private fun buildCategoryGrid(): View {
         val categories = listOf(
-            Triple("🌿", "Cây cỏ, rau", "Thường gặp và cách dùng"),
-            Triple("🍄", "Nấm", "Nhận biết và cảnh báo"),
-            Triple("🐟", "Cá & thủy sản", "Nước ngọt và vùng biển"),
-            Triple("🐝", "Côn trùng", "Có ích và nguy hiểm"),
-            Triple("🌸", "Hoa", "Tên Việt và hình ảnh"),
-            Triple("🌳", "Cây gỗ", "Đặc điểm và phân biệt"),
-            Triple("🍊", "Cây ăn quả", "Quả, mùa vụ, cách dùng"),
-            Triple("🌱", "Cây thuốc", "Nhận biết và lưu ý an toàn")
+            CategoryUi(NativeIcon.LEAF, "Cây cỏ, rau", "Thường gặp và cách dùng"),
+            CategoryUi(NativeIcon.MUSHROOM, "Nấm", "Nhận biết và cảnh báo"),
+            CategoryUi(NativeIcon.FISH, "Cá & thủy sản", "Nước ngọt và vùng biển"),
+            CategoryUi(NativeIcon.BUG, "Côn trùng", "Có ích và nguy hiểm"),
+            CategoryUi(NativeIcon.FLOWER, "Hoa", "Tên Việt và hình ảnh"),
+            CategoryUi(NativeIcon.TREE, "Cây gỗ", "Đặc điểm và phân biệt"),
+            CategoryUi(NativeIcon.FRUIT, "Cây ăn quả", "Quả, mùa vụ, cách dùng"),
+            CategoryUi(NativeIcon.MEDICINE, "Cây thuốc", "Nhận biết và lưu ý an toàn")
         )
-
         val container = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         categories.chunked(2).forEachIndexed { rowIndex, pair ->
             val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-            pair.forEachIndexed { columnIndex, item ->
-                val margin = if (columnIndex == 0) 6 else 0
-                row.addView(categoryCard(item.first, item.second, item.third), weightedCardParams(margin))
-            }
-            if (pair.size == 1) row.addView(Space(this), weightedCardParams(0))
+            pair.forEachIndexed { columnIndex, item -> row.addView(categoryCard(item), weightedCardParams(if (columnIndex == 0) 6 else 0, 104)) }
+            if (pair.size == 1) row.addView(Space(this), weightedCardParams(0, 104))
             container.addView(row)
-            if (rowIndex != categories.chunked(2).lastIndex) container.addView(space(10))
+            if (rowIndex != categories.chunked(2).lastIndex) container.addView(space(9))
         }
         return container
     }
 
-    private fun categoryCard(icon: String, title: String, subtitle: String): View {
+    private fun categoryCard(item: CategoryUi): View {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(13), dp(13), dp(13), dp(13))
-            background = roundedSolid(paper, 18)
+            setPadding(dp(12), dp(11), dp(12), dp(11))
+            background = roundedSolid(paper, 17)
             isClickable = true
             isFocusable = true
-            setOnClickListener { toast(title) }
-            addView(text(icon, 25f, forest, false))
-            addView(space(7))
-            addView(text(title, 15f, forest, true))
-            addView(text(subtitle, 10f, muted, false).apply { setPadding(0, dp(3), 0, 0) })
+            setOnClickListener { toast(item.title) }
+            addView(NativeIconView(this@MainAppActivity, item.icon, forest2), LinearLayout.LayoutParams(dp(25), dp(25)))
+            addView(space(6))
+            addView(text(item.title, 14f, forest, true))
+            addView(text(item.subtitle, 9.6f, muted, false).apply { setPadding(0, dp(3), 0, 0) })
         }
     }
 
@@ -348,136 +296,117 @@ class MainAppActivity : Activity() {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(16), dp(15), dp(16), dp(15))
+            setPadding(dp(15), dp(14), dp(15), dp(14))
             background = roundedGradient(forest2, forest, 20)
             isClickable = true
             isFocusable = true
             setOnClickListener { toast("Quét ảnh / chụp ảnh") }
         }
-        row.addView(text("◉", 34f, Color.WHITE, true), LinearLayout.LayoutParams(dp(48), ViewGroup.LayoutParams.WRAP_CONTENT))
-        val words = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        words.addView(text("Nhận dạng nhanh bằng camera", 16f, Color.WHITE, true))
-        words.addView(text("Quét ảnh / Chụp ảnh · AI offline sẽ được nối sau", 10.5f, Color.argb(220, 255, 255, 255), false))
+        row.addView(NativeIconView(this, NativeIcon.CAMERA, Color.WHITE), LinearLayout.LayoutParams(dp(36), dp(36)))
+        val words = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(11), 0, 0, 0) }
+        words.addView(text("Nhận dạng nhanh bằng camera", 15f, Color.WHITE, true))
+        words.addView(text("Quét ảnh / Chụp ảnh · AI offline sẽ được nối sau", 10.2f, Color.argb(220, 255, 255, 255), false).apply { setPadding(0, dp(2), 0, 0) })
         row.addView(words, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        row.addView(text("›", 30f, Color.WHITE, false))
+        row.addView(NativeIconView(this, NativeIcon.CHEVRON_RIGHT, Color.WHITE), LinearLayout.LayoutParams(dp(24), dp(24)))
         return row
     }
 
-    private fun buildDataNotice(): View {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(dp(14), dp(12), dp(14), dp(12))
-            background = roundedSolid(Color.rgb(243, 236, 211), 16)
-            addView(text("DỮ LIỆU HIỆN TẠI", 10f, Color.rgb(103, 78, 17), true))
-            addView(text("Các thẻ có nhãn DEMO chỉ dùng để kiểm tra giao diện. Hồ sơ thật chỉ xuất hiện sau khi qua bộ quy tắc kiểm chứng.", 11.5f, Color.rgb(100, 87, 52), false).apply {
-                setPadding(0, dp(5), 0, 0)
-            })
-        }
+    private fun buildDataNotice(): View = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        setPadding(dp(13), dp(11), dp(13), dp(11))
+        background = roundedSolid(Color.rgb(243, 236, 211), 15)
+        addView(text("DỮ LIỆU HIỆN TẠI", 9.5f, Color.rgb(103, 78, 17), true))
+        addView(text("Các thẻ DEMO chỉ dùng kiểm tra giao diện. Hồ sơ thật chỉ xuất hiện sau khi vượt bộ quy tắc kiểm chứng.", 10.8f, Color.rgb(100, 87, 52), false).apply { setPadding(0, dp(4), 0, 0) })
     }
 
     private fun buildBottomNav(): View {
         val nav = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(4), dp(6), dp(4), dp(6))
+            setPadding(dp(4), dp(5), dp(4), dp(5))
             setBackgroundColor(paper)
         }
         val items = listOf(
-            Triple("⌂", "Trang chủ", true),
-            Triple("▦", "Danh mục", false),
-            Triple("◎", "Quét ảnh", false),
-            Triple("♡", "Đã lưu", false),
-            Triple("↻", "Cập nhật", false)
+            NavUi(NativeIcon.HOME, "Trang chủ", true),
+            NavUi(NativeIcon.GRID, "Danh mục", false),
+            NavUi(NativeIcon.CAMERA, "Quét ảnh", false),
+            NavUi(NativeIcon.BOOKMARK, "Đã lưu", false),
+            NavUi(NativeIcon.REFRESH, "Cập nhật", false)
         )
         items.forEach { item ->
+            val color = if (item.selected) forest else muted
             val cell = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER
-                setPadding(dp(2), dp(2), dp(2), dp(2))
-                if (item.third) background = roundedSolid(sage, 16)
+                setPadding(dp(2), dp(3), dp(2), dp(2))
+                if (item.selected) background = roundedSolid(sage, 15)
                 isClickable = true
                 isFocusable = true
-                setOnClickListener { toast(item.second) }
-                addView(text(item.first, if (item.second == "Quét ảnh") 25f else 20f, if (item.third) forest else muted, true).apply {
-                    gravity = Gravity.CENTER
-                })
-                addView(text(item.second, 9.5f, if (item.third) forest else muted, item.third).apply {
-                    gravity = Gravity.CENTER
-                })
+                setOnClickListener { toast(item.label) }
+                addView(NativeIconView(this@MainAppActivity, item.icon, color), LinearLayout.LayoutParams(dp(22), dp(22)))
+                addView(text(item.label, 9.2f, color, item.selected).apply { gravity = Gravity.CENTER; setPadding(0, dp(3), 0, 0) })
             }
-            nav.addView(cell, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply {
-                marginStart = dp(2)
-                marginEnd = dp(2)
-            })
+            nav.addView(cell, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply { marginStart = dp(2); marginEnd = dp(2) })
         }
         return nav
     }
 
-    private fun sectionTitle(title: String, subtitle: String): View {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            addView(text(title, 22f, forest, true))
-            addView(text(subtitle, 11f, muted, false).apply { setPadding(0, dp(3), 0, 0) })
-        }
+    private fun sectionTitle(title: String, subtitle: String): View = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        addView(text(title, 20f, forest, true))
+        addView(text(subtitle, 10.5f, muted, false).apply { setPadding(0, dp(2), 0, 0) })
     }
 
-    private fun text(value: String, size: Float, color: Int, bold: Boolean): TextView {
-        return TextView(this).apply {
-            text = value
-            textSize = size
-            setTextColor(color)
-            includeFontPadding = false
-            if (bold) setTypeface(typeface, Typeface.BOLD)
-        }
+    private fun iconButton(icon: NativeIcon, click: () -> Unit): View = FrameLayout(this).apply {
+        background = roundedSolid(paper, 15)
+        isClickable = true
+        isFocusable = true
+        setOnClickListener { click() }
+        addView(NativeIconView(this@MainAppActivity, icon, forest), FrameLayout.LayoutParams(dp(23), dp(23), Gravity.CENTER))
     }
 
-    private fun chip(label: String, backgroundColor: Int, textColor: Int): TextView {
-        return text(label, 9.5f, textColor, true).apply {
-            gravity = Gravity.CENTER
-            setPadding(dp(10), dp(5), dp(10), dp(5))
-            background = roundedSolid(backgroundColor, 999)
-        }
+    private fun openDetail(recordId: String, title: String, imageRes: Int, usage: String) {
+        startActivity(Intent(this, RecordDetailActivity::class.java).apply {
+            putExtra("recordId", recordId)
+            putExtra(RecordDetailActivity.EXTRA_TITLE, title)
+            putExtra(RecordDetailActivity.EXTRA_IMAGE_RES, imageRes)
+            putExtra(RecordDetailActivity.EXTRA_USAGE, usage)
+        })
     }
 
-    private fun space(heightDp: Int): Space = Space(this).apply {
-        layoutParams = LinearLayout.LayoutParams(1, dp(heightDp))
+    private fun text(value: String, size: Float, color: Int, bold: Boolean): TextView = TextView(this).apply {
+        text = value
+        textSize = size
+        setTextColor(color)
+        includeFontPadding = false
+        if (bold) setTypeface(typeface, Typeface.BOLD)
     }
 
-    private fun weightedCardParams(endMarginDp: Int): LinearLayout.LayoutParams {
-        return LinearLayout.LayoutParams(0, dp(126), 1f).apply {
-            marginEnd = dp(endMarginDp)
-        }
+    private fun chip(label: String, backgroundColor: Int, textColor: Int): TextView = text(label, 9.2f, textColor, true).apply {
+        gravity = Gravity.CENTER
+        setPadding(dp(9), dp(5), dp(9), dp(5))
+        background = roundedSolid(backgroundColor, 999)
     }
 
-    private fun fixedCardParams(widthDp: Int, endMarginDp: Int): LinearLayout.LayoutParams {
-        return LinearLayout.LayoutParams(dp(widthDp), ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-            marginEnd = dp(endMarginDp)
-        }
+    private fun space(heightDp: Int): Space = Space(this).apply { layoutParams = LinearLayout.LayoutParams(1, dp(heightDp)) }
+
+    private fun weightedCardParams(endMarginDp: Int, heightDp: Int): LinearLayout.LayoutParams = LinearLayout.LayoutParams(0, dp(heightDp), 1f).apply { marginEnd = dp(endMarginDp) }
+
+    private fun fixedCardParams(widthDp: Int, endMarginDp: Int): LinearLayout.LayoutParams = LinearLayout.LayoutParams(dp(widthDp), ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = dp(endMarginDp) }
+
+    private fun roundedSolid(color: Int, radiusDp: Int): GradientDrawable = GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        setColor(color)
+        cornerRadius = dp(radiusDp).toFloat()
     }
 
-    private fun roundedSolid(color: Int, radiusDp: Int): GradientDrawable {
-        return GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            setColor(color)
-            cornerRadius = dp(radiusDp).toFloat()
-        }
-    }
+    private fun roundedStroke(fill: Int, radiusDp: Int, stroke: Int, strokeDp: Int): GradientDrawable = roundedSolid(fill, radiusDp).apply { setStroke(dp(strokeDp), stroke) }
 
-    private fun roundedStroke(fill: Int, radiusDp: Int, stroke: Int, strokeDp: Int): GradientDrawable {
-        return roundedSolid(fill, radiusDp).apply {
-            setStroke(dp(strokeDp), stroke)
-        }
-    }
+    private fun roundedGradient(start: Int, end: Int, radiusDp: Int): GradientDrawable = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(start, end)).apply { cornerRadius = dp(radiusDp).toFloat() }
 
-    private fun roundedGradient(start: Int, end: Int, radiusDp: Int): GradientDrawable {
-        return GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(start, end)).apply {
-            cornerRadius = dp(radiusDp).toFloat()
-        }
-    }
-
-    private fun toast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
+    private fun toast(message: String) { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
+
+    private data class CategoryUi(val icon: NativeIcon, val title: String, val subtitle: String)
+    private data class NavUi(val icon: NativeIcon, val label: String, val selected: Boolean)
 }
