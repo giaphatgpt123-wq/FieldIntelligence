@@ -17,6 +17,10 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) createPackageTables(db)
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE library_records ADD COLUMN package_id TEXT NOT NULL DEFAULT ''")
+            db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_package ON library_records(package_id)")
+        }
     }
 
     private fun createCoreTables(db: SQLiteDatabase) {
@@ -24,6 +28,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             """
             CREATE TABLE IF NOT EXISTS library_records (
                 id TEXT PRIMARY KEY,
+                package_id TEXT NOT NULL DEFAULT '',
                 vietnamese_name TEXT NOT NULL,
                 category_id TEXT NOT NULL,
                 usage_level TEXT NOT NULL,
@@ -38,6 +43,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         )
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_category ON library_records(category_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_published ON library_records(published)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_records_package ON library_records(package_id)")
         db.execSQL(
             """
             CREATE TABLE IF NOT EXISTS favorites (
@@ -163,6 +169,70 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         return result
     }
 
+    fun installVerifiedPackage(manifest: LibraryPackageManifest, records: List<LibraryPackageRecord>): Int {
+        val manifestDecision = LibraryDataPackages.validate(manifest)
+        require(manifestDecision.valid) { manifestDecision.blockers.joinToString("; ") }
+        val recordsDecision = LibraryDataPackages.validateRecords(manifest, records)
+        require(recordsDecision.valid) { recordsDecision.blockers.joinToString("; ") }
+
+        val database = writableDatabase
+        val installedAt = System.currentTimeMillis()
+        database.beginTransaction()
+        try {
+            database.delete("library_records", "package_id = ?", arrayOf(manifest.packageId))
+            records.forEach { record ->
+                val values = ContentValues().apply {
+                    put("id", record.id)
+                    put("package_id", manifest.packageId)
+                    put("vietnamese_name", record.vietnameseName)
+                    put("category_id", record.categoryId)
+                    put("usage_level", record.usageLevel.name)
+                    put("verification_state", record.verificationState.name)
+                    put("summary", record.summary)
+                    put("published", 1)
+                    put("high_risk", if (record.highRisk) 1 else 0)
+                    put("source_count", record.sourceCount)
+                    put("updated_at", installedAt)
+                }
+                val rowId = database.insertWithOnConflict(
+                    "library_records",
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE
+                )
+                require(rowId != -1L) { "Không thể ghi hồ sơ ${record.id}" }
+            }
+
+            val packageValues = ContentValues().apply {
+                put("package_id", manifest.packageId)
+                put("version", manifest.version)
+                put("status", PackageInstallStatus.INSTALLED.name)
+                put("record_count", manifest.recordCount)
+                put("verified_count", manifest.verifiedCount)
+                put("installed_at", installedAt)
+                put("checksum", manifest.sha256.lowercase())
+                put("source_uri", manifest.sourceUri)
+            }
+            val packageRow = database.insertWithOnConflict(
+                "content_packages",
+                null,
+                packageValues,
+                SQLiteDatabase.CONFLICT_REPLACE
+            )
+            require(packageRow != -1L) { "Không thể ghi trạng thái gói ${manifest.packageId}" }
+
+            val meta = ContentValues().apply {
+                put("meta_key", "last_data_update_at")
+                put("meta_value", installedAt.toString())
+            }
+            database.insertWithOnConflict("library_meta", null, meta, SQLiteDatabase.CONFLICT_REPLACE)
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
+        }
+        return records.size
+    }
+
     fun upsertPackageState(state: InstalledPackageState) {
         val values = ContentValues().apply {
             put("package_id", state.packageId)
@@ -208,6 +278,6 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
 
     companion object {
         private const val DB_NAME = "survival_library_vn.db"
-        private const val DB_VERSION = 2
+        private const val DB_VERSION = 3
     }
 }
