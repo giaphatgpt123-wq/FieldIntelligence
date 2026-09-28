@@ -14,7 +14,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,6 +40,18 @@ jobs:
 
       - name: Unit tests
         run: gradle -p SurvivalLibraryVN :app:testDebugUnitTest --stacktrace
+
+      - name: Enable KVM
+        run: |
+          sudo chmod 666 /dev/kvm || true
+
+      - name: Runtime launcher smoke test on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          disable-animations: true
+          script: gradle -p SurvivalLibraryVN :app:connectedDebugAndroidTest --stacktrace
 
       - name: Build unsigned release APK
         run: gradle -p SurvivalLibraryVN :app:assembleRelease --stacktrace
@@ -83,13 +95,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES="Bản cài đặt đầy đủ sạch v$APP_VERSION của Thư viện Sinh tồn Việt Nam. Package riêng vn.survivallibrary.full để tránh toàn bộ dữ liệu/cache/database của bản beta cũ. Có thể cài song song để kiểm tra trước khi xóa bản cũ."
+          NOTES="Bản cài đầy đủ Safe Start v$APP_VERSION. Launcher đầu tiên chạy Android native, không mở Compose/SQLite/network khi khởi động. Release chỉ được phát hành sau khi Activity launcher chạy thành công trên Android emulator. Package: vn.survivallibrary.full."
           if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt --clobber -R "${{ github.repository }}"
           else
             gh release create "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt \
               --target survival-library-vn \
-              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Full" \
+              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Safe Start" \
               --notes "$NOTES" \
               -R "${{ github.repository }}"
           fi
