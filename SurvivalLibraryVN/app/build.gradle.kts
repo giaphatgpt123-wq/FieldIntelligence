@@ -9,13 +9,11 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        // Clean standalone package. It installs separately from the broken beta
-        // package so no old database/cache/update state can affect first launch.
         applicationId = "vn.survivallibrary.full"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.9.0"
+        versionCode = 4
+        versionName = "0.9.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,6 +41,11 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.3.1")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
     debugImplementation("androidx.compose.ui:ui-tooling:1.7.8")
+
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")
+
+    androidTestImplementation("androidx.test:core-ktx:1.6.1")
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
 }
