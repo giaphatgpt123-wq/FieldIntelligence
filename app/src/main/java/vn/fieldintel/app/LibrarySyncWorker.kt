@@ -6,6 +6,8 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.WorkerParameters
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.io.File
@@ -17,25 +19,37 @@ import org.json.JSONObject
 import vn.fieldintel.feature.emergency.ScientificLibraryImportManager
 
 class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : CoroutineWorker(appContext, params) {
-    override suspend fun doWork(): Result {
-        if (!DataUpdateManager(applicationContext).isWifiAvailable()) return Result.retry()
-        return runCatching {
-            val preferences = applicationContext.getSharedPreferences("scientific-library-sync", Context.MODE_PRIVATE)
+    override suspend fun doWork(): Result = synchronized(SYNC_LOCK) {
+        val preferences = applicationContext.getSharedPreferences("scientific-library-sync", Context.MODE_PRIVATE)
+        if (!DataUpdateManager(applicationContext).isWifiAvailable()) {
+            preferences.edit().putString("state", "wifi-wait").apply()
+            return@synchronized Result.retry()
+        }
+        preferences.edit().putLong("lastAttemptAt", System.currentTimeMillis()).putString("state", "checking").remove("lastError").apply()
+        runCatching {
             val manifest = JSONObject(fetch(UpdateConfig.LIBRARY_MANIFEST_URL, 16 * 1024).toString(Charsets.UTF_8))
             val version = manifest.getLong("version")
             val size = manifest.getLong("sizeBytes")
             val digest = manifest.getString("sha256").lowercase()
             require(version > 0 && size in 1..MAX_PACKAGE_BYTES && digest.matches(Regex("[a-f0-9]{64}")))
-            if (preferences.getLong("installedVersion", 0) >= version) return@runCatching Result.success()
+            if (preferences.getLong("installedVersion", 0) >= version) {
+                preferences.edit().putString("state", "ready").putLong("lastSuccessAt", System.currentTimeMillis()).apply()
+                return@runCatching Result.success()
+            }
             val target = File(applicationContext.cacheDir, "scientific-library-${version}.zip")
             try {
+                preferences.edit().putString("state", "downloading").apply()
                 val actual = downloadToFile(UpdateConfig.LIBRARY_PACKAGE_URL, target, size)
                 require(actual == digest) { "Sai SHA-256 thư viện" }
+                preferences.edit().putString("state", "installing").apply()
                 ScientificLibraryImportManager(applicationContext).importBundle(target)
-                preferences.edit().putLong("installedVersion", version).apply()
+                preferences.edit().putLong("installedVersion", version).putLong("lastSuccessAt", System.currentTimeMillis()).putString("state", "ready").apply()
             } finally { target.delete() }
             Result.success()
-        }.getOrElse { Result.retry() }
+        }.getOrElse { failure ->
+            preferences.edit().putString("state", "error").putString("lastError", failure.message?.take(120) ?: "Không thể tải thư viện").apply()
+            Result.retry()
+        }
     }
 
     private fun fetch(address: String, maxBytes: Long): ByteArray {
@@ -88,12 +102,17 @@ class LibrarySyncWorker(appContext: Context, params: WorkerParameters) : Corouti
     }
 
     companion object {
+        private val SYNC_LOCK = Any()
         private const val MAX_PACKAGE_BYTES = 512L * 1024L * 1024L
         fun schedule(context: Context) {
+            val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
             val request = PeriodicWorkRequestBuilder<LibrarySyncWorker>(6, TimeUnit.HOURS)
-                .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build())
+                .setConstraints(constraints)
                 .build()
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork("scientific-library-wifi-sync", ExistingPeriodicWorkPolicy.KEEP, request)
+            val manager = WorkManager.getInstance(context)
+            manager.enqueueUniquePeriodicWork("scientific-library-wifi-sync", ExistingPeriodicWorkPolicy.KEEP, request)
+            manager.enqueueUniqueWork("scientific-library-wifi-sync-on-open", ExistingWorkPolicy.KEEP,
+                OneTimeWorkRequestBuilder<LibrarySyncWorker>().setConstraints(constraints).build())
         }
     }
 }
