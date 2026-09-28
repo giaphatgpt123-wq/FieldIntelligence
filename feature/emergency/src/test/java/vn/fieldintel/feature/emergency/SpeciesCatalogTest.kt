@@ -12,7 +12,7 @@ class SpeciesCatalogTest {
         assertEquals("centella-asiatica", SpeciesCatalog.search("rau ma").single().id)
         assertEquals("oryza-sativa", SpeciesCatalog.search("lua").single().id)
         assertEquals("zingiber-officinale", SpeciesCatalog.search("gung").single().id)
-        assertEquals("curcuma-longa", SpeciesCatalog.search("nghe").single().id)
+        assertTrue(SpeciesCatalog.search("nghe").map { it.id }.containsAll(listOf("curcuma-longa", "curcuma-zedoaria")))
         assertEquals("cymbopogon-citratus", SpeciesCatalog.search("sa").single().id)
         assertEquals("carica-papaya", SpeciesCatalog.search("du du").single().id)
         assertEquals("psidium-guajava", SpeciesCatalog.search("psidium guajava").single().id)
@@ -56,7 +56,8 @@ class SpeciesCatalogTest {
             "cymbopogon-citratus", "carica-papaya", "psidium-guajava"
         ).all { it in ids })
         assertTrue(SpeciesCatalog.records.filter { it.id in ids }.all { it.sourceUrl.startsWith("https://") })
-        assertTrue(SpeciesCatalog.search("Curcuma longa").single().sourceScope.contains("không suy ra", ignoreCase = true))
+        assertTrue(SpeciesCatalog.search("Curcuma longa").single().sourceScope.contains("công dụng và cách dùng cần chứng cứ riêng", ignoreCase = true))
+        assertEquals("curcuma-zedoaria", SpeciesCatalog.search("nghe den").single().id)
     }
 
     @Test fun sourceProvenanceAndUnknownBehaviorRemainExplicit() {
