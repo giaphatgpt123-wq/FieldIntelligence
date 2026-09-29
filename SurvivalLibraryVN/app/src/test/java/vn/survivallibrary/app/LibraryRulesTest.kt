@@ -45,4 +45,32 @@ class LibraryRulesTest {
         )
         assertFalse(LibraryRules.canEnterVietnamPriorityFeed(quality))
     }
+
+    @Test
+    fun priorityFeedRejectsUsageLevelWithoutEvidence() {
+        val quality = RecordQuality(
+            vietnamRelevant = true,
+            usageLevel = UsageLevel.THUONG_DUNG,
+            verificationState = VerificationState.DA_KIEM_CHUNG,
+            verifiedVietnameseName = true,
+            verifiedIdentitySource = true,
+            verifiedMedia = true,
+            verifiedUsageSource = false
+        )
+        assertFalse(LibraryRules.canEnterVietnamPriorityFeed(quality))
+    }
+
+    @Test
+    fun priorityFeedAcceptsSourcedUsageLevel() {
+        val quality = RecordQuality(
+            vietnamRelevant = true,
+            usageLevel = UsageLevel.THUONG_DUNG,
+            verificationState = VerificationState.DA_KIEM_CHUNG,
+            verifiedVietnameseName = true,
+            verifiedIdentitySource = true,
+            verifiedMedia = true,
+            verifiedUsageSource = true
+        )
+        assertTrue(LibraryRules.canEnterVietnamPriorityFeed(quality))
+    }
 }
