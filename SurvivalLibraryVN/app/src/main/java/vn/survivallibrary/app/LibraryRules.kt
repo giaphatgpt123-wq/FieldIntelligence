@@ -67,9 +67,15 @@ object LibraryRules {
         )
     }
 
+    /**
+     * Mức "Thường dùng/Hay dùng/..." là dữ liệu thực chứng, không phải suy luận từ taxonomy.
+     * Hồ sơ có thể được phát hành cho mục đích nhận dạng khi usageLevel chưa phân loại,
+     * nhưng chỉ được vào feed ưu tiên Việt Nam khi mức sử dụng có nguồn đối chiếu riêng.
+     */
     fun canEnterVietnamPriorityFeed(quality: RecordQuality): Boolean {
         return quality.vietnamRelevant &&
             quality.usageLevel != UsageLevel.CHUA_PHAN_LOAI &&
+            quality.verifiedUsageSource &&
             quality.verifiedVietnameseName &&
             quality.verifiedMedia &&
             quality.verificationState.rank >= VerificationState.DA_KIEM_CHUNG.rank
