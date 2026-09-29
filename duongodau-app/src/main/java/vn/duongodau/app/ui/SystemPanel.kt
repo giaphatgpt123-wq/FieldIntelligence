@@ -37,6 +37,8 @@ private val PanelSlate = Color(0xFF5C6F7B)
 private val PanelGood = Color(0xFF1A9B67)
 private val PanelWarning = Color(0xFFE58A16)
 private val PanelDanger = Color(0xFFD94B4B)
+private const val STABLE_CHANNEL_PAGE =
+    "https://github.com/giaphatgpt123-wq/FieldIntelligence/releases/tag/duongodau-stable"
 
 @Composable
 fun SystemPanel(
@@ -111,6 +113,17 @@ fun SystemPanel(
                     colors = ButtonDefaults.buttonColors(containerColor = PanelOrange, contentColor = PanelNavy)
                 ) {
                     Text(if (installing) "Đang tải…" else "Tải & cài", fontWeight = FontWeight.Bold)
+                }
+            }
+
+            if (updateResult is UpdateCheckResult.Error || installResult is InstallResult.Error) {
+                OutlinedButton(
+                    onClick = {
+                        bridgeStatus = describe(AppInterop.openBrowser(context, STABLE_CHANNEL_PAGE))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Mở kênh tải ổn định dự phòng")
                 }
             }
 
