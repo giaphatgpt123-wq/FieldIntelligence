@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "channel": "data-engine-v2-pilot",
   "snapshot": {
-    "version": 4,
+    "version": 5,
     "schemaVersion": 1,
-    "generatedAt": 1790683385901,
-    "sha256": "86b8cf40e16e4237af9640e888a3bdad7886384b193da1a4c6ae591648ebf098",
+    "generatedAt": 1790683611242,
+    "sha256": "36b21f52eb1ce1bcf9dd96b0a6b8d603f6412a5af71a7aad817264e9fa971c29",
     "snapshotUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress-snapshot.json",
     "entityCount": 12,
     "taskCount": 48
