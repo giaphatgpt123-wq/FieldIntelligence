@@ -44,7 +44,7 @@ class AdminRepository(private val context: Context) {
                 communesByProvince = emptyMap(),
                 transitions = transitions,
                 nationwideReady = false,
-                sourceLabel = "fallback_34_provinces"
+                sourceLabel = "QĐ 19/2025/QĐ-TTg – fallback 34 tỉnh/thành"
             )
         }
     }
@@ -65,7 +65,7 @@ class AdminRepository(private val context: Context) {
 
                 provinceMap.putIfAbsent(
                     pCode,
-                    AdminUnit(code = pCode, name = pName, level = AdminLevel.PROVINCE)
+                    AdminUnit(code = pCode, name = pName, level = AdminLevel.PROVINCE, effectiveFrom = "2025-07-01")
                 )
                 communeMap.getOrPut(pCode) { mutableListOf() }.add(
                     AdminUnit(
@@ -126,18 +126,47 @@ class AdminRepository(private val context: Context) {
         return result
     }
 
+    /** Official province-level codes from Decision 19/2025/QĐ-TTg, effective 2025-07-01. */
     private fun fallbackProvinces(): List<AdminUnit> {
-        val names = listOf(
-            "An Giang", "Bắc Ninh", "Cà Mau", "Cao Bằng", "Cần Thơ", "Đà Nẵng",
-            "Đắk Lắk", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Nội",
-            "Hà Tĩnh", "Hải Phòng", "Huế", "Hưng Yên", "Khánh Hòa", "Lai Châu",
-            "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Nghệ An", "Ninh Bình", "Phú Thọ",
-            "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sơn La", "Tây Ninh",
-            "Thái Nguyên", "Thanh Hóa", "Thành phố Hồ Chí Minh", "Tuyên Quang", "Vĩnh Long"
+        val units = listOf(
+            "01" to "Hà Nội",
+            "04" to "Cao Bằng",
+            "08" to "Tuyên Quang",
+            "11" to "Điện Biên",
+            "12" to "Lai Châu",
+            "14" to "Sơn La",
+            "15" to "Lào Cai",
+            "19" to "Thái Nguyên",
+            "20" to "Lạng Sơn",
+            "22" to "Quảng Ninh",
+            "24" to "Bắc Ninh",
+            "25" to "Phú Thọ",
+            "31" to "Hải Phòng",
+            "33" to "Hưng Yên",
+            "37" to "Ninh Bình",
+            "38" to "Thanh Hóa",
+            "40" to "Nghệ An",
+            "42" to "Hà Tĩnh",
+            "44" to "Quảng Trị",
+            "46" to "Huế",
+            "48" to "Đà Nẵng",
+            "51" to "Quảng Ngãi",
+            "52" to "Gia Lai",
+            "56" to "Khánh Hòa",
+            "66" to "Đắk Lắk",
+            "68" to "Lâm Đồng",
+            "75" to "Đồng Nai",
+            "79" to "Thành phố Hồ Chí Minh",
+            "80" to "Tây Ninh",
+            "82" to "Đồng Tháp",
+            "86" to "Vĩnh Long",
+            "91" to "An Giang",
+            "92" to "Cần Thơ",
+            "96" to "Cà Mau"
         )
-        return names.mapIndexed { index, name ->
+        return units.map { (code, name) ->
             AdminUnit(
-                code = "P${(index + 1).toString().padStart(2, '0')}",
+                code = code,
                 name = name,
                 level = AdminLevel.PROVINCE,
                 effectiveFrom = "2025-07-01",
