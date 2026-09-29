@@ -55,7 +55,7 @@ class LibraryDataPackagesTest {
             LibraryPackageManifest(
                 packageId = "mushrooms-core",
                 version = 1,
-                schemaVersion = LibraryDataPackages.SUPPORTED_SCHEMA_VERSION,
+                schemaVersion = LibraryDataPackages.LATEST_SCHEMA_VERSION,
                 recordCount = 40,
                 verifiedCount = 40,
                 sha256 = "b".repeat(64),
