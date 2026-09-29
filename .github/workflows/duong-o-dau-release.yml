@@ -96,6 +96,9 @@ jobs:
       - name: Unit tests
         run: gradle --no-daemon :duongodau-app:testDebugUnitTest
 
+      - name: Validate bounded road pilot provenance
+        run: python3 tools/validate_duongodau_pilot.py
+
       - name: Build signed release APK
         env:
           DUONGODAU_KEYSTORE_PATH: ${{ runner.temp }}/duongodau-signing/duongodau-release.jks
