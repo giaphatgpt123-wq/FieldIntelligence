@@ -2,6 +2,7 @@ package vn.survivallibrary.app
 
 import android.content.Context
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.net.URL
 import java.security.MessageDigest
 import javax.net.ssl.HttpsURLConnection
@@ -84,10 +85,21 @@ object LibraryUpdateIndexParser {
 object LibraryUpdateEngine {
     const val UPDATE_INDEX_URL = "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/update-index.json"
 
+    // Text-only update packages must stay small and shardable. These guards prevent an
+    // accidental or malformed index/package from exhausting the app heap.
+    private const val MAX_INDEX_BYTES = 512 * 1024
+    private const val MAX_PACKAGE_BYTES = 16 * 1024 * 1024
+    private const val MAX_RECORDS_PER_PACKAGE = 10_000
+    private val allowedInitialHosts = setOf("raw.githubusercontent.com", "github.com")
+
     fun checkAndUpdate(context: Context): UpdateRunResult {
         val db = OfflineLibraryDb(context.applicationContext)
         return try {
-            val remotePackages = LibraryUpdateIndexParser.parse(downloadText(UPDATE_INDEX_URL))
+            val remotePackages = LibraryUpdateIndexParser.parse(downloadText(UPDATE_INDEX_URL, MAX_INDEX_BYTES))
+            require(remotePackages.map { it.packageId }.distinct().size == remotePackages.size) {
+                "Chỉ mục cập nhật chứa packageId trùng lặp"
+            }
+
             val installed = db.installedPackageStates().associateBy { it.packageId }
             val candidates = remotePackages.filter { remote ->
                 val current = installed[remote.packageId]
@@ -113,9 +125,9 @@ object LibraryUpdateEngine {
 
             candidates.forEach { remote ->
                 try {
-                    val bytes = downloadBytes(remote.packageUrl)
-                    val actualSha = sha256(bytes)
-                    require(actualSha.equals(remote.sha256, ignoreCase = true)) { "SHA-256 không khớp" }
+                    require(remote.recordCount in 0..MAX_RECORDS_PER_PACKAGE) {
+                        "Gói vượt giới hạn $MAX_RECORDS_PER_PACKAGE hồ sơ; cần chia nhỏ gói"
+                    }
 
                     val manifest = LibraryPackageManifest(
                         packageId = remote.packageId,
@@ -128,6 +140,12 @@ object LibraryUpdateEngine {
                     )
                     val packageDecision = LibraryDataPackages.validate(manifest)
                     require(packageDecision.valid) { packageDecision.blockers.joinToString("; ") }
+
+                    // Validate descriptor before allocating memory for the package body.
+                    validateInitialDownloadUrl(remote.packageUrl)
+                    val bytes = downloadBytes(remote.packageUrl, MAX_PACKAGE_BYTES)
+                    val actualSha = sha256(bytes)
+                    require(actualSha.equals(remote.sha256, ignoreCase = true)) { "SHA-256 không khớp" }
 
                     val records = LibraryUpdateIndexParser.parseRecords(bytes, remote)
                     installedRecords += db.installVerifiedPackage(manifest, records)
@@ -161,19 +179,47 @@ object LibraryUpdateEngine {
         }
     }
 
-    private fun downloadText(url: String): String = downloadBytes(url).toString(Charsets.UTF_8)
+    private fun downloadText(url: String, maxBytes: Int): String =
+        downloadBytes(url, maxBytes).toString(Charsets.UTF_8)
 
-    private fun downloadBytes(url: String): ByteArray {
-        require(url.startsWith("https://")) { "Chỉ cho phép nguồn HTTPS" }
+    private fun validateInitialDownloadUrl(url: String) {
+        val parsed = URL(url)
+        require(parsed.protocol.equals("https", ignoreCase = true)) { "Chỉ cho phép nguồn HTTPS" }
+        require(parsed.host.lowercase() in allowedInitialHosts) { "Máy chủ gói dữ liệu không được phép" }
+    }
+
+    private fun downloadBytes(url: String, maxBytes: Int): ByteArray {
+        validateInitialDownloadUrl(url)
         val connection = URL(url).openConnection() as HttpsURLConnection
         connection.connectTimeout = 15_000
         connection.readTimeout = 30_000
         connection.instanceFollowRedirects = true
-        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.6")
+        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.14")
         return try {
             val code = connection.responseCode
             require(code in 200..299) { "HTTP $code" }
-            connection.inputStream.use { it.readBytes() }
+            val declaredLength = connection.contentLengthLong
+            require(declaredLength < 0L || declaredLength <= maxBytes.toLong()) {
+                "Gói tải về vượt giới hạn dung lượng"
+            }
+
+            connection.inputStream.use { input ->
+                val initialCapacity = when {
+                    declaredLength in 1..maxBytes.toLong() -> declaredLength.toInt()
+                    else -> minOf(64 * 1024, maxBytes)
+                }
+                val output = ByteArrayOutputStream(initialCapacity)
+                val buffer = ByteArray(16 * 1024)
+                var total = 0
+                while (true) {
+                    val read = input.read(buffer)
+                    if (read < 0) break
+                    total += read
+                    require(total <= maxBytes) { "Gói tải về vượt giới hạn dung lượng" }
+                    output.write(buffer, 0, read)
+                }
+                output.toByteArray()
+            }
         } finally {
             connection.disconnect()
         }
