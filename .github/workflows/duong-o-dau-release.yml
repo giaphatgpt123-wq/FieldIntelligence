@@ -42,6 +42,24 @@ jobs:
           echo "$VERSION_NAME" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.][A-Za-z0-9._-]+)?$' || (echo 'Invalid version_name' && exit 1)
           echo "$VERSION_CODE" | grep -Eq '^[1-9][0-9]*$' || (echo 'Invalid version_code' && exit 1)
 
+      - name: Enforce monotonic stable version code
+        env:
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          CHANNEL_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/duongodau-stable/duongodau-update.json"
+          if curl -fsSL --retry 2 --connect-timeout 8 "$CHANNEL_URL" -o /tmp/current-duongodau-update.json; then
+            CURRENT_CODE=$(python3 - <<'PY'
+          import json
+          with open('/tmp/current-duongodau-update.json', encoding='utf-8') as f:
+              print(int(json.load(f)['versionCode']))
+          PY
+          )
+            echo "Current stable versionCode=$CURRENT_CODE; requested=$VERSION_CODE"
+            test "$VERSION_CODE" -gt "$CURRENT_CODE" || (echo 'version_code must be greater than current stable' && exit 1)
+          else
+            echo 'No existing duongodau-stable channel; treating this as first stable release.'
+          fi
+
       - name: Validate stable signing secrets
         env:
           KEYSTORE_B64: ${{ secrets.DUONGODAU_KEYSTORE_B64 }}
