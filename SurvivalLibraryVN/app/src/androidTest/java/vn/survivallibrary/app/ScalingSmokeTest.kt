@@ -1,6 +1,7 @@
 package vn.survivallibrary.app
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -17,19 +18,21 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScalingSmokeTest {
     @Test
-    fun pagedSearchStarts() {
-        ActivityScenario.launch(PagedPublishedSearchActivity::class.java).use { scenario ->
+    fun windowedSearchStarts() {
+        ActivityScenario.launch(WindowedPublishedSearchActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse(activity.isFinishing)
-                assertTrue(containsText(activity.window.decorView, "Tải theo trang"))
+                assertTrue(containsText(activity.window.decorView, "giữ tối đa 40 hồ sơ"))
+                assertTrue(containsText(activity.window.decorView, "Trang trước"))
+                assertTrue(containsText(activity.window.decorView, "Trang sau"))
             }
         }
     }
 
     @Test
-    fun pagedCategoryIndexStarts() {
-        ActivityScenario.launch(PagedPublishedCategoryActivity::class.java).use { scenario ->
+    fun windowedCategoryIndexStarts() {
+        ActivityScenario.launch(WindowedPublishedCategoryActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse(activity.isFinishing)
@@ -39,14 +42,22 @@ class ScalingSmokeTest {
     }
 
     @Test
-    fun pagedSavedStarts() {
-        ActivityScenario.launch(PagedPublishedSavedActivity::class.java).use { scenario ->
+    fun windowedSavedStarts() {
+        ActivityScenario.launch(WindowedPublishedSavedActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse(activity.isFinishing)
-                assertTrue(containsText(activity.window.decorView, "Danh sách phân trang"))
+                assertTrue(containsText(activity.window.decorView, "Chỉ giữ một trang"))
             }
         }
+    }
+
+    @Test
+    fun legacyPagedComponentResolvesToWindowedTarget() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val intent = Intent().setClassName(context.packageName, "vn.survivallibrary.app.PagedPublishedSearchActivity")
+        val info = context.packageManager.resolveActivity(intent, 0)?.activityInfo
+        assertEquals("vn.survivallibrary.app.WindowedPublishedSearchActivity", info?.targetActivity)
     }
 
     @Test
@@ -102,8 +113,15 @@ class ScalingSmokeTest {
                 limit = PagingPolicy.PAGE_SIZE,
                 offset = PagingPolicy.PAGE_SIZE
             )
+            val probe = PagedPublishedRepository.records(
+                context,
+                categoryIds = setOf("vegetables"),
+                limit = PagingPolicy.PAGE_SIZE + 1,
+                offset = 0
+            )
             assertEquals(PagingPolicy.PAGE_SIZE, first.size)
             assertEquals(PagingPolicy.PAGE_SIZE, second.size)
+            assertEquals(PagingPolicy.PAGE_SIZE + 1, probe.size)
             assertTrue(first.map { it.id }.toSet().intersect(second.map { it.id }.toSet()).isEmpty())
         } finally {
             context.deleteDatabase("survival_library_vn.db")
