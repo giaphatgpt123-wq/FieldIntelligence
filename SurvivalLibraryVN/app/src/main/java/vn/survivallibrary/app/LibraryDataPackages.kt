@@ -62,7 +62,11 @@ data class LibraryRecordMedia(
     val license: String,
     val creator: String = "",
     val rightsHolder: String = "",
-    val mimeType: String = "image/webp"
+    val mimeType: String = "image/webp",
+    val viewRole: String = "REFERENCE",
+    val lifeStage: String = "",
+    val isPrimary: Boolean = false,
+    val diagnostic: Boolean = true
 )
 
 data class LibraryPackageRecord(
@@ -83,7 +87,14 @@ data class LibraryPackageRecord(
     val verifiedUsageSource: Boolean,
     val verifiedSafetySource: Boolean,
     val sources: List<LibraryRecordSource> = emptyList(),
-    val media: List<LibraryRecordMedia> = emptyList()
+    val media: List<LibraryRecordMedia> = emptyList(),
+    val scientificName: String = "",
+    val identificationSummary: String = "",
+    val keyFeatures: List<String> = emptyList(),
+    val confusableWith: List<String> = emptyList(),
+    val requiredViewRoles: List<String> = emptyList(),
+    val primaryViewRole: String = "",
+    val qualityProfile: String = ""
 ) {
     fun quality(): RecordQuality = RecordQuality(
         vietnamRelevant = vietnamRelevant,
@@ -105,8 +116,8 @@ data class PackageValidationResult(
 )
 
 object LibraryDataPackages {
-    val SUPPORTED_SCHEMA_VERSIONS = setOf(1, 2)
-    const val LATEST_SCHEMA_VERSION = 2
+    val SUPPORTED_SCHEMA_VERSIONS = setOf(1, 2, 3)
+    const val LATEST_SCHEMA_VERSION = 3
     const val MAX_RECORDS_PER_SHARD = 2_000
     const val MAX_SOURCES_PER_RECORD = 32
     const val MAX_MEDIA_PER_RECORD = 32
@@ -146,10 +157,6 @@ object LibraryDataPackages {
         )
     )
 
-    /**
-     * Package IDs may be base IDs (plants-core) or immutable shards
-     * (plants-core-s001, plants-core-s002...). A shard update replaces only that shard.
-     */
     fun basePackageId(packageId: String): String? {
         catalog.firstOrNull { it.packageId == packageId }?.let { return it.packageId }
         return catalog.firstOrNull { descriptor ->
@@ -168,7 +175,6 @@ object LibraryDataPackages {
         return base != packageId
     }
 
-    /** Aggregate shard state for compact package-management UI. */
     fun merge(installed: List<InstalledPackageState>): List<LibraryPackageUiState> {
         val grouped = installed.groupBy { basePackageId(it.packageId) ?: it.packageId }
         return catalog.map { descriptor ->
@@ -198,9 +204,7 @@ object LibraryDataPackages {
             if (manifest.version <= 0) add("Phiên bản gói không hợp lệ")
             if (manifest.schemaVersion !in SUPPORTED_SCHEMA_VERSIONS) add("Phiên bản cấu trúc dữ liệu không được hỗ trợ")
             if (manifest.recordCount < 0) add("Số hồ sơ không hợp lệ")
-            if (manifest.recordCount > MAX_RECORDS_PER_SHARD) {
-                add("Gói vượt $MAX_RECORDS_PER_SHARD hồ sơ; phải chia shard nhỏ hơn")
-            }
+            if (manifest.recordCount > MAX_RECORDS_PER_SHARD) add("Gói vượt $MAX_RECORDS_PER_SHARD hồ sơ; phải chia shard nhỏ hơn")
             if (manifest.verifiedCount < 0 || manifest.verifiedCount > manifest.recordCount) add("Số hồ sơ kiểm chứng không hợp lệ")
             if (!manifest.sha256.matches(SHA256)) add("Thiếu hoặc sai SHA-256")
             if (!isHttps(manifest.sourceUri)) add("Nguồn cập nhật phải dùng HTTPS")
@@ -228,7 +232,7 @@ object LibraryDataPackages {
 
             if (manifest.schemaVersion >= 2) {
                 val mediaIds = records.flatMap { record -> record.media.map { it.mediaId } }
-                if (mediaIds.distinct().size != mediaIds.size) add("Gói schema v2 có mediaId bị trùng")
+                if (mediaIds.distinct().size != mediaIds.size) add("Gói schema v2+ có mediaId bị trùng")
             }
 
             records.forEach { record ->
@@ -236,13 +240,14 @@ object LibraryDataPackages {
                 val decision = LibraryRules.publicationDecision(record.quality())
                 if (!decision.publishable) add("${record.id}: ${decision.blockers.joinToString("; ")}")
                 if (manifest.schemaVersion >= 2) validateProvenance(record).forEach { add("${record.id}: $it") }
+                if (manifest.schemaVersion >= 3) IdentificationMediaPolicy.validate(record).forEach { add("${record.id}: $it") }
             }
         }
         return PackageValidationResult(valid = blockers.isEmpty(), blockers = blockers)
     }
 
     private fun validateProvenance(record: LibraryPackageRecord): List<String> = buildList {
-        if (record.sources.isEmpty()) add("schema v2 phải có nguồn chi tiết")
+        if (record.sources.isEmpty()) add("schema v2+ phải có nguồn chi tiết")
         if (record.sources.size != record.sourceCount) add("sourceCount không khớp số nguồn chi tiết")
         if (record.sources.size > MAX_SOURCES_PER_RECORD) add("quá nhiều nguồn trong một hồ sơ")
         if (record.sources.map { it.sourceKey }.distinct().size != record.sources.size) add("sourceKey bị trùng")
@@ -264,6 +269,7 @@ object LibraryDataPackages {
             if (media.license.isBlank()) add("media thiếu thông tin giấy phép")
             if (media.creator.isBlank() && media.rightsHolder.isBlank()) add("media thiếu creator/rightsHolder")
             if (!media.mimeType.startsWith("image/") && !media.mimeType.startsWith("video/")) add("mimeType media không hợp lệ")
+            if (media.viewRole.isBlank()) add("media thiếu viewRole")
         }
     }
 
