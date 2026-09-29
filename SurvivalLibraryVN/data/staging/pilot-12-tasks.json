@@ -1,0 +1,61 @@
+[
+  {"taskId":"taxon:ipomoea-aquatica:identity","canonicalId":"taxon:ipomoea-aquatica","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Ipomoea aquatica","vietnameseName":"Rau muống","categoryId":"vegetables","maxSources":3},
+  {"taskId":"taxon:ipomoea-aquatica:aliases","canonicalId":"taxon:ipomoea-aquatica","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Ipomoea aquatica","vietnameseName":"Rau muống","categoryId":"vegetables","maxSources":3},
+  {"taskId":"taxon:ipomoea-aquatica:distribution","canonicalId":"taxon:ipomoea-aquatica","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Ipomoea aquatica","vietnameseName":"Rau muống","categoryId":"vegetables","maxSources":3},
+  {"taskId":"taxon:ipomoea-aquatica:media","canonicalId":"taxon:ipomoea-aquatica","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Ipomoea aquatica","vietnameseName":"Rau muống","categoryId":"vegetables","maxSources":3},
+
+  {"taskId":"taxon:colocasia-esculenta:identity","canonicalId":"taxon:colocasia-esculenta","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Colocasia esculenta","vietnameseName":"Khoai môn","categoryId":"roots","maxSources":3},
+  {"taskId":"taxon:colocasia-esculenta:aliases","canonicalId":"taxon:colocasia-esculenta","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Colocasia esculenta","vietnameseName":"Khoai môn","categoryId":"roots","maxSources":3},
+  {"taskId":"taxon:colocasia-esculenta:distribution","canonicalId":"taxon:colocasia-esculenta","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Colocasia esculenta","vietnameseName":"Khoai môn","categoryId":"roots","maxSources":3},
+  {"taskId":"taxon:colocasia-esculenta:media","canonicalId":"taxon:colocasia-esculenta","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Colocasia esculenta","vietnameseName":"Khoai môn","categoryId":"roots","maxSources":3},
+
+  {"taskId":"taxon:mangifera-indica:identity","canonicalId":"taxon:mangifera-indica","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Mangifera indica","vietnameseName":"Xoài","categoryId":"fruit-crops","maxSources":3},
+  {"taskId":"taxon:mangifera-indica:aliases","canonicalId":"taxon:mangifera-indica","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Mangifera indica","vietnameseName":"Xoài","categoryId":"fruit-crops","maxSources":3},
+  {"taskId":"taxon:mangifera-indica:distribution","canonicalId":"taxon:mangifera-indica","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Mangifera indica","vietnameseName":"Xoài","categoryId":"fruit-crops","maxSources":3},
+  {"taskId":"taxon:mangifera-indica:media","canonicalId":"taxon:mangifera-indica","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Mangifera indica","vietnameseName":"Xoài","categoryId":"fruit-crops","maxSources":3},
+
+  {"taskId":"taxon:nelumbo-nucifera:identity","canonicalId":"taxon:nelumbo-nucifera","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Nelumbo nucifera","vietnameseName":"Sen hồng","categoryId":"flowers","maxSources":3},
+  {"taskId":"taxon:nelumbo-nucifera:aliases","canonicalId":"taxon:nelumbo-nucifera","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Nelumbo nucifera","vietnameseName":"Sen hồng","categoryId":"flowers","maxSources":3},
+  {"taskId":"taxon:nelumbo-nucifera:distribution","canonicalId":"taxon:nelumbo-nucifera","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Nelumbo nucifera","vietnameseName":"Sen hồng","categoryId":"flowers","maxSources":3},
+  {"taskId":"taxon:nelumbo-nucifera:media","canonicalId":"taxon:nelumbo-nucifera","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Nelumbo nucifera","vietnameseName":"Sen hồng","categoryId":"flowers","maxSources":3},
+
+  {"taskId":"taxon:hopea-odorata:identity","canonicalId":"taxon:hopea-odorata","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Hopea odorata","vietnameseName":"Sao đen","categoryId":"timber-trees","maxSources":3},
+  {"taskId":"taxon:hopea-odorata:aliases","canonicalId":"taxon:hopea-odorata","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Hopea odorata","vietnameseName":"Sao đen","categoryId":"timber-trees","maxSources":3},
+  {"taskId":"taxon:hopea-odorata:distribution","canonicalId":"taxon:hopea-odorata","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Hopea odorata","vietnameseName":"Sao đen","categoryId":"timber-trees","maxSources":3},
+  {"taskId":"taxon:hopea-odorata:media","canonicalId":"taxon:hopea-odorata","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Hopea odorata","vietnameseName":"Sao đen","categoryId":"timber-trees","maxSources":3},
+
+  {"taskId":"taxon:pleurotus-pulmonarius:identity","canonicalId":"taxon:pleurotus-pulmonarius","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Pleurotus pulmonarius","vietnameseName":"Nấm sò trắng","categoryId":"mushrooms","maxSources":3},
+  {"taskId":"taxon:pleurotus-pulmonarius:aliases","canonicalId":"taxon:pleurotus-pulmonarius","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Pleurotus pulmonarius","vietnameseName":"Nấm sò trắng","categoryId":"mushrooms","maxSources":3},
+  {"taskId":"taxon:pleurotus-pulmonarius:distribution","canonicalId":"taxon:pleurotus-pulmonarius","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Pleurotus pulmonarius","vietnameseName":"Nấm sò trắng","categoryId":"mushrooms","maxSources":3},
+  {"taskId":"taxon:pleurotus-pulmonarius:media","canonicalId":"taxon:pleurotus-pulmonarius","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Pleurotus pulmonarius","vietnameseName":"Nấm sò trắng","categoryId":"mushrooms","maxSources":3},
+
+  {"taskId":"taxon:anabas-testudineus:identity","canonicalId":"taxon:anabas-testudineus","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Anabas testudineus","vietnameseName":"Cá rô đồng","categoryId":"freshwater-fish","maxSources":3},
+  {"taskId":"taxon:anabas-testudineus:aliases","canonicalId":"taxon:anabas-testudineus","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Anabas testudineus","vietnameseName":"Cá rô đồng","categoryId":"freshwater-fish","maxSources":3},
+  {"taskId":"taxon:anabas-testudineus:distribution","canonicalId":"taxon:anabas-testudineus","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Anabas testudineus","vietnameseName":"Cá rô đồng","categoryId":"freshwater-fish","maxSources":3},
+  {"taskId":"taxon:anabas-testudineus:media","canonicalId":"taxon:anabas-testudineus","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Anabas testudineus","vietnameseName":"Cá rô đồng","categoryId":"freshwater-fish","maxSources":3},
+
+  {"taskId":"taxon:penaeus-monodon:identity","canonicalId":"taxon:penaeus-monodon","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Penaeus monodon","vietnameseName":"Tôm sú","categoryId":"marine-life","maxSources":3},
+  {"taskId":"taxon:penaeus-monodon:aliases","canonicalId":"taxon:penaeus-monodon","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Penaeus monodon","vietnameseName":"Tôm sú","categoryId":"marine-life","maxSources":3},
+  {"taskId":"taxon:penaeus-monodon:distribution","canonicalId":"taxon:penaeus-monodon","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Penaeus monodon","vietnameseName":"Tôm sú","categoryId":"marine-life","maxSources":3},
+  {"taskId":"taxon:penaeus-monodon:media","canonicalId":"taxon:penaeus-monodon","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Penaeus monodon","vietnameseName":"Tôm sú","categoryId":"marine-life","maxSources":3},
+
+  {"taskId":"taxon:apis-cerana:identity","canonicalId":"taxon:apis-cerana","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Apis cerana","vietnameseName":"Ong nội","categoryId":"insects","maxSources":3},
+  {"taskId":"taxon:apis-cerana:aliases","canonicalId":"taxon:apis-cerana","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Apis cerana","vietnameseName":"Ong nội","categoryId":"insects","maxSources":3},
+  {"taskId":"taxon:apis-cerana:distribution","canonicalId":"taxon:apis-cerana","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Apis cerana","vietnameseName":"Ong nội","categoryId":"insects","maxSources":3},
+  {"taskId":"taxon:apis-cerana:media","canonicalId":"taxon:apis-cerana","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Apis cerana","vietnameseName":"Ong nội","categoryId":"insects","maxSources":3},
+
+  {"taskId":"taxon:sus-scrofa:identity","canonicalId":"taxon:sus-scrofa","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Sus scrofa","vietnameseName":"Lợn rừng","categoryId":"animals","maxSources":3},
+  {"taskId":"taxon:sus-scrofa:aliases","canonicalId":"taxon:sus-scrofa","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Sus scrofa","vietnameseName":"Lợn rừng","categoryId":"animals","maxSources":3},
+  {"taskId":"taxon:sus-scrofa:distribution","canonicalId":"taxon:sus-scrofa","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Sus scrofa","vietnameseName":"Lợn rừng","categoryId":"animals","maxSources":3},
+  {"taskId":"taxon:sus-scrofa:media","canonicalId":"taxon:sus-scrofa","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Sus scrofa","vietnameseName":"Lợn rừng","categoryId":"animals","maxSources":3},
+
+  {"taskId":"taxon:zingiber-officinale:identity","canonicalId":"taxon:zingiber-officinale","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Zingiber officinale","vietnameseName":"Gừng","categoryId":"medicinal-plants","maxSources":3},
+  {"taskId":"taxon:zingiber-officinale:aliases","canonicalId":"taxon:zingiber-officinale","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Zingiber officinale","vietnameseName":"Gừng","categoryId":"medicinal-plants","maxSources":3},
+  {"taskId":"taxon:zingiber-officinale:distribution","canonicalId":"taxon:zingiber-officinale","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Zingiber officinale","vietnameseName":"Gừng","categoryId":"medicinal-plants","maxSources":3},
+  {"taskId":"taxon:zingiber-officinale:media","canonicalId":"taxon:zingiber-officinale","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Zingiber officinale","vietnameseName":"Gừng","categoryId":"medicinal-plants","maxSources":3},
+
+  {"taskId":"taxon:aedes-aegypti:identity","canonicalId":"taxon:aedes-aegypti","taskType":"RESOLVE_CANONICAL","field":"CANONICAL_IDENTITY","scientificName":"Aedes aegypti","vietnameseName":"Muỗi vằn","categoryId":"danger","maxSources":3},
+  {"taskId":"taxon:aedes-aegypti:aliases","canonicalId":"taxon:aedes-aegypti","taskType":"COLLECT_VIETNAMESE_NAMES","field":"VIETNAMESE_ALIASES","scientificName":"Aedes aegypti","vietnameseName":"Muỗi vằn","categoryId":"danger","maxSources":3},
+  {"taskId":"taxon:aedes-aegypti:distribution","canonicalId":"taxon:aedes-aegypti","taskType":"COLLECT_DISTRIBUTION","field":"VIETNAM_DISTRIBUTION","scientificName":"Aedes aegypti","vietnameseName":"Muỗi vằn","categoryId":"danger","maxSources":3},
+  {"taskId":"taxon:aedes-aegypti:media","canonicalId":"taxon:aedes-aegypti","taskType":"COLLECT_MEDIA","field":"MEDIA_PRIMARY","scientificName":"Aedes aegypti","vietnameseName":"Muỗi vằn","categoryId":"danger","maxSources":3}
+]
