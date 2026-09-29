@@ -2,7 +2,9 @@ name: SurvivalLibraryVN Build
 
 on:
   push:
-    branches: [survival-library-vn]
+    branches:
+      - survival-library-vn
+      - 'optimize/survival-library-*'
     paths:
       - 'SurvivalLibraryVN/**'
       - '.github/workflows/survival-library-vn-build.yml'
