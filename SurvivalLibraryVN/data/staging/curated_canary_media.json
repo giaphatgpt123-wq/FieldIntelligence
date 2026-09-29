@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "purpose": "curated open-media evidence already used by published canary records; kept separate from official Vietnam authority tier",
+  "records": [
+    {
+      "scientificName": "Nelumbo nucifera",
+      "categoryId": "flowers",
+      "fields": {
+        "MEDIA_PRIMARY": {
+          "value": {
+            "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/flowers-nelumbo-nucifera.jpg",
+            "sourceFile": "Nelumbo nucifera 01.JPG",
+            "creator": "Prenn",
+            "license": "CC BY-SA 3.0",
+            "checksumSha256": "391ed3a9c3b6a7750bdb0a785376067ebde1bc760c2480d75a189129602be4c0"
+          },
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Nelumbo_nucifera_01.JPG",
+          "publisher": "Wikimedia Commons",
+          "license": "CC BY-SA 3.0"
+        }
+      }
+    },
+    {
+      "scientificName": "Hopea odorata",
+      "categoryId": "timber-trees",
+      "fields": {
+        "MEDIA_PRIMARY": {
+          "value": {
+            "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/timber-trees-hopea-odorata.jpg",
+            "sourceFile": "Hopea odorata Sao den.JPG",
+            "creator": "Hungda",
+            "license": "CC BY-SA 3.0",
+            "checksumSha256": "ed7f2ea2b13593d8011151dc7b1483fe473c2f888a73578d5f61b76640201b47"
+          },
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Hopea_odorata_Sao_den.JPG",
+          "publisher": "Wikimedia Commons",
+          "license": "CC BY-SA 3.0"
+        }
+      }
+    },
+    {
+      "scientificName": "Penaeus monodon",
+      "categoryId": "marine-life",
+      "fields": {
+        "MEDIA_PRIMARY": {
+          "value": {
+            "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/marine-life-penaeus-monodon.jpg",
+            "sourceFile": "Penaeus monodon.jpg",
+            "creator": "self",
+            "license": "CC BY-SA 3.0",
+            "checksumSha256": "be0ac4c4ab9803efc83237fe4a44c9529592cd6bac0936fdbef0e30467e365a5"
+          },
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
+          "publisher": "Wikimedia Commons",
+          "license": "CC BY-SA 3.0"
+        }
+      }
+    },
+    {
+      "scientificName": "Apis cerana",
+      "categoryId": "insects",
+      "fields": {
+        "MEDIA_PRIMARY": {
+          "value": {
+            "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/insects-apis-cerana.jpg",
+            "sourceFile": "Apis cerana08409.jpg",
+            "creator": "Vengolis",
+            "license": "CC BY-SA 4.0",
+            "checksumSha256": "7b7e3e3be29082b62c136333f99cfa82a27fd2dc64f990f95c61c08194cc8136"
+          },
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
+          "publisher": "Wikimedia Commons",
+          "license": "CC BY-SA 4.0"
+        }
+      }
+    },
+    {
+      "scientificName": "Zingiber officinale",
+      "categoryId": "medicinal-plants",
+      "fields": {
+        "MEDIA_PRIMARY": {
+          "value": {
+            "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/medicinal-plants-zingiber-officinale.jpg",
+            "sourceFile": "Zingiber officinale 1123783.jpg",
+            "creator": "Colin Meurk",
+            "license": "CC BY-SA 4.0",
+            "checksumSha256": "b31e8feec85c03c19a1dd6f78129f6abbd5bdc598375f96f9d88a8b83e553e8a"
+          },
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_1123783.jpg",
+          "publisher": "Wikimedia Commons",
+          "license": "CC BY-SA 4.0"
+        }
+      }
+    }
+  ],
+  "rules": [
+    "Chỉ chứa media đã có sourceUri gốc, creator, license và checksum SHA-256.",
+    "Nguồn này là OPEN_SCIENCE, không được nâng thành OFFICIAL_VIETNAM.",
+    "Collector chỉ dùng làm evidence staging; publication vẫn do LibraryRules quyết định."
+  ]
+}
