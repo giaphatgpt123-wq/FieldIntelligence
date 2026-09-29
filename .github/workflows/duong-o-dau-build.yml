@@ -12,6 +12,7 @@ on:
       - 'gradle/**'
       - 'gradle.properties'
       - '.github/workflows/duong-o-dau-build.yml'
+      - '.github/workflows/duong-o-dau-release.yml'
   pull_request:
     paths:
       - 'duongodau-app/**'
@@ -21,6 +22,7 @@ on:
       - 'gradle/**'
       - 'gradle.properties'
       - '.github/workflows/duong-o-dau-build.yml'
+      - '.github/workflows/duong-o-dau-release.yml'
   workflow_dispatch:
 
 jobs:
@@ -32,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -41,6 +43,28 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
+
+      - name: Stable signing readiness
+        env:
+          KEYSTORE_B64: ${{ secrets.DUONGODAU_KEYSTORE_B64 }}
+          STORE_PASSWORD: ${{ secrets.DUONGODAU_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.DUONGODAU_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ] && [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_PASSWORD" ]; then
+            mkdir -p "$RUNNER_TEMP/duongodau-signing-check"
+            printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/duongodau-signing-check/duongodau-release.jks"
+            if keytool -list \
+              -keystore "$RUNNER_TEMP/duongodau-signing-check/duongodau-release.jks" \
+              -alias duongodau \
+              -storepass "$STORE_PASSWORD" >/dev/null 2>&1; then
+              echo 'STABLE_SIGNING_READY'
+            else
+              echo 'STABLE_SIGNING_INVALID'
+            fi
+            rm -rf "$RUNNER_TEMP/duongodau-signing-check"
+          else
+            echo 'STABLE_SIGNING_NOT_CONFIGURED'
+          fi
 
       - name: Materialize nationwide administrative selector
         run: python3 tools/sync_admin_2025.py --open-admin-data
