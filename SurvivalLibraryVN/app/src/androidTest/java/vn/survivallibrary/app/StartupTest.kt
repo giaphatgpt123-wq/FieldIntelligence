@@ -73,12 +73,13 @@ class StartupTest {
     }
 
     @Test
-    fun libraryProgressStartsWithoutInventingCollectorNumbers() {
-        ActivityScenario.launch(LibraryProgressActivity::class.java).use { scenario ->
+    fun dataEngineProgressStartsWithoutInventingCollectorNumbers() {
+        ActivityScenario.launch(DataEngineProgressActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse(activity.isFinishing)
-                assertTrue(containsText(activity.window.decorView, "Bảng tiến độ trên thiết bị"))
+                assertTrue(containsText(activity.window.decorView, "Data Engine V2"))
+                assertTrue(containsText(activity.window.decorView, "Đồng bộ tiến độ AI"))
             }
         }
     }
