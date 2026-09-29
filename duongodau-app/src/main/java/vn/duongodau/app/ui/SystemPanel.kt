@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -37,7 +36,6 @@ import vn.duongodau.app.interop.InteropResult
 import vn.duongodau.app.update.AppUpdateManager
 import vn.duongodau.app.update.InstallResult
 import vn.duongodau.app.update.UpdateCheckResult
-import vn.duongodau.app.update.UpdateInfo
 
 private val PanelNavy = Color(0xFF071A2E)
 private val PanelTeal = Color(0xFF0E6F73)
@@ -48,14 +46,14 @@ private val PanelWarning = Color(0xFFE58A16)
 private val PanelDanger = Color(0xFFD94B4B)
 
 @Composable
-fun SystemPanel() {
+fun SystemPanel(initialBridgeText: String = "") {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var checking by remember { mutableStateOf(false) }
     var installing by remember { mutableStateOf(false) }
     var updateResult by remember { mutableStateOf<UpdateCheckResult?>(null) }
     var installResult by remember { mutableStateOf<InstallResult?>(null) }
-    var bridgeText by remember { mutableStateOf("") }
+    var bridgeText by remember(initialBridgeText) { mutableStateOf(initialBridgeText) }
     var bridgeStatus by remember { mutableStateOf<String?>(null) }
 
     fun checkNow() {
