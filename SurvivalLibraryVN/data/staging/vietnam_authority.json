@@ -1,7 +1,107 @@
 {
   "schemaVersion": 1,
   "purpose": "staging format for normalized official/specialist Vietnam evidence",
-  "records": [],
+  "records": [
+    {
+      "scientificName": "Ipomoea aquatica",
+      "categoryId": "vegetables",
+      "aliases": [
+        {
+          "value": {"displayName": "Rau muống", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
+          "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh"
+        }
+      ]
+    },
+    {
+      "scientificName": "Colocasia esculenta",
+      "categoryId": "roots",
+      "aliases": [
+        {
+          "value": {"displayName": "Khoai môn", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://nbca.gov.vn/doi-tuong-bao-ton/loai-nguy-cap-quy-hiem/loai-nguy-cap-quy-hiem-duoc-uu-tien-bao-ve/",
+          "publisher": "Trang thông tin quốc gia về bảo tồn thiên nhiên và đa dạng sinh học"
+        }
+      ]
+    },
+    {
+      "scientificName": "Mangifera indica",
+      "categoryId": "fruit-crops",
+      "aliases": [
+        {
+          "value": {"displayName": "Xoài", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://vafs.gov.vn/vn/magazine/so-4-2022/",
+          "publisher": "Viện Khoa học Lâm nghiệp Việt Nam"
+        }
+      ]
+    },
+    {
+      "scientificName": "Nelumbo nucifera",
+      "categoryId": "flowers",
+      "aliases": [
+        {
+          "value": {"displayName": "Sen", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://khuyennong.danang.gov.vn/QTIUpload/VanBan3/3.%20HD%20KT%20trong%20Sen%20lay%20hat%20%2811.7.3%29F%29.signed.pdf",
+          "publisher": "Sở Nông nghiệp và Phát triển nông thôn Quảng Nam"
+        }
+      ]
+    },
+    {
+      "scientificName": "Pleurotus pulmonarius",
+      "categoryId": "mushrooms",
+      "aliases": [
+        {
+          "value": {"displayName": "Nấm sò trắng", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://sokhcn.cantho.gov.vn/default.aspx?nid=26372&pid=57",
+          "publisher": "Sở Khoa học và Công nghệ thành phố Cần Thơ"
+        }
+      ]
+    },
+    {
+      "scientificName": "Apis cerana",
+      "categoryId": "insects",
+      "aliases": [
+        {
+          "value": {"displayName": "Ong nội", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-nuoi-ong-mat-ong-noi-apis-cerana-16705.html",
+          "publisher": "Trung tâm Khuyến nông Quốc gia"
+        }
+      ]
+    },
+    {
+      "scientificName": "Sus scrofa",
+      "categoryId": "animals",
+      "aliases": [
+        {
+          "value": {"displayName": "Lợn rừng", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+13842-3%3A2023",
+          "publisher": "Cổng thông tin Tiêu chuẩn Quốc gia"
+        }
+      ]
+    },
+    {
+      "scientificName": "Zingiber officinale",
+      "categoryId": "medicinal-plants",
+      "aliases": [
+        {
+          "value": {"displayName": "Gừng", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://qppl.dienbien.gov.vn/qlvb/vbpq.nsf/3d0f058120469ad34725726600365420/4C6659461B62F3AE47258C810010000D/%24file/845%20t3.pdf",
+          "publisher": "Cổng thông tin quy phạm pháp luật tỉnh Điện Biên"
+        }
+      ]
+    },
+    {
+      "scientificName": "Aedes aegypti",
+      "categoryId": "danger",
+      "aliases": [
+        {
+          "value": {"displayName": "Muỗi vằn", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://vncdc.gov.vn/thong-tin-tinh-hinh-va-hoat-dong-phong-chong-dich-benh-sot-xuat-huyet-nd14621.html",
+          "publisher": "Cục Phòng bệnh - Bộ Y tế"
+        }
+      ]
+    }
+  ],
   "rules": [
     "Không chép dữ liệu vào đây nếu không giữ được publisher và sourceUri gốc.",
     "Ảnh phải giữ license/rights/creator; công khai để xem không đồng nghĩa được phép đóng gói lại.",

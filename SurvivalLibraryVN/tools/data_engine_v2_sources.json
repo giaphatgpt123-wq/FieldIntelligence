@@ -44,6 +44,21 @@
       "notes": "Đăng ký ở tier cao để AI biết đây là nguồn ưu tiên Việt Nam; hiện không scrape HTML mù."
     },
     {
+      "id": "curated-canary-media",
+      "label": "Curated canary media with preserved open-license provenance",
+      "tier": "OPEN_SCIENCE",
+      "automated": true,
+      "adapter": "local_authority",
+      "dataPath": "data/staging/curated_canary_media.json",
+      "capabilities": [
+        "MEDIA_PRIMARY",
+        "MEDIA_DIAGNOSTIC_SET"
+      ],
+      "categories": ["flowers", "timber-trees", "marine-life", "insects", "medicinal-plants"],
+      "rightsPolicy": "Chỉ nhận media đã giữ sourceUri gốc, creator, license và checksum SHA-256; tuyệt đối không gắn tier OFFICIAL_VIETNAM cho nguồn Wikimedia Commons.",
+      "notes": "Nguồn offline đã curate từ chính media canary PUBLISHED để tránh RETRY do upstream thiếu media/license; vẫn chỉ tạo staging evidence."
+    },
+    {
       "id": "gbif",
       "label": "Global Biodiversity Information Facility",
       "tier": "GLOBAL_AUTHORITY",
