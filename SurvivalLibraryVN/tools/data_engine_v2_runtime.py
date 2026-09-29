@@ -6,7 +6,8 @@ Keeps the V2 evidence/publication contract unchanged while reducing avoidable la
 - one cached adapter per source and one parsed local-authority index per adapter;
 - bounded retry for malformed/transient JSON responses;
 - token-bucket source throttling using registry maxRequestsPerMinute;
-- buffered source-health persistence (one write at batch end, not one write per success).
+- buffered source-health persistence (one write at batch end, not one write per success);
+- explicit terminal evidence for narrowly curated fields, avoiding redundant fallbacks.
 
 The collector deliberately remains sequential. Publication/state code is not made concurrent
 until its health/evidence stores have explicit transaction/thread-safety guarantees.
@@ -32,6 +33,14 @@ DEFAULT_TIMEOUT_SECONDS = 20
 CACHE_MAX_ENTRIES = 256
 CACHE_MAX_RESPONSE_BYTES = 256 * 1024
 TRANSIENT_HTTP_CODES = {429, 500, 502, 503, 504}
+
+# Terminal evidence is intentionally source+field specific. It does not mean an entire tier
+# is authoritative for every field, and it does not relax app-side LibraryRules. These two
+# local packs were curated exactly for the listed fields and already preserve provenance.
+TERMINAL_EVIDENCE_FIELDS: dict[str, frozenset[str]] = {
+    "vn-authority-local": frozenset({"VIETNAMESE_PRIMARY_NAME", "VIETNAMESE_ALIASES"}),
+    "curated-canary-media": frozenset({"MEDIA_PRIMARY", "MEDIA_DIAGNOSTIC_SET"}),
+}
 
 
 class TransientPayloadError(RuntimeError):
@@ -250,7 +259,7 @@ RUNTIME_ADAPTERS["local_authority"] = CachedLocalAuthorityAdapter
 
 
 class OptimizedBatchCollector(core.BatchCollector):
-    """Reuse adapters/transports and flush health state once after the batch."""
+    """Reuse adapters/transports, short-circuit curated evidence, flush health once."""
 
     def __init__(
         self,
@@ -276,6 +285,73 @@ class OptimizedBatchCollector(core.BatchCollector):
         adapter = adapter_cls(source, bound_transport)
         self._adapter_cache[source.source_id] = adapter
         return adapter
+
+    @staticmethod
+    def _is_terminal_evidence(source: core.SourceDefinition, task: core.LoadTask, rows: list[dict[str, Any]]) -> bool:
+        return bool(rows) and task.field_key in TERMINAL_EVIDENCE_FIELDS.get(source.source_id, frozenset())
+
+    def collect_task(self, task: core.LoadTask) -> dict[str, Any]:
+        started = int(time.time() * 1000)
+        if task.task_type == "PUBLISH_RECORD":
+            return {
+                "taskId": task.task_id,
+                "canonicalId": task.canonical_id,
+                "field": task.field_key,
+                "status": "BLOCKED",
+                "evidence": [],
+                "attemptedSources": [],
+                "errors": ["PUBLISH_RECORD chỉ được thực hiện sau LibraryRules trên app"],
+                "startedAt": started,
+                "finishedAt": int(time.time() * 1000),
+            }
+
+        candidates = self.registry.candidates(task)
+        evidence: list[dict[str, Any]] = []
+        attempted: list[str] = []
+        errors: list[str] = []
+        successful_sources = 0
+
+        for source in candidates:
+            if successful_sources >= task.max_sources:
+                break
+            if not self.health.available(source.source_id):
+                continue
+            attempted.append(source.source_id)
+            try:
+                rows = self._adapter(source).collect(task)
+                self.health.success(source.source_id)
+                if rows:
+                    successful_sources += 1
+                    evidence.extend(rows)
+                    if self._is_terminal_evidence(source, task, rows):
+                        break
+            except Exception as exc:
+                message = f"{source.source_id}: {exc}"
+                errors.append(message)
+                self.health.failure(source.source_id, str(exc))
+                continue
+
+        if evidence:
+            status = "COMPLETED"
+        elif not candidates:
+            status = "BLOCKED"
+            errors.append("Không có automated adapter phù hợp cho field/category")
+        else:
+            status = "RETRY"
+            if not errors:
+                errors.append("Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau")
+
+        return {
+            "taskId": task.task_id,
+            "canonicalId": task.canonical_id,
+            "field": task.field_key,
+            "status": status,
+            "evidence": evidence,
+            "attemptedSources": attempted,
+            "errors": errors,
+            "startedAt": started,
+            "finishedAt": int(time.time() * 1000),
+        }
 
     def collect_many(self, tasks: Iterable[core.LoadTask], limit: int = 500) -> list[dict[str, Any]]:
         try:
