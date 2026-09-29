@@ -6,17 +6,13 @@ import vn.duongodau.app.core.AdminTransition
 import vn.duongodau.app.core.AdminUnit
 import vn.duongodau.app.core.VerificationState
 
-/**
- * Offline-first administrative repository.
- *
- * Preferred assets:
- * - admin_current.csv: province_code,province_name,commune_code,commune_name
- * - admin_transitions.csv: old_code,new_code,effective_from,legal_source,verification
- *
- * If the full commune asset is not bundled yet, the app falls back to the 34 current
- * province-level units and explicitly reports nationwideReady=false.
- */
+/** Offline-first administrative repository for the current two-level system plus history. */
 class AdminRepository(private val context: Context) {
+
+    companion object {
+        const val EXPECTED_PROVINCES = 34
+        const val EXPECTED_COMMUNES = 3321
+    }
 
     data class AdminDataState(
         val provinces: List<AdminUnit>,
@@ -29,22 +25,29 @@ class AdminRepository(private val context: Context) {
     fun load(): AdminDataState {
         val current = runCatching { loadCurrentAsset() }.getOrNull()
         val transitions = runCatching { loadTransitionsAsset() }.getOrDefault(emptyList())
+        val provinceCount = current?.first?.map { it.code }?.distinct()?.size ?: 0
+        val communeCount = current?.second?.values?.flatten()?.map { it.code }?.distinct()?.size ?: 0
+        val completeNationwide = provinceCount == EXPECTED_PROVINCES && communeCount == EXPECTED_COMMUNES
 
-        return if (current != null && current.second.values.sumOf { it.size } > 0) {
+        return if (current != null && completeNationwide) {
             AdminDataState(
                 provinces = current.first,
                 communesByProvince = current.second,
                 transitions = transitions,
                 nationwideReady = true,
-                sourceLabel = "admin_current.csv"
+                sourceLabel = "QĐ 19/2025/QĐ-TTg – admin_current.csv ($provinceCount tỉnh, $communeCount xã/phường/đặc khu)"
             )
         } else {
+            // Partial commune files are never silently promoted as nationwide data.
             AdminDataState(
-                provinces = fallbackProvinces(),
-                communesByProvince = emptyMap(),
+                provinces = if (current?.first?.size == EXPECTED_PROVINCES) current.first else fallbackProvinces(),
+                communesByProvince = current?.second.orEmpty(),
                 transitions = transitions,
                 nationwideReady = false,
-                sourceLabel = "QĐ 19/2025/QĐ-TTg – fallback 34 tỉnh/thành"
+                sourceLabel = if (current != null)
+                    "Dữ liệu hành chính một phần: $provinceCount/34 tỉnh, $communeCount/3321 cấp xã"
+                else
+                    "QĐ 19/2025/QĐ-TTg – fallback 34 tỉnh/thành"
             )
         }
     }
@@ -57,9 +60,9 @@ class AdminRepository(private val context: Context) {
                 if (line.isBlank()) return@forEach
                 val c = parseCsvLine(line)
                 if (c.size < 4) return@forEach
-                val pCode = c[0].trim()
+                val pCode = c[0].trim().padStart(2, '0')
                 val pName = c[1].trim()
-                val cCode = c[2].trim()
+                val cCode = c[2].trim().padStart(5, '0')
                 val cName = c[3].trim()
                 if (pCode.isBlank() || pName.isBlank() || cCode.isBlank() || cName.isBlank()) return@forEach
 
@@ -129,49 +132,18 @@ class AdminRepository(private val context: Context) {
     /** Official province-level codes from Decision 19/2025/QĐ-TTg, effective 2025-07-01. */
     private fun fallbackProvinces(): List<AdminUnit> {
         val units = listOf(
-            "01" to "Hà Nội",
-            "04" to "Cao Bằng",
-            "08" to "Tuyên Quang",
-            "11" to "Điện Biên",
-            "12" to "Lai Châu",
-            "14" to "Sơn La",
-            "15" to "Lào Cai",
-            "19" to "Thái Nguyên",
-            "20" to "Lạng Sơn",
-            "22" to "Quảng Ninh",
-            "24" to "Bắc Ninh",
-            "25" to "Phú Thọ",
-            "31" to "Hải Phòng",
-            "33" to "Hưng Yên",
-            "37" to "Ninh Bình",
-            "38" to "Thanh Hóa",
-            "40" to "Nghệ An",
-            "42" to "Hà Tĩnh",
-            "44" to "Quảng Trị",
-            "46" to "Huế",
-            "48" to "Đà Nẵng",
-            "51" to "Quảng Ngãi",
-            "52" to "Gia Lai",
-            "56" to "Khánh Hòa",
-            "66" to "Đắk Lắk",
-            "68" to "Lâm Đồng",
-            "75" to "Đồng Nai",
-            "79" to "Thành phố Hồ Chí Minh",
-            "80" to "Tây Ninh",
-            "82" to "Đồng Tháp",
-            "86" to "Vĩnh Long",
-            "91" to "An Giang",
-            "92" to "Cần Thơ",
-            "96" to "Cà Mau"
+            "01" to "Hà Nội", "04" to "Cao Bằng", "08" to "Tuyên Quang", "11" to "Điện Biên",
+            "12" to "Lai Châu", "14" to "Sơn La", "15" to "Lào Cai", "19" to "Thái Nguyên",
+            "20" to "Lạng Sơn", "22" to "Quảng Ninh", "24" to "Bắc Ninh", "25" to "Phú Thọ",
+            "31" to "Hải Phòng", "33" to "Hưng Yên", "37" to "Ninh Bình", "38" to "Thanh Hóa",
+            "40" to "Nghệ An", "42" to "Hà Tĩnh", "44" to "Quảng Trị", "46" to "Huế",
+            "48" to "Đà Nẵng", "51" to "Quảng Ngãi", "52" to "Gia Lai", "56" to "Khánh Hòa",
+            "66" to "Đắk Lắk", "68" to "Lâm Đồng", "75" to "Đồng Nai", "79" to "Thành phố Hồ Chí Minh",
+            "80" to "Tây Ninh", "82" to "Đồng Tháp", "86" to "Vĩnh Long", "91" to "An Giang",
+            "92" to "Cần Thơ", "96" to "Cà Mau"
         )
         return units.map { (code, name) ->
-            AdminUnit(
-                code = code,
-                name = name,
-                level = AdminLevel.PROVINCE,
-                effectiveFrom = "2025-07-01",
-                isCurrent = true
-            )
+            AdminUnit(code, name, AdminLevel.PROVINCE, effectiveFrom = "2025-07-01", isCurrent = true)
         }
     }
 }
