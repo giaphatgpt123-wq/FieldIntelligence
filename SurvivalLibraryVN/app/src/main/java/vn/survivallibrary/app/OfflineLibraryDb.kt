@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import org.json.JSONArray
 
 /**
  * Local-first storage for the app.
@@ -37,6 +38,13 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                 usage_level TEXT NOT NULL DEFAULT 'CHUA_PHAN_LOAI',
                 verification_state TEXT NOT NULL DEFAULT 'CHUA_CO',
                 summary TEXT NOT NULL DEFAULT '',
+                scientific_name TEXT NOT NULL DEFAULT '',
+                identification_summary TEXT NOT NULL DEFAULT '',
+                key_features_json TEXT NOT NULL DEFAULT '[]',
+                confusable_json TEXT NOT NULL DEFAULT '[]',
+                required_view_roles_json TEXT NOT NULL DEFAULT '[]',
+                primary_view_role TEXT NOT NULL DEFAULT '',
+                quality_profile TEXT NOT NULL DEFAULT '',
                 published INTEGER NOT NULL DEFAULT 0,
                 high_risk INTEGER NOT NULL DEFAULT 0,
                 source_count INTEGER NOT NULL DEFAULT 0,
@@ -50,6 +58,13 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         ensureColumn(db, "library_records", "usage_level", "TEXT NOT NULL DEFAULT 'CHUA_PHAN_LOAI'")
         ensureColumn(db, "library_records", "verification_state", "TEXT NOT NULL DEFAULT 'CHUA_CO'")
         ensureColumn(db, "library_records", "summary", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "scientific_name", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "identification_summary", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "key_features_json", "TEXT NOT NULL DEFAULT '[]'")
+        ensureColumn(db, "library_records", "confusable_json", "TEXT NOT NULL DEFAULT '[]'")
+        ensureColumn(db, "library_records", "required_view_roles_json", "TEXT NOT NULL DEFAULT '[]'")
+        ensureColumn(db, "library_records", "primary_view_role", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "library_records", "quality_profile", "TEXT NOT NULL DEFAULT ''")
         ensureColumn(db, "library_records", "published", "INTEGER NOT NULL DEFAULT 0")
         ensureColumn(db, "library_records", "high_risk", "INTEGER NOT NULL DEFAULT 0")
         ensureColumn(db, "library_records", "source_count", "INTEGER NOT NULL DEFAULT 0")
@@ -151,7 +166,11 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                 license TEXT NOT NULL DEFAULT '',
                 creator TEXT NOT NULL DEFAULT '',
                 rights_holder TEXT NOT NULL DEFAULT '',
-                mime_type TEXT NOT NULL DEFAULT ''
+                mime_type TEXT NOT NULL DEFAULT '',
+                view_role TEXT NOT NULL DEFAULT 'REFERENCE',
+                life_stage TEXT NOT NULL DEFAULT '',
+                is_primary INTEGER NOT NULL DEFAULT 0,
+                diagnostic INTEGER NOT NULL DEFAULT 1
             )
             """.trimIndent()
         )
@@ -165,10 +184,15 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         ensureColumn(db, "record_media", "creator", "TEXT NOT NULL DEFAULT ''")
         ensureColumn(db, "record_media", "rights_holder", "TEXT NOT NULL DEFAULT ''")
         ensureColumn(db, "record_media", "mime_type", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "view_role", "TEXT NOT NULL DEFAULT 'REFERENCE'")
+        ensureColumn(db, "record_media", "life_stage", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "is_primary", "INTEGER NOT NULL DEFAULT 0")
+        ensureColumn(db, "record_media", "diagnostic", "INTEGER NOT NULL DEFAULT 1")
 
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_sources_record ON record_sources(record_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_media_record ON record_media(record_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_media_verified ON record_media(verified)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_media_primary ON record_media(record_id, is_primary)")
     }
 
     private fun ensureColumn(db: SQLiteDatabase, table: String, column: String, definition: String) {
@@ -269,12 +293,15 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         val result = mutableListOf<LibraryRecordMedia>()
         readableDatabase.query(
             "record_media",
-            arrayOf("media_id", "source_uri", "download_uri", "verified", "angle_label", "checksum", "license", "creator", "rights_holder", "mime_type"),
+            arrayOf(
+                "media_id", "source_uri", "download_uri", "verified", "angle_label", "checksum", "license",
+                "creator", "rights_holder", "mime_type", "view_role", "life_stage", "is_primary", "diagnostic"
+            ),
             "record_id = ?",
             arrayOf(recordId),
             null,
             null,
-            "media_id ASC"
+            "is_primary DESC, media_id ASC"
         ).use { cursor ->
             while (cursor.moveToNext()) {
                 result += LibraryRecordMedia(
@@ -287,7 +314,11 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                     license = cursor.getString(6),
                     creator = cursor.getString(7),
                     rightsHolder = cursor.getString(8),
-                    mimeType = cursor.getString(9)
+                    mimeType = cursor.getString(9),
+                    viewRole = cursor.getString(10),
+                    lifeStage = cursor.getString(11),
+                    isPrimary = cursor.getInt(12) == 1,
+                    diagnostic = cursor.getInt(13) == 1
                 )
             }
         }
@@ -318,6 +349,13 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                     put("usage_level", record.usageLevel.name)
                     put("verification_state", record.verificationState.name)
                     put("summary", record.summary)
+                    put("scientific_name", record.scientificName)
+                    put("identification_summary", record.identificationSummary)
+                    put("key_features_json", JSONArray(record.keyFeatures).toString())
+                    put("confusable_json", JSONArray(record.confusableWith).toString())
+                    put("required_view_roles_json", JSONArray(record.requiredViewRoles).toString())
+                    put("primary_view_role", record.primaryViewRole)
+                    put("quality_profile", record.qualityProfile)
                     put("published", 1)
                     put("high_risk", if (record.highRisk) 1 else 0)
                     put("source_count", record.sourceCount)
@@ -335,12 +373,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                         put("uri", source.uri)
                         put("checked_at", source.checkedAt)
                     }
-                    val sourceRow = database.insertWithOnConflict(
-                        "record_sources",
-                        null,
-                        sourceValues,
-                        SQLiteDatabase.CONFLICT_REPLACE
-                    )
+                    val sourceRow = database.insertWithOnConflict("record_sources", null, sourceValues, SQLiteDatabase.CONFLICT_REPLACE)
                     require(sourceRow != -1L) { "Không thể ghi nguồn ${source.sourceKey} của ${record.id}" }
                 }
 
@@ -358,13 +391,12 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                         put("creator", media.creator)
                         put("rights_holder", media.rightsHolder)
                         put("mime_type", media.mimeType)
+                        put("view_role", media.viewRole)
+                        put("life_stage", media.lifeStage)
+                        put("is_primary", if (media.isPrimary) 1 else 0)
+                        put("diagnostic", if (media.diagnostic) 1 else 0)
                     }
-                    val mediaRow = database.insertWithOnConflict(
-                        "record_media",
-                        null,
-                        mediaValues,
-                        SQLiteDatabase.CONFLICT_REPLACE
-                    )
+                    val mediaRow = database.insertWithOnConflict("record_media", null, mediaValues, SQLiteDatabase.CONFLICT_REPLACE)
                     require(mediaRow != -1L) { "Không thể ghi media ${media.mediaId} của ${record.id}" }
                 }
             }
@@ -396,15 +428,7 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
 
     private fun clearPackageEvidence(database: SQLiteDatabase, packageId: String) {
         val oldIds = mutableListOf<String>()
-        database.query(
-            "library_records",
-            arrayOf("id"),
-            "package_id = ?",
-            arrayOf(packageId),
-            null,
-            null,
-            null
-        ).use { cursor ->
+        database.query("library_records", arrayOf("id"), "package_id = ?", arrayOf(packageId), null, null, null).use { cursor ->
             while (cursor.moveToNext()) oldIds += cursor.getString(0)
         }
         oldIds.forEach { recordId ->
@@ -437,16 +461,9 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
     }
 
     fun getMeta(key: String): String? = try {
-        readableDatabase.query(
-            "library_meta",
-            arrayOf("meta_value"),
-            "meta_key = ?",
-            arrayOf(key),
-            null,
-            null,
-            null,
-            "1"
-        ).use { cursor -> if (cursor.moveToFirst()) cursor.getString(0) else null }
+        readableDatabase.query("library_meta", arrayOf("meta_value"), "meta_key = ?", arrayOf(key), null, null, null, "1").use { cursor ->
+            if (cursor.moveToFirst()) cursor.getString(0) else null
+        }
     } catch (_: Exception) {
         null
     }
@@ -458,15 +475,13 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
     )
 
     private fun scalarCount(sql: String): Int = try {
-        readableDatabase.rawQuery(sql, null).use { cursor ->
-            if (cursor.moveToFirst()) cursor.getInt(0) else 0
-        }
+        readableDatabase.rawQuery(sql, null).use { cursor -> if (cursor.moveToFirst()) cursor.getInt(0) else 0 }
     } catch (_: Exception) {
         0
     }
 
     companion object {
         private const val DB_NAME = "survival_library_vn.db"
-        private const val DB_VERSION = 6
+        private const val DB_VERSION = 7
     }
 }
