@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 3,
-  "generatedAt": 1790682808687,
+  "version": 4,
+  "generatedAt": 1790683385901,
   "entities": [
     {
       "canonicalId": "taxon:sus-scrofa",
@@ -10,7 +10,7 @@
       "vietnameseName": "Lợn rừng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -19,7 +19,7 @@
       "vietnameseName": "Muỗi vằn",
       "highRisk": true,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:nelumbo-nucifera",
@@ -28,7 +28,7 @@
       "vietnameseName": "Sen hồng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -37,7 +37,7 @@
       "vietnameseName": "Cá rô đồng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:mangifera-indica",
@@ -46,7 +46,7 @@
       "vietnameseName": "Xoài",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -55,7 +55,7 @@
       "vietnameseName": "Ong nội",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:penaeus-monodon",
@@ -64,7 +64,7 @@
       "vietnameseName": "Tôm sú",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:zingiber-officinale",
@@ -73,7 +73,7 @@
       "vietnameseName": "Gừng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -82,7 +82,7 @@
       "vietnameseName": "Nấm sò trắng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -91,7 +91,7 @@
       "vietnameseName": "Khoai môn",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:hopea-odorata",
@@ -100,7 +100,7 @@
       "vietnameseName": "Sao đen",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -109,7 +109,7 @@
       "vietnameseName": "Rau muống",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     }
   ],
   "aliases": [
@@ -120,7 +120,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682805566
+      "updatedAt": 1790683384236
     },
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -129,7 +129,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -138,7 +138,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790682782909
+      "updatedAt": 1790683364859
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -147,7 +147,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790682782909
+      "updatedAt": 1790683364859
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -156,7 +156,7 @@
       "region": "",
       "sourceKey": "inaturalist",
       "verified": false,
-      "updatedAt": 1790682783485
+      "updatedAt": 1790683365039
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -165,7 +165,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682796189
+      "updatedAt": 1790683379803
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -174,7 +174,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -183,7 +183,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682763381
+      "updatedAt": 1790683352836
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -192,7 +192,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:hopea-odorata",
@@ -201,7 +201,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790682774850
+      "updatedAt": 1790683358912
     },
     {
       "canonicalId": "taxon:hopea-odorata",
@@ -210,7 +210,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790682774850
+      "updatedAt": 1790683358912
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -219,7 +219,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682761909
+      "updatedAt": 1790683350992
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -228,7 +228,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:mangifera-indica",
@@ -237,7 +237,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682765884
+      "updatedAt": 1790683354531
     },
     {
       "canonicalId": "taxon:mangifera-indica",
@@ -246,7 +246,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:nelumbo-nucifera",
@@ -255,7 +255,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682769858
+      "updatedAt": 1790683356429
     },
     {
       "canonicalId": "taxon:nelumbo-nucifera",
@@ -264,7 +264,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:penaeus-monodon",
@@ -273,7 +273,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790682786851
+      "updatedAt": 1790683369391
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -282,7 +282,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682777855
+      "updatedAt": 1790683361027
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -291,7 +291,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:sus-scrofa",
@@ -300,7 +300,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682797562
+      "updatedAt": 1790683380695
     },
     {
       "canonicalId": "taxon:sus-scrofa",
@@ -309,7 +309,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     },
     {
       "canonicalId": "taxon:zingiber-officinale",
@@ -318,7 +318,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790682801547
+      "updatedAt": 1790683382234
     },
     {
       "canonicalId": "taxon:zingiber-officinale",
@@ -327,7 +327,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790682808687
+      "updatedAt": 1790683385901
     }
   ],
   "fields": [
@@ -339,7 +339,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682805566,
+      "updatedAt": 1790683384235,
       "valueJson": ""
     },
     {
@@ -350,7 +350,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682808620,
+      "updatedAt": 1790683385828,
       "valueJson": ""
     },
     {
@@ -361,7 +361,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682805566,
+      "updatedAt": 1790683384236,
       "valueJson": ""
     },
     {
@@ -372,7 +372,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682807601,
+      "updatedAt": 1790683384865,
       "valueJson": ""
     },
     {
@@ -383,7 +383,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682781859,
+      "updatedAt": 1790683363892,
       "valueJson": ""
     },
     {
@@ -394,7 +394,7 @@
       "verified": false,
       "sourceKey": "inaturalist",
       "lastError": "",
-      "updatedAt": 1790682783879,
+      "updatedAt": 1790683365916,
       "valueJson": ""
     },
     {
@@ -405,7 +405,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790682783485,
+      "updatedAt": 1790683365039,
       "valueJson": ""
     },
     {
@@ -416,7 +416,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682783879,
+      "updatedAt": 1790683365916,
       "valueJson": ""
     },
     {
@@ -427,7 +427,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682796189,
+      "updatedAt": 1790683379803,
       "valueJson": ""
     },
     {
@@ -438,7 +438,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790682797036,
+      "updatedAt": 1790683380248,
       "valueJson": ""
     },
     {
@@ -449,7 +449,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682796189,
+      "updatedAt": 1790683379803,
       "valueJson": ""
     },
     {
@@ -460,7 +460,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682797036,
+      "updatedAt": 1790683380248,
       "valueJson": ""
     },
     {
@@ -471,7 +471,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682763381,
+      "updatedAt": 1790683352836,
       "valueJson": ""
     },
     {
@@ -482,7 +482,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682764849,
+      "updatedAt": 1790683354130,
       "valueJson": ""
     },
     {
@@ -493,7 +493,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682763381,
+      "updatedAt": 1790683352836,
       "valueJson": ""
     },
     {
@@ -504,7 +504,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682764356,
+      "updatedAt": 1790683353332,
       "valueJson": ""
     },
     {
@@ -515,7 +515,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682773852,
+      "updatedAt": 1790683358012,
       "valueJson": ""
     },
     {
@@ -526,7 +526,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790682775927,
+      "updatedAt": 1790683360047,
       "valueJson": ""
     },
     {
@@ -537,7 +537,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682774850,
+      "updatedAt": 1790683358912,
       "valueJson": ""
     },
     {
@@ -548,7 +548,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682775927,
+      "updatedAt": 1790683360047,
       "valueJson": ""
     },
     {
@@ -559,7 +559,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682761909,
+      "updatedAt": 1790683350992,
       "valueJson": ""
     },
     {
@@ -570,7 +570,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682763083,
+      "updatedAt": 1790683352410,
       "valueJson": ""
     },
     {
@@ -581,7 +581,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682761909,
+      "updatedAt": 1790683350992,
       "valueJson": ""
     },
     {
@@ -592,7 +592,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682762816,
+      "updatedAt": 1790683351478,
       "valueJson": ""
     },
     {
@@ -603,7 +603,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682765884,
+      "updatedAt": 1790683354531,
       "valueJson": ""
     },
     {
@@ -614,7 +614,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682768871,
+      "updatedAt": 1790683356002,
       "valueJson": ""
     },
     {
@@ -625,7 +625,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682765884,
+      "updatedAt": 1790683354531,
       "valueJson": ""
     },
     {
@@ -636,7 +636,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682767890,
+      "updatedAt": 1790683355363,
       "valueJson": ""
     },
     {
@@ -647,7 +647,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682769858,
+      "updatedAt": 1790683356429,
       "valueJson": ""
     },
     {
@@ -658,7 +658,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790682771933,
+      "updatedAt": 1790683356908,
       "valueJson": ""
     },
     {
@@ -669,7 +669,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682769858,
+      "updatedAt": 1790683356429,
       "valueJson": ""
     },
     {
@@ -680,7 +680,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682771933,
+      "updatedAt": 1790683356907,
       "valueJson": ""
     },
     {
@@ -691,7 +691,7 @@
       "verified": true,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790682786573,
+      "updatedAt": 1790683368971,
       "valueJson": ""
     },
     {
@@ -702,7 +702,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790682795613,
+      "updatedAt": 1790683379134,
       "valueJson": ""
     },
     {
@@ -713,7 +713,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682786851,
+      "updatedAt": 1790683369391,
       "valueJson": ""
     },
     {
@@ -724,7 +724,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682795613,
+      "updatedAt": 1790683379134,
       "valueJson": ""
     },
     {
@@ -735,7 +735,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682777855,
+      "updatedAt": 1790683361027,
       "valueJson": ""
     },
     {
@@ -746,7 +746,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790682780850,
+      "updatedAt": 1790683362931,
       "valueJson": ""
     },
     {
@@ -757,7 +757,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682777855,
+      "updatedAt": 1790683361027,
       "valueJson": ""
     },
     {
@@ -768,7 +768,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682780172,
+      "updatedAt": 1790683361913,
       "valueJson": ""
     },
     {
@@ -779,7 +779,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682797562,
+      "updatedAt": 1790683380695,
       "valueJson": ""
     },
     {
@@ -790,7 +790,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682800607,
+      "updatedAt": 1790683381815,
       "valueJson": ""
     },
     {
@@ -801,7 +801,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682797562,
+      "updatedAt": 1790683380695,
       "valueJson": ""
     },
     {
@@ -812,7 +812,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682799842,
+      "updatedAt": 1790683381141,
       "valueJson": ""
     },
     {
@@ -823,7 +823,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682801547,
+      "updatedAt": 1790683382234,
       "valueJson": ""
     },
     {
@@ -834,7 +834,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790682803573,
+      "updatedAt": 1790683383801,
       "valueJson": ""
     },
     {
@@ -845,7 +845,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790682801547,
+      "updatedAt": 1790683382234,
       "valueJson": ""
     },
     {
@@ -856,7 +856,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790682803573,
+      "updatedAt": 1790683383801,
       "valueJson": ""
     }
   ],
@@ -877,7 +877,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682805566
+      "updatedAt": 1790683384235
     },
     {
       "taskId": "taxon:anabas-testudineus:identity",
@@ -895,7 +895,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682781859
+      "updatedAt": 1790683363892
     },
     {
       "taskId": "taxon:apis-cerana:identity",
@@ -913,7 +913,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682796189
+      "updatedAt": 1790683379803
     },
     {
       "taskId": "taxon:colocasia-esculenta:identity",
@@ -931,7 +931,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682763381
+      "updatedAt": 1790683352836
     },
     {
       "taskId": "taxon:hopea-odorata:identity",
@@ -949,7 +949,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682773852
+      "updatedAt": 1790683358012
     },
     {
       "taskId": "taxon:ipomoea-aquatica:identity",
@@ -967,7 +967,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682761909
+      "updatedAt": 1790683350992
     },
     {
       "taskId": "taxon:mangifera-indica:identity",
@@ -985,7 +985,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682765884
+      "updatedAt": 1790683354531
     },
     {
       "taskId": "taxon:nelumbo-nucifera:identity",
@@ -1003,7 +1003,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682769858
+      "updatedAt": 1790683356429
     },
     {
       "taskId": "taxon:penaeus-monodon:identity",
@@ -1021,7 +1021,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682786573
+      "updatedAt": 1790683368971
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:identity",
@@ -1039,7 +1039,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682777855
+      "updatedAt": 1790683361027
     },
     {
       "taskId": "taxon:sus-scrofa:identity",
@@ -1057,7 +1057,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682797562
+      "updatedAt": 1790683380695
     },
     {
       "taskId": "taxon:zingiber-officinale:identity",
@@ -1075,7 +1075,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682801547
+      "updatedAt": 1790683382234
     },
     {
       "taskId": "taxon:aedes-aegypti:distribution",
@@ -1094,7 +1094,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682807601
+      "updatedAt": 1790683384865
     },
     {
       "taskId": "taxon:anabas-testudineus:distribution",
@@ -1113,7 +1113,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682783879
+      "updatedAt": 1790683365916
     },
     {
       "taskId": "taxon:apis-cerana:distribution",
@@ -1132,7 +1132,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682797036
+      "updatedAt": 1790683380248
     },
     {
       "taskId": "taxon:colocasia-esculenta:distribution",
@@ -1151,7 +1151,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682764356
+      "updatedAt": 1790683353332
     },
     {
       "taskId": "taxon:hopea-odorata:distribution",
@@ -1170,7 +1170,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682775927
+      "updatedAt": 1790683360047
     },
     {
       "taskId": "taxon:ipomoea-aquatica:distribution",
@@ -1189,7 +1189,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682762816
+      "updatedAt": 1790683351478
     },
     {
       "taskId": "taxon:mangifera-indica:distribution",
@@ -1208,7 +1208,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682767890
+      "updatedAt": 1790683355363
     },
     {
       "taskId": "taxon:nelumbo-nucifera:distribution",
@@ -1227,7 +1227,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682771933
+      "updatedAt": 1790683356907
     },
     {
       "taskId": "taxon:penaeus-monodon:distribution",
@@ -1246,7 +1246,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682795613
+      "updatedAt": 1790683379134
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:distribution",
@@ -1265,7 +1265,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682780172
+      "updatedAt": 1790683361913
     },
     {
       "taskId": "taxon:sus-scrofa:distribution",
@@ -1284,7 +1284,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682799842
+      "updatedAt": 1790683381141
     },
     {
       "taskId": "taxon:zingiber-officinale:distribution",
@@ -1303,7 +1303,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682803573
+      "updatedAt": 1790683383801
     },
     {
       "taskId": "taxon:aedes-aegypti:media",
@@ -1322,7 +1322,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682808620
+      "updatedAt": 1790683385828
     },
     {
       "taskId": "taxon:anabas-testudineus:media",
@@ -1341,7 +1341,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682784843
+      "updatedAt": 1790683366860
     },
     {
       "taskId": "taxon:apis-cerana:media",
@@ -1360,7 +1360,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682797299
+      "updatedAt": 1790683380248
     },
     {
       "taskId": "taxon:colocasia-esculenta:media",
@@ -1379,7 +1379,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682764849
+      "updatedAt": 1790683354130
     },
     {
       "taskId": "taxon:hopea-odorata:media",
@@ -1398,7 +1398,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682776873
+      "updatedAt": 1790683360047
     },
     {
       "taskId": "taxon:ipomoea-aquatica:media",
@@ -1417,7 +1417,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682763083
+      "updatedAt": 1790683352410
     },
     {
       "taskId": "taxon:mangifera-indica:media",
@@ -1436,7 +1436,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682768872
+      "updatedAt": 1790683356002
     },
     {
       "taskId": "taxon:nelumbo-nucifera:media",
@@ -1455,7 +1455,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682772843
+      "updatedAt": 1790683356908
     },
     {
       "taskId": "taxon:penaeus-monodon:media",
@@ -1474,7 +1474,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682795903
+      "updatedAt": 1790683379134
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:media",
@@ -1493,7 +1493,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682780850
+      "updatedAt": 1790683362931
     },
     {
       "taskId": "taxon:sus-scrofa:media",
@@ -1512,7 +1512,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682800607
+      "updatedAt": 1790683381815
     },
     {
       "taskId": "taxon:zingiber-officinale:media",
@@ -1531,7 +1531,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682804539
+      "updatedAt": 1790683383801
     },
     {
       "taskId": "taxon:aedes-aegypti:aliases",
@@ -1550,7 +1550,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682806998
+      "updatedAt": 1790683384236
     },
     {
       "taskId": "taxon:anabas-testudineus:aliases",
@@ -1569,7 +1569,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682783485
+      "updatedAt": 1790683365039
     },
     {
       "taskId": "taxon:apis-cerana:aliases",
@@ -1588,7 +1588,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682796742
+      "updatedAt": 1790683379803
     },
     {
       "taskId": "taxon:colocasia-esculenta:aliases",
@@ -1607,7 +1607,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682764027
+      "updatedAt": 1790683352836
     },
     {
       "taskId": "taxon:hopea-odorata:aliases",
@@ -1626,7 +1626,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682775237
+      "updatedAt": 1790683359292
     },
     {
       "taskId": "taxon:ipomoea-aquatica:aliases",
@@ -1645,7 +1645,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682762527
+      "updatedAt": 1790683350992
     },
     {
       "taskId": "taxon:mangifera-indica:aliases",
@@ -1664,7 +1664,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682767237
+      "updatedAt": 1790683354531
     },
     {
       "taskId": "taxon:nelumbo-nucifera:aliases",
@@ -1683,7 +1683,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682771117
+      "updatedAt": 1790683356429
     },
     {
       "taskId": "taxon:penaeus-monodon:aliases",
@@ -1702,7 +1702,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "worms: HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
-      "updatedAt": 1790682795276
+      "updatedAt": 1790683378679
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:aliases",
@@ -1721,7 +1721,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682779368
+      "updatedAt": 1790683361027
     },
     {
       "taskId": "taxon:sus-scrofa:aliases",
@@ -1740,7 +1740,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682799210
+      "updatedAt": 1790683380695
     },
     {
       "taskId": "taxon:zingiber-officinale:aliases",
@@ -1759,7 +1759,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790682802803
+      "updatedAt": 1790683382234
     }
   ],
   "sourceHealth": [
@@ -1769,7 +1769,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790682808620
+      "updatedAt": 1790683385828
     },
     {
       "sourceKey": "gbif",
@@ -1777,7 +1777,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790682808620
+      "updatedAt": 1790683385828
     },
     {
       "sourceKey": "inaturalist",
@@ -1785,7 +1785,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790682808620
+      "updatedAt": 1790683385828
     },
     {
       "sourceKey": "vn-authority-local",
@@ -1793,15 +1793,15 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790682808620
+      "updatedAt": 1790683385828
     },
     {
       "sourceKey": "worms",
       "tier": "",
       "consecutiveFailures": 1,
-      "cooldownUntil": 1790682825012,
+      "cooldownUntil": 1790683408208,
       "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
-      "updatedAt": 1790682808620
+      "updatedAt": 1790683385828
     }
   ]
 }
