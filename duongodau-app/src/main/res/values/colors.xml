@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dod_icon_background">#0A2742</color>
+    <color name="dod_icon_teal">#0E6F73</color>
+    <color name="dod_icon_orange">#F4A229</color>
+    <color name="dod_icon_road">#102A43</color>
+    <color name="dod_icon_white">#F7FBFF</color>
+</resources>
