@@ -28,8 +28,6 @@
         android:strokeColor="#F7FBFF"
         android:strokeWidth="2.4"
         android:strokeLineCap="round"
-        android:strokeDashWidth="5"
-        android:strokeDashGap="5"
         android:fillColor="#00000000"
         android:pathData="M26,92 C30,74 48,76 45,62 C43,51 57,49 61,41 C65,33 59,25 64,17" />
     <path
