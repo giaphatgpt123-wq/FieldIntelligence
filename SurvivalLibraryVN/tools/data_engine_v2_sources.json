@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "vn-authority-local",
+      "label": "Gói nguồn chính thức/chuyên ngành Việt Nam đã chuẩn hóa",
+      "tier": "OFFICIAL_VIETNAM",
+      "automated": true,
+      "adapter": "local_authority",
+      "dataPath": "data/staging/vietnam_authority.json",
+      "capabilities": [
+        "VIETNAMESE_PRIMARY_NAME",
+        "VIETNAMESE_ALIASES",
+        "VIETNAM_DISTRIBUTION",
+        "MEDIA_PRIMARY",
+        "MEDIA_DIAGNOSTIC_SET",
+        "IDENTIFICATION_TRAITS",
+        "CONFUSABLE_SPECIES",
+        "USAGE_LEVEL",
+        "USAGE_CONTENT",
+        "SAFETY"
+      ],
+      "categories": ["*"],
+      "rightsPolicy": "Mỗi evidence bên trong gói phải giữ publisher, sourceUri và license/rights của nguồn gốc. Không suy ra quyền sử dụng từ việc tài liệu được xem công khai.",
+      "notes": "Adapter offline/bulk ưu tiên số 1. Dữ liệu Việt Nam được chuyển đổi một lần từ nguồn công khai hợp lệ rồi tái sử dụng, tránh scrape lặp lại."
+    },
+    {
+      "id": "nbca-vietnam",
+      "label": "Cơ sở dữ liệu đa dạng sinh học Quốc gia Việt Nam",
+      "tier": "OFFICIAL_VIETNAM",
+      "automated": false,
+      "adapter": null,
+      "referenceUrl": "https://nbca.gov.vn/co-so-du-lieu/",
+      "capabilities": [
+        "VIETNAMESE_PRIMARY_NAME",
+        "VIETNAMESE_ALIASES",
+        "VIETNAM_DISTRIBUTION",
+        "MEDIA_PRIMARY",
+        "MEDIA_DIAGNOSTIC_SET",
+        "IDENTIFICATION_TRAITS"
+      ],
+      "categories": ["*"],
+      "rightsPolicy": "Chỉ tự động hóa sau khi xác định endpoint/dataset máy đọc và điều kiện tái sử dụng. Nội dung công khai không mặc nhiên đồng nghĩa ảnh được phép đóng gói lại.",
+      "notes": "Đăng ký ở tier cao để AI biết đây là nguồn ưu tiên Việt Nam; hiện không scrape HTML mù."
+    },
+    {
+      "id": "gbif",
+      "label": "Global Biodiversity Information Facility",
+      "tier": "GLOBAL_AUTHORITY",
+      "automated": true,
+      "adapter": "gbif",
+      "baseUrl": "https://api.gbif.org",
+      "capabilities": [
+        "CANONICAL_IDENTITY",
+        "VIETNAMESE_ALIASES",
+        "VIETNAM_DISTRIBUTION",
+        "MEDIA_PRIMARY",
+        "MEDIA_DIAGNOSTIC_SET"
+      ],
+      "categories": ["*"],
+      "maxRequestsPerMinute": 60,
+      "rightsPolicy": "Giữ nguyên dataset/source/identifier/license của từng evidence hoặc media; không nâng quyền sử dụng ảnh nếu metadata thiếu.",
+      "notes": "Dùng cho taxonomy/backbone, vernaculars, occurrence tại Việt Nam và media metadata."
+    },
+    {
+      "id": "worms",
+      "label": "World Register of Marine Species",
+      "tier": "GLOBAL_AUTHORITY",
+      "automated": true,
+      "adapter": "worms",
+      "baseUrl": "https://www.marinespecies.org/rest",
+      "capabilities": [
+        "CANONICAL_IDENTITY",
+        "VIETNAMESE_ALIASES",
+        "VIETNAM_DISTRIBUTION"
+      ],
+      "categories": ["marine-life"],
+      "maxRequestsPerMinute": 60,
+      "rightsPolicy": "Giữ nguồn WoRMS/AphiaID và citation/source trả về; media không lấy từ adapter này.",
+      "notes": "Đối chiếu taxonomy, synonym, vernacular và phân bố cho sinh vật biển."
+    },
+    {
+      "id": "inaturalist",
+      "label": "iNaturalist",
+      "tier": "OPEN_SCIENCE",
+      "automated": true,
+      "adapter": "inaturalist",
+      "baseUrl": "https://api.inaturalist.org",
+      "capabilities": [
+        "VIETNAMESE_ALIASES",
+        "MEDIA_PRIMARY",
+        "MEDIA_DIAGNOSTIC_SET"
+      ],
+      "categories": ["*"],
+      "maxRequestsPerMinute": 60,
+      "rightsPolicy": "Chỉ đưa ảnh tự động vào candidate pool khi photo license là CC0, CC-BY hoặc CC-BY-SA; vẫn phải giữ attribution và source URL.",
+      "notes": "Nguồn bổ sung media/common name; không dùng một mình để vượt safety/usage gate."
+    },
+    {
+      "id": "catalogue-of-life",
+      "label": "Catalogue of Life / ChecklistBank",
+      "tier": "GLOBAL_AUTHORITY",
+      "automated": false,
+      "adapter": null,
+      "referenceUrl": "https://www.catalogueoflife.org/tools/api",
+      "capabilities": [
+        "CANONICAL_IDENTITY",
+        "VIETNAMESE_ALIASES",
+        "VIETNAM_DISTRIBUTION"
+      ],
+      "categories": ["*"],
+      "rightsPolicy": "Theo license/citation của release và dataset nguồn trong ChecklistBank.",
+      "notes": "Ưu tiên triển khai bulk adapter ở vòng sau để giảm số request theo từng loài."
+    }
+  ]
+}

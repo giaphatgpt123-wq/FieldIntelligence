@@ -1,0 +1,62 @@
+name: SurvivalLibraryVN Data Engine V2
+
+on:
+  push:
+    branches:
+      - survival-library-vn
+      - feature/data-engine-v2b-source-adapters
+    paths:
+      - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
+      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2.py'
+      - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
+      - '.github/workflows/survival-library-data-engine-v2.yml'
+  pull_request:
+    branches:
+      - survival-library-vn
+    paths:
+      - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
+      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2.py'
+      - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
+      - '.github/workflows/survival-library-data-engine-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-data-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile collector
+        run: python -m py_compile SurvivalLibraryVN/tools/data_engine_v2.py
+
+      - name: Unit tests without network
+        run: python -m unittest discover -s SurvivalLibraryVN/tools/tests -p 'test_data_engine_v2.py' -v
+
+      - name: Validate source registry
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('SurvivalLibraryVN/tools/data_engine_v2_sources.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          assert d['schemaVersion'] == 1
+          ids = [s['id'] for s in d['sources']]
+          assert len(ids) == len(set(ids)), 'duplicate source id'
+          assert any(s['tier'] == 'OFFICIAL_VIETNAM' for s in d['sources'])
+          assert any(s.get('adapter') == 'gbif' and s.get('automated') for s in d['sources'])
+          assert any(s.get('adapter') == 'worms' and s.get('automated') for s in d['sources'])
+          assert any(s.get('adapter') == 'inaturalist' and s.get('automated') for s in d['sources'])
+          print(f'Source registry OK: {len(ids)} sources')
+          PY

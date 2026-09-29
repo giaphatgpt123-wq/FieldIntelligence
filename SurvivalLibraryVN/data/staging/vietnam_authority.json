@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "purpose": "staging format for normalized official/specialist Vietnam evidence",
+  "records": [],
+  "rules": [
+    "Không chép dữ liệu vào đây nếu không giữ được publisher và sourceUri gốc.",
+    "Ảnh phải giữ license/rights/creator; công khai để xem không đồng nghĩa được phép đóng gói lại.",
+    "Một scientificName/canonical ID có thể có nhiều alias theo vùng; không tạo hồ sơ mới chỉ vì khác tên gọi.",
+    "Mức sử dụng, công dụng và safety phải có evidence riêng; không suy ra từ taxonomy."
+  ]
+}
