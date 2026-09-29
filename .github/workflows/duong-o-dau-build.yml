@@ -86,6 +86,9 @@ jobs:
       - name: Unit tests
         run: gradle --no-daemon --stacktrace :duongodau-app:testDebugUnitTest
 
+      - name: Validate bounded road pilot provenance
+        run: python3 tools/validate_duongodau_pilot.py
+
       - name: Build debug APK
         run: gradle --no-daemon --stacktrace :duongodau-app:assembleDebug
 
