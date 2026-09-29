@@ -10,11 +10,11 @@ assert data['scope'] == 'BBOX_ONLY_UNMAPPED_ADMIN'
 assert data['verification'] == 'UNVERIFIED'
 assert data['license'] == 'ODbL 1.0'
 assert data['attribution'] == '© OpenStreetMap contributors'
-assert data['bbox'] == [10.33, 105.57, 10.35, 105.60]
+assert data['bbox'] == [10.33, 105.57, 10.44, 105.68]
 assert re.fullmatch(r'[0-9a-f]{64}', data['sourceSha256'])
 assert data['sourceRequest'].startswith('https://api.openstreetmap.org/api/0.6/map?bbox=')
 roads = data['roads']
-assert len(roads) == 16, len(roads)
+assert len(roads) == 279, len(roads)
 assert len({road['id'] for road in roads}) == len(roads)
 for road in roads:
     assert re.fullmatch(r'osm-way-[0-9]+', road['id'])
