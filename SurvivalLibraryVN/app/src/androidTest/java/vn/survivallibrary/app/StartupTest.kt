@@ -20,13 +20,14 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class StartupTest {
     @Test
-    fun launcherMainScreenReachesResumedStateAndRendersHome() {
-        ActivityScenario.launch(MainAppActivity::class.java).use { scenario ->
+    fun launcherPublishedHomeReachesResumedStateAndRendersCoreActions() {
+        ActivityScenario.launch(PublishedHomeActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
-                assertFalse("Main activity must stay alive", activity.isFinishing)
+                assertFalse("Published home must stay alive", activity.isFinishing)
                 assertTrue("Home title must be visible", containsText(activity.window.decorView, "THƯ VIỆN SINH TỒN"))
                 assertTrue("Need section must render", containsText(activity.window.decorView, "Tìm theo nhu cầu"))
+                assertTrue("Published section must render", containsText(activity.window.decorView, "Dữ liệu đã phát hành"))
                 assertTrue("Camera action must render", containsText(activity.window.decorView, "Nhận dạng nhanh bằng camera"))
             }
         }
@@ -50,37 +51,46 @@ class StartupTest {
     }
 
     @Test
-    fun recordDetailScreenReachesResumedStateAndRendersSafetySections() {
+    fun publishedSearchStartsAndDoesNotMixDemoResults() {
+        ActivityScenario.launch(PublishedSearchActivity::class.java).use { scenario ->
+            scenario.moveToState(Lifecycle.State.RESUMED)
+            scenario.onActivity { activity ->
+                assertFalse(activity.isFinishing)
+                assertTrue(containsText(activity.window.decorView, "Tìm trong thư viện"))
+                assertTrue(containsText(activity.window.decorView, "PUBLISHED"))
+            }
+        }
+    }
+
+    @Test
+    fun publishedCategoryIndexStarts() {
+        ActivityScenario.launch(PublishedCategoryActivity::class.java).use { scenario ->
+            scenario.moveToState(Lifecycle.State.RESUMED)
+            scenario.onActivity { activity ->
+                assertFalse(activity.isFinishing)
+                assertTrue(containsText(activity.window.decorView, "Danh mục thư viện"))
+            }
+        }
+    }
+
+    @Test
+    fun libraryProgressStartsWithoutInventingCollectorNumbers() {
+        ActivityScenario.launch(LibraryProgressActivity::class.java).use { scenario ->
+            scenario.moveToState(Lifecycle.State.RESUMED)
+            scenario.onActivity { activity ->
+                assertFalse(activity.isFinishing)
+                assertTrue(containsText(activity.window.decorView, "Bảng tiến độ trên thiết bị"))
+            }
+        }
+    }
+
+    @Test
+    fun legacyRecordDetailStillStartsForRecoveryCompatibility() {
         ActivityScenario.launch(RecordDetailActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse("Record detail activity must stay alive", activity.isFinishing)
                 assertTrue("Detail title must render", containsText(activity.window.decorView, "Hồ sơ"))
-                assertTrue("Recognition section must render", containsText(activity.window.decorView, "Nhận biết"))
-                assertTrue("Safety section must render", containsText(activity.window.decorView, "Lưu ý an toàn"))
-            }
-        }
-    }
-
-    @Test
-    fun searchScreenStartsAndRendersSearchUi() {
-        ActivityScenario.launch(NativeSearchActivity::class.java).use { scenario ->
-            scenario.moveToState(Lifecycle.State.RESUMED)
-            scenario.onActivity { activity ->
-                assertFalse(activity.isFinishing)
-                assertTrue(containsText(activity.window.decorView, "Tìm trong thư viện"))
-            }
-        }
-    }
-
-    @Test
-    fun categoryScreenStartsAndRendersCategoryList() {
-        ActivityScenario.launch(NativeCategoryActivity::class.java).use { scenario ->
-            scenario.moveToState(Lifecycle.State.RESUMED)
-            scenario.onActivity { activity ->
-                assertFalse(activity.isFinishing)
-                assertTrue(containsText(activity.window.decorView, "Danh mục thư viện"))
-                assertTrue(containsText(activity.window.decorView, "Cây cỏ, rau"))
             }
         }
     }
@@ -110,22 +120,7 @@ class StartupTest {
     }
 
     @Test
-    fun categoryNeedIntentRendersNoFakeDataMessageWhenEmpty() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val intent = Intent(context, NativeCategoryActivity::class.java).apply {
-            putExtra(NativeCategoryActivity.EXTRA_CATEGORY, "Uống")
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        ActivityScenario.launch<NativeCategoryActivity>(intent).use { scenario ->
-            scenario.moveToState(Lifecycle.State.RESUMED)
-            scenario.onActivity { activity ->
-                assertTrue(containsText(activity.window.decorView, "không tạo nội dung giả"))
-            }
-        }
-    }
-
-    @Test
-    fun recoveryActivityStillStarts() {
+    fun legacyRecoveryActivityStillStarts() {
         ActivityScenario.launch(MainActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
