@@ -23,7 +23,11 @@
         <activity android:name=".PagedPublishedCategoryActivity" android:exported="false" />
         <activity android:name=".PagedPublishedSearchActivity" android:exported="false" />
 
-        <activity android:name=".LibraryProgressActivity" android:exported="false" />
+        <activity android:name=".DataEngineProgressActivity" android:exported="false" />
+        <activity-alias
+            android:name=".LibraryProgressActivity"
+            android:targetActivity=".DataEngineProgressActivity"
+            android:exported="false" />
         <activity android:name=".PublishedRecordDetailActivity" android:exported="false" />
         <activity android:name=".PublishedSavedActivity" android:exported="false" />
         <activity android:name=".PublishedCategoryActivity" android:exported="false" />
