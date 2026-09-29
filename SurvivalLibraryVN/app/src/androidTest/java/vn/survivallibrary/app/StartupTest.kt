@@ -1,5 +1,8 @@
 package vn.survivallibrary.app
 
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +12,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +30,23 @@ class StartupTest {
                 assertTrue("Camera action must render", containsText(activity.window.decorView, "Nhận dạng nhanh bằng camera"))
             }
         }
+    }
+
+    @Test
+    fun defaultPolicySchedulesUnmeteredLibrarySyncWithoutOpeningNetworkOnUiThread() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        RuntimePolicyStore.setSyncMode(context, LibrarySyncMode.WIFI_AUTO)
+        LibrarySyncScheduler.reconcile(context)
+
+        val scheduler = context.getSystemService(JobScheduler::class.java)
+        val oneShot = scheduler.getPendingJob(LibrarySyncScheduler.ONE_SHOT_JOB_ID)
+        val periodic = scheduler.getPendingJob(LibrarySyncScheduler.PERIODIC_JOB_ID)
+
+        assertNotNull("One-shot Wi-Fi sync job must be scheduled", oneShot)
+        assertNotNull("Periodic Wi-Fi sync job must be scheduled", periodic)
+        assertTrue(oneShot!!.networkType == JobInfo.NETWORK_TYPE_UNMETERED)
+        assertTrue(periodic!!.networkType == JobInfo.NETWORK_TYPE_UNMETERED)
+        assertTrue(periodic.isPeriodic)
     }
 
     @Test
@@ -90,7 +111,7 @@ class StartupTest {
 
     @Test
     fun categoryNeedIntentRendersNoFakeDataMessageWhenEmpty() {
-        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val context = ApplicationProvider.getApplicationContext<Context>()
         val intent = Intent(context, NativeCategoryActivity::class.java).apply {
             putExtra(NativeCategoryActivity.EXTRA_CATEGORY, "Uống")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
