@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 2,
-  "generatedAt": 1790678465319,
+  "version": 3,
+  "generatedAt": 1790682808687,
   "entities": [
     {
       "canonicalId": "taxon:sus-scrofa",
@@ -10,7 +10,7 @@
       "vietnameseName": "Lợn rừng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -19,7 +19,7 @@
       "vietnameseName": "Muỗi vằn",
       "highRisk": true,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:nelumbo-nucifera",
@@ -28,7 +28,7 @@
       "vietnameseName": "Sen hồng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -37,7 +37,7 @@
       "vietnameseName": "Cá rô đồng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:mangifera-indica",
@@ -46,7 +46,7 @@
       "vietnameseName": "Xoài",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -55,7 +55,7 @@
       "vietnameseName": "Ong nội",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:penaeus-monodon",
@@ -64,7 +64,7 @@
       "vietnameseName": "Tôm sú",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:zingiber-officinale",
@@ -73,7 +73,7 @@
       "vietnameseName": "Gừng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -82,7 +82,7 @@
       "vietnameseName": "Nấm sò trắng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -91,7 +91,7 @@
       "vietnameseName": "Khoai môn",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:hopea-odorata",
@@ -100,7 +100,7 @@
       "vietnameseName": "Sao đen",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -109,10 +109,19 @@
       "vietnameseName": "Rau muống",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     }
   ],
   "aliases": [
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "displayName": "Muỗi vằn",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682805566
+    },
     {
       "canonicalId": "taxon:aedes-aegypti",
       "displayName": "Muỗi vằn",
@@ -120,7 +129,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -129,7 +138,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790678444322
+      "updatedAt": 1790682782909
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -138,7 +147,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790678444322
+      "updatedAt": 1790682782909
     },
     {
       "canonicalId": "taxon:anabas-testudineus",
@@ -147,7 +156,16 @@
       "region": "",
       "sourceKey": "inaturalist",
       "verified": false,
-      "updatedAt": 1790678444430
+      "updatedAt": 1790682783485
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "displayName": "Ong nội",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682796189
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -156,7 +174,16 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "displayName": "Khoai môn",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682763381
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -165,7 +192,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:hopea-odorata",
@@ -174,7 +201,7 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790678438071
+      "updatedAt": 1790682774850
     },
     {
       "canonicalId": "taxon:hopea-odorata",
@@ -183,7 +210,16 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790678438071
+      "updatedAt": 1790682774850
+    },
+    {
+      "canonicalId": "taxon:ipomoea-aquatica",
+      "displayName": "Rau muống",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682761909
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -192,7 +228,16 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "displayName": "Xoài",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682765884
     },
     {
       "canonicalId": "taxon:mangifera-indica",
@@ -201,7 +246,16 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "displayName": "Sen",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682769858
     },
     {
       "canonicalId": "taxon:nelumbo-nucifera",
@@ -210,7 +264,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     },
     {
       "canonicalId": "taxon:penaeus-monodon",
@@ -219,7 +273,16 @@
       "region": "",
       "sourceKey": "gbif",
       "verified": false,
-      "updatedAt": 1790678448381
+      "updatedAt": 1790682786851
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "displayName": "Nấm sò trắng",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682777855
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -228,7 +291,16 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "displayName": "Lợn rừng",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682797562
     },
     {
       "canonicalId": "taxon:sus-scrofa",
@@ -237,7 +309,16 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "displayName": "Gừng",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790682801547
     },
     {
       "canonicalId": "taxon:zingiber-officinale",
@@ -246,7 +327,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790678465319
+      "updatedAt": 1790682808687
     }
   ],
   "fields": [
@@ -258,7 +339,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678460919,
+      "updatedAt": 1790682805566,
       "valueJson": ""
     },
     {
@@ -269,7 +350,18 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678465230,
+      "updatedAt": 1790682808620,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682805566,
       "valueJson": ""
     },
     {
@@ -280,7 +372,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678464252,
+      "updatedAt": 1790682807601,
       "valueJson": ""
     },
     {
@@ -291,7 +383,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678443575,
+      "updatedAt": 1790682781859,
       "valueJson": ""
     },
     {
@@ -302,7 +394,7 @@
       "verified": false,
       "sourceKey": "inaturalist",
       "lastError": "",
-      "updatedAt": 1790678445520,
+      "updatedAt": 1790682783879,
       "valueJson": ""
     },
     {
@@ -313,7 +405,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790678444430,
+      "updatedAt": 1790682783485,
       "valueJson": ""
     },
     {
@@ -324,7 +416,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678445421,
+      "updatedAt": 1790682783879,
       "valueJson": ""
     },
     {
@@ -335,7 +427,29 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678451786,
+      "updatedAt": 1790682796189,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "curated-canary-media",
+      "lastError": "",
+      "updatedAt": 1790682797036,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682796189,
       "valueJson": ""
     },
     {
@@ -346,7 +460,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678453569,
+      "updatedAt": 1790682797036,
       "valueJson": ""
     },
     {
@@ -357,7 +471,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678428226,
+      "updatedAt": 1790682763381,
       "valueJson": ""
     },
     {
@@ -368,7 +482,18 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678431013,
+      "updatedAt": 1790682764849,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682763381,
       "valueJson": ""
     },
     {
@@ -379,7 +504,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678430074,
+      "updatedAt": 1790682764356,
       "valueJson": ""
     },
     {
@@ -390,7 +515,18 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678437302,
+      "updatedAt": 1790682773852,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "curated-canary-media",
+      "lastError": "",
+      "updatedAt": 1790682775927,
       "valueJson": ""
     },
     {
@@ -401,7 +537,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678438071,
+      "updatedAt": 1790682774850,
       "valueJson": ""
     },
     {
@@ -412,7 +548,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678439130,
+      "updatedAt": 1790682775927,
       "valueJson": ""
     },
     {
@@ -423,7 +559,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678424703,
+      "updatedAt": 1790682761909,
       "valueJson": ""
     },
     {
@@ -434,7 +570,18 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678427688,
+      "updatedAt": 1790682763083,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:ipomoea-aquatica",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682761909,
       "valueJson": ""
     },
     {
@@ -445,7 +592,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678426757,
+      "updatedAt": 1790682762816,
       "valueJson": ""
     },
     {
@@ -456,7 +603,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678431385,
+      "updatedAt": 1790682765884,
       "valueJson": ""
     },
     {
@@ -467,7 +614,18 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678433998,
+      "updatedAt": 1790682768871,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682765884,
       "valueJson": ""
     },
     {
@@ -478,7 +636,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678433077,
+      "updatedAt": 1790682767890,
       "valueJson": ""
     },
     {
@@ -489,7 +647,29 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678434374,
+      "updatedAt": 1790682769858,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "curated-canary-media",
+      "lastError": "",
+      "updatedAt": 1790682771933,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682769858,
       "valueJson": ""
     },
     {
@@ -500,7 +680,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678436060,
+      "updatedAt": 1790682771933,
       "valueJson": ""
     },
     {
@@ -511,7 +691,18 @@
       "verified": true,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790678447607,
+      "updatedAt": 1790682786573,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "curated-canary-media",
+      "lastError": "",
+      "updatedAt": 1790682795613,
       "valueJson": ""
     },
     {
@@ -522,7 +713,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678448381,
+      "updatedAt": 1790682786851,
       "valueJson": ""
     },
     {
@@ -533,7 +724,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678450569,
+      "updatedAt": 1790682795613,
       "valueJson": ""
     },
     {
@@ -544,7 +735,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678440377,
+      "updatedAt": 1790682777855,
       "valueJson": ""
     },
     {
@@ -555,7 +746,18 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790678443196,
+      "updatedAt": 1790682780850,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682777855,
       "valueJson": ""
     },
     {
@@ -566,7 +768,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678442059,
+      "updatedAt": 1790682780172,
       "valueJson": ""
     },
     {
@@ -577,7 +779,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678454870,
+      "updatedAt": 1790682797562,
       "valueJson": ""
     },
     {
@@ -588,7 +790,18 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678457550,
+      "updatedAt": 1790682800607,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682797562,
       "valueJson": ""
     },
     {
@@ -599,7 +812,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678456685,
+      "updatedAt": 1790682799842,
       "valueJson": ""
     },
     {
@@ -610,7 +823,29 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678457917,
+      "updatedAt": 1790682801547,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "curated-canary-media",
+      "lastError": "",
+      "updatedAt": 1790682803573,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790682801547,
       "valueJson": ""
     },
     {
@@ -621,7 +856,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790678459680,
+      "updatedAt": 1790682803573,
       "valueJson": ""
     }
   ],
@@ -642,7 +877,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678460920
+      "updatedAt": 1790682805566
     },
     {
       "taskId": "taxon:anabas-testudineus:identity",
@@ -660,7 +895,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678443576
+      "updatedAt": 1790682781859
     },
     {
       "taskId": "taxon:apis-cerana:identity",
@@ -678,7 +913,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678451786
+      "updatedAt": 1790682796189
     },
     {
       "taskId": "taxon:colocasia-esculenta:identity",
@@ -696,7 +931,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678428226
+      "updatedAt": 1790682763381
     },
     {
       "taskId": "taxon:hopea-odorata:identity",
@@ -714,7 +949,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678437303
+      "updatedAt": 1790682773852
     },
     {
       "taskId": "taxon:ipomoea-aquatica:identity",
@@ -732,7 +967,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678424704
+      "updatedAt": 1790682761909
     },
     {
       "taskId": "taxon:mangifera-indica:identity",
@@ -750,7 +985,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678431385
+      "updatedAt": 1790682765884
     },
     {
       "taskId": "taxon:nelumbo-nucifera:identity",
@@ -768,7 +1003,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678434375
+      "updatedAt": 1790682769858
     },
     {
       "taskId": "taxon:penaeus-monodon:identity",
@@ -786,7 +1021,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678447608
+      "updatedAt": 1790682786573
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:identity",
@@ -804,7 +1039,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678440377
+      "updatedAt": 1790682777855
     },
     {
       "taskId": "taxon:sus-scrofa:identity",
@@ -822,7 +1057,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678454870
+      "updatedAt": 1790682797562
     },
     {
       "taskId": "taxon:zingiber-officinale:identity",
@@ -840,7 +1075,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678457917
+      "updatedAt": 1790682801547
     },
     {
       "taskId": "taxon:aedes-aegypti:distribution",
@@ -859,7 +1094,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678464253
+      "updatedAt": 1790682807601
     },
     {
       "taskId": "taxon:anabas-testudineus:distribution",
@@ -878,7 +1113,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678445421
+      "updatedAt": 1790682783879
     },
     {
       "taskId": "taxon:apis-cerana:distribution",
@@ -897,7 +1132,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678453571
+      "updatedAt": 1790682797036
     },
     {
       "taskId": "taxon:colocasia-esculenta:distribution",
@@ -916,7 +1151,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678430074
+      "updatedAt": 1790682764356
     },
     {
       "taskId": "taxon:hopea-odorata:distribution",
@@ -935,7 +1170,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678439131
+      "updatedAt": 1790682775927
     },
     {
       "taskId": "taxon:ipomoea-aquatica:distribution",
@@ -954,7 +1189,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678426757
+      "updatedAt": 1790682762816
     },
     {
       "taskId": "taxon:mangifera-indica:distribution",
@@ -973,7 +1208,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678433077
+      "updatedAt": 1790682767890
     },
     {
       "taskId": "taxon:nelumbo-nucifera:distribution",
@@ -992,7 +1227,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678436061
+      "updatedAt": 1790682771933
     },
     {
       "taskId": "taxon:penaeus-monodon:distribution",
@@ -1011,7 +1246,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678450569
+      "updatedAt": 1790682795613
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:distribution",
@@ -1030,7 +1265,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678442060
+      "updatedAt": 1790682780172
     },
     {
       "taskId": "taxon:sus-scrofa:distribution",
@@ -1049,7 +1284,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678456685
+      "updatedAt": 1790682799842
     },
     {
       "taskId": "taxon:zingiber-officinale:distribution",
@@ -1068,7 +1303,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678459680
+      "updatedAt": 1790682803573
     },
     {
       "taskId": "taxon:aedes-aegypti:media",
@@ -1087,7 +1322,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678465230
+      "updatedAt": 1790682808620
     },
     {
       "taskId": "taxon:anabas-testudineus:media",
@@ -1106,7 +1341,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678446281
+      "updatedAt": 1790682784843
     },
     {
       "taskId": "taxon:apis-cerana:media",
@@ -1121,11 +1356,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678454478
+      "lastError": "",
+      "updatedAt": 1790682797299
     },
     {
       "taskId": "taxon:colocasia-esculenta:media",
@@ -1144,7 +1379,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678431014
+      "updatedAt": 1790682764849
     },
     {
       "taskId": "taxon:hopea-odorata:media",
@@ -1159,11 +1394,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678439992
+      "lastError": "",
+      "updatedAt": 1790682776873
     },
     {
       "taskId": "taxon:ipomoea-aquatica:media",
@@ -1182,7 +1417,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678427689
+      "updatedAt": 1790682763083
     },
     {
       "taskId": "taxon:mangifera-indica:media",
@@ -1201,7 +1436,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678433998
+      "updatedAt": 1790682768872
     },
     {
       "taskId": "taxon:nelumbo-nucifera:media",
@@ -1216,11 +1451,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678436927
+      "lastError": "",
+      "updatedAt": 1790682772843
     },
     {
       "taskId": "taxon:penaeus-monodon:media",
@@ -1235,11 +1470,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678451410
+      "lastError": "",
+      "updatedAt": 1790682795903
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:media",
@@ -1258,7 +1493,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678443196
+      "updatedAt": 1790682780850
     },
     {
       "taskId": "taxon:sus-scrofa:media",
@@ -1277,7 +1512,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678457550
+      "updatedAt": 1790682800607
     },
     {
       "taskId": "taxon:zingiber-officinale:media",
@@ -1292,11 +1527,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678460525
+      "lastError": "",
+      "updatedAt": 1790682804539
     },
     {
       "taskId": "taxon:aedes-aegypti:aliases",
@@ -1311,11 +1546,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678461775
+      "lastError": "",
+      "updatedAt": 1790682806998
     },
     {
       "taskId": "taxon:anabas-testudineus:aliases",
@@ -1334,7 +1569,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678444524
+      "updatedAt": 1790682783485
     },
     {
       "taskId": "taxon:apis-cerana:aliases",
@@ -1349,11 +1584,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678452776
+      "lastError": "",
+      "updatedAt": 1790682796742
     },
     {
       "taskId": "taxon:colocasia-esculenta:aliases",
@@ -1368,11 +1603,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678429231
+      "lastError": "",
+      "updatedAt": 1790682764027
     },
     {
       "taskId": "taxon:hopea-odorata:aliases",
@@ -1391,7 +1626,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790678438184
+      "updatedAt": 1790682775237
     },
     {
       "taskId": "taxon:ipomoea-aquatica:aliases",
@@ -1406,11 +1641,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678425956
+      "lastError": "",
+      "updatedAt": 1790682762527
     },
     {
       "taskId": "taxon:mangifera-indica:aliases",
@@ -1425,11 +1660,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678432277
+      "lastError": "",
+      "updatedAt": 1790682767237
     },
     {
       "taskId": "taxon:nelumbo-nucifera:aliases",
@@ -1444,11 +1679,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678435252
+      "lastError": "",
+      "updatedAt": 1790682771117
     },
     {
       "taskId": "taxon:penaeus-monodon:aliases",
@@ -1466,8 +1701,8 @@
       "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "worms: Expecting value: line 1 column 1 (char 0)",
-      "updatedAt": 1790678449587
+      "lastError": "worms: HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
+      "updatedAt": 1790682795276
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:aliases",
@@ -1482,11 +1717,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678441244
+      "lastError": "",
+      "updatedAt": 1790682779368
     },
     {
       "taskId": "taxon:sus-scrofa:aliases",
@@ -1501,11 +1736,11 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678455781
+      "lastError": "",
+      "updatedAt": 1790682799210
     },
     {
       "taskId": "taxon:zingiber-officinale:aliases",
@@ -1520,21 +1755,29 @@
         "OPEN_SCIENCE",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790678458791
+      "lastError": "",
+      "updatedAt": 1790682802803
     }
   ],
   "sourceHealth": [
+    {
+      "sourceKey": "curated-canary-media",
+      "tier": "",
+      "consecutiveFailures": 0,
+      "cooldownUntil": 0,
+      "lastError": "",
+      "updatedAt": 1790682808620
+    },
     {
       "sourceKey": "gbif",
       "tier": "",
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790678465230
+      "updatedAt": 1790682808620
     },
     {
       "sourceKey": "inaturalist",
@@ -1542,7 +1785,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790678465230
+      "updatedAt": 1790682808620
     },
     {
       "sourceKey": "vn-authority-local",
@@ -1550,15 +1793,15 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790678465230
+      "updatedAt": 1790682808620
     },
     {
       "sourceKey": "worms",
       "tier": "",
       "consecutiveFailures": 1,
-      "cooldownUntil": 1790678479465,
-      "lastError": "Expecting value: line 1 column 1 (char 0)",
-      "updatedAt": 1790678465230
+      "cooldownUntil": 1790682825012,
+      "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
+      "updatedAt": 1790682808620
     }
   ]
 }

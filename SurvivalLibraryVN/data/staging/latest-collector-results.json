@@ -21,7 +21,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2928525",
-        "collectedAt": 1790678424703,
+        "collectedAt": 1790682761909,
         "verified": false,
         "externalId": "2928525"
       }
@@ -30,25 +30,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678424067,
-    "finishedAt": 1790678424704
+    "startedAt": 1790682761581,
+    "finishedAt": 1790682761909
   },
   {
     "taskId": "taxon:ipomoea-aquatica:aliases",
     "canonicalId": "taxon:ipomoea-aquatica",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:ipomoea-aquatica",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Rau muống",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
+        "collectedAt": 1790682761909,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678424704,
-    "finishedAt": 1790678425956
+    "errors": [],
+    "startedAt": 1790682761909,
+    "finishedAt": 1790682762527
   },
   {
     "taskId": "taxon:ipomoea-aquatica:distribution",
@@ -67,7 +83,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
-        "collectedAt": 1790678426757,
+        "collectedAt": 1790682762816,
         "verified": false
       }
     ],
@@ -76,8 +92,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678425956,
-    "finishedAt": 1790678426757
+    "startedAt": 1790682762527,
+    "finishedAt": 1790682762816
   },
   {
     "taskId": "taxon:ipomoea-aquatica:media",
@@ -100,7 +116,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2928525",
-        "collectedAt": 1790678427688,
+        "collectedAt": 1790682763083,
         "verified": false
       }
     ],
@@ -110,8 +126,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678426757,
-    "finishedAt": 1790678427689
+    "startedAt": 1790682762816,
+    "finishedAt": 1790682763083
   },
   {
     "taskId": "taxon:colocasia-esculenta:identity",
@@ -135,7 +151,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/5330776",
-        "collectedAt": 1790678428226,
+        "collectedAt": 1790682763381,
         "verified": false,
         "externalId": "5330776"
       }
@@ -144,25 +160,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678427689,
-    "finishedAt": 1790678428226
+    "startedAt": 1790682763083,
+    "finishedAt": 1790682763381
   },
   {
     "taskId": "taxon:colocasia-esculenta:aliases",
     "canonicalId": "taxon:colocasia-esculenta",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:colocasia-esculenta",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Khoai môn",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Trang thông tin quốc gia về bảo tồn thiên nhiên và đa dạng sinh học",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://nbca.gov.vn/doi-tuong-bao-ton/loai-nguy-cap-quy-hiem/loai-nguy-cap-quy-hiem-duoc-uu-tien-bao-ve/",
+        "collectedAt": 1790682763381,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678428226,
-    "finishedAt": 1790678429231
+    "errors": [],
+    "startedAt": 1790682763381,
+    "finishedAt": 1790682764027
   },
   {
     "taskId": "taxon:colocasia-esculenta:distribution",
@@ -181,7 +213,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
-        "collectedAt": 1790678430074,
+        "collectedAt": 1790682764356,
         "verified": false
       }
     ],
@@ -190,8 +222,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678429231,
-    "finishedAt": 1790678430074
+    "startedAt": 1790682764027,
+    "finishedAt": 1790682764356
   },
   {
     "taskId": "taxon:colocasia-esculenta:media",
@@ -214,7 +246,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
-        "collectedAt": 1790678431013,
+        "collectedAt": 1790682764849,
         "verified": false
       }
     ],
@@ -224,8 +256,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678430074,
-    "finishedAt": 1790678431014
+    "startedAt": 1790682764356,
+    "finishedAt": 1790682764849
   },
   {
     "taskId": "taxon:mangifera-indica:identity",
@@ -249,7 +281,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/3190638",
-        "collectedAt": 1790678431385,
+        "collectedAt": 1790682765884,
         "verified": false,
         "externalId": "3190638"
       }
@@ -258,25 +290,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678431014,
-    "finishedAt": 1790678431385
+    "startedAt": 1790682764849,
+    "finishedAt": 1790682765884
   },
   {
     "taskId": "taxon:mangifera-indica:aliases",
     "canonicalId": "taxon:mangifera-indica",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:mangifera-indica",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Xoài",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Viện Khoa học Lâm nghiệp Việt Nam",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://vafs.gov.vn/vn/magazine/so-4-2022/",
+        "collectedAt": 1790682765884,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678431385,
-    "finishedAt": 1790678432277
+    "errors": [],
+    "startedAt": 1790682765884,
+    "finishedAt": 1790682767237
   },
   {
     "taskId": "taxon:mangifera-indica:distribution",
@@ -295,7 +343,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3190638",
-        "collectedAt": 1790678433077,
+        "collectedAt": 1790682767890,
         "verified": false
       }
     ],
@@ -304,8 +352,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678432277,
-    "finishedAt": 1790678433077
+    "startedAt": 1790682767237,
+    "finishedAt": 1790682767890
   },
   {
     "taskId": "taxon:mangifera-indica:media",
@@ -328,7 +376,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/3190638",
-        "collectedAt": 1790678433998,
+        "collectedAt": 1790682768871,
         "verified": false
       },
       {
@@ -346,7 +394,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.8293002",
-        "collectedAt": 1790678433998,
+        "collectedAt": 1790682768871,
         "verified": false
       }
     ],
@@ -356,8 +404,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678433077,
-    "finishedAt": 1790678433998
+    "startedAt": 1790682767890,
+    "finishedAt": 1790682768872
   },
   {
     "taskId": "taxon:nelumbo-nucifera:identity",
@@ -381,7 +429,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2882449",
-        "collectedAt": 1790678434374,
+        "collectedAt": 1790682769858,
         "verified": false,
         "externalId": "2882449"
       }
@@ -390,25 +438,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678433998,
-    "finishedAt": 1790678434375
+    "startedAt": 1790682768872,
+    "finishedAt": 1790682769858
   },
   {
     "taskId": "taxon:nelumbo-nucifera:aliases",
     "canonicalId": "taxon:nelumbo-nucifera",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:nelumbo-nucifera",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Sen",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Sở Nông nghiệp và Phát triển nông thôn Quảng Nam",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://khuyennong.danang.gov.vn/QTIUpload/VanBan3/3.%20HD%20KT%20trong%20Sen%20lay%20hat%20%2811.7.3%29F%29.signed.pdf",
+        "collectedAt": 1790682769858,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678434375,
-    "finishedAt": 1790678435252
+    "errors": [],
+    "startedAt": 1790682769858,
+    "finishedAt": 1790682771117
   },
   {
     "taskId": "taxon:nelumbo-nucifera:distribution",
@@ -427,7 +491,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2882449",
-        "collectedAt": 1790678436060,
+        "collectedAt": 1790682771933,
         "verified": false
       }
     ],
@@ -436,25 +500,44 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678435252,
-    "finishedAt": 1790678436061
+    "startedAt": 1790682771117,
+    "finishedAt": 1790682771933
   },
   {
     "taskId": "taxon:nelumbo-nucifera:media",
     "canonicalId": "taxon:nelumbo-nucifera",
     "field": "MEDIA_PRIMARY",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:nelumbo-nucifera",
+        "field": "MEDIA_PRIMARY",
+        "value": {
+          "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/flowers-nelumbo-nucifera.jpg",
+          "sourceFile": "Nelumbo nucifera 01.JPG",
+          "creator": "Prenn",
+          "license": "CC BY-SA 3.0",
+          "checksumSha256": "391ed3a9c3b6a7750bdb0a785376067ebde1bc760c2480d75a189129602be4c0"
+        },
+        "sourceId": "curated-canary-media",
+        "publisher": "Wikimedia Commons",
+        "sourceTier": "OPEN_SCIENCE",
+        "sourceUri": "https://commons.wikimedia.org/wiki/File:Nelumbo_nucifera_01.JPG",
+        "collectedAt": 1790682771933,
+        "verified": false,
+        "rights": "CC BY-SA 3.0",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
+      "curated-canary-media",
       "inaturalist",
       "gbif"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678436061,
-    "finishedAt": 1790678436927
+    "errors": [],
+    "startedAt": 1790682771933,
+    "finishedAt": 1790682772843
   },
   {
     "taskId": "taxon:hopea-odorata:identity",
@@ -478,7 +561,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/5669231",
-        "collectedAt": 1790678437302,
+        "collectedAt": 1790682773852,
         "verified": false,
         "externalId": "5669231"
       }
@@ -487,8 +570,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678436927,
-    "finishedAt": 1790678437303
+    "startedAt": 1790682772843,
+    "finishedAt": 1790682773852
   },
   {
     "taskId": "taxon:hopea-odorata:aliases",
@@ -508,7 +591,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/5669231",
-        "collectedAt": 1790678438071,
+        "collectedAt": 1790682774850,
         "verified": false
       },
       {
@@ -523,7 +606,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/5669231",
-        "collectedAt": 1790678438071,
+        "collectedAt": 1790682774850,
         "verified": false
       }
     ],
@@ -533,8 +616,8 @@
       "inaturalist"
     ],
     "errors": [],
-    "startedAt": 1790678437303,
-    "finishedAt": 1790678438184
+    "startedAt": 1790682773852,
+    "finishedAt": 1790682775237
   },
   {
     "taskId": "taxon:hopea-odorata:distribution",
@@ -553,7 +636,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5669231",
-        "collectedAt": 1790678439130,
+        "collectedAt": 1790682775927,
         "verified": false
       }
     ],
@@ -562,25 +645,44 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678438184,
-    "finishedAt": 1790678439131
+    "startedAt": 1790682775237,
+    "finishedAt": 1790682775927
   },
   {
     "taskId": "taxon:hopea-odorata:media",
     "canonicalId": "taxon:hopea-odorata",
     "field": "MEDIA_PRIMARY",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:hopea-odorata",
+        "field": "MEDIA_PRIMARY",
+        "value": {
+          "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/timber-trees-hopea-odorata.jpg",
+          "sourceFile": "Hopea odorata Sao den.JPG",
+          "creator": "Hungda",
+          "license": "CC BY-SA 3.0",
+          "checksumSha256": "ed7f2ea2b13593d8011151dc7b1483fe473c2f888a73578d5f61b76640201b47"
+        },
+        "sourceId": "curated-canary-media",
+        "publisher": "Wikimedia Commons",
+        "sourceTier": "OPEN_SCIENCE",
+        "sourceUri": "https://commons.wikimedia.org/wiki/File:Hopea_odorata_Sao_den.JPG",
+        "collectedAt": 1790682775927,
+        "verified": false,
+        "rights": "CC BY-SA 3.0",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
+      "curated-canary-media",
       "inaturalist",
       "gbif"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678439131,
-    "finishedAt": 1790678439992
+    "errors": [],
+    "startedAt": 1790682775927,
+    "finishedAt": 1790682776873
   },
   {
     "taskId": "taxon:pleurotus-pulmonarius:identity",
@@ -604,7 +706,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678440377,
+        "collectedAt": 1790682777855,
         "verified": false,
         "externalId": "2526548"
       }
@@ -613,25 +715,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678439992,
-    "finishedAt": 1790678440377
+    "startedAt": 1790682776873,
+    "finishedAt": 1790682777855
   },
   {
     "taskId": "taxon:pleurotus-pulmonarius:aliases",
     "canonicalId": "taxon:pleurotus-pulmonarius",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:pleurotus-pulmonarius",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Nấm sò trắng",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Sở Khoa học và Công nghệ thành phố Cần Thơ",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://sokhcn.cantho.gov.vn/default.aspx?nid=26372&pid=57",
+        "collectedAt": 1790682777855,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678440377,
-    "finishedAt": 1790678441244
+    "errors": [],
+    "startedAt": 1790682777855,
+    "finishedAt": 1790682779368
   },
   {
     "taskId": "taxon:pleurotus-pulmonarius:distribution",
@@ -650,7 +768,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
-        "collectedAt": 1790678442059,
+        "collectedAt": 1790682780172,
         "verified": false
       }
     ],
@@ -659,8 +777,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678441245,
-    "finishedAt": 1790678442060
+    "startedAt": 1790682779368,
+    "finishedAt": 1790682780172
   },
   {
     "taskId": "taxon:pleurotus-pulmonarius:media",
@@ -681,7 +799,7 @@
         "publisher": "iNaturalist",
         "sourceTier": "OPEN_SCIENCE",
         "sourceUri": "https://www.inaturalist.org/taxa/136399",
-        "collectedAt": 1790678442436,
+        "collectedAt": 1790682780172,
         "verified": false
       },
       {
@@ -699,7 +817,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678443196,
+        "collectedAt": 1790682780850,
         "verified": false
       },
       {
@@ -717,7 +835,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678443196,
+        "collectedAt": 1790682780850,
         "verified": false
       },
       {
@@ -735,7 +853,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678443196,
+        "collectedAt": 1790682780850,
         "verified": false
       },
       {
@@ -753,7 +871,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678443196,
+        "collectedAt": 1790682780850,
         "verified": false
       },
       {
@@ -771,7 +889,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678443196,
+        "collectedAt": 1790682780850,
         "verified": false
       },
       {
@@ -789,7 +907,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2526548",
-        "collectedAt": 1790678443196,
+        "collectedAt": 1790682780850,
         "verified": false
       }
     ],
@@ -799,8 +917,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678442060,
-    "finishedAt": 1790678443196
+    "startedAt": 1790682780172,
+    "finishedAt": 1790682780850
   },
   {
     "taskId": "taxon:anabas-testudineus:identity",
@@ -824,7 +942,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2391579",
-        "collectedAt": 1790678443575,
+        "collectedAt": 1790682781859,
         "verified": false,
         "externalId": "2391579"
       }
@@ -833,8 +951,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678443196,
-    "finishedAt": 1790678443576
+    "startedAt": 1790682780850,
+    "finishedAt": 1790682781859
   },
   {
     "taskId": "taxon:anabas-testudineus:aliases",
@@ -854,7 +972,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2391579",
-        "collectedAt": 1790678444322,
+        "collectedAt": 1790682782909,
         "verified": false
       },
       {
@@ -869,7 +987,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2391579",
-        "collectedAt": 1790678444322,
+        "collectedAt": 1790682782909,
         "verified": false
       },
       {
@@ -884,7 +1002,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2391579",
-        "collectedAt": 1790678444322,
+        "collectedAt": 1790682782909,
         "verified": false
       },
       {
@@ -898,7 +1016,7 @@
         "publisher": "iNaturalist",
         "sourceTier": "OPEN_SCIENCE",
         "sourceUri": "https://www.inaturalist.org/taxa/93987",
-        "collectedAt": 1790678444430,
+        "collectedAt": 1790682783485,
         "verified": false,
         "candidateOnly": true
       }
@@ -909,8 +1027,8 @@
       "inaturalist"
     ],
     "errors": [],
-    "startedAt": 1790678443576,
-    "finishedAt": 1790678444524
+    "startedAt": 1790682781859,
+    "finishedAt": 1790682783485
   },
   {
     "taskId": "taxon:anabas-testudineus:distribution",
@@ -929,7 +1047,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2391579",
-        "collectedAt": 1790678445421,
+        "collectedAt": 1790682783879,
         "verified": false
       }
     ],
@@ -938,8 +1056,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678444524,
-    "finishedAt": 1790678445421
+    "startedAt": 1790682783485,
+    "finishedAt": 1790682783879
   },
   {
     "taskId": "taxon:anabas-testudineus:media",
@@ -960,7 +1078,7 @@
         "publisher": "iNaturalist",
         "sourceTier": "OPEN_SCIENCE",
         "sourceUri": "https://www.inaturalist.org/taxa/93987",
-        "collectedAt": 1790678445520,
+        "collectedAt": 1790682783879,
         "verified": false
       }
     ],
@@ -970,8 +1088,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678445421,
-    "finishedAt": 1790678446281
+    "startedAt": 1790682783879,
+    "finishedAt": 1790682784843
   },
   {
     "taskId": "taxon:penaeus-monodon:identity",
@@ -995,7 +1113,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/8406925",
-        "collectedAt": 1790678446668,
+        "collectedAt": 1790682785852,
         "verified": false,
         "externalId": "8406925"
       },
@@ -1015,7 +1133,7 @@
         "publisher": "World Register of Marine Species",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.marinespecies.org/aphia.php?p=taxdetails&id=1809193",
-        "collectedAt": 1790678447607,
+        "collectedAt": 1790682786573,
         "verified": false,
         "externalId": "1809193"
       }
@@ -1025,8 +1143,8 @@
       "worms"
     ],
     "errors": [],
-    "startedAt": 1790678446281,
-    "finishedAt": 1790678447608
+    "startedAt": 1790682784843,
+    "finishedAt": 1790682786573
   },
   {
     "taskId": "taxon:penaeus-monodon:aliases",
@@ -1046,7 +1164,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/8406925",
-        "collectedAt": 1790678448381,
+        "collectedAt": 1790682786851,
         "verified": false
       }
     ],
@@ -1057,10 +1175,10 @@
       "inaturalist"
     ],
     "errors": [
-      "worms: Expecting value: line 1 column 1 (char 0)"
+      "worms: HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''"
     ],
-    "startedAt": 1790678447608,
-    "finishedAt": 1790678449587
+    "startedAt": 1790682786573,
+    "finishedAt": 1790682795276
   },
   {
     "taskId": "taxon:penaeus-monodon:distribution",
@@ -1079,7 +1197,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
-        "collectedAt": 1790678450569,
+        "collectedAt": 1790682795613,
         "verified": false
       }
     ],
@@ -1088,25 +1206,44 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678449587,
-    "finishedAt": 1790678450569
+    "startedAt": 1790682795276,
+    "finishedAt": 1790682795613
   },
   {
     "taskId": "taxon:penaeus-monodon:media",
     "canonicalId": "taxon:penaeus-monodon",
     "field": "MEDIA_PRIMARY",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:penaeus-monodon",
+        "field": "MEDIA_PRIMARY",
+        "value": {
+          "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/marine-life-penaeus-monodon.jpg",
+          "sourceFile": "Penaeus monodon.jpg",
+          "creator": "self",
+          "license": "CC BY-SA 3.0",
+          "checksumSha256": "be0ac4c4ab9803efc83237fe4a44c9529592cd6bac0936fdbef0e30467e365a5"
+        },
+        "sourceId": "curated-canary-media",
+        "publisher": "Wikimedia Commons",
+        "sourceTier": "OPEN_SCIENCE",
+        "sourceUri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
+        "collectedAt": 1790682795613,
+        "verified": false,
+        "rights": "CC BY-SA 3.0",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
+      "curated-canary-media",
       "inaturalist",
       "gbif"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678450569,
-    "finishedAt": 1790678451410
+    "errors": [],
+    "startedAt": 1790682795613,
+    "finishedAt": 1790682795903
   },
   {
     "taskId": "taxon:apis-cerana:identity",
@@ -1130,7 +1267,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/1341979",
-        "collectedAt": 1790678451786,
+        "collectedAt": 1790682796189,
         "verified": false,
         "externalId": "1341979"
       }
@@ -1139,25 +1276,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678451410,
-    "finishedAt": 1790678451786
+    "startedAt": 1790682795903,
+    "finishedAt": 1790682796189
   },
   {
     "taskId": "taxon:apis-cerana:aliases",
     "canonicalId": "taxon:apis-cerana",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:apis-cerana",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Ong nội",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Trung tâm Khuyến nông Quốc gia",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-nuoi-ong-mat-ong-noi-apis-cerana-16705.html",
+        "collectedAt": 1790682796189,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678451786,
-    "finishedAt": 1790678452776
+    "errors": [],
+    "startedAt": 1790682796189,
+    "finishedAt": 1790682796742
   },
   {
     "taskId": "taxon:apis-cerana:distribution",
@@ -1176,7 +1329,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
-        "collectedAt": 1790678453569,
+        "collectedAt": 1790682797036,
         "verified": false
       }
     ],
@@ -1185,25 +1338,44 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678452776,
-    "finishedAt": 1790678453571
+    "startedAt": 1790682796742,
+    "finishedAt": 1790682797036
   },
   {
     "taskId": "taxon:apis-cerana:media",
     "canonicalId": "taxon:apis-cerana",
     "field": "MEDIA_PRIMARY",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:apis-cerana",
+        "field": "MEDIA_PRIMARY",
+        "value": {
+          "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/insects-apis-cerana.jpg",
+          "sourceFile": "Apis cerana08409.jpg",
+          "creator": "Vengolis",
+          "license": "CC BY-SA 4.0",
+          "checksumSha256": "7b7e3e3be29082b62c136333f99cfa82a27fd2dc64f990f95c61c08194cc8136"
+        },
+        "sourceId": "curated-canary-media",
+        "publisher": "Wikimedia Commons",
+        "sourceTier": "OPEN_SCIENCE",
+        "sourceUri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
+        "collectedAt": 1790682797036,
+        "verified": false,
+        "rights": "CC BY-SA 4.0",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
+      "curated-canary-media",
       "inaturalist",
       "gbif"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678453571,
-    "finishedAt": 1790678454478
+    "errors": [],
+    "startedAt": 1790682797036,
+    "finishedAt": 1790682797299
   },
   {
     "taskId": "taxon:sus-scrofa:identity",
@@ -1227,7 +1399,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678454870,
+        "collectedAt": 1790682797562,
         "verified": false,
         "externalId": "7705930"
       }
@@ -1236,25 +1408,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678454478,
-    "finishedAt": 1790678454870
+    "startedAt": 1790682797299,
+    "finishedAt": 1790682797562
   },
   {
     "taskId": "taxon:sus-scrofa:aliases",
     "canonicalId": "taxon:sus-scrofa",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:sus-scrofa",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Lợn rừng",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Cổng thông tin Tiêu chuẩn Quốc gia",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+13842-3%3A2023",
+        "collectedAt": 1790682797562,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678454870,
-    "finishedAt": 1790678455781
+    "errors": [],
+    "startedAt": 1790682797562,
+    "finishedAt": 1790682799210
   },
   {
     "taskId": "taxon:sus-scrofa:distribution",
@@ -1273,7 +1461,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=7705930",
-        "collectedAt": 1790678456685,
+        "collectedAt": 1790682799842,
         "verified": false
       }
     ],
@@ -1282,8 +1470,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678455781,
-    "finishedAt": 1790678456685
+    "startedAt": 1790682799210,
+    "finishedAt": 1790682799842
   },
   {
     "taskId": "taxon:sus-scrofa:media",
@@ -1306,7 +1494,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1324,7 +1512,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1342,7 +1530,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1360,7 +1548,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1378,7 +1566,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1396,7 +1584,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1414,7 +1602,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1432,7 +1620,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/7705930",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1450,7 +1638,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.14797862",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1468,7 +1656,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure6",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1486,7 +1674,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure8",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1504,7 +1692,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.6513866",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       },
       {
@@ -1522,7 +1710,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.4571878",
-        "collectedAt": 1790678457550,
+        "collectedAt": 1790682800607,
         "verified": false
       }
     ],
@@ -1532,8 +1720,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678456685,
-    "finishedAt": 1790678457550
+    "startedAt": 1790682799842,
+    "finishedAt": 1790682800607
   },
   {
     "taskId": "taxon:zingiber-officinale:identity",
@@ -1557,7 +1745,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/2757280",
-        "collectedAt": 1790678457917,
+        "collectedAt": 1790682801547,
         "verified": false,
         "externalId": "2757280"
       }
@@ -1566,25 +1754,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678457550,
-    "finishedAt": 1790678457917
+    "startedAt": 1790682800607,
+    "finishedAt": 1790682801547
   },
   {
     "taskId": "taxon:zingiber-officinale:aliases",
     "canonicalId": "taxon:zingiber-officinale",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:zingiber-officinale",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Gừng",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Cổng thông tin quy phạm pháp luật tỉnh Điện Biên",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://qppl.dienbien.gov.vn/qlvb/vbpq.nsf/3d0f058120469ad34725726600365420/4C6659461B62F3AE47258C810010000D/%24file/845%20t3.pdf",
+        "collectedAt": 1790682801547,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678457917,
-    "finishedAt": 1790678458791
+    "errors": [],
+    "startedAt": 1790682801547,
+    "finishedAt": 1790682802803
   },
   {
     "taskId": "taxon:zingiber-officinale:distribution",
@@ -1603,7 +1807,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2757280",
-        "collectedAt": 1790678459680,
+        "collectedAt": 1790682803573,
         "verified": false
       }
     ],
@@ -1612,25 +1816,44 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678458791,
-    "finishedAt": 1790678459680
+    "startedAt": 1790682802803,
+    "finishedAt": 1790682803573
   },
   {
     "taskId": "taxon:zingiber-officinale:media",
     "canonicalId": "taxon:zingiber-officinale",
     "field": "MEDIA_PRIMARY",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:zingiber-officinale",
+        "field": "MEDIA_PRIMARY",
+        "value": {
+          "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/medicinal-plants-zingiber-officinale.jpg",
+          "sourceFile": "Zingiber officinale 1123783.jpg",
+          "creator": "Colin Meurk",
+          "license": "CC BY-SA 4.0",
+          "checksumSha256": "b31e8feec85c03c19a1dd6f78129f6abbd5bdc598375f96f9d88a8b83e553e8a"
+        },
+        "sourceId": "curated-canary-media",
+        "publisher": "Wikimedia Commons",
+        "sourceTier": "OPEN_SCIENCE",
+        "sourceUri": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_1123783.jpg",
+        "collectedAt": 1790682803573,
+        "verified": false,
+        "rights": "CC BY-SA 4.0",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
+      "curated-canary-media",
       "inaturalist",
       "gbif"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678459680,
-    "finishedAt": 1790678460525
+    "errors": [],
+    "startedAt": 1790682803573,
+    "finishedAt": 1790682804539
   },
   {
     "taskId": "taxon:aedes-aegypti:identity",
@@ -1654,7 +1877,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/species/1651891",
-        "collectedAt": 1790678460919,
+        "collectedAt": 1790682805566,
         "verified": false,
         "externalId": "1651891"
       }
@@ -1663,25 +1886,41 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678460525,
-    "finishedAt": 1790678460920
+    "startedAt": 1790682804539,
+    "finishedAt": 1790682805566
   },
   {
     "taskId": "taxon:aedes-aegypti:aliases",
     "canonicalId": "taxon:aedes-aegypti",
     "field": "VIETNAMESE_ALIASES",
-    "status": "RETRY",
-    "evidence": [],
+    "status": "COMPLETED",
+    "evidence": [
+      {
+        "canonicalId": "taxon:aedes-aegypti",
+        "field": "VIETNAMESE_ALIASES",
+        "value": {
+          "displayName": "Muỗi vằn",
+          "language": "vi",
+          "region": "Việt Nam"
+        },
+        "sourceId": "vn-authority-local",
+        "publisher": "Cục Phòng bệnh - Bộ Y tế",
+        "sourceTier": "OFFICIAL_VIETNAM",
+        "sourceUri": "https://vncdc.gov.vn/thong-tin-tinh-hinh-va-hoat-dong-phong-chong-dich-benh-sot-xuat-huyet-nd14621.html",
+        "collectedAt": 1790682805566,
+        "verified": false,
+        "rights": "",
+        "curatedLocalAuthority": true
+      }
+    ],
     "attemptedSources": [
       "vn-authority-local",
       "gbif",
       "inaturalist"
     ],
-    "errors": [
-      "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau"
-    ],
-    "startedAt": 1790678460920,
-    "finishedAt": 1790678461775
+    "errors": [],
+    "startedAt": 1790682805566,
+    "finishedAt": 1790682806998
   },
   {
     "taskId": "taxon:aedes-aegypti:distribution",
@@ -1700,7 +1939,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
-        "collectedAt": 1790678464252,
+        "collectedAt": 1790682807601,
         "verified": false
       }
     ],
@@ -1709,8 +1948,8 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678461775,
-    "finishedAt": 1790678464253
+    "startedAt": 1790682806998,
+    "finishedAt": 1790682807601
   },
   {
     "taskId": "taxon:aedes-aegypti:media",
@@ -1733,7 +1972,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.16975388",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1751,7 +1990,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.16975390",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1769,7 +2008,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.15391625",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1787,7 +2026,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.15391631",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1805,7 +2044,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.15391633",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1823,7 +2062,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.15391635",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1841,7 +2080,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.10479037",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1859,7 +2098,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.10454534",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1877,7 +2116,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.166052",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1895,7 +2134,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.166053",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1913,7 +2152,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.166054",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       },
       {
@@ -1931,7 +2170,7 @@
         "publisher": "Global Biodiversity Information Facility",
         "sourceTier": "GLOBAL_AUTHORITY",
         "sourceUri": "https://doi.org/10.5281/zenodo.166098",
-        "collectedAt": 1790678465230,
+        "collectedAt": 1790682808620,
         "verified": false
       }
     ],
@@ -1941,7 +2180,7 @@
       "gbif"
     ],
     "errors": [],
-    "startedAt": 1790678464253,
-    "finishedAt": 1790678465230
+    "startedAt": 1790682807601,
+    "finishedAt": 1790682808620
   }
 ]

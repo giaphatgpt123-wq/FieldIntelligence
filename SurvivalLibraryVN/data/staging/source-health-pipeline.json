@@ -1,7 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": 1790678465230,
+  "updatedAt": 1790682808620,
   "sources": {
+    "curated-canary-media": {
+      "failures": 0,
+      "cooldownUntil": 0.0,
+      "lastError": ""
+    },
     "gbif": {
       "failures": 0,
       "cooldownUntil": 0.0,
@@ -19,8 +24,8 @@
     },
     "worms": {
       "failures": 1,
-      "cooldownUntil": 1790678479.4655864,
-      "lastError": "Expecting value: line 1 column 1 (char 0)"
+      "cooldownUntil": 1790682825.0121326,
+      "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''"
     }
   }
 }
