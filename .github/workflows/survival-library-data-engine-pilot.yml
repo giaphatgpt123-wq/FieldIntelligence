@@ -103,5 +103,10 @@ jobs:
             echo "No staging progress changes to commit."
           else
             git commit -m "Update Data Engine V2 pilot staging progress"
-            git push origin HEAD:${GITHUB_REF_NAME}
+            # The feature/app branch can advance while a network collection is running.
+            # Rebase only the generated progress commit onto the latest branch tip so an
+            # unrelated code push does not make a successful collection fail at git push.
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}"
+            git push origin HEAD:"${GITHUB_REF_NAME}"
           fi
