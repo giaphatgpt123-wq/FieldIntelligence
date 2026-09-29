@@ -13,12 +13,14 @@ import android.widget.TextView
  * Operational dashboard for Data Engine V2.
  *
  * Counts come only from local published DB + DataEngineStore staging/task/source tables.
- * It deliberately shows zero when the collector-output bridge has not imported evidence yet.
+ * Pipeline progress is mirrored through DataEngineStagingSync with a SHA-256 verified snapshot;
+ * the mirror is never treated as PUBLISHED library content.
  */
 class DataEngineProgressActivity : PublishedBaseActivity() {
     private lateinit var holder: LinearLayout
     private lateinit var status: TextView
     private var loadGeneration = 0
+    private var syncing = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,8 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
         content.addView(space(8))
         status = text("Đang đọc staging và task queue…", 11f, muted, false)
         content.addView(status)
+        content.addView(space(10))
+        content.addView(primaryButton("Đồng bộ tiến độ AI", NativeIcon.REFRESH) { syncProgress() }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(54)))
         content.addView(space(12))
         holder = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         content.addView(holder)
@@ -42,6 +46,22 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
     override fun onResume() {
         super.onResume()
         if (::holder.isInitialized) load()
+    }
+
+    private fun syncProgress() {
+        if (syncing) return
+        syncing = true
+        status.text = "Đang tải snapshot tiến độ có kiểm tra SHA-256…"
+        Thread {
+            val result = DataEngineStagingSync.checkAndSync(applicationContext)
+            runOnUiThread {
+                syncing = false
+                if (isFinishing || isDestroyed) return@runOnUiThread
+                status.text = result.message
+                if (result.errors.isNotEmpty()) toast(result.errors.first())
+                load()
+            }
+        }.start()
     }
 
     private fun load() {
@@ -58,9 +78,11 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
 
     private fun render(engine: DataEngineDashboardSnapshot, published: PublishedLibrarySnapshot) {
         holder.removeAllViews()
-        status.text = buildString {
-            append("${engine.stagedEntities} hồ sơ staging · ${published.publishedCount} hồ sơ PUBLISHED")
-            if (engine.totalTrackedFields > 0) append(" · ${engine.completionPercent}% trường đã kiểm chứng")
+        if (!syncing) {
+            status.text = buildString {
+                append("${engine.stagedEntities} hồ sơ staging · ${published.publishedCount} hồ sơ PUBLISHED")
+                if (engine.totalTrackedFields > 0) append(" · ${engine.completionPercent}% trường đã kiểm chứng")
+            }
         }
 
         holder.addView(summaryGrid(engine, published))
@@ -82,7 +104,7 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
         holder.addView(sectionTitle("Hồ sơ cần xử lý", "Ưu tiên BLOCKED/RETRY rồi đến trường còn thiếu"))
         holder.addView(space(9))
         if (engine.entities.isEmpty()) {
-            holder.addView(notice("Staging hiện chưa có hồ sơ. Điều này không có nghĩa collector không tồn tại; output V2-B chỉ xuất hiện ở đây sau khi evidence được nhập vào DataEngineStore."))
+            holder.addView(notice("Staging trên thiết bị chưa có hồ sơ. Bấm Đồng bộ tiến độ AI để lấy snapshot đã checksum từ pipeline; nếu pipeline chưa phát hành snapshot thì app vẫn giữ dữ liệu cũ an toàn."))
         } else {
             engine.entities.take(30).forEachIndexed { index, entity ->
                 holder.addView(entityCard(entity))
@@ -107,7 +129,7 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
         }
 
         holder.addView(space(16))
-        holder.addView(notice("Dashboard chỉ phản ánh dữ liệu thực đã có trên thiết bị. V2-B collector hiện đã tạo evidence theo task; bước tích hợp tiếp theo là cầu nối evidence → staging → publish tăng dần."))
+        holder.addView(notice("Snapshot staging chỉ dùng cho tiến độ và chẩn đoán. Hồ sơ chỉ xuất hiện trong thư viện chính sau khi vượt LibraryRules và được cài như gói PUBLISHED đã kiểm tra SHA-256."))
     }
 
     private fun summaryGrid(engine: DataEngineDashboardSnapshot, published: PublishedLibrarySnapshot): View =

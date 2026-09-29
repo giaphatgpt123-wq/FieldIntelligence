@@ -1,0 +1,1202 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": 1790678210275,
+  "evidenceCount": 69,
+  "evidence": [
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 1651891,
+        "scientificName": "Aedes aegypti (Linnaeus, 1762)",
+        "canonicalName": "Aedes aegypti",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/1651891",
+      "collectedAt": 1790678207612,
+      "verified": false,
+      "externalId": "1651891"
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/10454534/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 24. Aedes aegypti, male (photo by James Turner, National Museum of Wales).",
+        "creator": "Dawah, Hassan A.;Abdullah, Mohammed A.;Ahmad, Syed Kamran;Turner, James;Azari-Hamidian, Shahyad",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.10454534",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/10479037/files/figure.png",
+        "type": "StillImage",
+        "title": "Figure 4. Characterisation of the overwintering eggs of Aedes aegypti. a. Scanning Electron Microscopy of an egg. The eggshell is damaged and much of the ornamentation has been artificially removed to expose the shell surface. b. Close-up of the ornamentation of an eggshell. c. Close-up of the surface of the eggshell region without ornamentation. d. Topographic image of the external surface of an eggshell generated with Atomic Force Microscopy. e. Force–distance (FD) curve generated from a single location on an eggshell. Parameters for the position of the location on the eggshell are indicated by the cursor positions (screen shot). Maximum force (MF, green circle) and 20% maximum force (20% MF, orange circle) are indicated on the FD curve. Scale bars: A = 100 µm; B = 53 µm; C = 15 µm.",
+        "creator": "Meyer, Stephanie;Araujo, Thiago Q.;Walsh, Elizabeth J.;Wallace, Robert L.;Hochberg, Rick",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.10479037",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391625/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 1: Novel ovitrap design for easy self-replication and low maintenance. (a): diagram of F9 (∼9 cm funnel) and F14 (∼14 cm funnel) ovitraps, constructed from readily available materials. (b): operational view, showing water fill level and drainage hole, designed to attract gravid females, hatch eggs, and trap emerging adults.",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391625",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391631/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 4: Ovitrap placement in Ban Na Chum Kham, Ubon Ratchathani (Google Earth).",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391631",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391633/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 5: Ae. aegypti larval dynamics and environmental correlations. (a): bimonthly larval counts showing reduction despite increased rainfall. (b): linear regression of larval reduction (y � 851.49 − 2.719x, R2 � 0.833, p� 0.011). (c): weekly larval counts comparison between F14 and F9 ovitraps. (d): linear regression showing negative correlation between rainfall and larval counts (B � −2.036, SE� 0.403, β � −0.930, t � −5.049, p� 0.007).",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391633",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391635/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 6: Biweekly Ae.aegypti larval counts in F14 ovitraps. (a): April. (b): May. (c): June. Demonstrating a decline in larvae throughout the study period.",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391635",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166052/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 1. Aedes (Stg.) aegypti — A, thorax (dorsal view); B, male fore­, mid­ and hindlegs (anterior view); Aedes (Stg.) albopictus — C, male fore­, mid­ and hindlegs (anterior view); D, thorax (dorsal view).",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166052",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166053/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 2. Aedes (Stg.) mascarensis — A, female tarsal claws (fore­, mid­ and hindlegs); B, female fore­, mid­ and hindlegs (anterior view); C, male fore­, mid­ and hindlegs (anterior view); D, male tarsal claws (fore­, mid­ and hindlegs).",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166053",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166054/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 3. Aedes (Stg.) aegypti — A, female tarsal claws (fore­, mid­ and hindlegs); D, male tarsal claws (fore­, mid­ and hindlegs); E, female abdomen (dorsal view); ssp. formosus — F, female abdomen (dorsal view); Aedes (Stg.) africanus — B, thorax (dorsal view); C, female fore­, mid­ and hindlegs (anterior view).",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166054",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166098/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 48. Aedes (Stg.) strelitziae — A, male genitalia; B, claspette; Aedes (Stg.) mascarensis — C, male genitalia.",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166098",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/16975388/files/figure.png",
+        "type": "StillImage",
+        "title": "Figures 2-3. Aedes aegypti. 2. Whole egg on a pallet sample. 3. Fourth instar larva: siphon, seta 1S, anal segment, incomplete saddle, VIII abdominal segment and comb scales. / Figuras 2-3. Aedes aegypti. 2. Huevo entero en muestra de paleta de ovitrampa. 3. Larva de cuarto estadio: sifón, seta 1S, segmento anal, silla incompleta, VIII segmento abdominal y dientes del peine.",
+        "creator": "Valderrama, Lara;Llanos, Lorena;Fernández, Jorge;Castillo, Andrés;Reyes, Carolina",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.16975388",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/16975390/files/figure.png",
+        "type": "StillImage",
+        "title": "Figure 4. Phylogenetic analysis of Ae. aegypti Los Andes isolate. The evolutionary history based on COI gene sequence was inferred using maximum likelihood method with TIM2+F+G4 as the bestfit model. The tree was drawn to scale, and branch lengths indicate number of substitutions per site. The Ae. aegypti isolated from Los Andes was labeled in red. A total of 827 nucleotide positions were aligned for phylogenetic inference. / Figura 4. Análisis filogenético del espécimen de Ae. aegypti Los Andes. La historia evolutiva basada en la secuencia del gen COI se infirió a través del método de máxima verosimilitud, utilizando el modelo TIM2+F+G4 como el de mejor ajuste. El árbol filogenético fue construido a escala, donde las longitudes de las ramas indica el número de sustituciones nucleotÍdicas por sitio. El espécimen de Ae. aegypti proveniente de Los Andes se resaltó en rojo.Para el análisis de inferencia filogenética se alinearon un total de 827 posiciones nucleotÍdicas.",
+        "creator": "Valderrama, Lara;Llanos, Lorena;Fernández, Jorge;Castillo, Andrés;Reyes, Carolina",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.16975390",
+      "collectedAt": 1790678210202,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 291
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
+      "collectedAt": 1790678209223,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2391579,
+        "scientificName": "Anabas testudineus (Bloch, 1792)",
+        "canonicalName": "Anabas testudineus",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790678190993,
+      "verified": false,
+      "externalId": "2391579"
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/52464343/medium.jpg",
+        "license": "cc-by-sa",
+        "attribution": "(c) Abu Hamas, some rights reserved (CC BY-SA), uploaded by Abu Hamas",
+        "photoId": 52464343
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/93987",
+      "collectedAt": 1790678192728,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá Rô đồng",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790678191757,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá ro dong",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790678191757,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá rô dông",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790678191757,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá rô dông",
+        "localeRequested": "vi"
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/93987",
+      "collectedAt": 1790678191869,
+      "verified": false,
+      "candidateOnly": true
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 198
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2391579",
+      "collectedAt": 1790678192633,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 1341979,
+        "scientificName": "Apis cerana Fabricius, 1793",
+        "canonicalName": "Apis cerana",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/1341979",
+      "collectedAt": 1790678199049,
+      "verified": false,
+      "externalId": "1341979"
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 395
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
+      "collectedAt": 1790678200669,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 5330776,
+        "scientificName": "Colocasia esculenta (L.) Schott",
+        "canonicalName": "Colocasia esculenta",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5330776",
+      "collectedAt": 1790678175574,
+      "verified": false,
+      "externalId": "5330776"
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://ia902609.us.archive.org/23/items/colocasia-esculenta-sc-2022053-01/Colocasia%20esculenta_SC_2022053_01.JPG",
+        "type": "StillImage",
+        "title": "Colocasia esculenta_SC_2022053_01",
+        "creator": "Nicolás Rodríguez Cerón",
+        "license": "https://creativecommons.org/licenses/by-nc-sa/2.0/deed.en",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
+      "collectedAt": 1790678178791,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 51
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
+      "collectedAt": 1790678177700,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 5669231,
+        "scientificName": "Hopea odorata Roxb.",
+        "canonicalName": "Hopea odorata",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5669231",
+      "collectedAt": 1790678185101,
+      "verified": false,
+      "externalId": "5669231"
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Sao Den",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5669231",
+      "collectedAt": 1790678185861,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Sao đen",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5669231",
+      "collectedAt": 1790678185861,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 41
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5669231",
+      "collectedAt": 1790678186920,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:ipomoea-aquatica",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2928525,
+        "scientificName": "Ipomoea aquatica Forssk.",
+        "canonicalName": "Ipomoea aquatica",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2928525",
+      "collectedAt": 1790678172165,
+      "verified": false,
+      "externalId": "2928525"
+    },
+    {
+      "canonicalId": "taxon:ipomoea-aquatica",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://binary.pensoft.net/fig/391169",
+        "type": "StillImage",
+        "title": "Figure 167. Photographs of Ipomoea species. A I. philomega B I. cairica C I. pandurata D I. acanthocarpa E I. aquatica. A http: // faunaandfloraofvietnam. blogspot. com B John Wood C Steve Turner D Maira Martinez E Wikipedia Commons.",
+        "creator": "Wood, John R. I.;Munoz-Rodriguez, Pablo;Williams, Bethany R. M.;Scotland, Robert W.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2928525",
+      "collectedAt": 1790678175191,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:ipomoea-aquatica",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 123
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
+      "collectedAt": 1790678174029,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 3190638,
+        "scientificName": "Mangifera indica L.",
+        "canonicalName": "Mangifera indica",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 97
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/3190638",
+      "collectedAt": 1790678179177,
+      "verified": false,
+      "externalId": "3190638"
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/8293002/files/figure.png",
+        "type": "StillImage",
+        "title": "Fig. 2. Chemical structure of mangiferin, found in Mangifera indica L. and investigated for its antihypertensive effects.",
+        "creator": "Micucci, M.;Bolchi, C.;Budriesi, R.;Cevenini, M.;Maroni, L.;Capozza, S.;Chiarini, A.;Pallavicini, M.;Angeletti, A.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.8293002",
+      "collectedAt": 1790678181838,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/csr%2FIMGP5500.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Carel de Haseth"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/3190638",
+      "collectedAt": 1790678181838,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 163
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3190638",
+      "collectedAt": 1790678180772,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2882449,
+        "scientificName": "Nelumbo nucifera Gaertn.",
+        "canonicalName": "Nelumbo nucifera",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2882449",
+      "collectedAt": 1790678182205,
+      "verified": false,
+      "externalId": "2882449"
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 465
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2882449",
+      "collectedAt": 1790678183866,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 8406925,
+        "scientificName": "Penaeus monodon Fabricius, 1798",
+        "canonicalName": "Penaeus monodon",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/8406925",
+      "collectedAt": 1790678193851,
+      "verified": false,
+      "externalId": "8406925"
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "aphiaId": 210378,
+        "validAphiaId": 1809193,
+        "scientificName": "Penaeus monodon",
+        "acceptedName": "Penaeus (Penaeus) monodon",
+        "authority": "Fabricius, 1798",
+        "rank": "Species",
+        "status": "superseded combination"
+      },
+      "sourceId": "worms",
+      "publisher": "World Register of Marine Species",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.marinespecies.org/aphia.php?p=taxdetails&id=1809193",
+      "collectedAt": 1790678194645,
+      "verified": false,
+      "externalId": "1809193"
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Tôm sú",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/8406925",
+      "collectedAt": 1790678195404,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 10
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
+      "collectedAt": 1790678197825,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2526548,
+        "scientificName": "Pleurotus pulmonarius (Fr.) Quél.",
+        "canonicalName": "Pleurotus pulmonarius",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678188146,
+      "verified": false,
+      "externalId": "2526548"
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/134280_ps_18_207.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678190610,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/127475_ps_16_180.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678190610,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/127476_ps_16_181.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678190610,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/117266_pleurotus_pulmonarius_-_bleke_oesterzwammen.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY",
+        "rightsHolder": "Hannco Bakker"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678190610,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/251822.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY",
+        "rightsHolder": "Hans Adema"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678190610,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/134281_ps_18_208.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790678190610,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/59421868/medium.jpeg",
+        "license": "cc-by",
+        "attribution": "(c) Alan Rockefeller, some rights reserved (CC BY), uploaded by Alan Rockefeller",
+        "photoId": 59421868
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/136399",
+      "collectedAt": 1790678189850,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 13
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
+      "collectedAt": 1790678189755,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 7705930,
+        "scientificName": "Sus scrofa Linnaeus, 1758",
+        "canonicalName": "Sus scrofa",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678201884,
+      "verified": false,
+      "externalId": "7705930"
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://binary.pensoft.net/fig/1262211",
+        "type": "StillImage",
+        "title": "Figure 6. Detection for each species by habitat (green = NPF, blue = HDF, and yellow = HS).",
+        "creator": "Cook-Price, Dawn R.;Petko, Olga N.;Makchai, Sunchai;Artchawakom, Taksin;Suwanwaree, Pongthep",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure6",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://binary.pensoft.net/fig/1262213",
+        "type": "StillImage",
+        "title": "Figure 8. A female Sambar deer in national park forest habitat B male Sambar deer in national park forest habitat C wild boar family in human-disturbed forest habitat, and D three wild boar piglets in human-disturbed forest habitat.",
+        "creator": "Cook-Price, Dawn R.;Petko, Olga N.;Makchai, Sunchai;Artchawakom, Taksin;Suwanwaree, Pongthep",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure8",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/14797862/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 110. Records of the Eurasian Wild Pig Sus scrofa Linnaeus, 1758 in Syria.",
+        "creator": "Aidek, Ahmad E.;Ibrahim, Amir;Amr, Zuhair;Hutterer, Rainer;Kryštufek, Boris;Serra, Gianluca;Benda, Petr;Shkaky, Yesra;Barbanera, Filippo;Al-Sheikhly, Omar F.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.14797862",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/4571878/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 66. Range map of Sus scrofa in Korea.",
+        "creator": "Jo, Yeong-Seok;Baccus, John T.;Koprowski, John L.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.4571878",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/6513866/files/figure.png",
+        "type": "StillImage",
+        "title": "On following pages 10 Phılıppıne Warty Pıg (Sus phı/ıppensıs) Mındoro Wany Png (Sus olıven) 12 Pılawın Bearded Pıg (Sus ıhoanobırbus). 13 Bearded Psg (Sus barbatus), 14 Sulawesı Wany Pug (Sus celebensıs) 15 Javan Wany Pıg (Sus venucosusl. 16 Eurasıan Wıld Pıg (Sus scrola) 17 Pygmy Hog (Porcııla salvımı)",
+        "creator": "Don E. Wilson;Russell A. Mittermeier",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.6513866",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/csr%2F123278_imgp6817_porto_mari_7_dec_2017.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Carel de Haseth"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/126818_wild_zwijn_aa1_9913-1_2.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Wijnand van Buuren"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/139663_img_6872.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Lidwien Peterse"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/109713_2-p5310162.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Henk van Woerden"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/126820_wild_zwijn_aa1_9929-1.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Wijnand van Buuren"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/95220_dsc01141irf20vi15ldd_sus_scrofa.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Hans Jonkman"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/109712_1-dsc00616.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Henk van Woerden"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/126819_wild_zwijn_aa1_9920-1-2.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Wijnand van Buuren"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790678204375,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 131
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=7705930",
+      "collectedAt": 1790678203506,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2757280,
+        "scientificName": "Zingiber officinale Roscoe",
+        "canonicalName": "Zingiber officinale",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2757280",
+      "collectedAt": 1790678204759,
+      "verified": false,
+      "externalId": "2757280"
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 53
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2757280",
+      "collectedAt": 1790678206365,
+      "verified": false
+    }
+  ]
+}
