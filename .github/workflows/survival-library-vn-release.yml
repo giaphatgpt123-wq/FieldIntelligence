@@ -95,13 +95,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES="Bản v$APP_VERSION áp dụng lại giao diện theo demo trên nền Android native ổn định: ảnh hero, logo, ô tìm kiếm, 4 nhu cầu, thẻ hình ảnh, bộ lọc mức sử dụng, danh mục, camera CTA và thanh điều hướng. Không khởi tạo Compose/SQLite/network trong lúc mở app. Release chỉ phát hành sau runtime smoke test trên Android emulator. Package: vn.survivallibrary.full."
+          NOTES="Bản v$APP_VERSION là đợt tối ưu nền đầu tiên: bỏ Compose khỏi runtime native, bật R8/resource shrinking để giảm APK; thêm chính sách cache theo cấu hình dung lượng; tự động kiểm tra/cập nhật thư viện bằng JobScheduler chỉ khi mạng unmetered (Wi-Fi/Ethernet) mà không mở network/SQLite trên UI startup. APK update vẫn yêu cầu người dùng xác nhận. Release chỉ phát hành sau unit test và runtime smoke test trên Android emulator. Package: vn.survivallibrary.full."
           if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt --clobber -R "${{ github.repository }}"
           else
             gh release create "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt \
               --target survival-library-vn \
-              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Demo Style Native" \
+              --title "Thư viện Sinh tồn Việt Nam v$APP_VERSION - Optimized Native" \
               --notes "$NOTES" \
               -R "${{ github.repository }}"
           fi
