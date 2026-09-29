@@ -271,6 +271,10 @@ class DataEngineStore(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         return result
     }
 
+    /**
+     * Portable Android implementation: minSdk 26 may expose SQLite versions older
+     * than native `ON CONFLICT ... DO UPDATE`. Update first; insert only when absent.
+     */
     fun markSourceFailure(
         sourceKey: String,
         tier: SourceTier,
@@ -278,19 +282,39 @@ class DataEngineStore(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         cooldownUntil: Long
     ) {
         val db = writableDatabase
-        db.execSQL(
-            """
-            INSERT INTO source_health(source_key, tier, consecutive_failures, cooldown_until, last_error, updated_at)
-            VALUES(?, ?, 1, ?, ?, ?)
-            ON CONFLICT(source_key) DO UPDATE SET
-                tier = excluded.tier,
-                consecutive_failures = source_health.consecutive_failures + 1,
-                cooldown_until = excluded.cooldown_until,
-                last_error = excluded.last_error,
-                updated_at = excluded.updated_at
-            """.trimIndent(),
-            arrayOf(sourceKey, tier.name, cooldownUntil, error, System.currentTimeMillis())
-        )
+        val now = System.currentTimeMillis()
+        db.beginTransaction()
+        try {
+            val currentFailures = db.query(
+                "source_health",
+                arrayOf("consecutive_failures"),
+                "source_key = ?",
+                arrayOf(sourceKey),
+                null,
+                null,
+                null,
+                "1"
+            ).use { cursor -> if (cursor.moveToFirst()) cursor.getInt(0) else null }
+
+            val values = ContentValues().apply {
+                put("source_key", sourceKey)
+                put("tier", tier.name)
+                put("consecutive_failures", (currentFailures ?: 0) + 1)
+                put("cooldown_until", cooldownUntil)
+                put("last_error", error)
+                put("updated_at", now)
+            }
+            if (currentFailures == null) {
+                val row = db.insertWithOnConflict("source_health", null, values, SQLiteDatabase.CONFLICT_REPLACE)
+                require(row != -1L) { "Không thể ghi source health cho $sourceKey" }
+            } else {
+                val rows = db.update("source_health", values, "source_key = ?", arrayOf(sourceKey))
+                require(rows == 1) { "Không thể cập nhật source health cho $sourceKey" }
+            }
+            db.setTransactionSuccessful()
+        } finally {
+            db.endTransaction()
+        }
     }
 
     fun markSourceHealthy(sourceKey: String, tier: SourceTier) {
