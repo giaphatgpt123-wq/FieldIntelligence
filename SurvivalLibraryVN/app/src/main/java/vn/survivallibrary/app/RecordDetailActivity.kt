@@ -1,6 +1,7 @@
 package vn.survivallibrary.app
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -27,7 +28,6 @@ class RecordDetailActivity : Activity() {
     private val paper = Color.rgb(255, 254, 250)
     private val sage = Color.rgb(233, 241, 228)
     private val muted = Color.rgb(99, 111, 102)
-    private val ink = Color.rgb(25, 35, 29)
     private val warning = Color.rgb(255, 236, 185)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +35,12 @@ class RecordDetailActivity : Activity() {
         window.statusBarColor = cream
         window.navigationBarColor = paper
 
+        val recordId = intent.getStringExtra(EXTRA_RECORD_ID) ?: "demo-record"
         val title = intent.getStringExtra(EXTRA_TITLE) ?: "Hồ sơ mẫu"
         val imageRes = intent.getIntExtra(EXTRA_IMAGE_RES, R.drawable.leaf_demo)
         val usage = intent.getStringExtra(EXTRA_USAGE) ?: "Chưa phân loại"
 
-        val root = buildScreen(title, imageRes, usage)
+        val root = buildScreen(recordId, title, imageRes, usage)
         ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(0, bars.top, 0, bars.bottom)
@@ -49,7 +50,7 @@ class RecordDetailActivity : Activity() {
         ViewCompat.requestApplyInsets(root)
     }
 
-    private fun buildScreen(title: String, imageRes: Int, usage: String): View {
+    private fun buildScreen(recordId: String, title: String, imageRes: Int, usage: String): View {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(cream)
@@ -64,7 +65,7 @@ class RecordDetailActivity : Activity() {
             setPadding(dp(16), dp(10), dp(16), dp(28))
         }
 
-        content.addView(topBar())
+        content.addView(topBar(recordId))
         content.addView(space(12))
         content.addView(hero(imageRes))
         content.addView(space(14))
@@ -91,23 +92,21 @@ class RecordDetailActivity : Activity() {
         content.addView(space(10))
         content.addView(section("Lưu ý an toàn", "Không sử dụng nội dung DEMO để quyết định ăn, uống, sơ cứu hay dùng làm thuốc. Hồ sơ thật phải qua bộ quy tắc kiểm chứng."))
         content.addView(space(18))
-        content.addView(actionRow())
+        content.addView(actionRow(recordId))
 
         scroll.addView(content)
         root.addView(scroll, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         return root
     }
 
-    private fun topBar(): View {
+    private fun topBar(recordId: String): View {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
         }
-        val back = iconButton(NativeIcon.BACK) { finish() }
-        row.addView(back, LinearLayout.LayoutParams(dp(46), dp(46)))
+        row.addView(iconButton(NativeIcon.BACK) { finish() }, LinearLayout.LayoutParams(dp(46), dp(46)))
         row.addView(text("Hồ sơ", 17f, forest, true).apply { gravity = Gravity.CENTER }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        val favorite = iconButton(NativeIcon.HEART) { toast("Đã ghi nhận thao tác lưu") }
-        row.addView(favorite, LinearLayout.LayoutParams(dp(46), dp(46)))
+        row.addView(iconButton(NativeIcon.HEART) { toggleSaved(recordId) }, LinearLayout.LayoutParams(dp(46), dp(46)))
         return row
     }
 
@@ -143,13 +142,25 @@ class RecordDetailActivity : Activity() {
         }
     }
 
-    private fun actionRow(): View {
+    private fun actionRow(recordId: String): View {
         val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        val compare = actionButton("Quét để so sánh", forest2, Color.WHITE, NativeIcon.CAMERA) { toast("Chức năng camera sẽ được nối ở bước kế tiếp") }
-        val save = actionButton("Lưu hồ sơ", sage, forest, NativeIcon.BOOKMARK) { toast("Đã ghi nhận thao tác lưu") }
+        val compare = actionButton("Quét để so sánh", forest2, Color.WHITE, NativeIcon.CAMERA) {
+            startActivity(Intent(this, NativeCameraActivity::class.java))
+        }
+        val save = actionButton("Lưu hồ sơ", sage, forest, NativeIcon.BOOKMARK) { toggleSaved(recordId) }
         row.addView(compare, LinearLayout.LayoutParams(0, dp(56), 1f).apply { marginEnd = dp(8) })
         row.addView(save, LinearLayout.LayoutParams(0, dp(56), 1f))
         return row
+    }
+
+    private fun toggleSaved(recordId: String) {
+        val known = NativeDemoCatalog.byId(recordId)
+        if (known == null) {
+            toast("Hồ sơ này chưa có mã lưu hợp lệ")
+            return
+        }
+        val saved = NativeSavedStore.toggle(this, recordId)
+        toast(if (saved) "Đã lưu hồ sơ trên thiết bị" else "Đã bỏ lưu hồ sơ")
     }
 
     private fun actionButton(label: String, bg: Int, fg: Int, icon: NativeIcon, click: () -> Unit): View {
@@ -193,6 +204,7 @@ class RecordDetailActivity : Activity() {
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 
     companion object {
+        const val EXTRA_RECORD_ID = "recordId"
         const val EXTRA_TITLE = "title"
         const val EXTRA_IMAGE_RES = "imageRes"
         const val EXTRA_USAGE = "usage"
