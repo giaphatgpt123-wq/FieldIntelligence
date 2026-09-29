@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Replace scientific-only Vietnamese display names with authoritative VN names."""
+"""Replace scientific-only Vietnamese display names with authoritative VN names.
+
+Only the display name and its naming source are changed. Rich schema-v3
+identification summaries and image-role metadata from the builder are preserved.
+"""
 
 from __future__ import annotations
 
@@ -50,12 +54,6 @@ def main() -> int:
             continue
         seen.add(record["id"])
         record["vietnameseName"] = override["name"]
-        scientific = record.get("scientificName", "")
-        record["summary"] = (
-            f"Hồ sơ dữ liệu thật canary. Tên khoa học: {scientific}. "
-            "Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; "
-            "chưa phát hành công dụng/cách dùng."
-        )
         sources = record.get("sources", [])
         if not sources:
             raise RuntimeError(f"{record['id']}: thiếu sources")
