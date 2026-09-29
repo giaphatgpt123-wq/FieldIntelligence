@@ -5,26 +5,29 @@ on:
     branches:
       - survival-library-vn
       - 'feature/data-engine-*'
+      - 'fix/data-engine-*'
     paths:
       - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_runtime.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
-      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2.py'
-      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2_state.py'
+      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2*.py'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
+      - 'SurvivalLibraryVN/data/staging/curated_canary_media.json'
       - '.github/workflows/survival-library-data-engine-v2.yml'
   pull_request:
     branches:
       - survival-library-vn
     paths:
       - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_runtime.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
-      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2.py'
-      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2_state.py'
+      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2*.py'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
+      - 'SurvivalLibraryVN/data/staging/curated_canary_media.json'
       - '.github/workflows/survival-library-data-engine-v2.yml'
   workflow_dispatch:
 
@@ -44,9 +47,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile collector and state bridge
+      - name: Compile collector runtime and state bridge
         run: |
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2.py
+          python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_runtime.py
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_state.py
 
       - name: Unit tests without network
@@ -62,6 +66,7 @@ jobs:
           ids = [s['id'] for s in registry['sources']]
           assert len(ids) == len(set(ids)), 'duplicate source id'
           assert any(s['tier'] == 'OFFICIAL_VIETNAM' for s in registry['sources'])
+          assert any(s.get('id') == 'curated-canary-media' and s.get('tier') == 'OPEN_SCIENCE' for s in registry['sources'])
           assert any(s.get('adapter') == 'gbif' and s.get('automated') for s in registry['sources'])
           assert any(s.get('adapter') == 'worms' and s.get('automated') for s in registry['sources'])
           assert any(s.get('adapter') == 'inaturalist' and s.get('automated') for s in registry['sources'])
