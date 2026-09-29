@@ -67,9 +67,18 @@ object LibraryRules {
         )
     }
 
+    /**
+     * Feed ưu tiên tại Việt Nam dùng mức độ sử dụng như một tín hiệu xếp hạng.
+     * Vì vậy chỉ nhận mức đã có nguồn đối chiếu; taxonomy/tên/ảnh không được dùng
+     * để tự suy ra "thường dùng", "hay dùng" hay các mức còn lại.
+     *
+     * Hồ sơ nhận dạng vẫn có thể PUBLISHED với CHUA_PHAN_LOAI. Quy tắc này chỉ
+     * ngăn hồ sơ chưa có bằng chứng mức sử dụng lọt vào feed ưu tiên.
+     */
     fun canEnterVietnamPriorityFeed(quality: RecordQuality): Boolean {
         return quality.vietnamRelevant &&
             quality.usageLevel != UsageLevel.CHUA_PHAN_LOAI &&
+            quality.verifiedUsageSource &&
             quality.verifiedVietnameseName &&
             quality.verifiedMedia &&
             quality.verificationState.rank >= VerificationState.DA_KIEM_CHUNG.rank
