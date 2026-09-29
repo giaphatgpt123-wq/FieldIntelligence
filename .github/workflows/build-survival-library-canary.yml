@@ -6,7 +6,7 @@ on:
     branches:
       - survival-library-vn
     paths:
-      - "SurvivalLibraryVN/tools/build_real_canary_samples_v2.py"
+      - "SurvivalLibraryVN/tools/build_real_canary_samples_v3.py"
       - ".github/workflows/build-survival-library-canary.yml"
 
 permissions:
@@ -32,7 +32,7 @@ jobs:
           python-version: "3.12"
 
       - name: Build 1 real record per category
-        run: python SurvivalLibraryVN/tools/build_real_canary_samples_v2.py
+        run: python SurvivalLibraryVN/tools/build_real_canary_samples_v3.py
 
       - name: Validate generated shards and media
         run: python SurvivalLibraryVN/tools/validate_data_packages.py
