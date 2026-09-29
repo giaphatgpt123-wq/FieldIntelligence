@@ -32,6 +32,7 @@ import vn.duongodau.app.core.Passability
 import vn.duongodau.app.core.VehicleClass
 import vn.duongodau.app.data.AdminRepository
 import vn.duongodau.app.data.PilotRoadRepository
+import vn.duongodau.app.data.RoadCatalogRepository
 
 private val Navy = Color(0xFF071A2E)
 private val Navy2 = Color(0xFF0B2944)
@@ -50,6 +51,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val adminState = AdminRepository(this).load()
+        val roadCatalog = runCatching { RoadCatalogRepository(this).load() }
         setContent {
             MaterialTheme(
                 colorScheme = lightColorScheme(
@@ -61,31 +63,25 @@ class MainActivity : ComponentActivity() {
                     onSurface = Ink
                 )
             ) {
-                DuongODauPanel(adminState)
+                DuongODauPanel(adminState, roadCatalog)
             }
         }
     }
 }
 
 @Composable
-private fun DuongODauPanel(adminState: AdminRepository.AdminDataState) {
+private fun DuongODauPanel(
+    adminState: AdminRepository.AdminDataState,
+    roadCatalog: Result<RoadCatalogRepository.Catalog>
+) {
     var selectedProvince by remember { mutableStateOf<AdminUnit?>(null) }
     var selectedCommune by remember { mutableStateOf<AdminUnit?>(null) }
     var searchText by remember { mutableStateOf("") }
-    var selectedVehicle by remember { mutableStateOf(VehicleClass.CAR_7) }
-    var currentBoundary by remember { mutableStateOf(true) }
-    var historicalBoundary by remember { mutableStateOf(false) }
     var searched by remember { mutableStateOf(false) }
-    var selectedNav by remember { mutableIntStateOf(0) }
 
     val communes = selectedProvince?.let { adminState.communesByProvince[it.code].orEmpty() }.orEmpty()
-    val routeGuard = remember(selectedVehicle, searched) { PilotRoadRepository.assess(selectedVehicle) }
-
     Scaffold(
-        containerColor = Ice,
-        bottomBar = {
-            BottomPanelNav(selectedNav) { selectedNav = it }
-        }
+        containerColor = Ice
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -118,7 +114,6 @@ private fun DuongODauPanel(adminState: AdminRepository.AdminDataState) {
                         provinces = adminState.provinces,
                         communes = communes,
                         searchText = searchText,
-                        selectedVehicle = selectedVehicle,
                         onProvinceSelected = {
                             selectedProvince = it
                             selectedCommune = null
@@ -132,7 +127,6 @@ private fun DuongODauPanel(adminState: AdminRepository.AdminDataState) {
                             searchText = it
                             searched = false
                         },
-                        onVehicleSelected = { selectedVehicle = it },
                         onSearch = { searched = searchText.isNotBlank() }
                     )
                 }
@@ -149,29 +143,12 @@ private fun DuongODauPanel(adminState: AdminRepository.AdminDataState) {
 
             item {
                 PaddingBox {
-                    RoadIntelligenceGrid(searched)
-                }
-            }
-
-            item {
-                PaddingBox {
-                    RouteGuardCard(
+                    RoadCatalogResults(
+                        catalog = roadCatalog.getOrNull(),
                         searched = searched,
-                        status = routeGuard.status,
-                        unknowns = routeGuard.unknowns
-                    )
-                }
-            }
-
-            item {
-                PaddingBox {
-                    RoadViewCard(
-                        placeLabel = selectedCommune?.name ?: selectedProvince?.name ?: "Chưa chọn khu vực",
-                        currentBoundary = currentBoundary,
-                        historicalBoundary = historicalBoundary,
-                        onCurrentChanged = { currentBoundary = it },
-                        onHistoricalChanged = { historicalBoundary = it },
-                        searched = searched
+                        query = searchText,
+                        selectedProvince = selectedProvince,
+                        selectedCommune = selectedCommune
                     )
                 }
             }
@@ -179,7 +156,7 @@ private fun DuongODauPanel(adminState: AdminRepository.AdminDataState) {
             item {
                 PaddingBox {
                     Text(
-                        "P0 UI • dữ liệu đường hiển thị trong panel hiện vẫn là dữ liệu kiểm thử SYNTHETIC / UNVERIFIED. Không dùng để quyết định hành trình thực tế.",
+                        "Thí điểm dữ liệu OpenStreetMap (ODbL) • © OpenStreetMap contributors. Chưa xác minh hiện trường; không dùng để quyết định hành trình.",
                         style = MaterialTheme.typography.labelSmall,
                         color = Slate
                     )
@@ -300,11 +277,9 @@ private fun SearchPanel(
     provinces: List<AdminUnit>,
     communes: List<AdminUnit>,
     searchText: String,
-    selectedVehicle: VehicleClass,
     onProvinceSelected: (AdminUnit) -> Unit,
     onCommuneSelected: (AdminUnit) -> Unit,
     onSearchTextChanged: (String) -> Unit,
-    onVehicleSelected: (VehicleClass) -> Unit,
     onSearch: () -> Unit
 ) {
     ElevatedCard(shape = RoundedCornerShape(22.dp)) {
@@ -338,13 +313,6 @@ private fun SearchPanel(
                 shape = RoundedCornerShape(14.dp)
             )
 
-            Text("Phương tiện", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Slate)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                VehicleChip("7 chỗ", VehicleClass.CAR_7, selectedVehicle, onVehicleSelected)
-                VehicleChip("16 chỗ", VehicleClass.BUS_16, selectedVehicle, onVehicleSelected)
-                VehicleChip("29 chỗ", VehicleClass.BUS_29, selectedVehicle, onVehicleSelected)
-            }
-
             Button(
                 onClick = onSearch,
                 enabled = searchText.isNotBlank(),
@@ -353,6 +321,48 @@ private fun SearchPanel(
                 colors = ButtonDefaults.buttonColors(containerColor = Orange, contentColor = Navy)
             ) {
                 Text("Tra cứu đường", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+private fun RoadCatalogResults(
+    catalog: RoadCatalogRepository.Catalog?,
+    searched: Boolean,
+    query: String,
+    selectedProvince: AdminUnit?,
+    selectedCommune: AdminUnit?
+) {
+    ElevatedCard(shape = RoundedCornerShape(20.dp)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("Kết quả đường", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(
+                "Gói thí điểm: ô tọa độ 10,33–10,35°B · 105,57–105,60°Đ. Chưa gán chính xác xã/phường.",
+                color = Slate, fontSize = 13.sp
+            )
+            when {
+                catalog == null -> Text("Không đọc được gói dữ liệu đường. Chưa có kết quả để hiển thị.", color = Danger)
+                !searched -> Text("Nhập tên hoặc mã đường rồi bấm Tra cứu đường.", color = Slate)
+                selectedCommune != null -> Text("Chưa có đối chiếu ranh giới xã cho gói thí điểm này. Không gán đường vào xã khi chưa kiểm chứng.", color = Warning)
+                selectedProvince != null && selectedProvince.code != "82" ->
+                    Text("Chưa có gói dữ liệu đường cho tỉnh/thành đã chọn.", color = Warning)
+                else -> {
+                    val found = catalog.search(query)
+                    Text("${found.size} đoạn khớp • dữ liệu chưa xác minh hiện trường", color = Teal, fontWeight = FontWeight.Bold)
+                    if (found.isEmpty()) Text("Không tìm thấy trong gói thí điểm; chưa thể kết luận đường không tồn tại.", color = Slate)
+                    found.forEach { entry ->
+                        HorizontalDivider()
+                        Text(entry.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text("${entry.id} • loại OSM: ${entry.roadClass}", color = Slate, fontSize = 13.sp)
+                        Text(
+                            "Mặt đường: ${entry.surface ?: "chưa rõ"} • tải trọng: ${entry.maxWeight ?: "chưa rõ"}",
+                            color = Ink, fontSize = 13.sp
+                        )
+                        Text("Nguồn: ${entry.sourceUrl}", color = Teal, fontSize = 12.sp)
+                        Text("Dữ liệu nguồn: ${entry.sourceTimestamp ?: "không rõ ngày"} • chưa kiểm chứng", color = Slate, fontSize = 12.sp)
+                    }
+                }
             }
         }
     }
@@ -371,9 +381,9 @@ private fun ScopeSummaryCard(selectedProvince: AdminUnit?, selectedCommune: Admi
             }
             Text(
                 when {
-                    selectedCommune != null -> "${selectedCommune.name}: ACTIVE_FULL • xã giáp ranh: ACTIVE_EDGE • khu vực khác: OFF"
-                    selectedProvince != null -> "${selectedProvince.name}: metadata ON • chưa chạy Road Discovery toàn tỉnh"
-                    else -> "Toàn quốc: cold index • chưa kích hoạt xử lý chi tiết"
+                    selectedCommune != null -> "${selectedCommune.name}: chưa có gói đường được gán và kiểm chứng theo ranh giới xã"
+                    selectedProvince != null -> "${selectedProvince.name}: bộ chọn hành chính sẵn sàng • dữ liệu đường hiện chỉ có lát cắt thí điểm"
+                    else -> "Dữ liệu đường hiện có một lát cắt thí điểm; chưa có thư viện đường toàn quốc"
                 },
                 color = Color.White.copy(alpha = 0.80f),
                 fontSize = 12.sp
