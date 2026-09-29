@@ -6,11 +6,13 @@ import android.app.job.JobScheduler
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 
 /**
  * Keeps library data independent from the APK and checks for verified packages
- * only on an unmetered network. Scheduling is cheap; all network/database work
- * happens later in JobService, never on the UI startup path.
+ * only when Android reports a Wi-Fi transport. Scheduling is cheap; all
+ * network/database work happens later in JobService, never on the UI startup path.
  */
 object WifiLibraryUpdateScheduler {
     private const val JOB_ID = 0x534C56
@@ -38,9 +40,15 @@ class WifiLibraryUpdateJobService : JobService() {
     @Volatile
     private var running = false
 
+    @Volatile
+    private var stopped = false
+
     override fun onStartJob(params: JobParameters): Boolean {
         if (running) return false
+        if (!isWifiConnected()) return false
+
         running = true
+        stopped = false
         Thread {
             val result = LibraryUpdateEngine.checkAndUpdate(applicationContext)
             runCatching {
@@ -51,13 +59,22 @@ class WifiLibraryUpdateJobService : JobService() {
                 }
             }
             running = false
-            jobFinished(params, false)
+            if (!stopped) jobFinished(params, false)
         }.start()
         return true
     }
 
     override fun onStopJob(params: JobParameters): Boolean {
+        stopped = true
         running = false
         return true
+    }
+
+    private fun isWifiConnected(): Boolean {
+        val manager = getSystemService(ConnectivityManager::class.java) ?: return false
+        val network = manager.activeNetwork ?: return false
+        val capabilities = manager.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 }
