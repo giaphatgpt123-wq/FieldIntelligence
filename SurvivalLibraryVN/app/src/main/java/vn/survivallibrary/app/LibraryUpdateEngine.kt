@@ -20,7 +20,13 @@ data class RemotePackageDescriptor(
     val sha256: String,
     val packageUrl: String,
     val sizeBytes: Long = 0L,
-    val minAppVersionCode: Int = 1
+    val minAppVersionCode: Int = 1,
+    val updateMode: PackageUpdateMode = PackageUpdateMode.SNAPSHOT
+)
+
+data class ParsedPackagePayload(
+    val records: List<LibraryPackageRecord>,
+    val removedRecordIds: List<String>
 )
 
 data class UpdateRunResult(
@@ -39,6 +45,11 @@ object LibraryUpdateIndexParser {
         return buildList {
             for (index in 0 until packages.length()) {
                 val item = packages.getJSONObject(index)
+                val updateMode = runCatching {
+                    PackageUpdateMode.valueOf(item.optString("updateMode", "SNAPSHOT").uppercase())
+                }.getOrElse {
+                    throw IllegalArgumentException("Chế độ cập nhật gói không hợp lệ")
+                }
                 add(
                     RemotePackageDescriptor(
                         packageId = item.getString("packageId"),
@@ -49,20 +60,29 @@ object LibraryUpdateIndexParser {
                         sha256 = item.getString("sha256").lowercase(),
                         packageUrl = item.getString("packageUrl"),
                         sizeBytes = item.optLong("sizeBytes", 0L),
-                        minAppVersionCode = item.optInt("minAppVersionCode", 1)
+                        minAppVersionCode = item.optInt("minAppVersionCode", 1),
+                        updateMode = updateMode
                     )
                 )
             }
         }
     }
 
-    fun parseRecords(jsonBytes: ByteArray, remote: RemotePackageDescriptor): List<LibraryPackageRecord> {
+    fun parsePackage(jsonBytes: ByteArray, remote: RemotePackageDescriptor): ParsedPackagePayload {
         val root = JSONObject(jsonBytes.toString(Charsets.UTF_8))
         require(root.getString("packageId") == remote.packageId) { "Sai packageId trong gói dữ liệu" }
         require(root.getInt("version") == remote.version) { "Sai phiên bản trong gói dữ liệu" }
         require(root.getInt("schemaVersion") == remote.schemaVersion) { "Sai phiên bản cấu trúc trong gói dữ liệu" }
+
+        val payloadMode = runCatching {
+            PackageUpdateMode.valueOf(root.optString("updateMode", "SNAPSHOT").uppercase())
+        }.getOrElse {
+            throw IllegalArgumentException("Chế độ cập nhật trong gói không hợp lệ")
+        }
+        require(payloadMode == remote.updateMode) { "Chế độ cập nhật không khớp chỉ mục" }
+
         val rows = root.getJSONArray("records")
-        return buildList {
+        val records = buildList {
             for (index in 0 until rows.length()) {
                 val row = rows.getJSONObject(index)
                 add(
@@ -87,14 +107,28 @@ object LibraryUpdateIndexParser {
                 )
             }
         }
+
+        val removedArray = root.optJSONArray("removedRecordIds")
+        val removed = buildList {
+            if (removedArray != null) {
+                for (index in 0 until removedArray.length()) add(removedArray.getString(index))
+            }
+        }
+        require(remote.updateMode == PackageUpdateMode.DELTA || removed.isEmpty()) {
+            "SNAPSHOT không được chứa danh sách thu hồi"
+        }
+        return ParsedPackagePayload(records = records, removedRecordIds = removed)
     }
+
+    fun parseRecords(jsonBytes: ByteArray, remote: RemotePackageDescriptor): List<LibraryPackageRecord> =
+        parsePackage(jsonBytes, remote).records
 }
 
 object LibraryUpdateEngine {
     const val UPDATE_INDEX_URL = "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/update-index.json"
 
-    // JSON data packages are deliberately capped so the library grows through
-    // small independent increments instead of one large all-or-nothing download.
+    // JSON packages are capped so the library grows through small verified deltas
+    // instead of one large all-or-nothing download.
     internal const val MAX_PACKAGE_BYTES = 32L * 1024L * 1024L
     private const val MAX_INDEX_BYTES = 512L * 1024L
     private const val DISK_SAFETY_RESERVE_BYTES = 32L * 1024L * 1024L
@@ -147,13 +181,21 @@ object LibraryUpdateEngine {
                         recordCount = remote.recordCount,
                         verifiedCount = remote.verifiedCount,
                         sha256 = remote.sha256,
-                        sourceUri = remote.packageUrl
+                        sourceUri = remote.packageUrl,
+                        updateMode = remote.updateMode
                     )
                     val packageDecision = LibraryDataPackages.validate(manifest)
                     require(packageDecision.valid) { packageDecision.blockers.joinToString("; ") }
 
-                    val records = LibraryUpdateIndexParser.parseRecords(bytes, remote)
-                    installedRecords += db.installVerifiedPackage(manifest, records)
+                    val payload = LibraryUpdateIndexParser.parsePackage(bytes, remote)
+                    installedRecords += when (remote.updateMode) {
+                        PackageUpdateMode.SNAPSHOT -> db.installVerifiedPackage(manifest, payload.records)
+                        PackageUpdateMode.DELTA -> db.installVerifiedDeltaPackage(
+                            manifest = manifest,
+                            records = payload.records,
+                            removedRecordIds = payload.removedRecordIds
+                        )
+                    }
                     updated += remote.packageId
                 } catch (error: Exception) {
                     errors += "${remote.packageId}: ${error.message ?: "không xác định"}"
@@ -165,7 +207,7 @@ object LibraryUpdateEngine {
                 updatedPackages = updated,
                 installedRecords = installedRecords,
                 message = when {
-                    updated.isNotEmpty() && errors.isEmpty() -> "Đã cập nhật ${updated.size} gói dữ liệu, $installedRecords hồ sơ."
+                    updated.isNotEmpty() && errors.isEmpty() -> "Đã cập nhật ${updated.size} gói dữ liệu, $installedRecords hồ sơ mới/thay đổi."
                     updated.isNotEmpty() -> "Đã cập nhật một phần; ${errors.size} gói bị chặn để bảo vệ dữ liệu."
                     else -> "Không gói nào được cài vì không vượt qua kiểm tra an toàn dữ liệu."
                 },
@@ -226,6 +268,7 @@ object LibraryUpdateEngine {
         return try {
             val code = connection.responseCode
             require(code in 200..299) { "HTTP $code" }
+            require(connection.url.protocol.equals("https", ignoreCase = true)) { "Chuyển hướng ra ngoài HTTPS bị chặn" }
             val declared = connection.contentLengthLong
             require(declared <= 0L || declared <= maxBytes) { "Nội dung tải về vượt giới hạn cho phép" }
             connection.inputStream.use { input ->
@@ -256,6 +299,7 @@ object LibraryUpdateEngine {
         return try {
             val code = connection.responseCode
             require(code in 200..299) { "HTTP $code" }
+            require(connection.url.protocol.equals("https", ignoreCase = true)) { "Chuyển hướng ra ngoài HTTPS bị chặn" }
             val declared = connection.contentLengthLong
             require(declared <= 0L || declared <= maxBytes) {
                 "Gói tải về vượt giới hạn ${maxBytes / 1024 / 1024} MB"
