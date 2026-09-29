@@ -4,7 +4,10 @@ on:
   push:
     branches: [survival-library-vn]
     paths:
-      - 'SurvivalLibraryVN/**'
+      - 'SurvivalLibraryVN/app/**'
+      - 'SurvivalLibraryVN/build.gradle.kts'
+      - 'SurvivalLibraryVN/settings.gradle.kts'
+      - 'SurvivalLibraryVN/gradle.properties'
       - '.github/workflows/survival-library-vn-release.yml'
   workflow_dispatch:
 
@@ -99,7 +102,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          NOTES="Bản v$APP_VERSION chuyển màn hình chính, tìm kiếm, danh mục, đã lưu và tiến độ sang dữ liệu PUBLISHED thật trong database cục bộ. App hiển thị tăng dần đúng số hồ sơ đã cài, không trộn hồ sơ DEMO vào kết quả thật; đọc SQLite sau khi UI đã render để giữ startup ổn định. Wi-Fi auto-sync, R8/resource shrinking và package ID vn.survivallibrary.full được giữ nguyên. Release chỉ phát hành sau unit test và runtime smoke test trên Android emulator."
+          NOTES="Bản v$APP_VERSION dùng thư viện PUBLISHED thật, phân trang danh sách lớn, giải mã thumbnail có giới hạn RAM, package shard tối đa 2.000 hồ sơ, Wi-Fi auto-sync và kiểm tra SHA-256. Dữ liệu thư viện được phát hành độc lập với APK; thay đổi data không kích hoạt build APK. Release chỉ phát hành sau unit test và runtime smoke test trên Android emulator."
           if gh release view "$RELEASE_TAG" -R "${{ github.repository }}" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" SurvivalLibraryVN-Full.apk SurvivalLibraryVN-Full.apk.sha256 SurvivalLibraryVN-Full.signature.txt SurvivalLibraryVN-Full.badging.txt --clobber -R "${{ github.repository }}"
           else

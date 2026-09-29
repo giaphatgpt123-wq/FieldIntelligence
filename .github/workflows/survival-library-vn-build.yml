@@ -4,7 +4,10 @@ on:
   push:
     branches: [survival-library-vn]
     paths:
-      - 'SurvivalLibraryVN/**'
+      - 'SurvivalLibraryVN/app/**'
+      - 'SurvivalLibraryVN/build.gradle.kts'
+      - 'SurvivalLibraryVN/settings.gradle.kts'
+      - 'SurvivalLibraryVN/gradle.properties'
       - '.github/workflows/survival-library-vn-build.yml'
   workflow_dispatch:
 

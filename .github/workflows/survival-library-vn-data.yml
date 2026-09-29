@@ -1,0 +1,33 @@
+name: Validate SurvivalLibraryVN Data
+
+on:
+  push:
+    branches: [survival-library-vn]
+    paths:
+      - 'SurvivalLibraryVN/data/**'
+      - 'SurvivalLibraryVN/tools/validate_data_packages.py'
+      - '.github/workflows/survival-library-vn-data.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: survival-library-vn-data-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate active data index and shards
+        run: python SurvivalLibraryVN/tools/validate_data_packages.py
