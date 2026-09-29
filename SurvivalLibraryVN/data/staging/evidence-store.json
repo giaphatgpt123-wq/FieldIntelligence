@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": 1790678210275,
+  "updatedAt": 1790678465318,
   "evidenceCount": 69,
   "evidence": [
     {
@@ -19,7 +19,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/1651891",
-      "collectedAt": 1790678207612,
+      "collectedAt": 1790678460919,
       "verified": false,
       "externalId": "1651891"
     },
@@ -38,7 +38,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.10454534",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -56,7 +56,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.10479037",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -74,7 +74,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391625",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -92,7 +92,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391631",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -110,7 +110,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391633",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -128,7 +128,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391635",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -146,7 +146,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166052",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -164,7 +164,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166053",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -182,7 +182,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166054",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -200,7 +200,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166098",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -218,7 +218,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.16975388",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -236,7 +236,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.16975390",
-      "collectedAt": 1790678210202,
+      "collectedAt": 1790678465230,
       "verified": false
     },
     {
@@ -250,7 +250,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
-      "collectedAt": 1790678209223,
+      "collectedAt": 1790678464252,
       "verified": false
     },
     {
@@ -269,7 +269,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2391579",
-      "collectedAt": 1790678190993,
+      "collectedAt": 1790678443575,
       "verified": false,
       "externalId": "2391579"
     },
@@ -286,7 +286,7 @@
       "publisher": "iNaturalist",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://www.inaturalist.org/taxa/93987",
-      "collectedAt": 1790678192728,
+      "collectedAt": 1790678445520,
       "verified": false
     },
     {
@@ -301,7 +301,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2391579",
-      "collectedAt": 1790678191757,
+      "collectedAt": 1790678444322,
       "verified": false
     },
     {
@@ -316,7 +316,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2391579",
-      "collectedAt": 1790678191757,
+      "collectedAt": 1790678444322,
       "verified": false
     },
     {
@@ -331,7 +331,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2391579",
-      "collectedAt": 1790678191757,
+      "collectedAt": 1790678444322,
       "verified": false
     },
     {
@@ -345,7 +345,7 @@
       "publisher": "iNaturalist",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://www.inaturalist.org/taxa/93987",
-      "collectedAt": 1790678191869,
+      "collectedAt": 1790678444430,
       "verified": false,
       "candidateOnly": true
     },
@@ -360,7 +360,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2391579",
-      "collectedAt": 1790678192633,
+      "collectedAt": 1790678445421,
       "verified": false
     },
     {
@@ -379,7 +379,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/1341979",
-      "collectedAt": 1790678199049,
+      "collectedAt": 1790678451786,
       "verified": false,
       "externalId": "1341979"
     },
@@ -394,7 +394,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
-      "collectedAt": 1790678200669,
+      "collectedAt": 1790678453569,
       "verified": false
     },
     {
@@ -413,7 +413,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5330776",
-      "collectedAt": 1790678175574,
+      "collectedAt": 1790678428226,
       "verified": false,
       "externalId": "5330776"
     },
@@ -432,7 +432,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
-      "collectedAt": 1790678178791,
+      "collectedAt": 1790678431013,
       "verified": false
     },
     {
@@ -446,7 +446,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
-      "collectedAt": 1790678177700,
+      "collectedAt": 1790678430074,
       "verified": false
     },
     {
@@ -465,7 +465,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5669231",
-      "collectedAt": 1790678185101,
+      "collectedAt": 1790678437302,
       "verified": false,
       "externalId": "5669231"
     },
@@ -481,7 +481,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5669231",
-      "collectedAt": 1790678185861,
+      "collectedAt": 1790678438071,
       "verified": false
     },
     {
@@ -496,7 +496,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5669231",
-      "collectedAt": 1790678185861,
+      "collectedAt": 1790678438071,
       "verified": false
     },
     {
@@ -510,7 +510,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5669231",
-      "collectedAt": 1790678186920,
+      "collectedAt": 1790678439130,
       "verified": false
     },
     {
@@ -529,7 +529,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790678172165,
+      "collectedAt": 1790678424703,
       "verified": false,
       "externalId": "2928525"
     },
@@ -548,7 +548,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790678175191,
+      "collectedAt": 1790678427688,
       "verified": false
     },
     {
@@ -562,7 +562,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
-      "collectedAt": 1790678174029,
+      "collectedAt": 1790678426757,
       "verified": false
     },
     {
@@ -581,7 +581,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/3190638",
-      "collectedAt": 1790678179177,
+      "collectedAt": 1790678431385,
       "verified": false,
       "externalId": "3190638"
     },
@@ -600,7 +600,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.8293002",
-      "collectedAt": 1790678181838,
+      "collectedAt": 1790678433998,
       "verified": false
     },
     {
@@ -618,7 +618,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/3190638",
-      "collectedAt": 1790678181838,
+      "collectedAt": 1790678433998,
       "verified": false
     },
     {
@@ -632,7 +632,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3190638",
-      "collectedAt": 1790678180772,
+      "collectedAt": 1790678433077,
       "verified": false
     },
     {
@@ -651,7 +651,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2882449",
-      "collectedAt": 1790678182205,
+      "collectedAt": 1790678434374,
       "verified": false,
       "externalId": "2882449"
     },
@@ -666,7 +666,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2882449",
-      "collectedAt": 1790678183866,
+      "collectedAt": 1790678436060,
       "verified": false
     },
     {
@@ -685,7 +685,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/8406925",
-      "collectedAt": 1790678193851,
+      "collectedAt": 1790678446668,
       "verified": false,
       "externalId": "8406925"
     },
@@ -705,7 +705,7 @@
       "publisher": "World Register of Marine Species",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.marinespecies.org/aphia.php?p=taxdetails&id=1809193",
-      "collectedAt": 1790678194645,
+      "collectedAt": 1790678447607,
       "verified": false,
       "externalId": "1809193"
     },
@@ -721,7 +721,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/8406925",
-      "collectedAt": 1790678195404,
+      "collectedAt": 1790678448381,
       "verified": false
     },
     {
@@ -735,7 +735,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
-      "collectedAt": 1790678197825,
+      "collectedAt": 1790678450569,
       "verified": false
     },
     {
@@ -754,7 +754,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678188146,
+      "collectedAt": 1790678440377,
       "verified": false,
       "externalId": "2526548"
     },
@@ -773,7 +773,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678190610,
+      "collectedAt": 1790678443196,
       "verified": false
     },
     {
@@ -791,7 +791,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678190610,
+      "collectedAt": 1790678443196,
       "verified": false
     },
     {
@@ -809,7 +809,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678190610,
+      "collectedAt": 1790678443196,
       "verified": false
     },
     {
@@ -827,7 +827,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678190610,
+      "collectedAt": 1790678443196,
       "verified": false
     },
     {
@@ -845,7 +845,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678190610,
+      "collectedAt": 1790678443196,
       "verified": false
     },
     {
@@ -863,7 +863,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790678190610,
+      "collectedAt": 1790678443196,
       "verified": false
     },
     {
@@ -879,7 +879,7 @@
       "publisher": "iNaturalist",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://www.inaturalist.org/taxa/136399",
-      "collectedAt": 1790678189850,
+      "collectedAt": 1790678442436,
       "verified": false
     },
     {
@@ -893,7 +893,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
-      "collectedAt": 1790678189755,
+      "collectedAt": 1790678442059,
       "verified": false
     },
     {
@@ -912,7 +912,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678201884,
+      "collectedAt": 1790678454870,
       "verified": false,
       "externalId": "7705930"
     },
@@ -931,7 +931,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure6",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -949,7 +949,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure8",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -967,7 +967,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.14797862",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -985,7 +985,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.4571878",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1003,7 +1003,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.6513866",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1021,7 +1021,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1039,7 +1039,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1057,7 +1057,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1075,7 +1075,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1093,7 +1093,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1111,7 +1111,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1129,7 +1129,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1147,7 +1147,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/7705930",
-      "collectedAt": 1790678204375,
+      "collectedAt": 1790678457550,
       "verified": false
     },
     {
@@ -1161,7 +1161,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=7705930",
-      "collectedAt": 1790678203506,
+      "collectedAt": 1790678456685,
       "verified": false
     },
     {
@@ -1180,7 +1180,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2757280",
-      "collectedAt": 1790678204759,
+      "collectedAt": 1790678457917,
       "verified": false,
       "externalId": "2757280"
     },
@@ -1195,7 +1195,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2757280",
-      "collectedAt": 1790678206365,
+      "collectedAt": 1790678459680,
       "verified": false
     }
   ]
