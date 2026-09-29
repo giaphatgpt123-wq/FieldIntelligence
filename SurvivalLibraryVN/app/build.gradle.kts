@@ -11,8 +11,8 @@ android {
         applicationId = "vn.survivallibrary.full"
         minSdk = 26
         targetSdk = 35
-        versionCode = 9
-        versionName = "0.12.0"
+        versionCode = 10
+        versionName = "0.13.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
