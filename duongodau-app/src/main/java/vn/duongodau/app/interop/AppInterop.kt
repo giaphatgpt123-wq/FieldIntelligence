@@ -11,6 +11,17 @@ sealed interface InteropResult {
 }
 
 object AppInterop {
+    fun openGoogleMapsSearch(context: Context, query: String): InteropResult {
+        val safeQuery = query.trim()
+        if (safeQuery.isBlank()) return InteropResult.Failed("Chưa có nội dung để gửi sang Google Maps.")
+        val encoded = Uri.encode(safeQuery)
+        val native = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$encoded"))
+            .setPackage("com.google.android.apps.maps")
+        val generic = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$encoded"))
+        val web = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=$encoded"))
+        return openWithFallback(context, "Google Maps", native, generic, web)
+    }
+
     fun openGoogleMaps(context: Context, latitude: Double, longitude: Double, label: String): InteropResult {
         val encoded = Uri.encode(label)
         val native = Intent(Intent.ACTION_VIEW, Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude($encoded)"))
