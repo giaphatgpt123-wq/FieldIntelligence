@@ -8,3 +8,13 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
+
+# Android signing material - NEVER commit
+*.jks
+*.keystore
+*.p12
+*.pfx
+*signing*.zip
+DUONGODAU_KEYSTORE_B64.txt
+DUONGODAU_STORE_PASSWORD.txt
+DUONGODAU_KEY_PASSWORD.txt

@@ -1,0 +1,97 @@
+name: Đường ở đâu P0
+
+on:
+  push:
+    branches:
+      - feature/duong-o-dau-p0
+    paths:
+      - 'duongodau-app/**'
+      - 'tools/sync_admin_2025.py'
+      - 'settings.gradle.kts'
+      - 'build.gradle.kts'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - '.github/workflows/duong-o-dau-build.yml'
+      - '.github/workflows/duong-o-dau-release.yml'
+  pull_request:
+    paths:
+      - 'duongodau-app/**'
+      - 'tools/sync_admin_2025.py'
+      - 'settings.gradle.kts'
+      - 'build.gradle.kts'
+      - 'gradle/**'
+      - 'gradle.properties'
+      - '.github/workflows/duong-o-dau-build.yml'
+      - '.github/workflows/duong-o-dau-release.yml'
+  workflow_dispatch:
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+
+      - name: Stable signing readiness
+        env:
+          KEYSTORE_B64: ${{ secrets.DUONGODAU_KEYSTORE_B64 }}
+          STORE_PASSWORD: ${{ secrets.DUONGODAU_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.DUONGODAU_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ] && [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_PASSWORD" ]; then
+            mkdir -p "$RUNNER_TEMP/duongodau-signing-check"
+            printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/duongodau-signing-check/duongodau-release.jks"
+            if keytool -list \
+              -keystore "$RUNNER_TEMP/duongodau-signing-check/duongodau-release.jks" \
+              -alias duongodau \
+              -storepass "$STORE_PASSWORD" >/dev/null 2>&1; then
+              echo 'STABLE_SIGNING_READY'
+            else
+              echo 'STABLE_SIGNING_INVALID'
+            fi
+            rm -rf "$RUNNER_TEMP/duongodau-signing-check"
+          else
+            echo 'STABLE_SIGNING_NOT_CONFIGURED'
+          fi
+
+      - name: Materialize nationwide administrative selector
+        run: python3 tools/sync_admin_2025.py --open-admin-data
+
+      - name: Verify administrative asset counts
+        run: |
+          python3 - <<'PY'
+          import csv
+          p='duongodau-app/src/main/assets/admin_current.csv'
+          with open(p, encoding='utf-8') as f:
+              rows=list(csv.DictReader(f))
+          provinces={r['province_code'] for r in rows}
+          communes={r['commune_code'] for r in rows}
+          assert len(provinces)==34, len(provinces)
+          assert len(communes)==3321, len(communes)
+          print(f'ADMIN_DATA_OK provinces={len(provinces)} communes={len(communes)}')
+          PY
+
+      - name: Unit tests
+        run: gradle --no-daemon --stacktrace :duongodau-app:testDebugUnitTest
+
+      - name: Build debug APK
+        run: gradle --no-daemon --stacktrace :duongodau-app:assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: duong-o-dau-p0-apk
+          path: duongodau-app/build/outputs/apk/debug/duongodau-app-debug.apk
+          if-no-files-found: error

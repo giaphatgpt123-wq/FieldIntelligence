@@ -1,0 +1,192 @@
+name: Đường ở đâu Stable Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name, ví dụ 1.0.0'
+        required: true
+        default: '1.0.0'
+      version_code:
+        description: 'Version code, phải lớn hơn bản trước'
+        required: true
+        default: '100'
+
+permissions:
+  contents: write
+
+jobs:
+  signed-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+
+      - name: Validate release inputs
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          echo "$VERSION_NAME" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.][A-Za-z0-9._-]+)?$' || (echo 'Invalid version_name' && exit 1)
+          echo "$VERSION_CODE" | grep -Eq '^[1-9][0-9]*$' || (echo 'Invalid version_code' && exit 1)
+
+      - name: Enforce monotonic stable version code
+        env:
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          CHANNEL_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/duongodau-stable/duongodau-update.json"
+          if curl -fsSL --retry 2 --connect-timeout 8 "$CHANNEL_URL" -o /tmp/current-duongodau-update.json; then
+            CURRENT_CODE=$(python3 - <<'PY'
+          import json
+          with open('/tmp/current-duongodau-update.json', encoding='utf-8') as f:
+              print(int(json.load(f)['versionCode']))
+          PY
+          )
+            echo "Current stable versionCode=$CURRENT_CODE; requested=$VERSION_CODE"
+            test "$VERSION_CODE" -gt "$CURRENT_CODE" || (echo 'version_code must be greater than current stable' && exit 1)
+          else
+            echo 'No existing duongodau-stable channel; treating this as first stable release.'
+          fi
+
+      - name: Validate stable signing secrets
+        env:
+          KEYSTORE_B64: ${{ secrets.DUONGODAU_KEYSTORE_B64 }}
+          STORE_PASSWORD: ${{ secrets.DUONGODAU_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.DUONGODAU_KEY_PASSWORD }}
+        run: |
+          test -n "$KEYSTORE_B64" || (echo 'Missing DUONGODAU_KEYSTORE_B64' && exit 1)
+          test -n "$STORE_PASSWORD" || (echo 'Missing DUONGODAU_STORE_PASSWORD' && exit 1)
+          test -n "$KEY_PASSWORD" || (echo 'Missing DUONGODAU_KEY_PASSWORD' && exit 1)
+
+      - name: Materialize stable keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.DUONGODAU_KEYSTORE_B64 }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/duongodau-signing"
+          printf '%s' "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/duongodau-signing/duongodau-release.jks"
+          chmod 600 "$RUNNER_TEMP/duongodau-signing/duongodau-release.jks"
+
+      - name: Materialize nationwide administrative selector
+        run: python3 tools/sync_admin_2025.py --open-admin-data
+
+      - name: Verify administrative asset counts
+        run: |
+          python3 - <<'PY'
+          import csv
+          p='duongodau-app/src/main/assets/admin_current.csv'
+          with open(p, encoding='utf-8') as f:
+              rows=list(csv.DictReader(f))
+          assert len({r['province_code'] for r in rows}) == 34
+          assert len({r['commune_code'] for r in rows}) == 3321
+          print('ADMIN_DATA_OK')
+          PY
+
+      - name: Unit tests
+        run: gradle --no-daemon :duongodau-app:testDebugUnitTest
+
+      - name: Build signed release APK
+        env:
+          DUONGODAU_KEYSTORE_PATH: ${{ runner.temp }}/duongodau-signing/duongodau-release.jks
+          DUONGODAU_STORE_PASSWORD: ${{ secrets.DUONGODAU_STORE_PASSWORD }}
+          DUONGODAU_KEY_PASSWORD: ${{ secrets.DUONGODAU_KEY_PASSWORD }}
+        run: |
+          gradle --no-daemon :duongodau-app:assembleRelease \
+            -PDUONGODAU_VERSION_NAME='${{ inputs.version_name }}' \
+            -PDUONGODAU_VERSION_CODE='${{ inputs.version_code }}'
+
+      - name: Verify APK signature and prepare update manifest
+        env:
+          STORE_PASSWORD: ${{ secrets.DUONGODAU_STORE_PASSWORD }}
+          VERSION_NAME: ${{ inputs.version_name }}
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          APK='duongodau-app/build/outputs/apk/release/duongodau-app-release.apk'
+          test -f "$APK"
+
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)
+          test -x "$APKSIGNER" || (echo 'apksigner not found' && exit 1)
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+
+          APK_SHA=$(sha256sum "$APK" | awk '{print $1}')
+          CERT_SHA=$(keytool -list -v \
+            -keystore "$RUNNER_TEMP/duongodau-signing/duongodau-release.jks" \
+            -alias duongodau \
+            -storepass "$STORE_PASSWORD" 2>/dev/null \
+            | sed -n 's/.*SHA256: //p' | head -1 | tr -d ':' | tr 'A-F' 'a-f')
+          test ${#CERT_SHA} -eq 64
+
+          DOWNLOAD_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/duongodau-stable/duong-o-dau.apk"
+          mkdir -p release-out
+          cp "$APK" release-out/duong-o-dau.apk
+          cat > release-out/duongodau-update.json <<JSON
+          {
+            "applicationId": "vn.duongodau.app",
+            "versionCode": ${VERSION_CODE},
+            "versionName": "${VERSION_NAME}",
+            "apkUrl": "${DOWNLOAD_URL}",
+            "sha256": "${APK_SHA}",
+            "signingCertSha256": "${CERT_SHA}",
+            "mandatory": false,
+            "notes": "Bản phát hành ổn định Đường ở đâu ${VERSION_NAME}"
+          }
+          JSON
+          cat release-out/duongodau-update.json
+
+      - name: Publish immutable version archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_NAME: ${{ inputs.version_name }}
+        run: |
+          TAG="duongodau-v${VERSION_NAME}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; refusing to overwrite immutable version archive."
+            exit 1
+          fi
+          gh release create "$TAG" \
+            release-out/duong-o-dau.apk \
+            release-out/duongodau-update.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Đường ở đâu ${VERSION_NAME}" \
+            --notes "Stable signed archive. Package, SHA-256 and signing certificate verified before publish."
+
+      - name: Publish fixed stable update channel
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_NAME: ${{ inputs.version_name }}
+        run: |
+          gh release delete duongodau-stable --repo "$GITHUB_REPOSITORY" --cleanup-tag -y >/dev/null 2>&1 || true
+          gh release create duongodau-stable \
+            release-out/duong-o-dau.apk \
+            release-out/duongodau-update.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Đường ở đâu – Stable ${VERSION_NAME}" \
+            --notes "Kênh cập nhật cố định cho ứng dụng Đường ở đâu. Không dùng repository-wide latest release."
+
+      - name: Verify stable channel assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view duongodau-stable --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | tee /tmp/assets.txt
+          grep -Fx 'duong-o-dau.apk' /tmp/assets.txt
+          grep -Fx 'duongodau-update.json' /tmp/assets.txt
+
+      - name: Upload release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: duong-o-dau-stable-release-${{ inputs.version_name }}
+          path: release-out/
+          if-no-files-found: error
