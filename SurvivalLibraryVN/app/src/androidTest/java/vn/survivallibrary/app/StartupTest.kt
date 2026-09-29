@@ -3,7 +3,6 @@ package vn.survivallibrary.app
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -21,7 +20,7 @@ import org.junit.runner.RunWith
 class StartupTest {
     @Test
     fun launcherPublishedHomeReachesResumedStateAndRendersCoreActions() {
-        ActivityScenario.launch(PublishedHomeActivity::class.java).use { scenario ->
+        ActivityScenario.launch(PublishedHomeLauncherActivity::class.java).use { scenario ->
             scenario.moveToState(Lifecycle.State.RESUMED)
             scenario.onActivity { activity ->
                 assertFalse("Published home must stay alive", activity.isFinishing)
