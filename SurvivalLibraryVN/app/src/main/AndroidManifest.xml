@@ -23,7 +23,8 @@
         <activity android:name=".PublishedSavedActivity" android:exported="false" />
         <activity android:name=".PublishedCategoryActivity" android:exported="false" />
         <activity android:name=".PublishedSearchActivity" android:exported="false" />
-        <activity android:name=".PublishedHomeActivity" android:exported="true">
+        <activity android:name=".PublishedHomeActivity" android:exported="false" />
+        <activity android:name=".PublishedHomeLauncherActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
