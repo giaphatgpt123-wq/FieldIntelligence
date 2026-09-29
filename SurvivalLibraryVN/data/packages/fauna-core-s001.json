@@ -5,7 +5,7 @@
   "records": [
     {
       "id": "canary-insects-apis-cerana",
-      "vietnameseName": "Apis cerana",
+      "vietnameseName": "Ong nội",
       "scientificName": "Apis cerana",
       "categoryId": "insects",
       "usageLevel": "CHUA_PHAN_LOAI",
@@ -26,39 +26,39 @@
       "wikidataId": "Q306939",
       "sources": [
         {
-          "sourceKey": "viwiki-name-q306939",
-          "title": "Wikipedia tiếng Việt: Apis cerana",
-          "publisher": "Wikimedia Foundation",
-          "uri": "https://vi.wikipedia.org/wiki/Apis_cerana",
-          "checkedAt": 1790656205799
+          "sourceKey": "khuyennong-name-apis-cerana",
+          "title": "Kỹ thuật nuôi ong mật (ong nội - Apis cerana)",
+          "publisher": "Trung tâm Khuyến nông Quốc gia",
+          "uri": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-nuoi-ong-mat-ong-noi-apis-cerana-16705.html",
+          "checkedAt": 1790656388006
         },
         {
           "sourceKey": "wikidata-q306939",
           "title": "Wikidata taxon linkage: Apis cerana",
           "publisher": "Wikimedia Foundation",
           "uri": "https://www.wikidata.org/entity/Q306939",
-          "checkedAt": 1790656205799
+          "checkedAt": 1790656388006
         },
         {
           "sourceKey": "gbif-taxon-1341979",
           "title": "GBIF Backbone Taxonomy: Apis cerana",
           "publisher": "GBIF Secretariat",
           "uri": "https://www.gbif.org/species/1341979",
-          "checkedAt": 1790656205799
+          "checkedAt": 1790656388006
         },
         {
           "sourceKey": "gbif-vn-1341979",
           "title": "GBIF occurrences in Viet Nam: Apis cerana",
           "publisher": "GBIF Secretariat",
           "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
-          "checkedAt": 1790656205799
+          "checkedAt": 1790656388006
         },
         {
           "sourceKey": "commons-apis-cerana",
           "title": "Wikimedia Commons media: Apis cerana08409.jpg",
           "publisher": "Wikimedia Commons",
           "uri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
-          "checkedAt": 1790656205799
+          "checkedAt": 1790656388006
         }
       ],
       "media": [
@@ -68,7 +68,7 @@
           "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/insects-apis-cerana.jpg",
           "verified": true,
           "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
-          "checksum": "ec2574ee28aa31a161e6be823dbd92804e2896338556329a59cc7f68e826393b",
+          "checksum": "7b7e3e3be29082b62c136333f99cfa82a27fd2dc64f990f95c61c08194cc8136",
           "license": "CC BY-SA 4.0",
           "creator": "Vengolis",
           "rightsHolder": "",
@@ -103,35 +103,35 @@
           "title": "Wikipedia tiếng Việt: Lợn rừng",
           "publisher": "Wikimedia Foundation",
           "uri": "https://vi.wikipedia.org/wiki/L%E1%BB%A3n_r%E1%BB%ABng",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "wikidata-q58697",
           "title": "Wikidata taxon linkage: Sus scrofa",
           "publisher": "Wikimedia Foundation",
           "uri": "https://www.wikidata.org/entity/Q58697",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "gbif-taxon-7705930",
           "title": "GBIF Backbone Taxonomy: Sus scrofa",
           "publisher": "GBIF Secretariat",
           "uri": "https://www.gbif.org/species/7705930",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "gbif-vn-7705930",
           "title": "GBIF occurrences in Viet Nam: Sus scrofa",
           "publisher": "GBIF Secretariat",
           "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=7705930",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "commons-sus-scrofa",
           "title": "Wikimedia Commons media: Sus scrofa piglet.jpg",
           "publisher": "Wikimedia Commons",
           "uri": "https://commons.wikimedia.org/wiki/File:Sus_scrofa_piglet.jpg",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         }
       ],
       "media": [
@@ -151,7 +151,7 @@
     },
     {
       "id": "canary-danger-aedes-aegypti",
-      "vietnameseName": "Aedes aegypti",
+      "vietnameseName": "Muỗi vằn",
       "scientificName": "Aedes aegypti",
       "categoryId": "danger",
       "usageLevel": "CHUA_PHAN_LOAI",
@@ -172,46 +172,46 @@
       "wikidataId": "Q1148004",
       "sources": [
         {
-          "sourceKey": "viwiki-name-q1148004",
-          "title": "Wikipedia tiếng Việt: Aedes aegypti",
-          "publisher": "Wikimedia Foundation",
-          "uri": "https://vi.wikipedia.org/wiki/Aedes_aegypti",
-          "checkedAt": 1790656205800
+          "sourceKey": "who-vietnam-name-aedes-aegypti",
+          "title": "WHO Việt Nam: Sốt xuất huyết Dengue - muỗi vằn (Aedes aegypti)",
+          "publisher": "World Health Organization",
+          "uri": "https://www.who.int/vietnam/vi/news/questions-and-answers/q-a-detail/dengue-and-severe-dengue",
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "wikidata-q1148004",
           "title": "Wikidata taxon linkage: Aedes aegypti",
           "publisher": "Wikimedia Foundation",
           "uri": "https://www.wikidata.org/entity/Q1148004",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "gbif-taxon-1651891",
           "title": "GBIF Backbone Taxonomy: Aedes aegypti",
           "publisher": "GBIF Secretariat",
           "uri": "https://www.gbif.org/species/1651891",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "gbif-vn-1651891",
           "title": "GBIF occurrences in Viet Nam: Aedes aegypti",
           "publisher": "GBIF Secretariat",
           "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "commons-aedes-aegypti",
           "title": "Wikimedia Commons media: Aedes aegypti (83920).jpg",
           "publisher": "Wikimedia Commons",
           "uri": "https://commons.wikimedia.org/wiki/File:Aedes_aegypti_(83920).jpg",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         },
         {
           "sourceKey": "who-dengue-aedes-safety",
           "title": "Dengue and severe dengue — vector and health-risk evidence",
           "publisher": "World Health Organization",
           "uri": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
-          "checkedAt": 1790656205800
+          "checkedAt": 1790656388007
         }
       ],
       "media": [

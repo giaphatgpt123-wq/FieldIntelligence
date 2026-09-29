@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "purpose": "one-real-record-per-category quality canary",
   "recordCount": 12,
-  "generatedAt": 1790656205801,
+  "generatedAt": 1790656388010,
   "records": [
     {
       "categoryId": "vegetables",
@@ -60,8 +60,8 @@
       "wikidataId": "Q16528",
       "commonsFile": "Nelumbo nucifera 01.JPG",
       "commonsLicense": "CC BY-SA 3.0",
-      "mediaBytes": 161592,
-      "mediaSha256": "1dcad44c6e969db57d574800c8d8f079b6276b7899e5617d6cf41d872db0699a",
+      "mediaBytes": 160847,
+      "mediaSha256": "391ed3a9c3b6a7750bdb0a785376067ebde1bc760c2480d75a189129602be4c0",
       "sourceCount": 5
     },
     {
@@ -128,15 +128,15 @@
       "categoryId": "insects",
       "categoryLabel": "Côn trùng",
       "recordId": "canary-insects-apis-cerana",
-      "vietnameseName": "Apis cerana",
+      "vietnameseName": "Ong nội",
       "scientificName": "Apis cerana",
       "gbifTaxonKey": 1341979,
       "gbifVietnamOccurrenceCount": 395,
       "wikidataId": "Q306939",
       "commonsFile": "Apis cerana08409.jpg",
       "commonsLicense": "CC BY-SA 4.0",
-      "mediaBytes": 132298,
-      "mediaSha256": "ec2574ee28aa31a161e6be823dbd92804e2896338556329a59cc7f68e826393b",
+      "mediaBytes": 132315,
+      "mediaSha256": "7b7e3e3be29082b62c136333f99cfa82a27fd2dc64f990f95c61c08194cc8136",
       "sourceCount": 5
     },
     {
@@ -173,7 +173,7 @@
       "categoryId": "danger",
       "categoryLabel": "Nguy hiểm",
       "recordId": "canary-danger-aedes-aegypti",
-      "vietnameseName": "Aedes aegypti",
+      "vietnameseName": "Muỗi vằn",
       "scientificName": "Aedes aegypti",
       "gbifTaxonKey": 1651891,
       "gbifVietnamOccurrenceCount": 291,

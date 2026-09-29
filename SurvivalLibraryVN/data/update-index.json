@@ -8,7 +8,7 @@
       "schemaVersion": 2,
       "recordCount": 6,
       "verifiedCount": 6,
-      "sha256": "f9689beb14575e0bb59cd1c4160db5ed717a576ec9d79403cf6d61fc3787c94e",
+      "sha256": "ea94bee4a16106a6f31b7945106c0ad0bb9f03ff21f4fd5e47528f7123a4dd9b",
       "packageUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/packages/plants-core-s001.json"
     },
     {
@@ -17,7 +17,7 @@
       "schemaVersion": 2,
       "recordCount": 1,
       "verifiedCount": 1,
-      "sha256": "de5ea6e893b3766eb60fde3295595d61715cb38d077e21f1195ff37b0604c287",
+      "sha256": "8a644ae917cf65c71252e802bbdb220415ba96547ba5d67a8ff8b85093e80c5c",
       "packageUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/packages/mushrooms-core-s001.json"
     },
     {
@@ -26,7 +26,7 @@
       "schemaVersion": 2,
       "recordCount": 2,
       "verifiedCount": 2,
-      "sha256": "14c45a0f808899ac9fda143928a46abe07966349a11c76aa86d4e2291592c7d2",
+      "sha256": "894b83af86c04ed9a1f316827c774306c98c6ce7a22741f56cbe0f1f44fe04ed",
       "packageUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/packages/aquatic-core-s001.json"
     },
     {
@@ -35,7 +35,7 @@
       "schemaVersion": 2,
       "recordCount": 3,
       "verifiedCount": 3,
-      "sha256": "9eaa9192b87b151672794211513765ad8afabc5b1d9b8b4cf645709d8454623e",
+      "sha256": "817ceeab60cc7d4b7e19b064a68adebb515d4628b7f3f1f7e58df1fd7bead48b",
       "packageUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/packages/fauna-core-s001.json"
     }
   ]
