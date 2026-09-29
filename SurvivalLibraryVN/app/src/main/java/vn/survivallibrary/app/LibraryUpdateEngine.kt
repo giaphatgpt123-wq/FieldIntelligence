@@ -57,6 +57,45 @@ object LibraryUpdateIndexParser {
         return buildList {
             for (index in 0 until rows.length()) {
                 val row = rows.getJSONObject(index)
+                val sources = buildList {
+                    val values = row.optJSONArray("sources")
+                    if (values != null) {
+                        for (sourceIndex in 0 until values.length()) {
+                            val source = values.getJSONObject(sourceIndex)
+                            add(
+                                LibraryRecordSource(
+                                    sourceKey = source.getString("sourceKey"),
+                                    title = source.getString("title"),
+                                    publisher = source.getString("publisher"),
+                                    uri = source.getString("uri"),
+                                    checkedAt = source.optLong("checkedAt", 0L)
+                                )
+                            )
+                        }
+                    }
+                }
+                val media = buildList {
+                    val values = row.optJSONArray("media")
+                    if (values != null) {
+                        for (mediaIndex in 0 until values.length()) {
+                            val item = values.getJSONObject(mediaIndex)
+                            add(
+                                LibraryRecordMedia(
+                                    mediaId = item.getString("mediaId"),
+                                    sourceUri = item.getString("sourceUri"),
+                                    downloadUri = item.getString("downloadUri"),
+                                    verified = item.optBoolean("verified", false),
+                                    angleLabel = item.getString("angleLabel"),
+                                    checksum = item.getString("checksum").lowercase(),
+                                    license = item.getString("license"),
+                                    creator = item.optString("creator", ""),
+                                    rightsHolder = item.optString("rightsHolder", ""),
+                                    mimeType = item.optString("mimeType", "image/webp")
+                                )
+                            )
+                        }
+                    }
+                }
                 add(
                     LibraryPackageRecord(
                         id = row.getString("id"),
@@ -74,7 +113,9 @@ object LibraryUpdateIndexParser {
                         verifiedMedia = row.optBoolean("verifiedMedia", false),
                         hasUsageClaim = row.optBoolean("hasUsageClaim", false),
                         verifiedUsageSource = row.optBoolean("verifiedUsageSource", false),
-                        verifiedSafetySource = row.optBoolean("verifiedSafetySource", false)
+                        verifiedSafetySource = row.optBoolean("verifiedSafetySource", false),
+                        sources = sources,
+                        media = media
                     )
                 )
             }
@@ -192,7 +233,7 @@ object LibraryUpdateEngine {
         connection.connectTimeout = 15_000
         connection.readTimeout = 30_000
         connection.instanceFollowRedirects = true
-        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.15")
+        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.16")
         return try {
             val code = connection.responseCode
             require(code in 200..299) { "HTTP $code" }

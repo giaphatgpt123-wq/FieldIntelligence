@@ -144,20 +144,31 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                 record_id TEXT NOT NULL,
                 local_path TEXT NOT NULL DEFAULT '',
                 source_uri TEXT NOT NULL DEFAULT '',
+                download_uri TEXT NOT NULL DEFAULT '',
                 verified INTEGER NOT NULL DEFAULT 0,
                 angle_label TEXT NOT NULL DEFAULT '',
-                checksum TEXT NOT NULL DEFAULT ''
+                checksum TEXT NOT NULL DEFAULT '',
+                license TEXT NOT NULL DEFAULT '',
+                creator TEXT NOT NULL DEFAULT '',
+                rights_holder TEXT NOT NULL DEFAULT '',
+                mime_type TEXT NOT NULL DEFAULT ''
             )
             """.trimIndent()
         )
         ensureColumn(db, "record_media", "local_path", "TEXT NOT NULL DEFAULT ''")
         ensureColumn(db, "record_media", "source_uri", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "download_uri", "TEXT NOT NULL DEFAULT ''")
         ensureColumn(db, "record_media", "verified", "INTEGER NOT NULL DEFAULT 0")
         ensureColumn(db, "record_media", "angle_label", "TEXT NOT NULL DEFAULT ''")
         ensureColumn(db, "record_media", "checksum", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "license", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "creator", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "rights_holder", "TEXT NOT NULL DEFAULT ''")
+        ensureColumn(db, "record_media", "mime_type", "TEXT NOT NULL DEFAULT ''")
 
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_sources_record ON record_sources(record_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_media_record ON record_media(record_id)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_media_verified ON record_media(verified)")
     }
 
     private fun ensureColumn(db: SQLiteDatabase, table: String, column: String, definition: String) {
@@ -228,6 +239,63 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         emptyList()
     }
 
+    fun recordSources(recordId: String): List<LibraryRecordSource> = try {
+        val result = mutableListOf<LibraryRecordSource>()
+        readableDatabase.query(
+            "record_sources",
+            arrayOf("source_key", "title", "publisher", "uri", "checked_at"),
+            "record_id = ?",
+            arrayOf(recordId),
+            null,
+            null,
+            "source_key ASC"
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result += LibraryRecordSource(
+                    sourceKey = cursor.getString(0),
+                    title = cursor.getString(1),
+                    publisher = cursor.getString(2),
+                    uri = cursor.getString(3),
+                    checkedAt = cursor.getLong(4)
+                )
+            }
+        }
+        result
+    } catch (_: Exception) {
+        emptyList()
+    }
+
+    fun recordMedia(recordId: String): List<LibraryRecordMedia> = try {
+        val result = mutableListOf<LibraryRecordMedia>()
+        readableDatabase.query(
+            "record_media",
+            arrayOf("media_id", "source_uri", "download_uri", "verified", "angle_label", "checksum", "license", "creator", "rights_holder", "mime_type"),
+            "record_id = ?",
+            arrayOf(recordId),
+            null,
+            null,
+            "media_id ASC"
+        ).use { cursor ->
+            while (cursor.moveToNext()) {
+                result += LibraryRecordMedia(
+                    mediaId = cursor.getString(0),
+                    sourceUri = cursor.getString(1),
+                    downloadUri = cursor.getString(2),
+                    verified = cursor.getInt(3) == 1,
+                    angleLabel = cursor.getString(4),
+                    checksum = cursor.getString(5),
+                    license = cursor.getString(6),
+                    creator = cursor.getString(7),
+                    rightsHolder = cursor.getString(8),
+                    mimeType = cursor.getString(9)
+                )
+            }
+        }
+        result
+    } catch (_: Exception) {
+        emptyList()
+    }
+
     fun installVerifiedPackage(manifest: LibraryPackageManifest, records: List<LibraryPackageRecord>): Int {
         val manifestDecision = LibraryDataPackages.validate(manifest)
         require(manifestDecision.valid) { manifestDecision.blockers.joinToString("; ") }
@@ -238,7 +306,9 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         val installedAt = System.currentTimeMillis()
         database.beginTransaction()
         try {
+            clearPackageEvidence(database, manifest.packageId)
             database.delete("library_records", "package_id = ?", arrayOf(manifest.packageId))
+
             records.forEach { record ->
                 val values = ContentValues().apply {
                     put("id", record.id)
@@ -255,6 +325,48 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
                 }
                 val rowId = database.insertWithOnConflict("library_records", null, values, SQLiteDatabase.CONFLICT_REPLACE)
                 require(rowId != -1L) { "Không thể ghi hồ sơ ${record.id}" }
+
+                record.sources.forEach { source ->
+                    val sourceValues = ContentValues().apply {
+                        put("record_id", record.id)
+                        put("source_key", source.sourceKey)
+                        put("title", source.title)
+                        put("publisher", source.publisher)
+                        put("uri", source.uri)
+                        put("checked_at", source.checkedAt)
+                    }
+                    val sourceRow = database.insertWithOnConflict(
+                        "record_sources",
+                        null,
+                        sourceValues,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                    )
+                    require(sourceRow != -1L) { "Không thể ghi nguồn ${source.sourceKey} của ${record.id}" }
+                }
+
+                record.media.forEach { media ->
+                    val mediaValues = ContentValues().apply {
+                        put("media_id", media.mediaId)
+                        put("record_id", record.id)
+                        put("local_path", "")
+                        put("source_uri", media.sourceUri)
+                        put("download_uri", media.downloadUri)
+                        put("verified", if (media.verified) 1 else 0)
+                        put("angle_label", media.angleLabel)
+                        put("checksum", media.checksum.lowercase())
+                        put("license", media.license)
+                        put("creator", media.creator)
+                        put("rights_holder", media.rightsHolder)
+                        put("mime_type", media.mimeType)
+                    }
+                    val mediaRow = database.insertWithOnConflict(
+                        "record_media",
+                        null,
+                        mediaValues,
+                        SQLiteDatabase.CONFLICT_REPLACE
+                    )
+                    require(mediaRow != -1L) { "Không thể ghi media ${media.mediaId} của ${record.id}" }
+                }
             }
 
             val packageValues = ContentValues().apply {
@@ -280,6 +392,26 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
             database.endTransaction()
         }
         return records.size
+    }
+
+    private fun clearPackageEvidence(database: SQLiteDatabase, packageId: String) {
+        val oldIds = mutableListOf<String>()
+        database.query(
+            "library_records",
+            arrayOf("id"),
+            "package_id = ?",
+            arrayOf(packageId),
+            null,
+            null,
+            null
+        ).use { cursor ->
+            while (cursor.moveToNext()) oldIds += cursor.getString(0)
+        }
+        oldIds.forEach { recordId ->
+            database.delete("record_sources", "record_id = ?", arrayOf(recordId))
+            database.delete("record_media", "record_id = ?", arrayOf(recordId))
+            database.delete("field_verification", "record_id = ?", arrayOf(recordId))
+        }
     }
 
     fun upsertPackageState(state: InstalledPackageState) {
@@ -335,6 +467,6 @@ class OfflineLibraryDb(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
 
     companion object {
         private const val DB_NAME = "survival_library_vn.db"
-        private const val DB_VERSION = 5
+        private const val DB_VERSION = 6
     }
 }

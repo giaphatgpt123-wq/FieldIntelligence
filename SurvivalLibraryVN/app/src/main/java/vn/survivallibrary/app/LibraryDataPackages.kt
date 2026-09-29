@@ -44,6 +44,27 @@ data class LibraryPackageManifest(
     val sourceUri: String
 )
 
+data class LibraryRecordSource(
+    val sourceKey: String,
+    val title: String,
+    val publisher: String,
+    val uri: String,
+    val checkedAt: Long = 0L
+)
+
+data class LibraryRecordMedia(
+    val mediaId: String,
+    val sourceUri: String,
+    val downloadUri: String,
+    val verified: Boolean,
+    val angleLabel: String,
+    val checksum: String,
+    val license: String,
+    val creator: String = "",
+    val rightsHolder: String = "",
+    val mimeType: String = "image/webp"
+)
+
 data class LibraryPackageRecord(
     val id: String,
     val vietnameseName: String,
@@ -60,7 +81,9 @@ data class LibraryPackageRecord(
     val verifiedMedia: Boolean,
     val hasUsageClaim: Boolean,
     val verifiedUsageSource: Boolean,
-    val verifiedSafetySource: Boolean
+    val verifiedSafetySource: Boolean,
+    val sources: List<LibraryRecordSource> = emptyList(),
+    val media: List<LibraryRecordMedia> = emptyList()
 ) {
     fun quality(): RecordQuality = RecordQuality(
         vietnamRelevant = vietnamRelevant,
@@ -82,9 +105,13 @@ data class PackageValidationResult(
 )
 
 object LibraryDataPackages {
-    const val SUPPORTED_SCHEMA_VERSION = 1
+    val SUPPORTED_SCHEMA_VERSIONS = setOf(1, 2)
+    const val LATEST_SCHEMA_VERSION = 2
     const val MAX_RECORDS_PER_SHARD = 2_000
+    const val MAX_SOURCES_PER_RECORD = 32
+    const val MAX_MEDIA_PER_RECORD = 32
     private val SHARD_SUFFIX = Regex("^\\d{3,6}$")
+    private val SHA256 = Regex("^[a-fA-F0-9]{64}$")
 
     val catalog: List<LibraryPackageDescriptor> = listOf(
         LibraryPackageDescriptor(
@@ -169,14 +196,14 @@ object LibraryDataPackages {
         val blockers = buildList {
             if (descriptor(manifest.packageId) == null) add("Gói dữ liệu không thuộc danh mục hoặc shard được phép")
             if (manifest.version <= 0) add("Phiên bản gói không hợp lệ")
-            if (manifest.schemaVersion != SUPPORTED_SCHEMA_VERSION) add("Phiên bản cấu trúc dữ liệu không được hỗ trợ")
+            if (manifest.schemaVersion !in SUPPORTED_SCHEMA_VERSIONS) add("Phiên bản cấu trúc dữ liệu không được hỗ trợ")
             if (manifest.recordCount < 0) add("Số hồ sơ không hợp lệ")
             if (manifest.recordCount > MAX_RECORDS_PER_SHARD) {
                 add("Gói vượt $MAX_RECORDS_PER_SHARD hồ sơ; phải chia shard nhỏ hơn")
             }
             if (manifest.verifiedCount < 0 || manifest.verifiedCount > manifest.recordCount) add("Số hồ sơ kiểm chứng không hợp lệ")
-            if (!manifest.sha256.matches(Regex("^[a-fA-F0-9]{64}$"))) add("Thiếu hoặc sai SHA-256")
-            if (!manifest.sourceUri.startsWith("https://")) add("Nguồn cập nhật phải dùng HTTPS")
+            if (!manifest.sha256.matches(SHA256)) add("Thiếu hoặc sai SHA-256")
+            if (!isHttps(manifest.sourceUri)) add("Nguồn cập nhật phải dùng HTTPS")
         }
         return PackageValidationResult(valid = blockers.isEmpty(), blockers = blockers)
     }
@@ -198,12 +225,47 @@ object LibraryDataPackages {
             }
             val verified = records.count { it.verificationState.rank >= VerificationState.DA_KIEM_CHUNG.rank }
             if (verified != manifest.verifiedCount) add("Số hồ sơ kiểm chứng không khớp manifest")
+
+            if (manifest.schemaVersion >= 2) {
+                val mediaIds = records.flatMap { record -> record.media.map { it.mediaId } }
+                if (mediaIds.distinct().size != mediaIds.size) add("Gói schema v2 có mediaId bị trùng")
+            }
+
             records.forEach { record ->
                 if (!record.published) add("${record.id}: hồ sơ chưa ở trạng thái phát hành")
                 val decision = LibraryRules.publicationDecision(record.quality())
                 if (!decision.publishable) add("${record.id}: ${decision.blockers.joinToString("; ")}")
+                if (manifest.schemaVersion >= 2) validateProvenance(record).forEach { add("${record.id}: $it") }
             }
         }
         return PackageValidationResult(valid = blockers.isEmpty(), blockers = blockers)
     }
+
+    private fun validateProvenance(record: LibraryPackageRecord): List<String> = buildList {
+        if (record.sources.isEmpty()) add("schema v2 phải có nguồn chi tiết")
+        if (record.sources.size != record.sourceCount) add("sourceCount không khớp số nguồn chi tiết")
+        if (record.sources.size > MAX_SOURCES_PER_RECORD) add("quá nhiều nguồn trong một hồ sơ")
+        if (record.sources.map { it.sourceKey }.distinct().size != record.sources.size) add("sourceKey bị trùng")
+        record.sources.forEach { source ->
+            if (source.sourceKey.isBlank()) add("sourceKey trống")
+            if (source.title.isBlank()) add("nguồn thiếu tiêu đề")
+            if (source.publisher.isBlank()) add("nguồn thiếu đơn vị xuất bản")
+            if (!isHttps(source.uri)) add("URI nguồn phải dùng HTTPS")
+        }
+
+        if (record.media.size > MAX_MEDIA_PER_RECORD) add("quá nhiều media trong một hồ sơ")
+        if (record.verifiedMedia && record.media.none { it.verified }) add("verifiedMedia=true nhưng không có media đã kiểm chứng")
+        record.media.forEach { media ->
+            if (media.mediaId.isBlank()) add("mediaId trống")
+            if (!isHttps(media.sourceUri)) add("sourceUri media phải dùng HTTPS")
+            if (!isHttps(media.downloadUri)) add("downloadUri media phải dùng HTTPS")
+            if (media.angleLabel.isBlank()) add("media thiếu nhãn góc/đặc điểm")
+            if (!media.checksum.matches(SHA256)) add("media thiếu hoặc sai SHA-256")
+            if (media.license.isBlank()) add("media thiếu thông tin giấy phép")
+            if (media.creator.isBlank() && media.rightsHolder.isBlank()) add("media thiếu creator/rightsHolder")
+            if (!media.mimeType.startsWith("image/") && !media.mimeType.startsWith("video/")) add("mimeType media không hợp lệ")
+        }
+    }
+
+    private fun isHttps(value: String): Boolean = value.startsWith("https://", ignoreCase = true)
 }
