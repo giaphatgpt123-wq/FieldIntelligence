@@ -7,6 +7,11 @@ enum class PackageInstallStatus {
     BLOCKED
 }
 
+enum class PackageUpdateMode {
+    SNAPSHOT,
+    DELTA
+}
+
 data class InstalledPackageState(
     val packageId: String,
     val version: Int,
@@ -41,7 +46,8 @@ data class LibraryPackageManifest(
     val recordCount: Int,
     val verifiedCount: Int,
     val sha256: String,
-    val sourceUri: String
+    val sourceUri: String,
+    val updateMode: PackageUpdateMode = PackageUpdateMode.SNAPSHOT
 )
 
 data class LibraryPackageRecord(
