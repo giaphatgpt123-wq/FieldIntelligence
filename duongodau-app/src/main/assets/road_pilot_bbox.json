@@ -4,17 +4,521 @@
   "bbox": [
     10.33,
     105.57,
-    10.35,
-    105.6
+    10.44,
+    105.68
   ],
   "source": "OpenStreetMap API 0.6",
-  "sourceRequest": "https://api.openstreetmap.org/api/0.6/map?bbox=105.57,10.33,105.60,10.35",
-  "sourceSha256": "a20ae85b96e9d774a579794113f15770a3faf24c8bf88842f6cf3e2e924c4887",
-  "retrievedAt": "2026-09-29T15:32:47+00:00",
+  "sourceRequest": "https://api.openstreetmap.org/api/0.6/map?bbox=105.57,10.33,105.68,10.44",
+  "sourceSha256": "11d6a0dce5ab14a94ac1feab98b44bee6c93973b50be266920817eed5232f315",
+  "retrievedAt": "2026-09-29T15:46:35+00:00",
   "license": "ODbL 1.0",
   "attribution": "© OpenStreetMap contributors",
   "verification": "UNVERIFIED",
   "roads": [
+    {
+      "id": "osm-way-1061368693",
+      "name": "An Nhơn",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1061368693",
+      "sourceTimestamp": "2026-02-24T13:49:23Z"
+    },
+    {
+      "id": "osm-way-842641019",
+      "name": "Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842641019",
+      "sourceTimestamp": "2026-04-30T04:16:45Z"
+    },
+    {
+      "id": "osm-way-1228612278",
+      "name": "Cao Lãnh-Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1228612278",
+      "sourceTimestamp": "2026-04-30T04:17:16Z"
+    },
+    {
+      "id": "osm-way-591596479",
+      "name": "Cao Tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596479",
+      "sourceTimestamp": "2026-04-30T04:17:22Z"
+    },
+    {
+      "id": "osm-way-591724178",
+      "name": "Cao Tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591724178",
+      "sourceTimestamp": "2026-04-30T04:16:55Z"
+    },
+    {
+      "id": "osm-way-591726019",
+      "name": "Cao Tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591726019",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-150660961",
+      "name": "Cái Bường",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/150660961",
+      "sourceTimestamp": "2025-10-11T13:46:27Z"
+    },
+    {
+      "id": "osm-way-150660963",
+      "name": "Cái Bường",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/150660963",
+      "sourceTimestamp": "2025-10-11T13:46:27Z"
+    },
+    {
+      "id": "osm-way-169417713",
+      "name": "Cái Tắc",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/169417713",
+      "sourceTimestamp": "2026-02-24T13:49:23Z"
+    },
+    {
+      "id": "osm-way-335378552",
+      "name": "Cầu Ba Bọng",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378552",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335250814",
+      "name": "Cầu Cai Châu",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335250814",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-566015552",
+      "name": "Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/566015552",
+      "sourceTimestamp": "2026-04-30T04:15:20Z"
+    },
+    {
+      "id": "osm-way-591590369",
+      "name": "Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591590369",
+      "sourceTimestamp": "2026-04-30T04:15:19Z"
+    },
+    {
+      "id": "osm-way-145221708",
+      "name": "Cầu Cái Bường",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221708",
+      "sourceTimestamp": "2024-06-11T10:00:46Z"
+    },
+    {
+      "id": "osm-way-1547016157",
+      "name": "Cầu Kênh Phèn",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016157",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016143",
+      "name": "Cầu Kênh Ranh",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016143",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016147",
+      "name": "Cầu Mương Lớn",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016147",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016151",
+      "name": "Cầu Mương Miễu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016151",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1188680511",
+      "name": "Cầu Ngã Cái",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1188680511",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-335378551",
+      "name": "Cầu Rạch Chùa Cạn",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378551",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-1530980744",
+      "name": "Cầu Rạch Miễu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980744",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-842641037",
+      "name": "Cầu Rạch Miễu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842641037",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1547016145",
+      "name": "Cầu Thầy Lâm",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016145",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-335250816",
+      "name": "Cầu Thầy Lâm",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335250816",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335314137",
+      "name": "Cầu Thầy Lâm",
+      "roadClass": "secondary",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335314137",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-591596476",
+      "name": "Cầu Thầy Lâm",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596476",
+      "sourceTimestamp": "2026-04-30T04:17:03Z"
+    },
+    {
+      "id": "osm-way-591726018",
+      "name": "Cầu Thầy Lâm",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591726018",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1184363744",
+      "name": "Cầu Thủ Ô",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1184363744",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-1547016159",
+      "name": "Cầu Tân Bình",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016159",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016137",
+      "name": "Cầu Tân Mỹ",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016137",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591594745",
+      "name": "Cầu Tân Mỹ",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591594745",
+      "sourceTimestamp": "2026-04-30T04:16:39Z"
+    },
+    {
+      "id": "osm-way-591726016",
+      "name": "Cầu Tân Mỹ",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591726016",
+      "sourceTimestamp": "2026-04-30T04:16:41Z"
+    },
+    {
+      "id": "osm-way-335314194",
+      "name": "Cầu Tư Ly",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335314194",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591577930",
+      "name": "Cầu Tịnh Thới",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591577930",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591577937",
+      "name": "Cầu Tịnh Thới",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591577937",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-773079150",
+      "name": "Cầu Tịnh Thới",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/773079150",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-968241313",
+      "name": "Cầu Vĩnh Thạnh",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241313",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-1547016155",
+      "name": "Cầu Xáng Múc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016155",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-150815140",
+      "name": "Cầu Ông Đấu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/150815140",
+      "sourceTimestamp": "2026-03-30T12:45:33Z"
+    },
+    {
+      "id": "osm-way-1547016149",
+      "name": "Cầu Đất Sét",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016149",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-335250815",
+      "name": "Cầu Đất Sét",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335250815",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-591596483",
+      "name": "Cầu Đất Sét",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596483",
+      "sourceTimestamp": "2026-04-30T04:17:37Z"
+    },
+    {
+      "id": "osm-way-591731145",
+      "name": "Cầu Đất Sét",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731145",
+      "sourceTimestamp": "2026-04-30T04:17:38Z"
+    },
+    {
+      "id": "osm-way-1188680513",
+      "name": "Cống Hùng Cường",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1188680513",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-1120710438",
+      "name": "Dương Thị Mỹ",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1120710438",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149395853",
+      "name": "Dương Thị Mỹ",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395853",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1120710439",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": "unpaved",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1120710439",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1157857137",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1157857137",
+      "sourceTimestamp": "2023-03-28T07:29:44Z"
+    },
+    {
+      "id": "osm-way-1157857138",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1157857138",
+      "sourceTimestamp": "2023-03-28T07:29:44Z"
+    },
+    {
+      "id": "osm-way-149006205",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006205",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-149395847",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395847",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-149396020",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396020",
+      "sourceTimestamp": "2023-03-28T07:29:44Z"
+    },
+    {
+      "id": "osm-way-149396028",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396028",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-769687062",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/769687062",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-769687063",
+      "name": "Hồ Thị Trầm",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/769687063",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-149396026",
+      "name": "Khai Long",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396026",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
     {
       "id": "osm-way-146375058",
       "name": "Kinh Mới",
@@ -25,6 +529,456 @@
       "sourceTimestamp": "2026-04-05T06:15:45Z"
     },
     {
+      "id": "osm-way-1169515725",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1169515725",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1169515726",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1169515726",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995792",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995792",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995793",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995793",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995795",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995795",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995796",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995796",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995818",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995818",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995819",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995819",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995823",
+      "name": "Làn xe máy Cầu Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995823",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-148910939",
+      "name": "Lê Văn Kiếc",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910939",
+      "sourceTimestamp": "2023-06-17T08:40:53Z"
+    },
+    {
+      "id": "osm-way-770027911",
+      "name": "Lê Văn Kiếc",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/770027911",
+      "sourceTimestamp": "2023-06-17T08:40:53Z"
+    },
+    {
+      "id": "osm-way-149395902",
+      "name": "Miễu Ngói",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395902",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-1482559650",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1482559650",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1482559651",
+      "name": "Nguyễn Hương",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1482559651",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-148910957",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910957",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-148910970",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910970",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-149006271",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006271",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1546995820",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995820",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995821",
+      "name": "Nguyễn Hương",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995821",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-769688500",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/769688500",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-769688501",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/769688501",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-769688502",
+      "name": "Nguyễn Hương",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/769688502",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-148910962",
+      "name": "Nguyễn Thị Trà",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910962",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-149006189",
+      "name": "Nguyễn Thị Trà",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006189",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-149006199",
+      "name": "Nguyễn Thị Trà",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006199",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149395931",
+      "name": "Nguyễn Thị Trà",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395931",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1119916522",
+      "name": "Nguyễn Văn Dũng",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1119916522",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-148910975",
+      "name": "Nguyễn Văn Voi",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910975",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-1125111551",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1125111551",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1184369890",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1184369890",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-1306986003",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986003",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-1457988945",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1457988945",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-1457988947",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1457988947",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-148867650",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148867650",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-148910950",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910950",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-148910977",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910977",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-149395959",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395959",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-149395975",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395975",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-149396010",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396010",
+      "sourceTimestamp": "2025-12-12T07:27:17Z"
+    },
+    {
+      "id": "osm-way-1530980746",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980746",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-1530980747",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980747",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-1530980748",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980748",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-169405267",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/169405267",
+      "sourceTimestamp": "2025-12-18T07:34:58Z"
+    },
+    {
+      "id": "osm-way-842626311",
+      "name": "Phạm Hữu Lầu",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842626311",
+      "sourceTimestamp": "2025-12-18T07:34:58Z"
+    },
+    {
+      "id": "osm-way-145221704",
+      "name": "QL. 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221704",
+      "sourceTimestamp": "2024-06-11T10:00:46Z"
+    },
+    {
+      "id": "osm-way-1119916521",
+      "name": "Quản Bạch",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1119916521",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-148910969",
+      "name": "Quản Bạch",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910969",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-149091534",
+      "name": "Quản Bạch",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149091534",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-149091552",
+      "name": "Quản Bạch",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149091552",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-149396030",
+      "name": "Quản Bạch",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396030",
+      "sourceTimestamp": "2026-02-24T13:49:23Z"
+    },
+    {
       "id": "osm-way-1125308468",
       "name": "Quốc lộ 80",
       "roadClass": "trunk",
@@ -32,6 +986,24 @@
       "maxWeight": null,
       "sourceUrl": "https://www.openstreetmap.org/way/1125308468",
       "sourceTimestamp": "2026-02-10T20:50:03Z"
+    },
+    {
+      "id": "osm-way-1163515889",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1163515889",
+      "sourceTimestamp": "2026-02-23T08:14:43Z"
+    },
+    {
+      "id": "osm-way-1163515890",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1163515890",
+      "sourceTimestamp": "2026-02-23T08:14:43Z"
     },
     {
       "id": "osm-way-145221706",
@@ -52,6 +1024,15 @@
       "sourceTimestamp": "2026-02-10T20:50:03Z"
     },
     {
+      "id": "osm-way-145221711",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221711",
+      "sourceTimestamp": "2026-03-30T13:21:50Z"
+    },
+    {
       "id": "osm-way-145221712",
       "name": "Quốc lộ 80",
       "roadClass": "trunk",
@@ -59,6 +1040,1167 @@
       "maxWeight": null,
       "sourceUrl": "https://www.openstreetmap.org/way/145221712",
       "sourceTimestamp": "2026-02-10T20:50:03Z"
+    },
+    {
+      "id": "osm-way-146468482",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/146468482",
+      "sourceTimestamp": "2026-02-23T20:01:28Z"
+    },
+    {
+      "id": "osm-way-1120710432",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1120710432",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1120710433",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1120710433",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149395892",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395892",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149395941",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395941",
+      "sourceTimestamp": "2024-09-05T15:35:12Z"
+    },
+    {
+      "id": "osm-way-149396057",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396057",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-770027295",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/770027295",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-770027910",
+      "name": "Sông Tiên",
+      "roadClass": "residential",
+      "surface": "unpaved",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/770027910",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1169515713",
+      "name": "Trạm dừng nghỉ Nguyễn Bình",
+      "roadClass": "services",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1169515713",
+      "sourceTimestamp": "2023-12-04T06:54:38Z"
+    },
+    {
+      "id": "osm-way-1136865370",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1136865370",
+      "sourceTimestamp": "2023-02-01T01:50:26Z"
+    },
+    {
+      "id": "osm-way-1136865371",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1136865371",
+      "sourceTimestamp": "2023-02-01T01:50:26Z"
+    },
+    {
+      "id": "osm-way-1306986002",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986002",
+      "sourceTimestamp": "2024-08-11T07:05:53Z"
+    },
+    {
+      "id": "osm-way-1306986005",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986005",
+      "sourceTimestamp": "2024-12-09T12:23:05Z"
+    },
+    {
+      "id": "osm-way-148910951",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910951",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-148910963",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/148910963",
+      "sourceTimestamp": "2025-12-18T07:34:58Z"
+    },
+    {
+      "id": "osm-way-149395838",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395838",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-149395940",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395940",
+      "sourceTimestamp": "2023-01-19T03:15:18Z"
+    },
+    {
+      "id": "osm-way-149395963",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395963",
+      "sourceTimestamp": "2023-01-19T05:01:12Z"
+    },
+    {
+      "id": "osm-way-149395981",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149395981",
+      "sourceTimestamp": "2023-01-18T06:53:33Z"
+    },
+    {
+      "id": "osm-way-149396014",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396014",
+      "sourceTimestamp": "2022-05-18T10:58:33Z"
+    },
+    {
+      "id": "osm-way-149396046",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396046",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-149396049",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396049",
+      "sourceTimestamp": "2023-07-27T08:24:22Z"
+    },
+    {
+      "id": "osm-way-149396053",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396053",
+      "sourceTimestamp": "2024-08-11T07:05:53Z"
+    },
+    {
+      "id": "osm-way-149396056",
+      "name": "Tân Việt Hoà",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396056",
+      "sourceTimestamp": "2024-12-09T12:23:05Z"
+    },
+    {
+      "id": "osm-way-1076624497",
+      "name": "Võ Nguyên Giáp",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1076624497",
+      "sourceTimestamp": "2024-12-09T12:34:41Z"
+    },
+    {
+      "id": "osm-way-1076624498",
+      "name": "Võ Nguyên Giáp",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1076624498",
+      "sourceTimestamp": "2024-12-09T12:34:41Z"
+    },
+    {
+      "id": "osm-way-1076624500",
+      "name": "Võ Nguyên Giáp",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1076624500",
+      "sourceTimestamp": "2024-12-09T12:34:41Z"
+    },
+    {
+      "id": "osm-way-1076624501",
+      "name": "Võ Nguyên Giáp",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1076624501",
+      "sourceTimestamp": "2024-12-09T12:34:41Z"
+    },
+    {
+      "id": "osm-way-1076624502",
+      "name": "Võ Nguyên Giáp",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1076624502",
+      "sourceTimestamp": "2024-12-09T12:34:41Z"
+    },
+    {
+      "id": "osm-way-1076624503",
+      "name": "Võ Nguyên Giáp",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1076624503",
+      "sourceTimestamp": "2024-12-09T12:34:41Z"
+    },
+    {
+      "id": "osm-way-1119916523",
+      "name": "Văn Tấn Bảy",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1119916523",
+      "sourceTimestamp": "2023-02-25T00:18:12Z"
+    },
+    {
+      "id": "osm-way-149091553",
+      "name": "Văn Tấn Bảy",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149091553",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-149396025",
+      "name": "Văn Tấn Bảy",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396025",
+      "sourceTimestamp": "2022-12-06T17:08:39Z"
+    },
+    {
+      "id": "osm-way-1183864068",
+      "name": "Đi Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1183864068",
+      "sourceTimestamp": "2026-02-24T13:33:39Z"
+    },
+    {
+      "id": "osm-way-566017359",
+      "name": "Đi Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/566017359",
+      "sourceTimestamp": "2026-04-30T04:16:09Z"
+    },
+    {
+      "id": "osm-way-591563230",
+      "name": "Đi Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591563230",
+      "sourceTimestamp": "2026-02-24T13:33:39Z"
+    },
+    {
+      "id": "osm-way-591713632",
+      "name": "Đi Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591713632",
+      "sourceTimestamp": "2026-04-30T04:16:03Z"
+    },
+    {
+      "id": "osm-way-773079151",
+      "name": "Đi Cao Lãnh",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/773079151",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-1548356972",
+      "name": "Đi Lộ Tẻ",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1548356972",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-566016582",
+      "name": "Đi Lộ Tẻ",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/566016582",
+      "sourceTimestamp": "2026-04-30T04:16:16Z"
+    },
+    {
+      "id": "osm-way-591563232",
+      "name": "Đi Lộ Tẻ",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591563232",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591594744",
+      "name": "Đi Lộ Tẻ",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591594744",
+      "sourceTimestamp": "2026-04-30T04:16:13Z"
+    },
+    {
+      "id": "osm-way-842641023",
+      "name": "Đi Mỹ An",
+      "roadClass": "motorway_link",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842641023",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-1155357070",
+      "name": "Đi Đường tỉnh 849",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1155357070",
+      "sourceTimestamp": "2026-04-30T04:16:43Z"
+    },
+    {
+      "id": "osm-way-1306986006",
+      "name": "Đi Đường tỉnh 849",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986006",
+      "sourceTimestamp": "2026-04-30T04:16:17Z"
+    },
+    {
+      "id": "osm-way-566016583",
+      "name": "Đi Đường tỉnh 849",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/566016583",
+      "sourceTimestamp": "2026-04-30T04:16:19Z"
+    },
+    {
+      "id": "osm-way-566016591",
+      "name": "Đi Đường tỉnh 849",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/566016591",
+      "sourceTimestamp": "2026-04-30T04:16:03Z"
+    },
+    {
+      "id": "osm-way-566017358",
+      "name": "Đi Đường tỉnh 849",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/566017358",
+      "sourceTimestamp": "2026-04-30T04:16:05Z"
+    },
+    {
+      "id": "osm-way-842641017",
+      "name": "Đi Đường tỉnh 849",
+      "roadClass": "motorway_link",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842641017",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-149005982",
+      "name": "Đinh Công Bê",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149005982",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149006200",
+      "name": "Đinh Công Bê",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006200",
+      "sourceTimestamp": "2026-06-20T08:48:57Z"
+    },
+    {
+      "id": "osm-way-149006212",
+      "name": "Đinh Công Bê",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006212",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149396074",
+      "name": "Đinh Công Bê",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396074",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149401829",
+      "name": "Đinh Công Bê",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149401829",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1120710440",
+      "name": "Đình Tịnh Thới",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1120710440",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149006198",
+      "name": "Đình Tịnh Thới",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149006198",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-149396069",
+      "name": "Đình Tịnh Thới",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/149396069",
+      "sourceTimestamp": "2022-12-10T06:17:05Z"
+    },
+    {
+      "id": "osm-way-1125561251",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1125561251",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-1166266574",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1166266574",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1170046957",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1170046957",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-1170046959",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1170046959",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-1228612274",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1228612274",
+      "sourceTimestamp": "2026-04-30T04:17:14Z"
+    },
+    {
+      "id": "osm-way-1228612276",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1228612276",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1228612281",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1228612281",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1306986001",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986001",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-1348259472",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1348259472",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1372000153",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1372000153",
+      "sourceTimestamp": "2026-04-30T04:17:51Z"
+    },
+    {
+      "id": "osm-way-1372000154",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1372000154",
+      "sourceTimestamp": "2026-04-30T04:17:52Z"
+    },
+    {
+      "id": "osm-way-1378826387",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1378826387",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1378826388",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1378826388",
+      "sourceTimestamp": "2026-04-30T04:20:45Z"
+    },
+    {
+      "id": "osm-way-1378826389",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1378826389",
+      "sourceTimestamp": "2026-04-30T04:20:46Z"
+    },
+    {
+      "id": "osm-way-1378826390",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1378826390",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591563231",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591563231",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591563234",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591563234",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591574468",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591574468",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591577928",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591577928",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591577933",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591577933",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591577935",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591577935",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591577939",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591577939",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591582575",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591582575",
+      "sourceTimestamp": "2026-08-09T17:21:09Z"
+    },
+    {
+      "id": "osm-way-591594746",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591594746",
+      "sourceTimestamp": "2026-04-30T04:15:54Z"
+    },
+    {
+      "id": "osm-way-591594747",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591594747",
+      "sourceTimestamp": "2026-04-30T04:16:48Z"
+    },
+    {
+      "id": "osm-way-591594748",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591594748",
+      "sourceTimestamp": "2026-04-30T04:16:51Z"
+    },
+    {
+      "id": "osm-way-591596478",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596478",
+      "sourceTimestamp": "2026-04-30T04:16:53Z"
+    },
+    {
+      "id": "osm-way-591596481",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596481",
+      "sourceTimestamp": "2026-04-30T04:17:06Z"
+    },
+    {
+      "id": "osm-way-591596485",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596485",
+      "sourceTimestamp": "2026-04-30T04:17:26Z"
+    },
+    {
+      "id": "osm-way-591596488",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596488",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591596489",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596489",
+      "sourceTimestamp": "2026-04-30T04:17:41Z"
+    },
+    {
+      "id": "osm-way-591596491",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596491",
+      "sourceTimestamp": "2026-04-30T04:20:51Z"
+    },
+    {
+      "id": "osm-way-591596496",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591596496",
+      "sourceTimestamp": "2026-04-30T04:20:53Z"
+    },
+    {
+      "id": "osm-way-591716183",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591716183",
+      "sourceTimestamp": "2026-04-30T04:15:55Z"
+    },
+    {
+      "id": "osm-way-591716187",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591716187",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-591724176",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591724176",
+      "sourceTimestamp": "2026-04-30T04:16:50Z"
+    },
+    {
+      "id": "osm-way-591726017",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591726017",
+      "sourceTimestamp": "2026-04-30T04:16:52Z"
+    },
+    {
+      "id": "osm-way-591731138",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731138",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591731139",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731139",
+      "sourceTimestamp": "2026-04-30T04:17:43Z"
+    },
+    {
+      "id": "osm-way-591731140",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731140",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591731141",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731141",
+      "sourceTimestamp": "2026-04-30T04:20:48Z"
+    },
+    {
+      "id": "osm-way-591731146",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731146",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591731148",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591731148",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-591735199",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591735199",
+      "sourceTimestamp": "2026-04-30T04:20:54Z"
+    },
+    {
+      "id": "osm-way-591735204",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/591735204",
+      "sourceTimestamp": "2026-04-30T04:20:50Z"
+    },
+    {
+      "id": "osm-way-925787204",
+      "name": "Đường cao tốc Cao Lãnh - Vàm Cống",
+      "roadClass": "motorway",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/925787204",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1530980741",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980741",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1530980742",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980742",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1530980743",
+      "name": "Đường gom cao tốc",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1530980743",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995794",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995794",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995797",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995797",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995817",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995817",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995822",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995822",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1546995825",
+      "name": "Đường gom cao tốc",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1546995825",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-1547016138",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016138",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016139",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016139",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016142",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016142",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016144",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016144",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016146",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016146",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016148",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016148",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016150",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016150",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016154",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016154",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016156",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016156",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-1547016158",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1547016158",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-773079149",
+      "name": "Đường gom cao tốc",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/773079149",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-842641013",
+      "name": "Đường gom cao tốc",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842641013",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-842641036",
+      "name": "Đường gom cao tốc",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/842641036",
+      "sourceTimestamp": "2026-08-03T15:56:23Z"
+    },
+    {
+      "id": "osm-way-768452407",
+      "name": "Đường huyện 68",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/768452407",
+      "sourceTimestamp": "2023-07-10T15:51:40Z"
+    },
+    {
+      "id": "osm-way-1188680514",
+      "name": "Đường huyện 69",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1188680514",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-1188680515",
+      "name": "Đường huyện 69",
+      "roadClass": "tertiary",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1188680515",
+      "sourceTimestamp": "2023-07-10T15:51:40Z"
+    },
+    {
+      "id": "osm-way-1494300631",
+      "name": "Đường huyện 69",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1494300631",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-768462964",
+      "name": "Đường huyện 69",
+      "roadClass": "tertiary",
+      "surface": "asphalt",
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/768462964",
+      "sourceTimestamp": "2026-05-26T10:43:55Z"
     },
     {
       "id": "osm-way-146375060",
@@ -124,6 +2266,213 @@
       "sourceTimestamp": "2026-03-29T07:46:09Z"
     },
     {
+      "id": "osm-way-1306985999",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306985999",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335250813",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335250813",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335250817",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335250817",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335250818",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335250818",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335378546",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378546",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335378547",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378547",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335378549",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378549",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335378553",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378553",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335378562",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378562",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-335378566",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378566",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-689419710",
+      "name": "Đường tỉnh 848",
+      "roadClass": "primary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/689419710",
+      "sourceTimestamp": "2026-04-19T12:02:52Z"
+    },
+    {
+      "id": "osm-way-1188680512",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1188680512",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-1306986000",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986000",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-1306986007",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1306986007",
+      "sourceTimestamp": "2026-08-03T17:42:25Z"
+    },
+    {
+      "id": "osm-way-145159152",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145159152",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-145221713",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221713",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-335314136",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335314136",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-335378567",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/335378567",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-968241312",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241312",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-968241314",
+      "name": "Đường tỉnh 849",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241314",
+      "sourceTimestamp": "2026-03-30T13:01:21Z"
+    },
+    {
+      "id": "osm-way-146588877",
+      "name": "Đường tỉnh 852",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/146588877",
+      "sourceTimestamp": "2026-03-30T12:45:33Z"
+    },
+    {
+      "id": "osm-way-150815141",
+      "name": "Đường tỉnh 852",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/150815141",
+      "sourceTimestamp": "2026-03-30T12:45:33Z"
+    },
+    {
+      "id": "osm-way-1060171929",
+      "name": "Đường tỉnh 852B",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1060171929",
+      "sourceTimestamp": "2026-03-30T13:18:44Z"
+    },
+    {
       "id": "osm-way-773079163",
       "name": "Đường tỉnh 852B",
       "roadClass": "secondary",
@@ -148,6 +2497,24 @@
       "surface": null,
       "maxWeight": null,
       "sourceUrl": "https://www.openstreetmap.org/way/968241292",
+      "sourceTimestamp": "2026-03-30T13:18:44Z"
+    },
+    {
+      "id": "osm-way-968241309",
+      "name": "Đường tỉnh 852B",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241309",
+      "sourceTimestamp": "2026-03-30T13:18:44Z"
+    },
+    {
+      "id": "osm-way-968241310",
+      "name": "Đường tỉnh 852B",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241310",
       "sourceTimestamp": "2026-03-30T13:18:44Z"
     },
     {

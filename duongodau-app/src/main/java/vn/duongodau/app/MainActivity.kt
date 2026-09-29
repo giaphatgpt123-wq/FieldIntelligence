@@ -338,7 +338,7 @@ private fun RoadCatalogResults(
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Kết quả đường", fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(
-                "Gói thí điểm: ô tọa độ 10,33–10,35°B · 105,57–105,60°Đ. Chưa gán chính xác xã/phường.",
+                "Gói thí điểm: ô tọa độ 10,33–10,44°B · 105,57–105,68°Đ. Chưa gán chính xác xã/phường.",
                 color = Slate, fontSize = 13.sp
             )
             when {
@@ -349,7 +349,7 @@ private fun RoadCatalogResults(
                     Text("Chưa có gói dữ liệu đường cho tỉnh/thành đã chọn.", color = Warning)
                 else -> {
                     val found = catalog.search(query)
-                    Text("${found.size} đoạn khớp • dữ liệu chưa xác minh hiện trường", color = Teal, fontWeight = FontWeight.Bold)
+                    Text("Hiển thị ${found.size} đoạn đầu khớp • chưa xác minh hiện trường", color = Teal, fontWeight = FontWeight.Bold)
                     if (found.isEmpty()) Text("Không tìm thấy trong gói thí điểm; chưa thể kết luận đường không tồn tại.", color = Slate)
                     found.forEach { entry ->
                         HorizontalDivider()
