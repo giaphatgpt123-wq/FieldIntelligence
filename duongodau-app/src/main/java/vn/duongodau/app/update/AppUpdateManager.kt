@@ -22,6 +22,7 @@ private const val STABLE_APPLICATION_ID = "vn.duongodau.app"
 private const val PREFS = "duong_o_dau_update"
 private const val CACHE_KEY = "last_manifest"
 private const val APK_MIME = "application/vnd.android.package-archive"
+private const val NETWORK_RETRIES = 3
 
 private val MANIFEST_URLS = listOf(
     "https://github.com/giaphatgpt123-wq/FieldIntelligence/releases/latest/download/duongodau-update.json",
@@ -99,13 +100,23 @@ object AppUpdateManager {
         val targetDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
             ?: return@withContext InstallResult.Error("Không mở được thư mục tải cập nhật.")
         targetDir.mkdirs()
+
         val apk = File(targetDir, "duong-o-dau-${info.versionCode}.apk")
-        if (apk.exists()) apk.delete()
+        val partial = File(targetDir, "duong-o-dau-${info.versionCode}.apk.part")
+        apk.delete()
+        partial.delete()
 
         try {
-            downloadToFile(info.apkUrl, apk)
+            downloadToFileWithRetry(info.apkUrl, partial)
+            if (!partial.exists() || partial.length() <= 0L) throw IOException("Tệp tải về rỗng")
+            if (!partial.renameTo(apk)) {
+                partial.copyTo(apk, overwrite = true)
+                partial.delete()
+            }
         } catch (e: Exception) {
-            return@withContext InstallResult.Error("Tải APK thất bại: ${e.message ?: "lỗi mạng"}")
+            partial.delete()
+            apk.delete()
+            return@withContext InstallResult.Error("Tải APK thất bại sau $NETWORK_RETRIES lần thử: ${e.message ?: "lỗi mạng"}")
         }
 
         val actualSha = sha256(apk)
@@ -147,11 +158,11 @@ object AppUpdateManager {
         context.startActivity(intent)
     }
 
-    private fun loadManifest(context: Context): UpdateInfo? {
+    private suspend fun loadManifest(context: Context): UpdateInfo? {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         for (url in MANIFEST_URLS) {
             try {
-                val raw = fetchText(url)
+                val raw = fetchTextWithRetry(url)
                 val parsed = parseManifest(raw)
                 prefs.edit().putString(CACHE_KEY, raw).apply()
                 return parsed
@@ -176,13 +187,16 @@ object AppUpdateManager {
             mandatory = json.optBoolean("mandatory", false),
             notes = json.optString("notes", "")
         ).also {
+            require(it.applicationId == STABLE_APPLICATION_ID)
+            require(it.versionCode > 0L)
+            require(it.versionName.isNotBlank())
             require(it.apkUrl.startsWith("https://"))
             require(it.sha256.matches(Regex("[0-9a-f]{64}")))
             require(it.signingCertSha256.matches(Regex("[0-9a-f]{64}")))
         }
     }
 
-    private fun fetchText(url: String): String {
+    private suspend fun fetchTextWithRetry(url: String): String = retryNetwork {
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             connectTimeout = 8_000
             readTimeout = 12_000
@@ -190,30 +204,53 @@ object AppUpdateManager {
             requestMethod = "GET"
             setRequestProperty("User-Agent", "DuongODau-Android-Updater")
             setRequestProperty("Accept", "application/json")
+            setRequestProperty("Cache-Control", "no-cache")
         }
-        return connection.useConnection { conn ->
+        connection.useConnection { conn ->
             val code = conn.responseCode
             if (code !in 200..299) throw IOException("HTTP $code")
             conn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
         }
     }
 
-    private fun downloadToFile(url: String, target: File) {
-        val connection = (URL(url).openConnection() as HttpURLConnection).apply {
-            connectTimeout = 10_000
-            readTimeout = 30_000
-            instanceFollowRedirects = true
-            requestMethod = "GET"
-            setRequestProperty("User-Agent", "DuongODau-Android-Updater")
-            setRequestProperty("Accept", APK_MIME)
-        }
-        connection.useConnection { conn ->
-            val code = conn.responseCode
-            if (code !in 200..299) throw IOException("HTTP $code")
-            conn.inputStream.use { input ->
-                target.outputStream().buffered().use { output -> input.copyTo(output) }
+    private suspend fun downloadToFileWithRetry(url: String, target: File) {
+        retryNetwork {
+            target.delete()
+            val connection = (URL(url).openConnection() as HttpURLConnection).apply {
+                connectTimeout = 10_000
+                readTimeout = 35_000
+                instanceFollowRedirects = true
+                requestMethod = "GET"
+                setRequestProperty("User-Agent", "DuongODau-Android-Updater")
+                setRequestProperty("Accept", APK_MIME)
+                setRequestProperty("Cache-Control", "no-cache")
+            }
+            connection.useConnection { conn ->
+                val code = conn.responseCode
+                if (code !in 200..299) throw IOException("HTTP $code")
+                val expectedLength = conn.contentLengthLong
+                conn.inputStream.use { input ->
+                    target.outputStream().buffered().use { output -> input.copyTo(output) }
+                }
+                if (target.length() <= 0L) throw IOException("Tệp tải về rỗng")
+                if (expectedLength > 0L && target.length() != expectedLength) {
+                    throw IOException("Tải chưa đủ dữ liệu (${target.length()}/$expectedLength byte)")
+                }
             }
         }
+    }
+
+    private suspend fun <T> retryNetwork(block: () -> T): T {
+        var lastError: Throwable? = null
+        repeat(NETWORK_RETRIES) { attempt ->
+            try {
+                return block()
+            } catch (t: Throwable) {
+                lastError = t
+                if (attempt < NETWORK_RETRIES - 1) delay(750L * (attempt + 1))
+            }
+        }
+        throw lastError ?: IOException("Lỗi mạng không xác định")
     }
 
     private fun installedVersion(context: Context): Pair<Long, String> {
