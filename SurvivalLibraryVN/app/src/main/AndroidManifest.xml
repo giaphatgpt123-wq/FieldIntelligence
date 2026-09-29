@@ -19,9 +19,22 @@
             android:exported="false" />
 
         <activity android:name=".OptimizedRecordDetailActivity" android:exported="false" />
-        <activity android:name=".PagedPublishedSavedActivity" android:exported="false" />
-        <activity android:name=".PagedPublishedCategoryActivity" android:exported="false" />
-        <activity android:name=".PagedPublishedSearchActivity" android:exported="false" />
+
+        <activity android:name=".WindowedPublishedSavedActivity" android:exported="false" />
+        <activity android:name=".WindowedPublishedCategoryActivity" android:exported="false" />
+        <activity android:name=".WindowedPublishedSearchActivity" android:exported="false" />
+        <activity-alias
+            android:name=".PagedPublishedSavedActivity"
+            android:targetActivity=".WindowedPublishedSavedActivity"
+            android:exported="false" />
+        <activity-alias
+            android:name=".PagedPublishedCategoryActivity"
+            android:targetActivity=".WindowedPublishedCategoryActivity"
+            android:exported="false" />
+        <activity-alias
+            android:name=".PagedPublishedSearchActivity"
+            android:targetActivity=".WindowedPublishedSearchActivity"
+            android:exported="false" />
 
         <activity android:name=".DataEngineProgressActivity" android:exported="false" />
         <activity-alias
