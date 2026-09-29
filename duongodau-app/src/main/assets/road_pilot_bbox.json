@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "scope": "BBOX_ONLY_UNMAPPED_ADMIN",
+  "bbox": [
+    10.33,
+    105.57,
+    10.35,
+    105.6
+  ],
+  "source": "OpenStreetMap API 0.6",
+  "sourceRequest": "https://api.openstreetmap.org/api/0.6/map?bbox=105.57,10.33,105.60,10.35",
+  "sourceSha256": "a20ae85b96e9d774a579794113f15770a3faf24c8bf88842f6cf3e2e924c4887",
+  "retrievedAt": "2026-09-29T15:32:47+00:00",
+  "license": "ODbL 1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "verification": "UNVERIFIED",
+  "roads": [
+    {
+      "id": "osm-way-146375058",
+      "name": "Kinh Mới",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/146375058",
+      "sourceTimestamp": "2026-04-05T06:15:45Z"
+    },
+    {
+      "id": "osm-way-1125308468",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/1125308468",
+      "sourceTimestamp": "2026-02-10T20:50:03Z"
+    },
+    {
+      "id": "osm-way-145221706",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221706",
+      "sourceTimestamp": "2026-02-10T20:50:03Z"
+    },
+    {
+      "id": "osm-way-145221709",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221709",
+      "sourceTimestamp": "2026-02-10T20:50:03Z"
+    },
+    {
+      "id": "osm-way-145221712",
+      "name": "Quốc lộ 80",
+      "roadClass": "trunk",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145221712",
+      "sourceTimestamp": "2026-02-10T20:50:03Z"
+    },
+    {
+      "id": "osm-way-146375060",
+      "name": "Đường Kinh Mới",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/146375060",
+      "sourceTimestamp": "2026-04-05T06:15:45Z"
+    },
+    {
+      "id": "osm-way-145387136",
+      "name": "Đường Kênh 11",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145387136",
+      "sourceTimestamp": "2026-03-29T07:46:09Z"
+    },
+    {
+      "id": "osm-way-145387131",
+      "name": "Đường Kênh 13",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145387131",
+      "sourceTimestamp": "2025-10-11T13:46:27Z"
+    },
+    {
+      "id": "osm-way-145387256",
+      "name": "Đường Kênh 13",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145387256",
+      "sourceTimestamp": "2026-03-29T07:46:09Z"
+    },
+    {
+      "id": "osm-way-145387224",
+      "name": "Đường Kênh số 9",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145387224",
+      "sourceTimestamp": "2026-03-29T07:46:09Z"
+    },
+    {
+      "id": "osm-way-146374962",
+      "name": "Đường Ngã Cái",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/146374962",
+      "sourceTimestamp": "2025-10-11T13:46:27Z"
+    },
+    {
+      "id": "osm-way-145387241",
+      "name": "Đường Thủ Sự",
+      "roadClass": "residential",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145387241",
+      "sourceTimestamp": "2026-03-29T07:46:09Z"
+    },
+    {
+      "id": "osm-way-773079163",
+      "name": "Đường tỉnh 852B",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/773079163",
+      "sourceTimestamp": "2026-03-30T13:18:44Z"
+    },
+    {
+      "id": "osm-way-968241291",
+      "name": "Đường tỉnh 852B",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241291",
+      "sourceTimestamp": "2026-03-30T13:18:44Z"
+    },
+    {
+      "id": "osm-way-968241292",
+      "name": "Đường tỉnh 852B",
+      "roadClass": "secondary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/968241292",
+      "sourceTimestamp": "2026-03-30T13:18:44Z"
+    },
+    {
+      "id": "osm-way-145158927",
+      "name": "Đường ĐH66",
+      "roadClass": "tertiary",
+      "surface": null,
+      "maxWeight": null,
+      "sourceUrl": "https://www.openstreetmap.org/way/145158927",
+      "sourceTimestamp": "2026-04-18T02:08:12Z"
+    }
+  ]
+}
