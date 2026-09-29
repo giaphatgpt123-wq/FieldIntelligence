@@ -25,7 +25,7 @@ private const val APK_MIME = "application/vnd.android.package-archive"
 private const val NETWORK_RETRIES = 3
 
 private val MANIFEST_URLS = listOf(
-    "https://github.com/giaphatgpt123-wq/FieldIntelligence/releases/latest/download/duongodau-update.json",
+    "https://github.com/giaphatgpt123-wq/FieldIntelligence/releases/download/duongodau-stable/duongodau-update.json",
     "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/main/docs/duongodau/update.json"
 )
 
