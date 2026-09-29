@@ -1,0 +1,107 @@
+name: SurvivalLibraryVN Data Engine Pilot
+
+on:
+  push:
+    branches:
+      - survival-library-vn
+      - feature/data-engine-v2d-staging-bridge
+    paths:
+      - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
+      - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
+      - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
+      - '.github/workflows/survival-library-data-engine-pilot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: survival-library-data-engine-pilot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  collect-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate task seed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('SurvivalLibraryVN/data/staging/pilot-12-tasks.json')
+          rows = json.loads(p.read_text(encoding='utf-8'))
+          assert len(rows) == 48, len(rows)
+          ids = [r['taskId'] for r in rows]
+          assert len(ids) == len(set(ids))
+          entities = {r['canonicalId'] for r in rows}
+          assert len(entities) == 12, len(entities)
+          required = {'CANONICAL_IDENTITY','VIETNAMESE_ALIASES','VIETNAM_DISTRIBUTION','MEDIA_PRIMARY'}
+          for entity in entities:
+              fields = {r['field'] for r in rows if r['canonicalId'] == entity}
+              assert fields == required, (entity, fields)
+          print('Pilot seed OK: 12 entities / 48 independent tasks')
+          PY
+
+      - name: Collect independent evidence tasks
+        run: |
+          python SurvivalLibraryVN/tools/data_engine_v2.py \
+            --tasks SurvivalLibraryVN/data/staging/pilot-12-tasks.json \
+            --output SurvivalLibraryVN/data/staging/latest-collector-results.json \
+            --health-file SurvivalLibraryVN/data/staging/source-health-pipeline.json \
+            --limit 500
+
+      - name: Merge evidence and build progress snapshot
+        run: |
+          python SurvivalLibraryVN/tools/data_engine_v2_state.py
+
+      - name: Validate snapshot contract
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('SurvivalLibraryVN/data/staging')
+          snapshot_raw = (root / 'progress-snapshot.json').read_bytes()
+          snapshot = json.loads(snapshot_raw)
+          index = json.loads((root / 'progress-index.json').read_text(encoding='utf-8'))
+          assert snapshot['schemaVersion'] == 1
+          assert len(snapshot['entities']) == 12
+          assert len(snapshot['tasks']) == 48
+          assert hashlib.sha256(snapshot_raw).hexdigest() == index['snapshot']['sha256']
+          assert index['snapshot']['entityCount'] == 12
+          assert index['snapshot']['taskCount'] == 48
+          blocked = sum(1 for t in snapshot['tasks'] if t['status'] == 'BLOCKED')
+          retry = sum(1 for t in snapshot['tasks'] if t['status'] == 'RETRY')
+          completed = sum(1 for t in snapshot['tasks'] if t['status'] == 'COMPLETED')
+          evidence = json.loads((root / 'evidence-store.json').read_text(encoding='utf-8'))['evidenceCount']
+          print(f'Pilot snapshot: completed={completed} retry={retry} blocked={blocked} evidence={evidence}')
+          PY
+
+      - name: Commit partial progress without waiting for all 48 tasks
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            SurvivalLibraryVN/data/staging/latest-collector-results.json \
+            SurvivalLibraryVN/data/staging/source-health-pipeline.json \
+            SurvivalLibraryVN/data/staging/evidence-store.json \
+            SurvivalLibraryVN/data/staging/progress-snapshot.json \
+            SurvivalLibraryVN/data/staging/progress-index.json
+          if git diff --cached --quiet; then
+            echo "No staging progress changes to commit."
+          else
+            git commit -m "Update Data Engine V2 pilot staging progress"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
