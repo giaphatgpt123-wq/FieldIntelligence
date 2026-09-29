@@ -34,6 +34,17 @@ object AppInterop {
         return openWithFallback(context, "Google Maps", native, generic, web)
     }
 
+    fun openNavigation(context: Context, latitude: Double, longitude: Double, label: String): InteropResult {
+        val encoded = Uri.encode(label)
+        val generic = Intent(Intent.ACTION_VIEW, Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude($encoded)"))
+        val google = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude")
+        )
+        val waze = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.waze.com/ul?ll=$latitude%2C$longitude&navigate=yes"))
+        return openWithFallback(context, "ứng dụng bản đồ", generic, google, waze)
+    }
+
     fun openWaze(context: Context, latitude: Double, longitude: Double): InteropResult {
         val native = Intent(Intent.ACTION_VIEW, Uri.parse("waze://?ll=$latitude,$longitude&navigate=yes"))
             .setPackage("com.waze")
@@ -79,22 +90,39 @@ object AppInterop {
 
     fun parseIncoming(intent: Intent?): IncomingPayload? {
         if (intent == null) return null
+
         if (intent.action == Intent.ACTION_VIEW && intent.data?.scheme == "duongodau") {
             val data = intent.data ?: return null
             return IncomingPayload(
-                roadName = data.getQueryParameter("name").orEmpty(),
+                roadName = data.getQueryParameter("name").orEmpty().take(500),
                 latitude = data.getQueryParameter("lat")?.toDoubleOrNull(),
                 longitude = data.getQueryParameter("lon")?.toDoubleOrNull(),
-                source = "deep_link"
+                source = "deep_link",
+                originalUrl = data.toString()
             )
         }
+
+        if (intent.action == Intent.ACTION_VIEW && intent.data?.scheme == "geo") {
+            val parsed = ExternalShareParser.parse(intent.data.toString())
+            return parsed?.toIncomingPayload("geo_intent")
+        }
+
         if (intent.action == Intent.ACTION_SEND && intent.type == "text/plain") {
             val text = intent.getStringExtra(Intent.EXTRA_TEXT)?.trim().orEmpty()
             if (text.isBlank()) return null
-            return IncomingPayload(roadName = text.take(500), latitude = null, longitude = null, source = "share")
+            return ExternalShareParser.parse(text)?.toIncomingPayload("share")
         }
+
         return null
     }
+
+    private fun ParsedExternalShare.toIncomingPayload(sourceOverride: String): IncomingPayload = IncomingPayload(
+        roadName = label.take(500),
+        latitude = latitude,
+        longitude = longitude,
+        source = if (sourceType.isBlank()) sourceOverride else "$sourceOverride:$sourceType",
+        originalUrl = originalUrl
+    )
 
     private fun openWithFallback(context: Context, target: String, vararg intents: Intent): InteropResult {
         intents.forEach { intent ->
@@ -116,5 +144,6 @@ data class IncomingPayload(
     val roadName: String,
     val latitude: Double?,
     val longitude: Double?,
-    val source: String
+    val source: String,
+    val originalUrl: String? = null
 )
