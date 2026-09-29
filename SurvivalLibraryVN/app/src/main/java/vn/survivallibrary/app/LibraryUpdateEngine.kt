@@ -57,6 +57,14 @@ object LibraryUpdateIndexParser {
         return buildList {
             for (index in 0 until rows.length()) {
                 val row = rows.getJSONObject(index)
+                fun stringList(key: String): List<String> = buildList {
+                    val values = row.optJSONArray(key) ?: return@buildList
+                    for (itemIndex in 0 until values.length()) {
+                        val value = values.optString(itemIndex).trim()
+                        if (value.isNotBlank()) add(value)
+                    }
+                }
+
                 val sources = buildList {
                     val values = row.optJSONArray("sources")
                     if (values != null) {
@@ -90,7 +98,11 @@ object LibraryUpdateIndexParser {
                                     license = item.getString("license"),
                                     creator = item.optString("creator", ""),
                                     rightsHolder = item.optString("rightsHolder", ""),
-                                    mimeType = item.optString("mimeType", "image/webp")
+                                    mimeType = item.optString("mimeType", "image/webp"),
+                                    viewRole = item.optString("viewRole", "REFERENCE"),
+                                    lifeStage = item.optString("lifeStage", ""),
+                                    isPrimary = item.optBoolean("isPrimary", false),
+                                    diagnostic = item.optBoolean("diagnostic", true)
                                 )
                             )
                         }
@@ -115,7 +127,14 @@ object LibraryUpdateIndexParser {
                         verifiedUsageSource = row.optBoolean("verifiedUsageSource", false),
                         verifiedSafetySource = row.optBoolean("verifiedSafetySource", false),
                         sources = sources,
-                        media = media
+                        media = media,
+                        scientificName = row.optString("scientificName", ""),
+                        identificationSummary = row.optString("identificationSummary", ""),
+                        keyFeatures = stringList("keyFeatures"),
+                        confusableWith = stringList("confusableWith"),
+                        requiredViewRoles = stringList("requiredViewRoles"),
+                        primaryViewRole = row.optString("primaryViewRole", ""),
+                        qualityProfile = row.optString("qualityProfile", "")
                     )
                 )
             }
@@ -126,7 +145,6 @@ object LibraryUpdateIndexParser {
 object LibraryUpdateEngine {
     const val UPDATE_INDEX_URL = "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/update-index.json"
 
-    // Keep text packages deliberately small so updates are cheap, restartable and RAM-safe.
     private const val MAX_INDEX_BYTES = 512 * 1024
     private const val MAX_PACKAGE_BYTES = 8 * 1024 * 1024
     private const val MAX_RECORDS_PER_PACKAGE = LibraryDataPackages.MAX_RECORDS_PER_SHARD
@@ -200,8 +218,6 @@ object LibraryUpdateEngine {
                 }
             }
 
-            // Text/database publication and media transfer are deliberately separate.
-            // A record can remain available if one image fails; the next sync repairs missing media.
             val media = LibraryMediaSync.syncMissing(appContext, db)
             errors += media.errors.map { "media: $it" }
 
@@ -248,14 +264,12 @@ object LibraryUpdateEngine {
         connection.connectTimeout = 15_000
         connection.readTimeout = 30_000
         connection.instanceFollowRedirects = true
-        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.16")
+        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.17")
         return try {
             val code = connection.responseCode
             require(code in 200..299) { "HTTP $code" }
             val declaredLength = connection.contentLengthLong
-            require(declaredLength < 0L || declaredLength <= maxBytes.toLong()) {
-                "Gói tải về vượt giới hạn dung lượng"
-            }
+            require(declaredLength < 0L || declaredLength <= maxBytes.toLong()) { "Gói tải về vượt giới hạn dung lượng" }
 
             connection.inputStream.use { input ->
                 val initialCapacity = when {
