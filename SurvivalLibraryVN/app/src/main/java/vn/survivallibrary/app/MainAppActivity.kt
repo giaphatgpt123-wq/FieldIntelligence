@@ -124,7 +124,7 @@ class MainAppActivity : Activity() {
         titles.addView(text("Thiên nhiên Việt Nam · hiểu để an toàn", 10.8f, muted, false).apply { setPadding(0, dp(2), 0, 0) })
         row.addView(titles, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
 
-        row.addView(iconButton(NativeIcon.SEARCH) { toast("Mở tìm kiếm") }, LinearLayout.LayoutParams(dp(46), dp(46)))
+        row.addView(iconButton(NativeIcon.SEARCH) { openSearch() }, LinearLayout.LayoutParams(dp(46), dp(46)))
         return row
     }
 
@@ -164,7 +164,7 @@ class MainAppActivity : Activity() {
             background = roundedStroke(paper, 18, Color.rgb(116, 167, 117), 1)
             isClickable = true
             isFocusable = true
-            setOnClickListener { toast("Tìm trong thư viện") }
+            setOnClickListener { openSearch() }
         }
         row.addView(NativeIconView(this, NativeIcon.SEARCH, forest), LinearLayout.LayoutParams(dp(23), dp(23)))
         row.addView(text("Tìm tên, hình ảnh hoặc kỹ năng...", 12.8f, muted, false).apply { setPadding(dp(10), 0, 0, 0) }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
@@ -195,7 +195,7 @@ class MainAppActivity : Activity() {
             background = roundedSolid(color, 19)
             isClickable = true
             isFocusable = true
-            setOnClickListener { toast(title) }
+            setOnClickListener { openCategory(title) }
             addView(NativeIconView(this@MainAppActivity, icon, forest), LinearLayout.LayoutParams(dp(27), dp(27)))
             addView(space(6))
             addView(text(title, 17f, forest, true))
@@ -247,7 +247,12 @@ class MainAppActivity : Activity() {
         val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         val labels = listOf("Thường dùng", "Hay dùng", "Ít dùng", "Hiếm dùng", "Xem thêm")
         labels.forEachIndexed { index, label ->
-            row.addView(chip(label, if (index == 0) forest else paper, if (index == 0) Color.WHITE else forest), LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36)).apply {
+            val filter = chip(label, if (index == 0) forest else paper, if (index == 0) Color.WHITE else forest).apply {
+                isClickable = true
+                isFocusable = true
+                setOnClickListener { openSearch(label) }
+            }
+            row.addView(filter, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36)).apply {
                 if (index != labels.lastIndex) marginEnd = dp(7)
             })
         }
@@ -284,7 +289,7 @@ class MainAppActivity : Activity() {
             background = roundedSolid(paper, 17)
             isClickable = true
             isFocusable = true
-            setOnClickListener { toast(item.title) }
+            setOnClickListener { openCategory(item.title) }
             addView(NativeIconView(this@MainAppActivity, item.icon, forest2), LinearLayout.LayoutParams(dp(25), dp(25)))
             addView(space(6))
             addView(text(item.title, 14f, forest, true))
@@ -300,12 +305,12 @@ class MainAppActivity : Activity() {
             background = roundedGradient(forest2, forest, 20)
             isClickable = true
             isFocusable = true
-            setOnClickListener { toast("Quét ảnh / chụp ảnh") }
+            setOnClickListener { startActivity(Intent(this@MainAppActivity, NativeCameraActivity::class.java)) }
         }
         row.addView(NativeIconView(this, NativeIcon.CAMERA, Color.WHITE), LinearLayout.LayoutParams(dp(36), dp(36)))
         val words = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(11), 0, 0, 0) }
         words.addView(text("Nhận dạng nhanh bằng camera", 15f, Color.WHITE, true))
-        words.addView(text("Quét ảnh / Chụp ảnh · AI offline sẽ được nối sau", 10.2f, Color.argb(220, 255, 255, 255), false).apply { setPadding(0, dp(2), 0, 0) })
+        words.addView(text("Chụp ảnh / chọn ảnh · không trả kết quả giả khi chưa có model", 10.2f, Color.argb(220, 255, 255, 255), false).apply { setPadding(0, dp(2), 0, 0) })
         row.addView(words, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         row.addView(NativeIconView(this, NativeIcon.CHEVRON_RIGHT, Color.WHITE), LinearLayout.LayoutParams(dp(24), dp(24)))
         return row
@@ -342,13 +347,33 @@ class MainAppActivity : Activity() {
                 if (item.selected) background = roundedSolid(sage, 15)
                 isClickable = true
                 isFocusable = true
-                setOnClickListener { toast(item.label) }
+                setOnClickListener { onNav(item.label) }
                 addView(NativeIconView(this@MainAppActivity, item.icon, color), LinearLayout.LayoutParams(dp(22), dp(22)))
                 addView(text(item.label, 9.2f, color, item.selected).apply { gravity = Gravity.CENTER; setPadding(0, dp(3), 0, 0) })
             }
             nav.addView(cell, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f).apply { marginStart = dp(2); marginEnd = dp(2) })
         }
         return nav
+    }
+
+    private fun onNav(label: String) {
+        when (label) {
+            "Trang chủ" -> Unit
+            "Danh mục" -> openCategory("Tất cả danh mục")
+            "Quét ảnh" -> startActivity(Intent(this, NativeCameraActivity::class.java))
+            "Đã lưu" -> startActivity(Intent(this, NativeSavedActivity::class.java))
+            "Cập nhật" -> startActivity(Intent(this, NativeUpdateActivity::class.java))
+        }
+    }
+
+    private fun openSearch(query: String = "") {
+        startActivity(Intent(this, NativeSearchActivity::class.java).apply {
+            if (query.isNotBlank()) putExtra(NativeSearchActivity.EXTRA_QUERY, query)
+        })
+    }
+
+    private fun openCategory(category: String) {
+        startActivity(Intent(this, NativeCategoryActivity::class.java).putExtra(NativeCategoryActivity.EXTRA_CATEGORY, category))
     }
 
     private fun sectionTitle(title: String, subtitle: String): View = LinearLayout(this).apply {
