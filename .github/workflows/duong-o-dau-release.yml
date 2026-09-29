@@ -34,6 +34,14 @@ jobs:
         with:
           gradle-version: '8.11.1'
 
+      - name: Validate release inputs
+        env:
+          VERSION_NAME: ${{ inputs.version_name }}
+          VERSION_CODE: ${{ inputs.version_code }}
+        run: |
+          echo "$VERSION_NAME" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([-.][A-Za-z0-9._-]+)?$' || (echo 'Invalid version_name' && exit 1)
+          echo "$VERSION_CODE" | grep -Eq '^[1-9][0-9]*$' || (echo 'Invalid version_code' && exit 1)
+
       - name: Validate stable signing secrets
         env:
           KEYSTORE_B64: ${{ secrets.DUONGODAU_KEYSTORE_B64 }}
@@ -88,6 +96,11 @@ jobs:
         run: |
           APK='duongodau-app/build/outputs/apk/release/duongodau-app-release.apk'
           test -f "$APK"
+
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -1)
+          test -x "$APKSIGNER" || (echo 'apksigner not found' && exit 1)
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+
           APK_SHA=$(sha256sum "$APK" | awk '{print $1}')
           CERT_SHA=$(keytool -list -v \
             -keystore "$RUNNER_TEMP/duongodau-signing/duongodau-release.jks" \
@@ -95,8 +108,8 @@ jobs:
             -storepass "$STORE_PASSWORD" 2>/dev/null \
             | sed -n 's/.*SHA256: //p' | head -1 | tr -d ':' | tr 'A-F' 'a-f')
           test ${#CERT_SHA} -eq 64
-          TAG="duongodau-v${VERSION_NAME}"
-          DOWNLOAD_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/duong-o-dau.apk"
+
+          DOWNLOAD_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/duongodau-stable/duong-o-dau.apk"
           mkdir -p release-out
           cp "$APK" release-out/duong-o-dau.apk
           cat > release-out/duongodau-update.json <<JSON
@@ -113,19 +126,45 @@ jobs:
           JSON
           cat release-out/duongodau-update.json
 
-      - name: Publish GitHub Release
+      - name: Publish immutable version archive
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION_NAME: ${{ inputs.version_name }}
         run: |
           TAG="duongodau-v${VERSION_NAME}"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; refusing to overwrite immutable version archive."
+            exit 1
+          fi
           gh release create "$TAG" \
             release-out/duong-o-dau.apk \
             release-out/duongodau-update.json \
             --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
             --title "Đường ở đâu ${VERSION_NAME}" \
-            --notes "Stable signed release. In-app updater validates package, SHA-256 and signing certificate before install." \
-            --latest
+            --notes "Stable signed archive. Package, SHA-256 and signing certificate verified before publish."
+
+      - name: Publish fixed stable update channel
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_NAME: ${{ inputs.version_name }}
+        run: |
+          gh release delete duongodau-stable --repo "$GITHUB_REPOSITORY" --cleanup-tag -y >/dev/null 2>&1 || true
+          gh release create duongodau-stable \
+            release-out/duong-o-dau.apk \
+            release-out/duongodau-update.json \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Đường ở đâu – Stable ${VERSION_NAME}" \
+            --notes "Kênh cập nhật cố định cho ứng dụng Đường ở đâu. Không dùng repository-wide latest release."
+
+      - name: Verify stable channel assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view duongodau-stable --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | tee /tmp/assets.txt
+          grep -Fx 'duong-o-dau.apk' /tmp/assets.txt
+          grep -Fx 'duongodau-update.json' /tmp/assets.txt
 
       - name: Upload release evidence
         uses: actions/upload-artifact@v4
