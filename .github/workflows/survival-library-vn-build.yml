@@ -2,6 +2,14 @@ name: SurvivalLibraryVN Build
 
 on:
   push:
+    branches: [survival-library-vn, feature/data-engine-v2]
+    paths:
+      - 'SurvivalLibraryVN/app/**'
+      - 'SurvivalLibraryVN/build.gradle.kts'
+      - 'SurvivalLibraryVN/settings.gradle.kts'
+      - 'SurvivalLibraryVN/gradle.properties'
+      - '.github/workflows/survival-library-vn-build.yml'
+  pull_request:
     branches: [survival-library-vn]
     paths:
       - 'SurvivalLibraryVN/app/**'
