@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "current_admin": {
+    "effective_from": "2025-07-01",
+    "legal_basis": "Quyết định 19/2025/QĐ-TTg",
+    "official_source": "https://congbao.chinhphu.vn/tai-ve-van-ban-so-19-2025-qd-ttg-45430-57438?format=pdf",
+    "expected_province_count": 34,
+    "expected_commune_count": 3321,
+    "verification_state": "OFFICIAL_SOURCE_REQUIRED"
+  },
+  "asset_contract": {
+    "current_csv": "admin_current.csv",
+    "current_columns": ["province_code", "province_name", "commune_code", "commune_name"],
+    "transitions_csv": "admin_transitions.csv",
+    "transition_columns": ["old_code", "new_code", "effective_from", "legal_source", "verification"]
+  },
+  "rules": [
+    "Do not mark nationwideReady until current_csv contains 34 provinces and 3321 unique commune codes.",
+    "Historical-to-current mappings must preserve legal source and verification state.",
+    "Administrative names must not be used as the sole identity of a road; road geometry remains primary."
+  ]
+}
