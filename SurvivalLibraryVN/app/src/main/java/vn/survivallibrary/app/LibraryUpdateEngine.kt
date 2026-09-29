@@ -133,7 +133,8 @@ object LibraryUpdateEngine {
     private val allowedInitialHosts = setOf("raw.githubusercontent.com", "github.com")
 
     fun checkAndUpdate(context: Context): UpdateRunResult {
-        val db = OfflineLibraryDb(context.applicationContext)
+        val appContext = context.applicationContext
+        val db = OfflineLibraryDb(appContext)
         return try {
             val remotePackages = LibraryUpdateIndexParser.parse(downloadText(UPDATE_INDEX_URL, MAX_INDEX_BYTES))
             require(remotePackages.map { it.packageId }.distinct().size == remotePackages.size) {
@@ -147,15 +148,20 @@ object LibraryUpdateEngine {
             }
 
             if (candidates.isEmpty()) {
+                val media = LibraryMediaSync.syncMissing(appContext, db)
+                val mediaErrors = media.errors.map { "media: $it" }
                 return UpdateRunResult(
                     checked = true,
                     updatedPackages = emptyList(),
                     installedRecords = 0,
-                    message = if (remotePackages.isEmpty()) {
-                        "Đã kết nối máy chủ cập nhật. Hiện chưa có gói dữ liệu thật mới được phát hành."
-                    } else {
-                        "Dữ liệu trên thiết bị đã là phiên bản mới nhất."
-                    }
+                    message = when {
+                        remotePackages.isEmpty() -> "Đã kết nối máy chủ cập nhật. Hiện chưa có gói dữ liệu thật mới được phát hành."
+                        media.downloaded > 0 && mediaErrors.isEmpty() -> "Dữ liệu đã là phiên bản mới nhất. Đã tải ${media.downloaded} ảnh kiểm chứng để hiển thị trên app."
+                        media.downloaded > 0 -> "Dữ liệu đã là phiên bản mới nhất. Đã tải ${media.downloaded} ảnh; ${mediaErrors.size} media cần thử lại."
+                        mediaErrors.isNotEmpty() -> "Dữ liệu đã là phiên bản mới nhất nhưng có ${mediaErrors.size} media chưa tải được."
+                        else -> "Dữ liệu trên thiết bị đã là phiên bản mới nhất."
+                    },
+                    errors = mediaErrors
                 )
             }
 
@@ -194,13 +200,22 @@ object LibraryUpdateEngine {
                 }
             }
 
+            // Text/database publication and media transfer are deliberately separate.
+            // A record can remain available if one image fails; the next sync repairs missing media.
+            val media = LibraryMediaSync.syncMissing(appContext, db)
+            errors += media.errors.map { "media: $it" }
+
             UpdateRunResult(
                 checked = true,
                 updatedPackages = updated,
                 installedRecords = installedRecords,
                 message = when {
-                    updated.isNotEmpty() && errors.isEmpty() -> "Đã cập nhật ${updated.size} gói dữ liệu, $installedRecords hồ sơ."
-                    updated.isNotEmpty() -> "Đã cập nhật một phần; ${errors.size} gói bị chặn để bảo vệ dữ liệu."
+                    updated.isNotEmpty() && errors.isEmpty() -> {
+                        val mediaText = if (media.downloaded > 0) " · ${media.downloaded} ảnh" else ""
+                        "Đã cập nhật ${updated.size} gói dữ liệu, $installedRecords hồ sơ$mediaText."
+                    }
+                    updated.isNotEmpty() -> "Đã cập nhật dữ liệu; ${errors.size} mục bị chặn hoặc media cần thử lại."
+                    media.downloaded > 0 && errors.isEmpty() -> "Không có gói dữ liệu mới. Đã tải ${media.downloaded} ảnh kiểm chứng."
                     else -> "Không gói nào được cài vì không vượt qua kiểm tra an toàn dữ liệu."
                 },
                 errors = errors
