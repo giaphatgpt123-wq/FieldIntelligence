@@ -11,9 +11,12 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
-        <activity
-            android:name=".RecordDetailActivity"
-            android:exported="false" />
+        <activity android:name=".NativeUpdateActivity" android:exported="false" />
+        <activity android:name=".NativeSavedActivity" android:exported="false" />
+        <activity android:name=".NativeCameraActivity" android:exported="false" />
+        <activity android:name=".NativeCategoryActivity" android:exported="false" />
+        <activity android:name=".NativeSearchActivity" android:exported="false" />
+        <activity android:name=".RecordDetailActivity" android:exported="false" />
 
         <activity
             android:name=".MainAppActivity"
