@@ -28,6 +28,19 @@ class FakeResponse:
         return self.body
 
 
+class RecordingAdapter:
+    def __init__(self, rows=None, fail_if_called: bool = False):
+        self.rows = rows or []
+        self.fail_if_called = fail_if_called
+        self.calls = 0
+
+    def collect(self, _task):
+        self.calls += 1
+        if self.fail_if_called:
+            raise AssertionError("redundant fallback adapter must not be called")
+        return list(self.rows)
+
+
 class DataEngineV2RuntimeTest(unittest.TestCase):
     def test_transport_caches_repeated_get(self):
         transport = runtime.ResilientCachingJsonTransport(timeout=5)
@@ -125,6 +138,93 @@ class DataEngineV2RuntimeTest(unittest.TestCase):
         collector = runtime.OptimizedBatchCollector(registry, health, transport)
         source = next(source for source in registry.sources if source.source_id == "vn-authority-local")
         self.assertIs(collector._adapter(source), collector._adapter(source))
+
+    def test_vietnamese_alias_terminal_source_skips_network_fallbacks(self):
+        registry = core.SourceRegistry.load()
+        local = RecordingAdapter(rows=[{"sourceTier": "OFFICIAL_VIETNAM", "value": {"displayName": "Rau muống"}}])
+        gbif = RecordingAdapter(fail_if_called=True)
+        inat = RecordingAdapter(fail_if_called=True)
+        collector = runtime.OptimizedBatchCollector(
+            registry,
+            runtime.BufferedSourceHealthStore(None),
+            runtime.ResilientCachingJsonTransport(timeout=5),
+            {"vn-authority-local": local, "gbif": gbif, "inaturalist": inat},
+        )
+        task = core.LoadTask(
+            task_id="alias-terminal",
+            canonical_id="taxon:ipomoea-aquatica",
+            task_type="COLLECT_VIETNAMESE_NAMES",
+            field_key="VIETNAMESE_ALIASES",
+            scientific_name="Ipomoea aquatica",
+            category_id="vegetables",
+            max_sources=3,
+        )
+        result = collector.collect_task(task)
+        self.assertEqual(result["status"], "COMPLETED")
+        self.assertEqual(result["attemptedSources"], ["vn-authority-local"])
+        self.assertEqual(local.calls, 1)
+        self.assertEqual(gbif.calls, 0)
+        self.assertEqual(inat.calls, 0)
+
+    def test_curated_media_terminal_source_skips_lower_fallbacks(self):
+        registry = core.SourceRegistry.load()
+        local = RecordingAdapter(rows=[])
+        curated = RecordingAdapter(rows=[{"sourceTier": "OPEN_SCIENCE", "rights": "CC BY-SA 3.0"}])
+        gbif = RecordingAdapter(fail_if_called=True)
+        inat = RecordingAdapter(fail_if_called=True)
+        collector = runtime.OptimizedBatchCollector(
+            registry,
+            runtime.BufferedSourceHealthStore(None),
+            runtime.ResilientCachingJsonTransport(timeout=5),
+            {
+                "vn-authority-local": local,
+                "curated-canary-media": curated,
+                "gbif": gbif,
+                "inaturalist": inat,
+            },
+        )
+        task = core.LoadTask(
+            task_id="media-terminal",
+            canonical_id="taxon:nelumbo-nucifera",
+            task_type="COLLECT_MEDIA",
+            field_key="MEDIA_PRIMARY",
+            scientific_name="Nelumbo nucifera",
+            category_id="flowers",
+            max_sources=3,
+        )
+        result = collector.collect_task(task)
+        self.assertEqual(result["status"], "COMPLETED")
+        self.assertEqual(result["attemptedSources"], ["vn-authority-local", "curated-canary-media"])
+        self.assertEqual(curated.calls, 1)
+        self.assertEqual(gbif.calls, 0)
+        self.assertEqual(inat.calls, 0)
+
+    def test_distribution_keeps_multi_source_corroboration(self):
+        registry = core.SourceRegistry.load()
+        local = RecordingAdapter(rows=[])
+        gbif = RecordingAdapter(rows=[{"sourceTier": "GLOBAL_AUTHORITY", "value": {"country": "VN"}}])
+        worms = RecordingAdapter(rows=[{"sourceTier": "GLOBAL_AUTHORITY", "value": {"locality": "Vietnam"}}])
+        collector = runtime.OptimizedBatchCollector(
+            registry,
+            runtime.BufferedSourceHealthStore(None),
+            runtime.ResilientCachingJsonTransport(timeout=5),
+            {"vn-authority-local": local, "gbif": gbif, "worms": worms},
+        )
+        task = core.LoadTask(
+            task_id="distribution-corroboration",
+            canonical_id="taxon:penaeus-monodon",
+            task_type="COLLECT_DISTRIBUTION",
+            field_key="VIETNAM_DISTRIBUTION",
+            scientific_name="Penaeus monodon",
+            category_id="marine-life",
+            max_sources=2,
+        )
+        result = collector.collect_task(task)
+        self.assertEqual(result["status"], "COMPLETED")
+        self.assertIn("gbif", result["attemptedSources"])
+        self.assertIn("worms", result["attemptedSources"])
+        self.assertEqual(gbif.calls, 1)
+        self.assertEqual(worms.calls, 1)
 
 
 if __name__ == "__main__":
