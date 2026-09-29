@@ -33,6 +33,9 @@ class SystemActivity : ComponentActivity() {
             MaterialTheme {
                 SystemScreen(
                     initialBridgeText = incoming?.roadName.orEmpty(),
+                    initialLatitude = incoming?.latitude,
+                    initialLongitude = incoming?.longitude,
+                    incomingSource = incoming?.source,
                     onClose = { finish() }
                 )
             }
@@ -41,7 +44,13 @@ class SystemActivity : ComponentActivity() {
 }
 
 @Composable
-private fun SystemScreen(initialBridgeText: String, onClose: () -> Unit) {
+private fun SystemScreen(
+    initialBridgeText: String,
+    initialLatitude: Double?,
+    initialLongitude: Double?,
+    incomingSource: String?,
+    onClose: () -> Unit
+) {
     val navy = Color(0xFF071A2E)
     val ice = Color(0xFFF4F8FB)
     val orange = Color(0xFFF4A229)
@@ -76,7 +85,14 @@ private fun SystemScreen(initialBridgeText: String, onClose: () -> Unit) {
             contentPadding = PaddingValues(14.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item { SystemPanel(initialBridgeText = initialBridgeText) }
+            item {
+                SystemPanel(
+                    initialBridgeText = initialBridgeText,
+                    initialLatitude = initialLatitude,
+                    initialLongitude = initialLongitude,
+                    incomingSource = incomingSource
+                )
+            }
         }
     }
 }
