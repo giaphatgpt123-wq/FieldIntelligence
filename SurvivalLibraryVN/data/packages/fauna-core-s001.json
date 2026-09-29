@@ -1,0 +1,233 @@
+{
+  "packageId": "fauna-core-s001",
+  "version": 1,
+  "schemaVersion": 2,
+  "records": [
+    {
+      "id": "canary-insects-apis-cerana",
+      "vietnameseName": "Apis cerana",
+      "scientificName": "Apis cerana",
+      "categoryId": "insects",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Apis cerana. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 1341979,
+      "gbifVietnamOccurrenceCount": 395,
+      "wikidataId": "Q306939",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q306939",
+          "title": "Wikipedia tiếng Việt: Apis cerana",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Apis_cerana",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "wikidata-q306939",
+          "title": "Wikidata taxon linkage: Apis cerana",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q306939",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-taxon-1341979",
+          "title": "GBIF Backbone Taxonomy: Apis cerana",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/1341979",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-vn-1341979",
+          "title": "GBIF occurrences in Viet Nam: Apis cerana",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "commons-apis-cerana",
+          "title": "Wikimedia Commons media: Apis cerana08409.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
+          "checkedAt": 1790656205799
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-insects-apis-cerana-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/insects-apis-cerana.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "ec2574ee28aa31a161e6be823dbd92804e2896338556329a59cc7f68e826393b",
+          "license": "CC BY-SA 4.0",
+          "creator": "Vengolis",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-animals-sus-scrofa",
+      "vietnameseName": "Lợn rừng",
+      "scientificName": "Sus scrofa",
+      "categoryId": "animals",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Sus scrofa. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 7705930,
+      "gbifVietnamOccurrenceCount": 131,
+      "wikidataId": "Q58697",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q58697",
+          "title": "Wikipedia tiếng Việt: Lợn rừng",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/L%E1%BB%A3n_r%E1%BB%ABng",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "wikidata-q58697",
+          "title": "Wikidata taxon linkage: Sus scrofa",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q58697",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "gbif-taxon-7705930",
+          "title": "GBIF Backbone Taxonomy: Sus scrofa",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/7705930",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "gbif-vn-7705930",
+          "title": "GBIF occurrences in Viet Nam: Sus scrofa",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=7705930",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "commons-sus-scrofa",
+          "title": "Wikimedia Commons media: Sus scrofa piglet.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Sus_scrofa_piglet.jpg",
+          "checkedAt": 1790656205800
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-animals-sus-scrofa-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Sus_scrofa_piglet.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/animals-sus-scrofa.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "a94d1b5d7ba76065f0ea4788fd89f3ad87e9950caef7a14e7cf00dedf344aabb",
+          "license": "CC BY-SA 2.0",
+          "creator": "Sander van der Wel",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-danger-aedes-aegypti",
+      "vietnameseName": "Aedes aegypti",
+      "scientificName": "Aedes aegypti",
+      "categoryId": "danger",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Aedes aegypti. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": true,
+      "sourceCount": 6,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": true,
+      "gbifTaxonKey": 1651891,
+      "gbifVietnamOccurrenceCount": 291,
+      "wikidataId": "Q1148004",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q1148004",
+          "title": "Wikipedia tiếng Việt: Aedes aegypti",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Aedes_aegypti",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "wikidata-q1148004",
+          "title": "Wikidata taxon linkage: Aedes aegypti",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q1148004",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "gbif-taxon-1651891",
+          "title": "GBIF Backbone Taxonomy: Aedes aegypti",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/1651891",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "gbif-vn-1651891",
+          "title": "GBIF occurrences in Viet Nam: Aedes aegypti",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "commons-aedes-aegypti",
+          "title": "Wikimedia Commons media: Aedes aegypti (83920).jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Aedes_aegypti_(83920).jpg",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "who-dengue-aedes-safety",
+          "title": "Dengue and severe dengue — vector and health-risk evidence",
+          "publisher": "World Health Organization",
+          "uri": "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue",
+          "checkedAt": 1790656205800
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-danger-aedes-aegypti-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Aedes_aegypti_(83920).jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/danger-aedes-aegypti.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "dd22664242b8aee32cc0eac20a1b02f98472a983768dc72be49af6209d50d910",
+          "license": "CC BY-SA 3.0",
+          "creator": "Dr. Chinchu C.",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

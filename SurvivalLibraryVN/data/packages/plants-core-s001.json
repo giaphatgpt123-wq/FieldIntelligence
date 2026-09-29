@@ -1,0 +1,452 @@
+{
+  "packageId": "plants-core-s001",
+  "version": 1,
+  "schemaVersion": 2,
+  "records": [
+    {
+      "id": "canary-vegetables-ipomoea-aquatica",
+      "vietnameseName": "Rau muống",
+      "scientificName": "Ipomoea aquatica",
+      "categoryId": "vegetables",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Ipomoea aquatica. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 2928525,
+      "gbifVietnamOccurrenceCount": 123,
+      "wikidataId": "Q272754",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q272754",
+          "title": "Wikipedia tiếng Việt: Rau muống",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Rau_mu%E1%BB%91ng",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "wikidata-q272754",
+          "title": "Wikidata taxon linkage: Ipomoea aquatica",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q272754",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-taxon-2928525",
+          "title": "GBIF Backbone Taxonomy: Ipomoea aquatica",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/2928525",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-vn-2928525",
+          "title": "GBIF occurrences in Viet Nam: Ipomoea aquatica",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "commons-ipomoea-aquatica",
+          "title": "Wikimedia Commons media: Ipomoea aquatica kz01.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Ipomoea_aquatica_kz01.jpg",
+          "checkedAt": 1790656205798
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-vegetables-ipomoea-aquatica-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Ipomoea_aquatica_kz01.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/vegetables-ipomoea-aquatica.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "fa1fd95607c14f14c2f300808a069d517536bc8ea4feb04d804666d865a1e940",
+          "license": "CC BY-SA 4.0",
+          "creator": "Krzysztof Ziarnek, Kenraiz",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-roots-colocasia-esculenta",
+      "vietnameseName": "Khoai môn",
+      "scientificName": "Colocasia esculenta",
+      "categoryId": "roots",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Colocasia esculenta. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 5330776,
+      "gbifVietnamOccurrenceCount": 51,
+      "wikidataId": "Q227997",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q227997",
+          "title": "Wikipedia tiếng Việt: Khoai môn",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Khoai_m%C3%B4n",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "wikidata-q227997",
+          "title": "Wikidata taxon linkage: Colocasia esculenta",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q227997",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-taxon-5330776",
+          "title": "GBIF Backbone Taxonomy: Colocasia esculenta",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/5330776",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-vn-5330776",
+          "title": "GBIF occurrences in Viet Nam: Colocasia esculenta",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "commons-colocasia-esculenta",
+          "title": "Wikimedia Commons media: Colocasia esculenta dsc07801.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Colocasia_esculenta_dsc07801.jpg",
+          "checkedAt": 1790656205798
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-roots-colocasia-esculenta-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Colocasia_esculenta_dsc07801.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/roots-colocasia-esculenta.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "3b567fd50c0d579f8f4a4ddc0d34d849310d71bdeed08f9fc123552c9fb5df8d",
+          "license": "CC BY-SA 3.0",
+          "creator": "Wikimedia Commons contributor",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-fruit-crops-mangifera-indica",
+      "vietnameseName": "Xoài (cây)",
+      "scientificName": "Mangifera indica",
+      "categoryId": "fruit-crops",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Mangifera indica. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 3190638,
+      "gbifVietnamOccurrenceCount": 163,
+      "wikidataId": "Q3919027",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q3919027",
+          "title": "Wikipedia tiếng Việt: Xoài (cây)",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Xo%C3%A0i_(c%C3%A2y)",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "wikidata-q3919027",
+          "title": "Wikidata taxon linkage: Mangifera indica",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q3919027",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-taxon-3190638",
+          "title": "GBIF Backbone Taxonomy: Mangifera indica",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/3190638",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-vn-3190638",
+          "title": "GBIF occurrences in Viet Nam: Mangifera indica",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3190638",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "commons-mangifera-indica",
+          "title": "Wikimedia Commons media: Mangifera indica old.JPG",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Mangifera_indica_old.JPG",
+          "checkedAt": 1790656205798
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-fruit-crops-mangifera-indica-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Mangifera_indica_old.JPG",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/fruit-crops-mangifera-indica.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "4b7f2878320a19a3696e73aa46b5e2949660f17a61cce76d72820e024a32b50a",
+          "license": "CC BY-SA 3.0",
+          "creator": "B.navez",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-flowers-nelumbo-nucifera",
+      "vietnameseName": "Sen hồng",
+      "scientificName": "Nelumbo nucifera",
+      "categoryId": "flowers",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Nelumbo nucifera. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 2882449,
+      "gbifVietnamOccurrenceCount": 465,
+      "wikidataId": "Q16528",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q16528",
+          "title": "Wikipedia tiếng Việt: Sen hồng",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Sen_h%E1%BB%93ng",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "wikidata-q16528",
+          "title": "Wikidata taxon linkage: Nelumbo nucifera",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q16528",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-taxon-2882449",
+          "title": "GBIF Backbone Taxonomy: Nelumbo nucifera",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/2882449",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "gbif-vn-2882449",
+          "title": "GBIF occurrences in Viet Nam: Nelumbo nucifera",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2882449",
+          "checkedAt": 1790656205798
+        },
+        {
+          "sourceKey": "commons-nelumbo-nucifera",
+          "title": "Wikimedia Commons media: Nelumbo nucifera 01.JPG",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Nelumbo_nucifera_01.JPG",
+          "checkedAt": 1790656205798
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-flowers-nelumbo-nucifera-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Nelumbo_nucifera_01.JPG",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/flowers-nelumbo-nucifera.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "1dcad44c6e969db57d574800c8d8f079b6276b7899e5617d6cf41d872db0699a",
+          "license": "CC BY-SA 3.0",
+          "creator": "Prenn",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-timber-trees-hopea-odorata",
+      "vietnameseName": "Sao đen",
+      "scientificName": "Hopea odorata",
+      "categoryId": "timber-trees",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Hopea odorata. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 5669231,
+      "gbifVietnamOccurrenceCount": 41,
+      "wikidataId": "Q150518",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q150518",
+          "title": "Wikipedia tiếng Việt: Sao đen",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/Sao_%C4%91en",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "wikidata-q150518",
+          "title": "Wikidata taxon linkage: Hopea odorata",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q150518",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-taxon-5669231",
+          "title": "GBIF Backbone Taxonomy: Hopea odorata",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/5669231",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-vn-5669231",
+          "title": "GBIF occurrences in Viet Nam: Hopea odorata",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5669231",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "commons-hopea-odorata",
+          "title": "Wikimedia Commons media: Hopea odorata Sao den.JPG",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Hopea_odorata_Sao_den.JPG",
+          "checkedAt": 1790656205799
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-timber-trees-hopea-odorata-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Hopea_odorata_Sao_den.JPG",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/timber-trees-hopea-odorata.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "ed7f2ea2b13593d8011151dc7b1483fe473c2f888a73578d5f61b76640201b47",
+          "license": "CC BY-SA 3.0",
+          "creator": "Hungda",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "id": "canary-medicinal-plants-zingiber-officinale",
+      "vietnameseName": "Gừng",
+      "scientificName": "Zingiber officinale",
+      "categoryId": "medicinal-plants",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Zingiber officinale. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 6,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 2757280,
+      "gbifVietnamOccurrenceCount": 53,
+      "wikidataId": "Q35625",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q35625",
+          "title": "Wikipedia tiếng Việt: Gừng",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/G%E1%BB%ABng",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "wikidata-q35625",
+          "title": "Wikidata taxon linkage: Zingiber officinale",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q35625",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "gbif-taxon-2757280",
+          "title": "GBIF Backbone Taxonomy: Zingiber officinale",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/2757280",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "gbif-vn-2757280",
+          "title": "GBIF occurrences in Viet Nam: Zingiber officinale",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2757280",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "commons-zingiber-officinale",
+          "title": "Wikimedia Commons media: Zingiber officinale 1123783.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_1123783.jpg",
+          "checkedAt": 1790656205800
+        },
+        {
+          "sourceKey": "moh-traditional-medicine-listing",
+          "title": "Danh mục dược liệu theo nguồn Bộ Y tế Việt Nam",
+          "publisher": "Bộ Y tế Việt Nam",
+          "uri": "https://emohbackup.moh.gov.vn/publish/attach/getfile/412855",
+          "checkedAt": 1790656205800
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-medicinal-plants-zingiber-officinale-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_1123783.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/medicinal-plants-zingiber-officinale.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "b31e8feec85c03c19a1dd6f78129f6abbd5bdc598375f96f9d88a8b83e553e8a",
+          "license": "CC BY-SA 4.0",
+          "creator": "Colin Meurk",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

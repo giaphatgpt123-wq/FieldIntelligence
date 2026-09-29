@@ -1,0 +1,80 @@
+{
+  "packageId": "mushrooms-core-s001",
+  "version": 1,
+  "schemaVersion": 2,
+  "records": [
+    {
+      "id": "canary-mushrooms-pleurotus-pulmonarius",
+      "vietnameseName": "Nấm sò trắng",
+      "scientificName": "Pleurotus pulmonarius",
+      "categoryId": "mushrooms",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Pleurotus pulmonarius. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 2526548,
+      "gbifVietnamOccurrenceCount": 13,
+      "wikidataId": "Q1261868",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q1261868",
+          "title": "Wikipedia tiếng Việt: Nấm sò trắng",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/N%E1%BA%A5m_s%C3%B2_tr%E1%BA%AFng",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "wikidata-q1261868",
+          "title": "Wikidata taxon linkage: Pleurotus pulmonarius",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q1261868",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-taxon-2526548",
+          "title": "GBIF Backbone Taxonomy: Pleurotus pulmonarius",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/2526548",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-vn-2526548",
+          "title": "GBIF occurrences in Viet Nam: Pleurotus pulmonarius",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "commons-pleurotus-pulmonarius",
+          "title": "Wikimedia Commons media: Pleurotus pulmonarius LC0228.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Pleurotus_pulmonarius_LC0228.jpg",
+          "checkedAt": 1790656205799
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-mushrooms-pleurotus-pulmonarius-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Pleurotus_pulmonarius_LC0228.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/mushrooms-pleurotus-pulmonarius.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "00e3b086c4d3e9d47497be915be6ba76177aa5b3eb57c11cef9a291e7f63e8e2",
+          "license": "CC BY-SA 3.0 de",
+          "creator": "Jörg Hempel",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

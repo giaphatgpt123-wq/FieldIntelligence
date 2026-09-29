@@ -1,0 +1,153 @@
+{
+  "packageId": "aquatic-core-s001",
+  "version": 1,
+  "schemaVersion": 2,
+  "records": [
+    {
+      "id": "canary-freshwater-fish-anabas-testudineus",
+      "vietnameseName": "Cá rô đồng",
+      "scientificName": "Anabas testudineus",
+      "categoryId": "freshwater-fish",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Anabas testudineus. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 2391579,
+      "gbifVietnamOccurrenceCount": 198,
+      "wikidataId": "Q10540515",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q10540515",
+          "title": "Wikipedia tiếng Việt: Cá rô đồng",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/C%C3%A1_r%C3%B4_%C4%91%E1%BB%93ng",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "wikidata-q10540515",
+          "title": "Wikidata taxon linkage: Anabas testudineus",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q10540515",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-taxon-2391579",
+          "title": "GBIF Backbone Taxonomy: Anabas testudineus",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/2391579",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-vn-2391579",
+          "title": "GBIF occurrences in Viet Nam: Anabas testudineus",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2391579",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "commons-anabas-testudineus",
+          "title": "Wikimedia Commons media: Anabas testudineus.png",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Anabas_testudineus.png",
+          "checkedAt": 1790656205799
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-freshwater-fish-anabas-testudineus-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Anabas_testudineus.png",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/freshwater-fish-anabas-testudineus.png",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "39ad82ec6cb989a63972bcc40e5f142a77b8f89f210a4237899ad7b00b78a9cb",
+          "license": "CC BY 3.0",
+          "creator": "Sahat Ratmuangkhwang",
+          "rightsHolder": "",
+          "mimeType": "image/png"
+        }
+      ]
+    },
+    {
+      "id": "canary-marine-life-penaeus-monodon",
+      "vietnameseName": "Tôm sú",
+      "scientificName": "Penaeus monodon",
+      "categoryId": "marine-life",
+      "usageLevel": "CHUA_PHAN_LOAI",
+      "verificationState": "DA_PHAT_HANH",
+      "summary": "Hồ sơ dữ liệu thật canary. Tên khoa học: Penaeus monodon. Định danh, tên Việt, hiện diện tại Việt Nam và ảnh đã đối chiếu nguồn; chưa phát hành công dụng/cách dùng.",
+      "highRisk": false,
+      "sourceCount": 5,
+      "published": true,
+      "vietnamRelevant": true,
+      "verifiedVietnameseName": true,
+      "verifiedIdentitySource": true,
+      "verifiedMedia": true,
+      "hasUsageClaim": false,
+      "verifiedUsageSource": false,
+      "verifiedSafetySource": false,
+      "gbifTaxonKey": 8406925,
+      "gbifVietnamOccurrenceCount": 10,
+      "wikidataId": "Q578204",
+      "sources": [
+        {
+          "sourceKey": "viwiki-name-q578204",
+          "title": "Wikipedia tiếng Việt: Tôm sú",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://vi.wikipedia.org/wiki/T%C3%B4m_s%C3%BA",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "wikidata-q578204",
+          "title": "Wikidata taxon linkage: Penaeus monodon",
+          "publisher": "Wikimedia Foundation",
+          "uri": "https://www.wikidata.org/entity/Q578204",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-taxon-8406925",
+          "title": "GBIF Backbone Taxonomy: Penaeus monodon",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/species/8406925",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "gbif-vn-8406925",
+          "title": "GBIF occurrences in Viet Nam: Penaeus monodon",
+          "publisher": "GBIF Secretariat",
+          "uri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
+          "checkedAt": 1790656205799
+        },
+        {
+          "sourceKey": "commons-penaeus-monodon",
+          "title": "Wikimedia Commons media: Penaeus monodon.jpg",
+          "publisher": "Wikimedia Commons",
+          "uri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
+          "checkedAt": 1790656205799
+        }
+      ],
+      "media": [
+        {
+          "mediaId": "canary-marine-life-penaeus-monodon-01",
+          "sourceUri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
+          "downloadUri": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/marine-life-penaeus-monodon.jpg",
+          "verified": true,
+          "angleLabel": "Ảnh đại diện nhận dạng — nguồn mở đã kiểm tra license",
+          "checksum": "be0ac4c4ab9803efc83237fe4a44c9529592cd6bac0936fdbef0e30467e365a5",
+          "license": "CC BY-SA 3.0",
+          "creator": "self",
+          "rightsHolder": "",
+          "mimeType": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}
