@@ -13,6 +13,9 @@ import re
 import sys
 import time
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_real_canary_samples_v3 as v3  # noqa: E402
@@ -62,6 +65,49 @@ _pool_cache: dict[str, list[dict]] = {}
 _focused_cache: dict[tuple[str, str], list[dict]] = {}
 _last_commons_call = 0.0
 _last_media_download = 0.0
+
+
+def fetch_bytes_bounded(url: str, *, accept: str = "*/*", max_bytes: int | None = None) -> tuple[bytes, str]:
+    """Network fetch for canary discovery with bounded backoff.
+
+    The older helper honored upstream Retry-After literally, including 600s.
+    That can make a single rejected thumbnail stall the whole quality run. Media
+    429s therefore fail immediately so collect_media can try another candidate;
+    API/transient server failures get only short bounded retries.
+    """
+    last: Exception | None = None
+    for attempt in range(3):
+        try:
+            request = Request(url, headers={"User-Agent": v3.core.USER_AGENT, "Accept": accept})
+            with urlopen(request, timeout=v3.core.TIMEOUT) as response:
+                declared = response.headers.get("Content-Length")
+                if max_bytes and declared and int(declared) > max_bytes:
+                    raise RuntimeError(f"download quá lớn: {declared} bytes")
+                data = response.read(max_bytes + 1 if max_bytes else -1)
+                if max_bytes and len(data) > max_bytes:
+                    raise RuntimeError(f"download vượt {max_bytes} bytes")
+                return data, response.headers.get_content_type()
+        except HTTPError as exc:
+            last = exc
+            host = urlparse(url).netloc
+            if exc.code == 429 and host == "upload.wikimedia.org":
+                raise RuntimeError("Wikimedia media rate-limit; bỏ candidate này") from exc
+            if exc.code not in {429, 500, 502, 503, 504}:
+                raise
+            retry_after = exc.headers.get("Retry-After") if exc.headers else None
+            requested = int(retry_after) if retry_after and retry_after.isdigit() else 2 ** attempt
+            delay = min(requested, 5)
+            print(f"[canary] HTTP {exc.code}; retry giới hạn {delay}s: {host}", file=sys.stderr)
+            time.sleep(delay)
+        except URLError as exc:
+            last = exc
+            time.sleep(min(2 ** attempt, 5))
+    raise RuntimeError(f"không tải được sau bounded retry: {last}")
+
+
+# v3/core helpers resolve this module attribute at call time, so the canary v4
+# run gets bounded retry without changing the older stable builders.
+v3.core.fetch_bytes = fetch_bytes_bounded
 
 
 def _throttle_commons() -> None:
