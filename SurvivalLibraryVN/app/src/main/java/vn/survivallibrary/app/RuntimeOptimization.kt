@@ -165,6 +165,12 @@ class LibrarySyncJobService : JobService() {
 object MediaCachePolicy {
     private const val MEDIA_CACHE_DIR = "library-media"
 
+    private data class CacheFile(
+        val file: File,
+        val size: Long,
+        val modifiedAt: Long
+    )
+
     fun cacheDirectory(context: Context): File = File(context.cacheDir, MEDIA_CACHE_DIR).apply { mkdirs() }
 
     fun budgetBytes(context: Context): Long {
@@ -173,21 +179,31 @@ object MediaCachePolicy {
 
     fun currentBytes(context: Context): Long = directorySize(cacheDirectory(context))
 
+    /**
+     * Scan the cache exactly once. The previous implementation first calculated directorySize()
+     * and then walked the whole tree again to collect/sort files. At a multi-GB cache with many
+     * small images that doubled filesystem traversal cost. We now collect lightweight metadata
+     * and total bytes in the same pass, sorting only when the cache is actually over budget.
+     */
     fun trimToBudget(context: Context): Long {
         val root = cacheDirectory(context)
         val budget = budgetBytes(context)
-        var total = directorySize(root)
+        val files = ArrayList<CacheFile>()
+        var total = 0L
+
+        root.walkTopDown().forEach { file ->
+            if (file.isFile) {
+                val size = file.length().coerceAtLeast(0L)
+                total += size
+                files.add(CacheFile(file, size, file.lastModified()))
+            }
+        }
+
         if (total <= budget) return total
-
-        val files = root.walkTopDown()
-            .filter { it.isFile }
-            .sortedBy { it.lastModified() }
-            .toList()
-
-        for (file in files) {
+        files.sortBy { it.modifiedAt }
+        for (entry in files) {
             if (total <= budget) break
-            val size = file.length()
-            if (file.delete()) total -= size
+            if (entry.file.delete()) total -= entry.size
         }
         return total.coerceAtLeast(0L)
     }
