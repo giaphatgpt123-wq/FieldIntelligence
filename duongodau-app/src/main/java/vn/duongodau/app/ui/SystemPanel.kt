@@ -39,7 +39,12 @@ private val PanelWarning = Color(0xFFE58A16)
 private val PanelDanger = Color(0xFFD94B4B)
 
 @Composable
-fun SystemPanel(initialBridgeText: String = "") {
+fun SystemPanel(
+    initialBridgeText: String = "",
+    initialLatitude: Double? = null,
+    initialLongitude: Double? = null,
+    incomingSource: String? = null
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var checking by remember { mutableStateOf(false) }
@@ -48,6 +53,8 @@ fun SystemPanel(initialBridgeText: String = "") {
     var installResult by remember { mutableStateOf<InstallResult?>(null) }
     var bridgeText by remember(initialBridgeText) { mutableStateOf(initialBridgeText) }
     var bridgeStatus by remember { mutableStateOf<String?>(null) }
+
+    val hasIncomingCoordinate = initialLatitude != null && initialLongitude != null
 
     fun checkNow() {
         scope.launch {
@@ -123,10 +130,30 @@ fun SystemPanel(initialBridgeText: String = "") {
                 ) {
                     Text("Liên thông với ứng dụng khác", fontWeight = FontWeight.Bold, color = PanelTeal)
                     Text(
-                        "Có thể nhận chia sẻ/deep link từ app khác; khi mở app đích sẽ thử native app trước rồi tự rơi về ứng dụng phù hợp hoặc web.",
+                        "Nhận Share/deep link từ app khác; chuẩn hóa tên, link bản đồ và tọa độ. Khi mở app đích sẽ thử handler phù hợp trước rồi tự rơi về web nếu cần.",
                         color = PanelSlate,
                         fontSize = 12.sp
                     )
+
+                    if (!incomingSource.isNullOrBlank()) {
+                        val coordinateText = if (hasIncomingCoordinate) {
+                            " • ${"%.6f".format(initialLatitude)}, ${"%.6f".format(initialLongitude)}"
+                        } else ""
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = PanelGood.copy(alpha = 0.08f),
+                            border = BorderStroke(1.dp, PanelGood.copy(alpha = 0.25f))
+                        ) {
+                            Text(
+                                "Đã nhận từ: $incomingSource$coordinateText",
+                                modifier = Modifier.padding(9.dp),
+                                color = PanelGood,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+
                     OutlinedTextField(
                         value = bridgeText,
                         onValueChange = { bridgeText = it },
@@ -135,20 +162,40 @@ fun SystemPanel(initialBridgeText: String = "") {
                         label = { Text("Tên đường / địa điểm để liên thông") },
                         placeholder = { Text("Ví dụ: QL20, Trần Phú, Đà Lạt") }
                     )
+
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(
                             onClick = {
-                                bridgeStatus = describe(AppInterop.openGoogleMapsSearch(context, bridgeText))
+                                bridgeStatus = if (hasIncomingCoordinate) {
+                                    describe(
+                                        AppInterop.openNavigation(
+                                            context,
+                                            initialLatitude!!,
+                                            initialLongitude!!,
+                                            bridgeText.ifBlank { "Vị trí được chia sẻ" }
+                                        )
+                                    )
+                                } else {
+                                    describe(AppInterop.openGoogleMapsSearch(context, bridgeText))
+                                }
                             },
-                            enabled = bridgeText.isNotBlank(),
+                            enabled = bridgeText.isNotBlank() || hasIncomingCoordinate,
                             modifier = Modifier.weight(1f),
                             colors = ButtonDefaults.buttonColors(containerColor = PanelTeal)
-                        ) { Text("Mở Maps") }
+                        ) { Text(if (hasIncomingCoordinate) "Mở vị trí" else "Mở Maps") }
+
                         OutlinedButton(
                             onClick = {
-                                bridgeStatus = describe(AppInterop.shareRoad(context, bridgeText, null, null))
+                                bridgeStatus = describe(
+                                    AppInterop.shareRoad(
+                                        context,
+                                        bridgeText.ifBlank { "Vị trí được chia sẻ" },
+                                        initialLatitude,
+                                        initialLongitude
+                                    )
+                                )
                             },
-                            enabled = bridgeText.isNotBlank(),
+                            enabled = bridgeText.isNotBlank() || hasIncomingCoordinate,
                             modifier = Modifier.weight(1f)
                         ) { Text("Chia sẻ") }
                     }
