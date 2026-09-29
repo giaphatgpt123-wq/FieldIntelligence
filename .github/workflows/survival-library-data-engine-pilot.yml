@@ -5,12 +5,15 @@ on:
     branches:
       - survival-library-vn
       - feature/data-engine-v2d-staging-bridge
+      - 'fix/data-engine-*'
     paths:
       - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_runtime.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
+      - 'SurvivalLibraryVN/data/staging/curated_canary_media.json'
       - '.github/workflows/survival-library-data-engine-pilot.yml'
   workflow_dispatch:
 
@@ -55,9 +58,11 @@ jobs:
           print('Pilot seed OK: 12 entities / 48 independent tasks')
           PY
 
-      - name: Collect independent evidence tasks
+      - name: Collect independent evidence tasks with bounded runtime
+        env:
+          DATA_ENGINE_HTTP_TIMEOUT: '20'
         run: |
-          python SurvivalLibraryVN/tools/data_engine_v2.py \
+          python SurvivalLibraryVN/tools/data_engine_v2_runtime.py \
             --tasks SurvivalLibraryVN/data/staging/pilot-12-tasks.json \
             --output SurvivalLibraryVN/data/staging/latest-collector-results.json \
             --health-file SurvivalLibraryVN/data/staging/source-health-pipeline.json \
@@ -87,6 +92,7 @@ jobs:
           completed = sum(1 for t in snapshot['tasks'] if t['status'] == 'COMPLETED')
           evidence = json.loads((root / 'evidence-store.json').read_text(encoding='utf-8'))['evidenceCount']
           print(f'Pilot snapshot: completed={completed} retry={retry} blocked={blocked} evidence={evidence}')
+          assert blocked == 0, 'Pilot must not introduce BLOCKED tasks'
           PY
 
       - name: Commit partial progress without waiting for all 48 tasks
@@ -103,9 +109,6 @@ jobs:
             echo "No staging progress changes to commit."
           else
             git commit -m "Update Data Engine V2 pilot staging progress"
-            # The feature/app branch can advance while a network collection is running.
-            # Rebase only the generated progress commit onto the latest branch tip so an
-            # unrelated code push does not make a successful collection fail at git push.
             git fetch origin "${GITHUB_REF_NAME}"
             git rebase "origin/${GITHUB_REF_NAME}"
             git push origin HEAD:"${GITHUB_REF_NAME}"
