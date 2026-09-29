@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 """Harden schema-v3 canary discovery for visual review.
 
-This wrapper pins the user's review taxa so failures cannot silently swap Gừng,
-Lợn rừng, Rau muống, Cá rô đồng or Ong nội for easier substitutes. It also cuts
-Wikimedia API calls by reusing a per-taxon media pool and only doing one focused
-fallback search per missing role.
+Pins the user's review taxa so failures cannot silently swap Gừng, Lợn rừng,
+Rau muống, Cá rô đồng or Ong nội for easier substitutes. Wikimedia calls are
+cached/throttled, and recognition text is extracted from the sourced Vietnamese
+article instead of being invented from an image label.
 """
 
 from __future__ import annotations
 
+import re
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_real_canary_samples_v3 as v3  # noqa: E402
 
-# Do not silently replace the records explicitly used for human visual review.
 PINNED_TAXA = {
     "vegetables": "Ipomoea aquatica",
     "freshwater-fish": "Anabas testudineus",
@@ -26,16 +27,15 @@ PINNED_TAXA = {
 for category, scientific_name in PINNED_TAXA.items():
     v3.core.CANDIDATES[category] = [scientific_name]
 
-# Prefer a mushroom with a richer public diagnostic image corpus.
 v3.core.CANDIDATES["mushrooms"] = [
     "Pleurotus ostreatus",
     "Pleurotus pulmonarius",
     "Volvariella volvacea",
 ]
 
-# Whole form + underside are hard minimum for mushrooms. STIPE remains requested
-# as an extra view, but lack of a separately-labelled stipe image alone does not
-# discard an otherwise rich six-image diagnostic set.
+# Generic mushroom minimum: whole fruiting body + underside. A separately
+# labelled stipe image remains desirable but should not falsely block a rich
+# six-image set when the stipe is already visible in whole-body images.
 v3.CATEGORY_POLICY["mushrooms"] = {
     "required": ["WHOLE", "UNDERSIDE"],
     "primary": "WHOLE",
@@ -47,10 +47,20 @@ v3.SPECIES_EXTRA_ROLES["Volvariella volvacea"] = ["STIPE", "HABITAT"]
 
 _pool_cache: dict[str, list[dict]] = {}
 _focused_cache: dict[tuple[str, str], list[dict]] = {}
+_last_commons_call = 0.0
+
+
+def _throttle() -> None:
+    global _last_commons_call
+    elapsed = time.monotonic() - _last_commons_call
+    if elapsed < 1.1:
+        time.sleep(1.1 - elapsed)
+    _last_commons_call = time.monotonic()
 
 
 def generic_pool(scientific_name: str) -> list[dict]:
     if scientific_name not in _pool_cache:
+        _throttle()
         _pool_cache[scientific_name] = v3.commons_candidates(scientific_name, "", 50)
     return _pool_cache[scientific_name]
 
@@ -65,16 +75,69 @@ def role_candidates_cached(scientific_name: str, role: str) -> list[dict]:
     if matching:
         return matching
 
-    # One focused query only. The previous implementation could make several
-    # calls per role and repeatedly hit Commons HTTP 429.
     key = (scientific_name, role)
     if key not in _focused_cache:
         focused_term = v3.ROLE_TERMS.get(role, [""])[0]
+        _throttle()
         _focused_cache[key] = v3.commons_candidates(scientific_name, focused_term, 30)
     return _focused_cache[key]
 
 
 v3.role_candidates = role_candidates_cached
+
+MORPHOLOGY_WORDS = (
+    "lá", "thân", "rễ", "củ", "thân rễ", "hoa", "quả", "hạt", "vỏ", "mũ",
+    "phiến", "cuống", "mang", "vây", "miệng", "đầu", "mõm", "lông", "cánh",
+    "râu", "chân", "màu", "dài", "cao", "rộng", "kích thước", "hình dạng",
+)
+
+
+def sourced_features(text: str) -> list[str]:
+    if not text:
+        return []
+    cleaned = " ".join(text.split())
+    sentences = re.split(r"(?<=[.!?])\s+", cleaned)
+    selected: list[str] = []
+    for sentence in sentences:
+        lowered = sentence.casefold()
+        if not any(word in lowered for word in MORPHOLOGY_WORDS):
+            continue
+        sentence = sentence.strip()
+        if not (35 <= len(sentence) <= 260):
+            continue
+        if sentence not in selected:
+            selected.append(sentence)
+        if len(selected) >= 5:
+            break
+    return selected
+
+
+_original_build_record = v3.build_record
+
+
+def build_record_grounded(item: dict) -> tuple[dict, dict]:
+    record, audit = _original_build_record(item)
+    source_text = " ".join(str(item.get("wikiExtract") or "").split())
+    roles = record.get("requiredViewRoles", [])
+    role_text = ", ".join(v3.ROLE_LABELS.get(role, role) for role in roles)
+    if source_text:
+        record["identificationSummary"] = (
+            source_text[:850]
+            + ("…" if len(source_text) > 850 else "")
+            + f"\n\nKhi đối chiếu ảnh, phải kiểm tra đồng thời: {role_text}."
+        )
+        record["keyFeatures"] = sourced_features(source_text)
+    else:
+        record["identificationSummary"] = (
+            f"Chưa có mô tả hình thái tiếng Việt đủ mạnh. Chỉ cho phép đối chiếu các góc đã kiểm chứng: {role_text}; "
+            "không kết luận từ một ảnh duy nhất."
+        )
+        record["keyFeatures"] = []
+    audit["groundedFeatureCount"] = len(record["keyFeatures"])
+    return record, audit
+
+
+v3.build_record = build_record_grounded
 
 if __name__ == "__main__":
     raise SystemExit(v3.main())
