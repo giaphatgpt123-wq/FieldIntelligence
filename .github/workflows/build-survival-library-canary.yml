@@ -7,6 +7,7 @@ on:
       - survival-library-vn
     paths:
       - "SurvivalLibraryVN/tools/build_real_canary_samples_v3.py"
+      - "SurvivalLibraryVN/tools/build_real_canary_samples_v4.py"
       - "SurvivalLibraryVN/tools/fix_canary_vietnamese_names.py"
       - ".github/workflows/build-survival-library-canary.yml"
 
@@ -33,7 +34,7 @@ jobs:
           python-version: "3.12"
 
       - name: Build 1 real record per category
-        run: python SurvivalLibraryVN/tools/build_real_canary_samples_v3.py
+        run: python SurvivalLibraryVN/tools/build_real_canary_samples_v4.py
 
       - name: Apply authoritative Vietnamese display names
         run: python SurvivalLibraryVN/tools/fix_canary_vietnamese_names.py
@@ -50,7 +51,13 @@ jobs:
           d = json.loads(p.read_text(encoding='utf-8'))
           print(f"Canary records: {d['recordCount']}")
           for r in d['records']:
-              print(f"- {r['categoryLabel']}: {r['vietnameseName']} / {r['scientificName']} | GBIF VN={r['gbifVietnamOccurrenceCount']} | {r['commonsLicense']} | {r['mediaBytes']} bytes")
+              roles = ','.join(r.get('requiredViewRoles', []))
+              print(
+                  f"- {r['categoryLabel']}: {r['vietnameseName']} / {r['scientificName']} "
+                  f"| GBIF VN={r['gbifVietnamOccurrenceCount']} "
+                  f"| images={r.get('mediaCount', 0)} | required={roles} "
+                  f"| primary={r.get('primaryViewRole', '')}"
+              )
           PY
 
       - name: Commit validated canary data
@@ -64,6 +71,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No canary changes to commit."
           else
-            git commit -m "Publish validated real canary library samples"
+            git commit -m "Publish validated multi-view canary library samples"
             git push origin HEAD:survival-library-vn
           fi
