@@ -55,6 +55,21 @@ class LibraryRulesTest {
     }
 
     @Test
+    fun priorityFeedRejectsUnsourcedUsageClassification() {
+        val snapshot = LibraryQualitySnapshot(
+            vietnamRelevant = true,
+            usageLevel = UsageLevel.THUONG_DUNG,
+            verificationState = VerificationState.DA_KIEM_CHUNG,
+            verifiedVietnameseName = true,
+            verifiedIdentitySource = true,
+            verifiedMedia = true,
+            verifiedUsageSource = false
+        )
+
+        assertFalse(LibraryRules.mayAppearInVietnamPriorityFeed(snapshot))
+    }
+
+    @Test
     fun verifiedCommonRecordMayAppearInPriorityFeed() {
         val snapshot = LibraryQualitySnapshot(
             vietnamRelevant = true,
@@ -62,7 +77,8 @@ class LibraryRulesTest {
             verificationState = VerificationState.DA_KIEM_CHUNG,
             verifiedVietnameseName = true,
             verifiedIdentitySource = true,
-            verifiedMedia = true
+            verifiedMedia = true,
+            verifiedUsageSource = true
         )
 
         assertTrue(LibraryRules.mayAppearInVietnamPriorityFeed(snapshot))

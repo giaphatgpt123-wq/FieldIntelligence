@@ -78,6 +78,11 @@ object LibraryRules {
     fun publicationDecision(snapshot: LibraryQualitySnapshot): PublicationDecision {
         val blockers = buildList {
             if (!snapshot.vietnamRelevant) add("Chưa xác nhận mức liên quan tại Việt Nam")
+            if (snapshot.usageLevel == UsageLevel.CHUA_PHAN_LOAI) {
+                add("Mức độ sử dụng chưa được phân loại")
+            } else if (!snapshot.verifiedUsageSource) {
+                add("Mức độ sử dụng chưa có nguồn đối chiếu")
+            }
             if (!snapshot.verifiedVietnameseName) add("Tên tiếng Việt chưa được đối chiếu")
             if (!snapshot.verifiedIdentitySource) add("Chưa có nguồn xác minh định danh/taxonomy")
             if (!snapshot.verifiedMedia) add("Chưa có ảnh đúng đối tượng đã kiểm tra nguồn")
@@ -101,6 +106,7 @@ object LibraryRules {
     fun mayAppearInVietnamPriorityFeed(snapshot: LibraryQualitySnapshot): Boolean {
         if (!snapshot.vietnamRelevant) return false
         if (snapshot.usageLevel == UsageLevel.CHUA_PHAN_LOAI) return false
+        if (!snapshot.verifiedUsageSource) return false
         if (!snapshot.verifiedVietnameseName || !snapshot.verifiedMedia) return false
         return snapshot.verificationState.rank >= VerificationState.DA_KIEM_CHUNG.rank
     }
