@@ -1,0 +1,65 @@
+name: Build SurvivalLibraryVN Real Canary
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - survival-library-vn
+    paths:
+      - "SurvivalLibraryVN/tools/build_real_canary_samples.py"
+      - ".github/workflows/build-survival-library-canary.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: survival-library-real-canary
+  cancel-in-progress: true
+
+jobs:
+  build-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: survival-library-vn
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build 1 real record per category
+        run: python SurvivalLibraryVN/tools/build_real_canary_samples.py
+
+      - name: Validate generated shards and media
+        run: python SurvivalLibraryVN/tools/validate_data_packages.py
+
+      - name: Show canary summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('SurvivalLibraryVN/data/canary-selection.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          print(f"Canary records: {d['recordCount']}")
+          for r in d['records']:
+              print(f"- {r['categoryLabel']}: {r['vietnameseName']} / {r['scientificName']} | GBIF VN={r['gbifVietnamOccurrenceCount']} | {r['commonsLicense']} | {r['mediaBytes']} bytes")
+          PY
+
+      - name: Commit validated canary data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add SurvivalLibraryVN/data/update-index.json \
+                  SurvivalLibraryVN/data/packages \
+                  SurvivalLibraryVN/data/media/canary \
+                  SurvivalLibraryVN/data/canary-selection.json
+          if git diff --cached --quiet; then
+            echo "No canary changes to commit."
+          else
+            git commit -m "Publish validated real canary library samples"
+            git push origin HEAD:survival-library-vn
+          fi
