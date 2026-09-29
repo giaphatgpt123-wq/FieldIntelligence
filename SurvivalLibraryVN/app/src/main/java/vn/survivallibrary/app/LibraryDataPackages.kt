@@ -83,6 +83,8 @@ data class PackageValidationResult(
 
 object LibraryDataPackages {
     const val SUPPORTED_SCHEMA_VERSION = 1
+    const val MAX_RECORDS_PER_SHARD = 2_000
+    private val SHARD_SUFFIX = Regex("^\\d{3,6}$")
 
     val catalog: List<LibraryPackageDescriptor> = listOf(
         LibraryPackageDescriptor(
@@ -117,19 +119,61 @@ object LibraryDataPackages {
         )
     )
 
-    fun descriptor(packageId: String): LibraryPackageDescriptor? = catalog.firstOrNull { it.packageId == packageId }
+    /**
+     * Package IDs may be base IDs (plants-core) or immutable shards
+     * (plants-core-s001, plants-core-s002...). A shard update replaces only that shard.
+     */
+    fun basePackageId(packageId: String): String? {
+        catalog.firstOrNull { it.packageId == packageId }?.let { return it.packageId }
+        return catalog.firstOrNull { descriptor ->
+            val prefix = "${descriptor.packageId}-s"
+            packageId.startsWith(prefix) && packageId.removePrefix(prefix).matches(SHARD_SUFFIX)
+        }?.packageId
+    }
 
+    fun descriptor(packageId: String): LibraryPackageDescriptor? {
+        val base = basePackageId(packageId) ?: return null
+        return catalog.firstOrNull { it.packageId == base }
+    }
+
+    fun isShard(packageId: String): Boolean {
+        val base = basePackageId(packageId) ?: return false
+        return base != packageId
+    }
+
+    /** Aggregate shard state for compact package-management UI. */
     fun merge(installed: List<InstalledPackageState>): List<LibraryPackageUiState> {
-        val byId = installed.associateBy { it.packageId }
-        return catalog.map { descriptor -> LibraryPackageUiState(descriptor, byId[descriptor.packageId]) }
+        val grouped = installed.groupBy { basePackageId(it.packageId) ?: it.packageId }
+        return catalog.map { descriptor ->
+            val states = grouped[descriptor.packageId].orEmpty()
+            val aggregate = if (states.isEmpty()) null else InstalledPackageState(
+                packageId = descriptor.packageId,
+                version = states.maxOf { it.version },
+                status = when {
+                    states.any { it.status == PackageInstallStatus.BLOCKED } -> PackageInstallStatus.BLOCKED
+                    states.any { it.status == PackageInstallStatus.UPDATE_AVAILABLE } -> PackageInstallStatus.UPDATE_AVAILABLE
+                    states.all { it.status == PackageInstallStatus.INSTALLED } -> PackageInstallStatus.INSTALLED
+                    else -> PackageInstallStatus.NOT_INSTALLED
+                },
+                recordCount = states.sumOf { it.recordCount },
+                verifiedCount = states.sumOf { it.verifiedCount },
+                installedAt = states.maxOf { it.installedAt },
+                checksum = if (states.size == 1) states.first().checksum else "",
+                sourceUri = if (states.size == 1) states.first().sourceUri else ""
+            )
+            LibraryPackageUiState(descriptor, aggregate)
+        }
     }
 
     fun validate(manifest: LibraryPackageManifest): PackageValidationResult {
         val blockers = buildList {
-            if (catalog.none { it.packageId == manifest.packageId }) add("Gói dữ liệu không thuộc danh mục được phép")
+            if (descriptor(manifest.packageId) == null) add("Gói dữ liệu không thuộc danh mục hoặc shard được phép")
             if (manifest.version <= 0) add("Phiên bản gói không hợp lệ")
             if (manifest.schemaVersion != SUPPORTED_SCHEMA_VERSION) add("Phiên bản cấu trúc dữ liệu không được hỗ trợ")
             if (manifest.recordCount < 0) add("Số hồ sơ không hợp lệ")
+            if (manifest.recordCount > MAX_RECORDS_PER_SHARD) {
+                add("Gói vượt $MAX_RECORDS_PER_SHARD hồ sơ; phải chia shard nhỏ hơn")
+            }
             if (manifest.verifiedCount < 0 || manifest.verifiedCount > manifest.recordCount) add("Số hồ sơ kiểm chứng không hợp lệ")
             if (!manifest.sha256.matches(Regex("^[a-fA-F0-9]{64}$"))) add("Thiếu hoặc sai SHA-256")
             if (!manifest.sourceUri.startsWith("https://")) add("Nguồn cập nhật phải dùng HTTPS")

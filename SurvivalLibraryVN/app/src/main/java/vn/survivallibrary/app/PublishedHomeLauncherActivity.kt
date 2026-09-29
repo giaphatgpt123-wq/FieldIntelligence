@@ -10,15 +10,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.Space
 import android.widget.TextView
 
 /**
  * Production launcher for the PUBLISHED library.
  * The first frame is pure native Views; database reads happen only after setContentView().
+ * List/media rendering is bounded by OptimizedPublishedBaseActivity.
  */
-class PublishedHomeLauncherActivity : PublishedBaseActivity() {
+class PublishedHomeLauncherActivity : OptimizedPublishedBaseActivity() {
     private lateinit var statusText: TextView
     private lateinit var recentHolder: LinearLayout
     private lateinit var categoryHolder: LinearLayout
@@ -66,7 +65,6 @@ class PublishedHomeLauncherActivity : PublishedBaseActivity() {
         content.addView(space(14))
         content.addView(notice("Chỉ hồ sơ PUBLISHED trong database được hiển thị. Dữ liệu DEMO không được trộn vào thư viện thật."))
 
-        // scrollContent() already attached content as the ScrollView's single child.
         root.addView(scroll, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         root.addView(buildBottomNav(), LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(70)))
         applyNativeRoot(root)
@@ -125,7 +123,7 @@ class PublishedHomeLauncherActivity : PublishedBaseActivity() {
         })
         addView(titles, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         addView(iconButton(NativeIcon.SEARCH) {
-            startActivity(Intent(this@PublishedHomeLauncherActivity, PublishedSearchActivity::class.java))
+            startActivity(Intent(this@PublishedHomeLauncherActivity, PagedPublishedSearchActivity::class.java))
         }, LinearLayout.LayoutParams(dp(46), dp(46)))
     }
 
@@ -164,7 +162,7 @@ class PublishedHomeLauncherActivity : PublishedBaseActivity() {
         background = roundedSolid(paper, 18)
         isClickable = true
         isFocusable = true
-        setOnClickListener { startActivity(Intent(this@PublishedHomeLauncherActivity, PublishedSearchActivity::class.java)) }
+        setOnClickListener { startActivity(Intent(this@PublishedHomeLauncherActivity, PagedPublishedSearchActivity::class.java)) }
         addView(NativeIconView(this@PublishedHomeLauncherActivity, NativeIcon.SEARCH, forest), LinearLayout.LayoutParams(dp(23), dp(23)))
         addView(text("Tìm tên tiếng Việt trong dữ liệu đã phát hành…", 12.2f, muted, false).apply {
             setPadding(dp(10), 0, 0, 0)
@@ -194,9 +192,9 @@ class PublishedHomeLauncherActivity : PublishedBaseActivity() {
         isClickable = true
         isFocusable = true
         setOnClickListener {
-            startActivity(Intent(this@PublishedHomeLauncherActivity, PublishedCategoryActivity::class.java).apply {
-                putExtra(PublishedCategoryActivity.EXTRA_TITLE, label)
-                putExtra(PublishedCategoryActivity.EXTRA_CATEGORY_IDS, categoryIds.toTypedArray())
+            startActivity(Intent(this@PublishedHomeLauncherActivity, PagedPublishedCategoryActivity::class.java).apply {
+                putExtra(PagedPublishedCategoryActivity.EXTRA_TITLE, label)
+                putExtra(PagedPublishedCategoryActivity.EXTRA_CATEGORY_IDS, categoryIds.toTypedArray())
             })
         }
         addView(NativeIconView(this@PublishedHomeLauncherActivity, icon, forest), LinearLayout.LayoutParams(dp(27), dp(27)))
@@ -227,9 +225,9 @@ class PublishedHomeLauncherActivity : PublishedBaseActivity() {
                 isClickable = true
                 isFocusable = true
                 setOnClickListener {
-                    startActivity(Intent(this@PublishedHomeLauncherActivity, PublishedCategoryActivity::class.java).apply {
-                        putExtra(PublishedCategoryActivity.EXTRA_TITLE, category.label)
-                        putExtra(PublishedCategoryActivity.EXTRA_CATEGORY_IDS, arrayOf(category.id))
+                    startActivity(Intent(this@PublishedHomeLauncherActivity, PagedPublishedCategoryActivity::class.java).apply {
+                        putExtra(PagedPublishedCategoryActivity.EXTRA_TITLE, category.label)
+                        putExtra(PagedPublishedCategoryActivity.EXTRA_CATEGORY_IDS, arrayOf(category.id))
                     })
                 }
                 addView(NativeIconView(this@PublishedHomeLauncherActivity, icon, forest2), LinearLayout.LayoutParams(dp(27), dp(27)))
@@ -255,13 +253,13 @@ class PublishedHomeLauncherActivity : PublishedBaseActivity() {
         setBackgroundColor(paper)
         addView(navItem(NativeIcon.HOME, "Trang chủ") {}, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
         addView(navItem(NativeIcon.GRID, "Danh mục") {
-            startActivity(Intent(this@PublishedHomeLauncherActivity, PublishedCategoryActivity::class.java))
+            startActivity(Intent(this@PublishedHomeLauncherActivity, PagedPublishedCategoryActivity::class.java))
         }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
         addView(navItem(NativeIcon.CAMERA, "Quét ảnh") {
             startActivity(Intent(this@PublishedHomeLauncherActivity, NativeCameraActivity::class.java))
         }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
         addView(navItem(NativeIcon.BOOKMARK, "Đã lưu") {
-            startActivity(Intent(this@PublishedHomeLauncherActivity, PublishedSavedActivity::class.java))
+            startActivity(Intent(this@PublishedHomeLauncherActivity, PagedPublishedSavedActivity::class.java))
         }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
         addView(navItem(NativeIcon.REFRESH, "Cập nhật") {
             startActivity(Intent(this@PublishedHomeLauncherActivity, NativeUpdateActivity::class.java))

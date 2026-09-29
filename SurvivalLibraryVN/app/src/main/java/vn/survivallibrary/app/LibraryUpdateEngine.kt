@@ -85,11 +85,10 @@ object LibraryUpdateIndexParser {
 object LibraryUpdateEngine {
     const val UPDATE_INDEX_URL = "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/update-index.json"
 
-    // Text-only update packages must stay small and shardable. These guards prevent an
-    // accidental or malformed index/package from exhausting the app heap.
+    // Keep text packages deliberately small so updates are cheap, restartable and RAM-safe.
     private const val MAX_INDEX_BYTES = 512 * 1024
-    private const val MAX_PACKAGE_BYTES = 16 * 1024 * 1024
-    private const val MAX_RECORDS_PER_PACKAGE = 10_000
+    private const val MAX_PACKAGE_BYTES = 8 * 1024 * 1024
+    private const val MAX_RECORDS_PER_PACKAGE = LibraryDataPackages.MAX_RECORDS_PER_SHARD
     private val allowedInitialHosts = setOf("raw.githubusercontent.com", "github.com")
 
     fun checkAndUpdate(context: Context): UpdateRunResult {
@@ -126,7 +125,7 @@ object LibraryUpdateEngine {
             candidates.forEach { remote ->
                 try {
                     require(remote.recordCount in 0..MAX_RECORDS_PER_PACKAGE) {
-                        "Gói vượt giới hạn $MAX_RECORDS_PER_PACKAGE hồ sơ; cần chia nhỏ gói"
+                        "Gói vượt giới hạn $MAX_RECORDS_PER_PACKAGE hồ sơ; cần chia nhỏ thành shard"
                     }
 
                     val manifest = LibraryPackageManifest(
@@ -141,7 +140,6 @@ object LibraryUpdateEngine {
                     val packageDecision = LibraryDataPackages.validate(manifest)
                     require(packageDecision.valid) { packageDecision.blockers.joinToString("; ") }
 
-                    // Validate descriptor before allocating memory for the package body.
                     validateInitialDownloadUrl(remote.packageUrl)
                     val bytes = downloadBytes(remote.packageUrl, MAX_PACKAGE_BYTES)
                     val actualSha = sha256(bytes)
@@ -194,7 +192,7 @@ object LibraryUpdateEngine {
         connection.connectTimeout = 15_000
         connection.readTimeout = 30_000
         connection.instanceFollowRedirects = true
-        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.14")
+        connection.setRequestProperty("User-Agent", "SurvivalLibraryVN/0.15")
         return try {
             val code = connection.responseCode
             require(code in 200..299) { "HTTP $code" }
