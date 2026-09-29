@@ -4,11 +4,14 @@ on:
   push:
     branches:
       - survival-library-vn
-      - feature/data-engine-v2b-source-adapters
+      - 'feature/data-engine-*'
     paths:
       - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2_state.py'
+      - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
       - '.github/workflows/survival-library-data-engine-v2.yml'
   pull_request:
@@ -16,8 +19,11 @@ on:
       - survival-library-vn
     paths:
       - 'SurvivalLibraryVN/tools/data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2.py'
+      - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2_state.py'
+      - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
       - '.github/workflows/survival-library-data-engine-v2.yml'
   workflow_dispatch:
@@ -38,25 +44,31 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile collector
-        run: python -m py_compile SurvivalLibraryVN/tools/data_engine_v2.py
+      - name: Compile collector and state bridge
+        run: |
+          python -m py_compile SurvivalLibraryVN/tools/data_engine_v2.py
+          python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_state.py
 
       - name: Unit tests without network
-        run: python -m unittest discover -s SurvivalLibraryVN/tools/tests -p 'test_data_engine_v2.py' -v
+        run: python -m unittest discover -s SurvivalLibraryVN/tools/tests -p 'test_data_engine_v2*.py' -v
 
-      - name: Validate source registry
+      - name: Validate source registry and pilot seed
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('SurvivalLibraryVN/tools/data_engine_v2_sources.json')
-          d = json.loads(p.read_text(encoding='utf-8'))
-          assert d['schemaVersion'] == 1
-          ids = [s['id'] for s in d['sources']]
+          registry = json.loads(Path('SurvivalLibraryVN/tools/data_engine_v2_sources.json').read_text(encoding='utf-8'))
+          assert registry['schemaVersion'] == 1
+          ids = [s['id'] for s in registry['sources']]
           assert len(ids) == len(set(ids)), 'duplicate source id'
-          assert any(s['tier'] == 'OFFICIAL_VIETNAM' for s in d['sources'])
-          assert any(s.get('adapter') == 'gbif' and s.get('automated') for s in d['sources'])
-          assert any(s.get('adapter') == 'worms' and s.get('automated') for s in d['sources'])
-          assert any(s.get('adapter') == 'inaturalist' and s.get('automated') for s in d['sources'])
-          print(f'Source registry OK: {len(ids)} sources')
+          assert any(s['tier'] == 'OFFICIAL_VIETNAM' for s in registry['sources'])
+          assert any(s.get('adapter') == 'gbif' and s.get('automated') for s in registry['sources'])
+          assert any(s.get('adapter') == 'worms' and s.get('automated') for s in registry['sources'])
+          assert any(s.get('adapter') == 'inaturalist' and s.get('automated') for s in registry['sources'])
+
+          tasks = json.loads(Path('SurvivalLibraryVN/data/staging/pilot-12-tasks.json').read_text(encoding='utf-8'))
+          assert len(tasks) == 48
+          assert len({t['taskId'] for t in tasks}) == 48
+          assert len({t['canonicalId'] for t in tasks}) == 12
+          print(f'Registry OK: {len(ids)} sources · pilot 12 entities / 48 tasks')
           PY
