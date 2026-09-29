@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -312,31 +313,25 @@ private fun SearchPanel(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text("Chọn khu vực", fontWeight = FontWeight.Bold, fontSize = 17.sp)
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Box(Modifier.weight(1f)) {
-                    AdminDropdown(
-                        label = "Tỉnh / Thành",
-                        selected = selectedProvince?.name,
-                        options = provinces,
-                        enabled = true,
-                        onSelected = onProvinceSelected
-                    )
-                }
-                Box(Modifier.weight(1f)) {
-                    AdminDropdown(
-                        label = "Xã / Phường",
-                        selected = selectedCommune?.name,
-                        options = communes,
-                        enabled = selectedProvince != null && communes.isNotEmpty(),
-                        onSelected = onCommuneSelected
-                    )
-                }
-            }
+            AdminDropdown(
+                label = "Tỉnh / Thành phố",
+                selected = selectedProvince?.name,
+                options = provinces,
+                enabled = true,
+                onSelected = onProvinceSelected
+            )
+            AdminDropdown(
+                label = "Xã / Phường / Đặc khu",
+                selected = selectedCommune?.name,
+                options = communes,
+                enabled = selectedProvince != null && communes.isNotEmpty(),
+                onSelected = onCommuneSelected
+            )
 
             OutlinedTextField(
                 value = searchText,
                 onValueChange = onSearchTextChanged,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                 label = { Text("Tên đường / mã đường") },
                 placeholder = { Text("Ví dụ: Trần Phú, QL20, ĐT725...") },
                 singleLine = true,
@@ -353,7 +348,7 @@ private fun SearchPanel(
             Button(
                 onClick = onSearch,
                 enabled = searchText.isNotBlank(),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Orange, contentColor = Navy)
             ) {
@@ -392,11 +387,13 @@ private fun RoadIntelligenceGrid(searched: Boolean) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             InfoTile("Loại đường", if (searched) "Chưa xác minh" else "—", "▰", Modifier.weight(1f))
-            InfoTile("Chất liệu", if (searched) "UNKNOWN" else "—", "▤", Modifier.weight(1f))
-            InfoTile("Tình trạng", if (searched) "UNKNOWN" else "—", "≋", Modifier.weight(1f))
+            InfoTile("Mặt đường", if (searched) "Chưa rõ" else "—", "▤", Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            InfoTile("Tải trọng", if (searched) "UNKNOWN" else "—", "⚖", Modifier.weight(1f))
+            InfoTile("Tình trạng", if (searched) "Chưa rõ" else "—", "≋", Modifier.weight(1f))
+            InfoTile("Tải trọng", if (searched) "Chưa rõ" else "—", "⚖", Modifier.weight(1f))
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             InfoTile("Kết nối", if (searched) "Đang kiểm" else "—", "⌘", Modifier.weight(1f))
             InfoTile("Cầu / Phà", if (searched) "Đang kiểm" else "—", "⌁", Modifier.weight(1f))
         }
@@ -405,11 +402,11 @@ private fun RoadIntelligenceGrid(searched: Boolean) {
 
 @Composable
 private fun InfoTile(title: String, value: String, symbol: String, modifier: Modifier = Modifier) {
-    ElevatedCard(modifier = modifier.height(104.dp), shape = RoundedCornerShape(18.dp)) {
+    ElevatedCard(modifier = modifier.heightIn(min = 100.dp), shape = RoundedCornerShape(18.dp)) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(symbol, color = Teal, fontWeight = FontWeight.Black, fontSize = 18.sp)
-            Text(title, color = Slate, fontSize = 11.sp, maxLines = 1)
-            Text(value, color = Ink, fontWeight = FontWeight.Bold, fontSize = 13.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(title, color = Slate, fontSize = 13.sp, maxLines = 1)
+            Text(value, color = Ink, fontWeight = FontWeight.Bold, fontSize = 15.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
     }
 }
@@ -556,13 +553,14 @@ private fun AdminDropdown(
     onSelected: (AdminUnit) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var filter by remember { mutableStateOf("") }
     Box(Modifier.fillMaxWidth()) {
         OutlinedButton(
-            onClick = { expanded = true },
+            onClick = { filter = ""; expanded = true },
             enabled = enabled,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
-            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 13.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp)
         ) {
             Text(
                 selected ?: label,
@@ -570,19 +568,46 @@ private fun AdminDropdown(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
-            Text("⌄")
+            Text("⌄", fontSize = 18.sp)
         }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option.name) },
-                    onClick = {
-                        onSelected(option)
-                        expanded = false
+    }
+    if (expanded) {
+        AlertDialog(
+            onDismissRequest = { expanded = false },
+            title = { Text(label, fontWeight = FontWeight.Bold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = filter,
+                        onValueChange = { filter = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Nhập tên để tìm") },
+                        singleLine = true
+                    )
+                    val matches = remember(options, filter) {
+                        options.filter { it.name.contains(filter.trim(), ignoreCase = true) }
                     }
-                )
+                    LazyColumn(modifier = Modifier.heightIn(max = 360.dp)) {
+                        items(matches, key = { it.code }) { option ->
+                            Text(
+                                option.name,
+                                modifier = Modifier.fillMaxWidth().clickable {
+                                    onSelected(option)
+                                    expanded = false
+                                }.padding(vertical = 15.dp, horizontal = 8.dp),
+                                fontSize = 16.sp
+                            )
+                        }
+                        if (matches.isEmpty()) item {
+                            Text("Không tìm thấy khu vực", color = Slate, modifier = Modifier.padding(12.dp))
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { expanded = false }) { Text("Đóng") }
             }
-        }
+        )
     }
 }
 
@@ -629,7 +654,7 @@ private fun BottomPanelNav(selected: Int, onSelected: (Int) -> Unit) {
                     Text(
                         item.first,
                         color = if (selected == index) OrangeSoft else Color.White.copy(alpha = 0.74f),
-                        fontSize = 10.sp
+                        fontSize = 12.sp
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(
