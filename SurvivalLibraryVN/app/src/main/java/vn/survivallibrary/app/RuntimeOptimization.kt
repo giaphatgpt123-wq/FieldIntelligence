@@ -7,6 +7,8 @@ import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Runtime policies agreed for the production direction:
@@ -45,7 +47,7 @@ object RuntimePolicyStore {
     fun setSyncMode(context: Context, mode: LibrarySyncMode) {
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
             .edit().putString(KEY_SYNC_MODE, mode.name).apply()
-        LibrarySyncScheduler.reconcile(context)
+        runCatching { LibrarySyncScheduler.reconcile(context) }
     }
 
     fun storageProfile(context: Context): StorageProfile {
@@ -58,7 +60,7 @@ object RuntimePolicyStore {
     fun setStorageProfile(context: Context, profile: StorageProfile) {
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE)
             .edit().putString(KEY_STORAGE_PROFILE, profile.name).apply()
-        MediaCachePolicy.trimToBudget(context)
+        Thread({ runCatching { MediaCachePolicy.trimToBudget(context.applicationContext) } }, "library-cache-trim").start()
     }
 
     fun recordLibrarySync(context: Context, result: UpdateRunResult) {
@@ -118,30 +120,40 @@ object LibrarySyncScheduler {
 }
 
 class LibrarySyncJobService : JobService() {
-    @Volatile private var stopped = false
+    /**
+     * Keep cancellation state per JobScheduler job. A single shared boolean is unsafe because
+     * one-shot and periodic jobs can overlap on some devices, and a newly started job could
+     * accidentally re-enable completion of an older stopped worker.
+     */
+    private val cancelledJobs = ConcurrentHashMap<Int, AtomicBoolean>()
 
     override fun onStartJob(params: JobParameters): Boolean {
-        stopped = false
-        Thread {
+        val cancelled = AtomicBoolean(false)
+        cancelledJobs[params.jobId] = cancelled
+
+        Thread({
             var retry = false
             try {
-                if (!stopped && RuntimePolicyStore.syncMode(this) == LibrarySyncMode.WIFI_AUTO) {
+                if (!cancelled.get() && RuntimePolicyStore.syncMode(this) == LibrarySyncMode.WIFI_AUTO) {
                     val result = LibraryUpdateEngine.checkAndUpdate(applicationContext)
-                    RuntimePolicyStore.recordLibrarySync(applicationContext, result)
-                    MediaCachePolicy.trimToBudget(applicationContext)
-                    retry = !result.checked && result.errors.isNotEmpty()
+                    if (!cancelled.get()) {
+                        RuntimePolicyStore.recordLibrarySync(applicationContext, result)
+                        MediaCachePolicy.trimToBudget(applicationContext)
+                        retry = !result.checked && result.errors.isNotEmpty()
+                    }
                 }
             } catch (_: Throwable) {
                 retry = true
             } finally {
-                if (!stopped) jobFinished(params, retry)
+                cancelledJobs.remove(params.jobId, cancelled)
+                if (!cancelled.get()) jobFinished(params, retry)
             }
-        }.start()
+        }, "library-sync-${params.jobId}").start()
         return true
     }
 
     override fun onStopJob(params: JobParameters): Boolean {
-        stopped = true
+        cancelledJobs.remove(params.jobId)?.set(true)
         return true
     }
 }
