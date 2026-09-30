@@ -176,7 +176,20 @@
           "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+10257%3A2014",
           "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam"
         }
-      ]
+      ],
+      "fields": {
+        "VIETNAM_DISTRIBUTION": [
+          {
+            "value": {
+              "countryCode": "VN",
+              "status": "cultivated",
+              "scope": "nhiều vùng miền trên cả nước"
+            },
+            "sourceUri": "https://tthc.most.gov.vn/index.php/ban_b/article/view/93",
+            "publisher": "Tạp chí Khoa học và Công nghệ Việt Nam - Bộ Khoa học và Công nghệ"
+          }
+        ]
+      }
     },
     {
       "scientificName": "Naja kaouthia",
