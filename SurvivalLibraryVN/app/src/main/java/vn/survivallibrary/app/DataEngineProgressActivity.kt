@@ -67,7 +67,7 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
     private fun load() {
         val generation = ++loadGeneration
         Thread {
-            val engine = DataEngineProgressRepository.snapshot(applicationContext)
+            val engine = DataEngineProgressSqlRepository.snapshot(applicationContext)
             val published = PublishedLibraryRepository.snapshot(applicationContext, 1)
             runOnUiThread {
                 if (generation != loadGeneration || isFinishing || isDestroyed) return@runOnUiThread
@@ -110,9 +110,9 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
                 holder.addView(entityCard(entity))
                 if (index != minOf(engine.entities.size, 30) - 1) holder.addView(space(8))
             }
-            if (engine.entities.size > 30) {
+            if (engine.stagedEntities > 30) {
                 holder.addView(space(7))
-                holder.addView(text("Đang hiển thị 30/${engine.entities.size} hồ sơ ưu tiên xử lý.", 10f, muted, false))
+                holder.addView(text("Đang hiển thị 30/${engine.stagedEntities} hồ sơ ưu tiên xử lý.", 10f, muted, false))
             }
         }
 
