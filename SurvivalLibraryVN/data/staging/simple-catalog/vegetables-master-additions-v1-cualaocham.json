@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "sourceScope": "Cù Lao Chàm",
+  "additions": [
+    {
+      "canonicalNameVi": "Rau cu",
+      "scientificName": "Nephrolepis falcata (Cav.) C.Chr.",
+      "state": "NEW_CANONICAL_PROFILE_COMPLETED",
+      "source": "https://vafs.gov.vn/vn/wp-content/uploads/sites/2/2014/04/2.No4_.bai-Pham-Thi-Kim-Thoa.pdf",
+      "note": "Tên chưa có trong organized master v5; điều tra Cù Lao Chàm ghi trực tiếp Rau cu = Nephrolepis falcata và lá non được sử dụng. Kew 2026 backbone hiện ghi native range Philippines, vì vậy giữ cờ đối chiếu voucher/distribution trước phát hành cuối."
+    },
+    {
+      "searchName": "Tim lang",
+      "state": "REGIONAL_NAME_COLLISION_DO_NOT_ADD_SINGLE_CANONICAL_YET",
+      "regionalTargets": [
+        {"region":"Cù Lao Chàm, Quảng Nam","scientificName":"Barringtonia macrostachya (Jack) Kurz"},
+        {"region":"một số nguồn Việt Nam khác","scientificName":"Barringtonia racemosa (L.) Spreng."}
+      ],
+      "rule": "REGION_REQUIRED_BEFORE_PROFILE_MATCH"
+    },
+    {
+      "canonicalNameVi": "Đọt choại",
+      "scientificName": "Stenochlaena palustris (Burm.f.) Bedd.",
+      "state": "EXISTING_CANONICAL_IDENTITY_RESOLVED_AND_PROFILE_COMPLETED",
+      "aliases": ["Rau choại", "Rau chạy", "Đọt chạy", "Dây choại"],
+      "note": "Không phải Rau dớn/Diplazium esculentum; giữ hai hồ sơ riêng."
+    }
+  ],
+  "metricEffect": {
+    "canonicalBefore": 256,
+    "newCanonicalAdded": 1,
+    "canonicalAfter": 257,
+    "reason": "Bổ sung Rau cu; Đọt choại đã có sẵn trong master nên không tăng canonical; Tim lang chưa tăng vì còn collision theo vùng."
+  },
+  "state": "ADDITIONS_RECORDED"
+}
