@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 11,
-  "generatedAt": 1790738894621,
+  "version": 12,
+  "generatedAt": 1790739367553,
   "categoryId": "vegetables",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Rau muống",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790738894621
+      "updatedAt": 1790739367553
     }
   ],
   "aliases": [
@@ -22,7 +22,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790738864011
+      "updatedAt": 1790739325667
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790738894621
+      "updatedAt": 1790739367553
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790738864011,
+      "updatedAt": 1790739325667,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790738865689,
+      "updatedAt": 1790739330777,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790738864011,
+      "updatedAt": 1790739325667,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790738864553,
+      "updatedAt": 1790739329706,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738864011
+      "updatedAt": 1790739325667
     },
     {
       "taskId": "taxon:ipomoea-aquatica:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738864553
+      "updatedAt": 1790739329706
     },
     {
       "taskId": "taxon:ipomoea-aquatica:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738865689
+      "updatedAt": 1790739330777
     },
     {
       "taskId": "taxon:ipomoea-aquatica:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738864011
+      "updatedAt": 1790739325667
     }
   ]
 }

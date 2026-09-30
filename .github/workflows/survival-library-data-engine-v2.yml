@@ -40,6 +40,9 @@ on:
 permissions:
   contents: read
 
+env:
+  DATA_ENGINE_TASK_SEED: SurvivalLibraryVN/data/staging/pilot-12-tasks.json
+
 jobs:
   test-data-engine:
     runs-on: ubuntu-latest
@@ -65,11 +68,12 @@ jobs:
       - name: Unit tests without network
         run: python -m unittest discover -s SurvivalLibraryVN/tools/tests -p 'test_data_engine_v2*.py' -v
 
-      - name: Validate source registry and pilot seed
+      - name: Validate source registry and active task seed
         run: |
           python - <<'PY'
-          import json
+          import json, os
           from pathlib import Path
+
           registry = json.loads(Path('SurvivalLibraryVN/tools/data_engine_v2_sources.json').read_text(encoding='utf-8'))
           assert registry['schemaVersion'] == 1
           ids = [s['id'] for s in registry['sources']]
@@ -80,9 +84,20 @@ jobs:
           assert any(s.get('adapter') == 'worms' and s.get('automated') for s in registry['sources'])
           assert any(s.get('adapter') == 'inaturalist' and s.get('automated') for s in registry['sources'])
 
-          tasks = json.loads(Path('SurvivalLibraryVN/data/staging/pilot-12-tasks.json').read_text(encoding='utf-8'))
-          assert len(tasks) == 48
-          assert len({t['taskId'] for t in tasks}) == 48
-          assert len({t['canonicalId'] for t in tasks}) == 12
-          print(f'Registry OK: {len(ids)} sources · pilot 12 entities / 48 tasks')
+          seed = Path(os.environ['DATA_ENGINE_TASK_SEED'])
+          tasks = json.loads(seed.read_text(encoding='utf-8'))
+          assert tasks, 'task seed must not be empty'
+          task_ids = [t['taskId'] for t in tasks]
+          entities = {t['canonicalId'] for t in tasks}
+          assert len(task_ids) == len(set(task_ids)), 'duplicate task id'
+          assert all(t.get('categoryId') for t in tasks), 'categoryId is required'
+          required = {'CANONICAL_IDENTITY','VIETNAMESE_ALIASES','VIETNAM_DISTRIBUTION','MEDIA_PRIMARY'}
+          for entity in entities:
+              fields = {t['field'] for t in tasks if t['canonicalId'] == entity}
+              assert fields == required, (entity, fields)
+          categories = {t['categoryId'] for t in tasks}
+          print(
+              f'Registry OK: {len(ids)} sources · '
+              f'active seed {len(entities)} entities / {len(tasks)} tasks / {len(categories)} categories'
+          )
           PY
