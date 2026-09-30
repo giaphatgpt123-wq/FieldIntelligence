@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "resolutionDate": "2026-09-30",
+  "scope": "Cù Lao Chàm",
+  "source": "Phạm Thị Kim Thoa & Nguyễn Thị Kim Yến - danh lục 43 loài rau rừng Cù Lao Chàm",
+  "items": [
+    {
+      "nameVi": "Bươm bướm",
+      "scientificName": "Mussaenda cambodiana Pierre ex Pit.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "YOUNG_LEAVES_CONFIRMED_AS_WILD_VEGETABLE",
+      "mediaState": "INSUFFICIENT_TWO_VERIFIED_OPEN_FIELD_IMAGES",
+      "note": "Nguồn Cù Lao Chàm ghi trực tiếp Bươm bướm = Mussaenda cambodiana; Kew xác nhận taxon và Việt Nam trong vùng phân bố."
+    },
+    {
+      "nameVi": "Rau Sứng",
+      "canonicalSearchName": "Rau xứng",
+      "scientificName": "Strophioblachia fimbricalyx Boerl.",
+      "identityState": "IDENTITY_CONFIRMED_ORTHOGRAPHIC_NORMALIZATION_REQUIRED",
+      "foodUseState": "YOUNG_LEAVES_AND_SHOOTS_CONFIRMED",
+      "mediaState": "INSUFFICIENT_TWO_VERIFIED_OPEN_FIELD_IMAGES",
+      "note": "Ưu tiên chính tả Rau Sứng theo công trình HCMUE 2020; giữ Rau xứng/Mồng sa ria làm từ khóa tìm kiếm nếu nguồn địa phương dùng."
+    },
+    {
+      "nameVi": "Kim cang",
+      "identityState": "REGIONAL_NAME_COLLISION",
+      "candidateTaxa": ["Smilax zeylanica L.", "Smilax bauhinioides Kunth"],
+      "mediaState": "BLOCKED_UNTIL_LOCAL_NAME_TO_TAXON_RESOLVED",
+      "note": "Danh lục Cù Lao Chàm có đồng thời hai loài Smilax; nguồn khác của Việt Nam cũng dùng Kim cang cho nhiều loài Smilax. Không suy đoán một taxon duy nhất."
+    },
+    {
+      "nameVi": "Thành ngạnh",
+      "identityState": "REGIONAL_NAME_COLLISION",
+      "regionalTargets": [
+        {"region":"Pù Luông, Thanh Hóa","scientificName":"Cratoxylum formosum (Jack) Benth. & Hook.f. ex Dyer"},
+        {"region":"Cù Lao Chàm, Quảng Nam","scientificName":"Cratoxylum maingayi Dyer"}
+      ],
+      "rule": "REGION_REQUIRED_BEFORE_PROFILE_MATCH",
+      "note": "Hồ sơ Thành ngạnh hiện đã hoàn thiện từ nguồn Pù Luông chỉ có giá trị cho identity đó; không tự động áp cho Cù Lao Chàm."
+    },
+    {
+      "nameVi": "Đỏ ngọn",
+      "scientificName": "Glochidion zeylanicum (Gaertn.) A.Juss.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "YOUNG_LEAVES_CONFIRMED_AS_WILD_VEGETABLE",
+      "mediaState": "OPEN_MEDIA_EXISTS_LICENSE_PAIR_NOT_YET_LOCKED"
+    },
+    {
+      "nameVi": "Rau đậu",
+      "identityState": "LOCAL_NAME_CONFIRMED_TAXON_UNRESOLVED",
+      "mediaState": "BLOCKED_UNTIL_TAXON_RESOLVED"
+    },
+    {
+      "nameVi": "Rau nho",
+      "identityState": "LOCAL_NAME_CONFIRMED_TAXON_UNRESOLVED",
+      "mediaState": "BLOCKED_UNTIL_TAXON_RESOLVED"
+    },
+    {
+      "nameVi": "Cánh ngạnh",
+      "identityState": "LOCAL_NAME_CONFIRMED_TAXON_UNRESOLVED",
+      "mediaState": "BLOCKED_UNTIL_TAXON_RESOLVED"
+    },
+    {
+      "nameVi": "Rau bìm bìm",
+      "identityState": "LOCAL_NAME_CONFIRMED_TAXON_UNRESOLVED",
+      "mediaState": "BLOCKED_UNTIL_TAXON_RESOLVED"
+    },
+    {
+      "nameVi": "Rau săn",
+      "identityState": "LOCAL_NAME_CONFIRMED_TAXON_UNRESOLVED",
+      "mediaState": "BLOCKED_UNTIL_TAXON_RESOLVED"
+    }
+  ],
+  "state": "RESOLUTION_RECORDED"
+}
