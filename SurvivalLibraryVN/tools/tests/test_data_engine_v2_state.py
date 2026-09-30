@@ -10,6 +10,7 @@ sys.path.insert(0, str(TOOLS))
 from data_engine_v2_state import (  # noqa: E402
     DEFAULT_TASKS,
     build_snapshot,
+    effective_task_status,
     field_verified,
     merge_evidence,
     vietnam_distribution_evidence_verified,
@@ -95,6 +96,30 @@ class DataEngineV2StateTests(unittest.TestCase):
     def test_default_task_seed_is_active_not_canary_baseline(self):
         self.assertEqual("active-tasks.json", DEFAULT_TASKS.name)
 
+    def test_retry_with_persisted_evidence_keeps_completed_collection_state(self):
+        evidence_by_field = {
+            ("taxon:x", "MEDIA_PRIMARY"): [{"sourceId": "inaturalist", "value": {"url": "https://example.org/a.jpg"}}]
+        }
+        self.assertEqual(
+            "COMPLETED",
+            effective_task_status("RETRY", "taxon:x", "MEDIA_PRIMARY", evidence_by_field),
+        )
+
+    def test_retry_without_persisted_evidence_stays_retry(self):
+        self.assertEqual(
+            "RETRY",
+            effective_task_status("RETRY", "taxon:x", "MEDIA_PRIMARY", {}),
+        )
+
+    def test_blocked_is_never_softened_by_existing_evidence(self):
+        evidence_by_field = {
+            ("taxon:x", "MEDIA_PRIMARY"): [{"sourceId": "old", "value": {"url": "https://example.org/a.jpg"}}]
+        }
+        self.assertEqual(
+            "BLOCKED",
+            effective_task_status("BLOCKED", "taxon:x", "MEDIA_PRIMARY", evidence_by_field),
+        )
+
     def test_evidence_merge_is_idempotent(self):
         evidence = [{
             "canonicalId": "taxon:x",
@@ -150,6 +175,37 @@ class DataEngineV2StateTests(unittest.TestCase):
         self.assertEqual(1, len(snapshot["entities"]))
         self.assertEqual(2, len(snapshot["tasks"]))
         self.assertTrue(snapshot["fields"][0]["verified"])
+
+    def test_snapshot_does_not_regress_task_when_refresh_retries_but_evidence_persists(self):
+        tasks = [{
+            "taskId": "x:media",
+            "canonicalId": "taxon:x",
+            "taskType": "COLLECT_MEDIA",
+            "field": "MEDIA_PRIMARY",
+            "scientificName": "Example species",
+            "vietnameseName": "Loài ví dụ",
+            "categoryId": "animals",
+        }]
+        evidence = [{
+            "canonicalId": "taxon:x",
+            "field": "MEDIA_PRIMARY",
+            "sourceId": "inaturalist",
+            "sourceTier": "OPEN_SCIENCE",
+            "sourceUri": "https://example.org/a.jpg",
+            "collectedAt": 100,
+            "value": {"url": "https://example.org/a.jpg"},
+        }]
+        results = [{
+            "taskId": "x:media",
+            "status": "RETRY",
+            "errors": ["HTTP 503"],
+            "finishedAt": 201,
+            "evidence": [],
+        }]
+        snapshot = build_snapshot(tasks, results, evidence, {"sources": {}}, version=4)
+        task = snapshot["tasks"][0]
+        self.assertEqual("COMPLETED", task["status"])
+        self.assertEqual("HTTP 503", task["lastError"])
 
     def test_snapshot_marks_only_curated_vietnam_alias_row_verified(self):
         tasks = [{
