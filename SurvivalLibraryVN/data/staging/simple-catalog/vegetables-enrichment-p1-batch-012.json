@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-petroselinum-crispum",
+      "nameVi": "Mùi tây",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết mùi tây",
+          "fileName": "Petroselinum crispum 0zz.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Petroselinum_crispum_0zz.jpg",
+          "creator": "David Stang",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá mùi tây để so sánh",
+          "fileName": "Starr 080731-9590 Petroselinum crispum.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr_080731-9590_Petroselinum_crispum.jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau gia vị/thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Petroselinum crispum (Mill.) Fuss",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:60442790-2/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-pandanus-amaryllifolius",
+      "nameVi": "Lá nếp",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết lá nếp",
+          "fileName": "Pandan Leaf (Pandanus amaryllifolius).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Pandan_Leaf_(Pandanus_amaryllifolius).jpg",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây/lá nếp để so sánh",
+          "fileName": "Pandanus amaryllifolius, locally known as 'daun pandan' in Indonesia.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Pandanus_amaryllifolius,_locally_known_as_%27daun_pandan%27_in_Indonesia.jpg",
+          "creator": "Salmiah sitti",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Dùng trong thực phẩm — lá dùng tạo hương và màu cho món ăn/đồ uống.",
+      "internalEvidence": {
+        "scientificName": "Pandanus amaryllifolius Roxb.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:670690-1",
+        "applicationSource": "https://doi.org/10.1016/j.fitote.2024.106144"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
