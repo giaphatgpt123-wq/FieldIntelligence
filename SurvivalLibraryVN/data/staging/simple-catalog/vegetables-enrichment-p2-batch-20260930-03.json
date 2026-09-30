@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-diplazium-esculentum",
+      "nameVi": "Rau dớn",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh đọt non nhận biết",
+          "fileName": "Diplazium esculentum.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Diplazium_esculentum.JPG",
+          "creator": "Eric Chan W.C.",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Diplazium esculentum 1zz.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Diplazium_esculentum_1zz.jpg",
+          "creator": "David J. Stang",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — đọt và lá non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Diplazium esculentum (Retz.) Sw.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:17086810-1",
+        "applicationSources": [
+          "https://www.echocommunity.org/vi/resources/709c1862-caad-45a5-bbb6-02789e413c47",
+          "https://vnexpress.net/trong-rau-rung-dac-san-4488139.html"
+        ]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
