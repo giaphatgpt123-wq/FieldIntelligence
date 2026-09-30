@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "recordId": "canary-vegetables-ipomoea-aquatica",
+  "categoryId": "vegetables",
+  "supplement": "AGRONOMY_FOOD_SAFETY_V1",
+  "state": "REVIEW",
+  "agronomy": {
+    "cropType": ["rau muống nước", "rau muống cạn/gieo hạt"],
+    "growth": "Nguồn Chi cục Trồng trọt và BVTV TP.HCM mô tả rau muống là cây ngắn ngày, sinh trưởng nhanh, chịu nhiệt cao và cần đủ ánh sáng.",
+    "propagation": [
+      "Rau muống nước có thể nhân giống từ ruộng đang thu hoạch, đoạn thân bánh tẻ có nhiều đốt hoặc tách khóm có nhánh con.",
+      "Rau muống cạn có thể gieo hạt."
+    ],
+    "season": "Nguồn TP.HCM nêu có thể trồng quanh năm; mùa mưa thường có áp lực bệnh cao hơn mùa khô. Phạm vi áp dụng ưu tiên điều kiện tương tự TP.HCM/miền nhiệt đới phía Nam.",
+    "soilWater": {
+      "soilTypes": ["đất sét", "đất cát", "đất pha cát", "đất ẩm giàu mùn"],
+      "pHReference": "5,3-6,5",
+      "waterRequirement": "Chủ động nguồn nước; ruộng nước phải thoát nước và có khả năng thay nước thường xuyên.",
+      "contaminationControls": "Nguồn yêu cầu tránh khu vực có chất thải và đất có tồn dư hóa chất độc hại/kim loại nặng. Các khoảng cách địa lý cụ thể trong tài liệu được giữ ở provenance, không coi là chuẩn pháp lý quốc gia hiện hành nếu chưa đối chiếu quy định mới."
+    },
+    "fertilizerSafety": [
+      "Ưu tiên phân hữu cơ đã ủ hoai và phân hữu cơ vi sinh.",
+      "Không dùng phân chuồng chưa ủ hoai hoặc phân tươi pha loãng để tưới rau.",
+      "Bón N-P-K cân đối theo nhu cầu cây; không dùng công thức bón cũ như một đơn thuốc chung cho mọi vùng/giống.",
+      "Nguồn nêu kết thúc bón phân trước thu hoạch tối thiểu 5-7 ngày; cần đối chiếu quy trình hiện hành khi dùng cho hướng dẫn sản xuất."
+    ],
+    "pestDisease": {
+      "verifiedProblems": [
+        "sâu khoang",
+        "rầy xám",
+        "nhện đỏ",
+        "sâu ba ba",
+        "ốc bươu vàng",
+        "bệnh gỉ trắng",
+        "đốm lá",
+        "vàng lá",
+        "thối nhũn"
+      ],
+      "managementPrinciple": "Ưu tiên quản lý dịch hại tổng hợp (IPM), vệ sinh đồng ruộng, thoát nước, bón phân hữu cơ hoai mục và biện pháp sinh học.",
+      "legacyPesticideNames": "EXCLUDED_FROM_USER_RECOMMENDATIONS",
+      "reason": "Tên hoạt chất/thương phẩm trong tài liệu 2019 phải được đối chiếu đăng ký thuốc BVTV hiện hành trước khi hiển thị như khuyến nghị."
+    },
+    "harvest": {
+      "firstHarvest": "Nguồn TP.HCM nêu khoảng 20-25 ngày sau cấy cho lứa đầu đối với rau muống nước.",
+      "regrowth": "Sau thu hoạch nguồn khuyến nghị để lại khoảng 2-3 đốt thân để tái sinh.",
+      "subsequentInterval": "Khoảng 18-25 ngày/lứa tùy điều kiện chăm sóc, nhiệt độ và nước theo nguồn địa phương."
+    },
+    "evidence": ["HCMC_PPD_IPOMOEA_GROWING_2019", "HCMC_PPD_WATER_SPINACH_TRAINING_2023"]
+  },
+  "foodSafety": {
+    "riskModel": {
+      "speciesIntrinsicRisk": "NO_HIGH_INTRINSIC_RISK_ESTABLISHED_IN_THIS_SUPPLEMENT",
+      "productionEnvironmentRisk": "IMPORTANT",
+      "productionRiskFactors": ["nguồn nước", "phân tươi", "dư lượng thuốc BVTV", "ô nhiễm đất/nước", "vi sinh"]
+    },
+    "verifiedActions": [
+      "Dùng nguồn nước sản xuất an toàn và có khả năng thay/thoát nước đối với ruộng nước.",
+      "Không dùng phân tươi hoặc phân chuồng chưa ủ hoai.",
+      "Áp dụng IPM và tuân thủ nguyên tắc sử dụng thuốc BVTV hiện hành.",
+      "Không chuyển các tên thuốc trong tài liệu cũ thành khuyến nghị tự động cho người dùng."
+    ],
+    "evidence": ["HCMC_PPD_IPOMOEA_GROWING_2019", "HCMC_PPD_WATER_SPINACH_TRAINING_2023"]
+  },
+  "sources": [
+    {
+      "sourceId": "HCMC_PPD_IPOMOEA_GROWING_2019",
+      "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
+      "title": "Kỹ thuật trồng cây rau muống",
+      "uri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
+      "publishedDate": "2019-11-05",
+      "roles": ["agronomy", "food-safety", "pest-disease", "harvest"],
+      "scope": "HCMC_TECHNICAL_GUIDANCE",
+      "authorityLevel": "HIGH_WITH_GEOGRAPHIC_AND_DATE_LIMITATION"
+    },
+    {
+      "sourceId": "HCMC_PPD_WATER_SPINACH_TRAINING_2023",
+      "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
+      "title": "Lớp tập huấn Phòng trừ sinh vật hại trên rau",
+      "uri": "https://chicucttbvtvhcm.gov.vn/bao-ve-thuc-vat/lop-tap-huan-phong-tru-sinh-vat-hai-tren-rau-1528.html",
+      "publishedDate": "2023-09-06",
+      "roles": ["currentness-corroboration", "pest-management", "safe-pesticide-use"],
+      "scope": "HOC_MON_DISTRICT_TRAINING",
+      "authorityLevel": "HIGH_LOCAL"
+    }
+  ],
+  "publicationNotes": [
+    "Có thể nâng trường propagation/soil-water/pest-harvest từ PENDING sang VERIFIED_LOCAL khi validator hỗ trợ provenance theo phạm vi.",
+    "Không nâng các công thức phân bón hoặc thuốc BVTV cũ thành khuyến nghị toàn quốc.",
+    "Hồ sơ chính vẫn bị chặn bởi media, dinh dưỡng sơ cấp và confusable-species."
+  ]
+}
