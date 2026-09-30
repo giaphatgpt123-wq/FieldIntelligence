@@ -108,7 +108,7 @@ def evidence_key(row: dict[str, Any]) -> str:
 
 
 def trusted_curated_vietnam_row(row: dict[str, Any]) -> bool:
-    """Return True only for locally curated evidence from an approved Vietnam source tier."""
+    """True only for locally curated evidence from an approved Vietnam source tier."""
     tier = str(row.get("sourceTier") or "").strip().upper()
     source_uri = str(row.get("sourceUri") or "").strip()
     return (
@@ -213,6 +213,25 @@ def normalize_status(raw: str) -> str:
     return value if value in {"PENDING", "RUNNING", "RETRY", "COMPLETED", "BLOCKED"} else "RETRY"
 
 
+def effective_task_status(
+    raw_status: str,
+    canonical_id: str,
+    field: str,
+    evidence_by_field: dict[tuple[str, str], list[dict[str, Any]]],
+) -> str:
+    """Do not regress durable collection progress on a transient refresh miss.
+
+    A RETRY means the current refresh could not collect new evidence. If the persistent
+    evidence store still contains evidence for that exact entity+field, collection remains
+    COMPLETED. The current refresh error is preserved in lastError and source health so the
+    transient failure stays observable. BLOCKED is never softened here.
+    """
+    status = normalize_status(raw_status)
+    if status == "RETRY" and evidence_by_field.get((canonical_id, field)):
+        return "COMPLETED"
+    return status
+
+
 def build_snapshot(
     tasks: list[dict[str, Any]],
     results: list[dict[str, Any]],
@@ -300,15 +319,17 @@ def build_snapshot(
     task_rows: list[dict[str, Any]] = []
     for task in tasks:
         task_id = str(task["taskId"])
+        canonical_id = str(task["canonicalId"])
         result = result_by_task.get(task_id)
         field = str(task.get("field") or task.get("fieldKey") or "")
-        status = normalize_status(str(result.get("status") if result else "PENDING"))
+        raw_status = str(result.get("status") if result else "PENDING")
+        status = effective_task_status(raw_status, canonical_id, field, evidence_by_field)
         errors = result.get("errors", []) if result else []
         last_error = " | ".join(str(error) for error in errors if error)[:1000]
         task_rows.append(
             {
                 "taskId": task_id,
-                "canonicalId": str(task["canonicalId"]),
+                "canonicalId": canonical_id,
                 "taskType": str(task.get("taskType") or FIELD_TO_TASK.get(field, "VERIFY_FIELD")),
                 "field": field,
                 "priority": int(task.get("priority") or FIELD_PRIORITY.get(field, 0)),
