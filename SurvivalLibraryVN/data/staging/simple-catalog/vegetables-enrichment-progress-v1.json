@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 256,
-  "enrichedDisplayRecords": 79,
-  "verifiedOpenImageLinks": 158,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 177,
+  "enrichedDisplayRecords": 80,
+  "verifiedOpenImageLinks": 160,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 176,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 8,
   "completedNames": [
@@ -23,7 +23,7 @@
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
     "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái","Lá cóc","Hải đường xẻ",
     "Chua ngút","Móc mật","Vông vang","Nhội","Thành ngạnh","Giảo cổ lam","Chân chim",
-    "Sâng đỏ","Mã đề","Cỏ hôi","Rau trai"
+    "Sâng đỏ","Mã đề","Cỏ hôi","Rau trai","Rau muối"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
@@ -34,12 +34,12 @@
   ],
   "regionalCollisionBucketsAdded": [
     {"searchName":"Thành ngạnh","targets":["Cratoxylum formosum - Pù Luông","Cratoxylum maingayi - Cù Lao Chàm"]},
-    {"searchName":"Kim cang","targets":["Smilax zeylanica","Smilax bauhinioides","các Smilax khác theo vùng"]},
+    {"searchName":"Kim cang","targets":["Heterosmilax/Smilax erythrantha - nguồn sử dụng địa phương Cù Lao Chàm","Smilax elegantissima - nguồn bảo tồn Cù Lao Chàm","Smilax poilanei - nguồn bảo tồn Cù Lao Chàm","các Smilax khác theo vùng"]},
     {"searchName":"Chua lè","targets":["Emilia gaudichaudii - Cù Lao Chàm","Emilia sonchifolia/Cỏ chua lè - K'Ho, Lâm Đồng"]}
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi",
-    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt","Tiết dê","Sóc dalton","Chàm đuôi dài","Ráy thon","Rau bác bác",
+    "Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt","Tiết dê","Sóc dalton","Chàm đuôi dài","Ráy thon","Rau bác bác",
     "Rau đậu","Rau nho","Cánh ngạnh","Rau bìm bìm","Rau săn","Kim cang","Sâng trắng"
   ],
   "deferredForMediaVerification": [
@@ -52,15 +52,17 @@
   ],
   "deferredForSafetyResolution": ["Lạc tiên","Lu lu đực","Lá lộc vừng","Ráy thon"],
   "deferredForCategoryReview": ["Mè đất","Ô rô trắng","Xuân tiết","Bứa poilan","Bìm tán","Dưa núi","Lâu xác","Lộc mại nhỏ"],
-  "nextP2Queue": ["Đỏ ngọn","Rau Sứng","Bươm bướm","Sâng trắng","Rau đậu","Rau nho","Kim cang"],
+  "nextP2Queue": ["Đỏ ngọn","Rau Sứng","Bươm bướm","Sâng trắng","Rau đậu","Rau nho","Cánh ngạnh","Rau bìm bìm","Rau săn","Kim cang"],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Master hiệu dụng còn 256 tên chính sau các lần gộp alias/trùng taxon đã xác minh.",
+    "Rau muối đã được mở khóa từ trạng thái chỉ biết cấp chi: nguồn Cù Lao Chàm ghi Cây muối = Chenopodium album dùng làm thực phẩm; Kew xác nhận accepted taxon và food use.",
     "Sâng đỏ = Zanthoxylum nitidum; Xâng/Sâng/Sưng là alias vùng Cù Lao Chàm.",
     "Mã đề = Plantago major và Rau trai = Commelina diffusa đã được giải trực tiếp từ nguồn Việt Nam/Cù Lao Chàm.",
     "Cỏ hôi = Ageratum conyzoides; BVNGroup xác nhận tên Việt và lá/ngọn non có thể chế biến làm rau.",
     "Bươm bướm = Mussaenda cambodiana và Rau Sứng = Strophioblachia fimbricalyx đã rõ identity nhưng còn thiếu đủ media mở theo gate.",
-    "Thành ngạnh, Kim cang và Chua lè được quản lý như tên va chạm theo vùng; không tự gộp toàn quốc.",
+    "Kim cang được quản lý như collision bucket vùng vì nguồn Cù Lao Chàm hiện cho nhiều taxon Smilax/Heterosmilax khác nhau; không tự gộp.",
+    "Thành ngạnh và Chua lè tiếp tục quản lý như tên va chạm theo vùng; không tự gộp toàn quốc.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
