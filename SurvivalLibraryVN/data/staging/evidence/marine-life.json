@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "marine-life",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 6,
+  "evidence": [
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 8406925,
+        "scientificName": "Penaeus monodon Fabricius, 1798",
+        "canonicalName": "Penaeus monodon",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/8406925",
+      "collectedAt": 1790731650991,
+      "verified": false,
+      "externalId": "8406925"
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "aphiaId": 210378,
+        "validAphiaId": 1809193,
+        "scientificName": "Penaeus monodon",
+        "acceptedName": "Penaeus (Penaeus) monodon",
+        "authority": "Fabricius, 1798",
+        "rank": "Species",
+        "status": "superseded combination"
+      },
+      "sourceId": "worms",
+      "publisher": "World Register of Marine Species",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.marinespecies.org/aphia.php?p=taxdetails&id=1809193",
+      "collectedAt": 1790731651881,
+      "verified": false,
+      "externalId": "1809193"
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/marine-life-penaeus-monodon.jpg",
+        "sourceFile": "Penaeus monodon.jpg",
+        "creator": "self",
+        "license": "CC BY-SA 3.0",
+        "checksumSha256": "be0ac4c4ab9803efc83237fe4a44c9529592cd6bac0936fdbef0e30467e365a5"
+      },
+      "sourceId": "curated-canary-media",
+      "publisher": "Wikimedia Commons",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
+      "collectedAt": 1790731661283,
+      "verified": false,
+      "rights": "CC BY-SA 3.0",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Tôm sú",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/8406925",
+      "collectedAt": 1790683596013,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Tôm sú",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Trung tâm Khuyến nông Quốc gia",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://khuyennongvn.gov.vn/portals/0/tailieu/2014/12/host/kthuat_nuoitom_suthamcanh.pdf",
+      "collectedAt": 1790731651881,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:penaeus-monodon",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 10
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
+      "collectedAt": 1790731652366,
+      "verified": false
+    }
+  ]
+}

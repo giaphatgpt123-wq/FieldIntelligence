@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "danger",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 15,
+  "evidence": [
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 1651891,
+        "scientificName": "Aedes aegypti (Linnaeus, 1762)",
+        "canonicalName": "Aedes aegypti",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/1651891",
+      "collectedAt": 1790731664932,
+      "verified": false,
+      "externalId": "1651891"
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/10454534/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 24. Aedes aegypti, male (photo by James Turner, National Museum of Wales).",
+        "creator": "Dawah, Hassan A.;Abdullah, Mohammed A.;Ahmad, Syed Kamran;Turner, James;Azari-Hamidian, Shahyad",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.10454534",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/10479037/files/figure.png",
+        "type": "StillImage",
+        "title": "Figure 4. Characterisation of the overwintering eggs of Aedes aegypti. a. Scanning Electron Microscopy of an egg. The eggshell is damaged and much of the ornamentation has been artificially removed to expose the shell surface. b. Close-up of the ornamentation of an eggshell. c. Close-up of the surface of the eggshell region without ornamentation. d. Topographic image of the external surface of an eggshell generated with Atomic Force Microscopy. e. Force–distance (FD) curve generated from a single location on an eggshell. Parameters for the position of the location on the eggshell are indicated by the cursor positions (screen shot). Maximum force (MF, green circle) and 20% maximum force (20% MF, orange circle) are indicated on the FD curve. Scale bars: A = 100 µm; B = 53 µm; C = 15 µm.",
+        "creator": "Meyer, Stephanie;Araujo, Thiago Q.;Walsh, Elizabeth J.;Wallace, Robert L.;Hochberg, Rick",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.10479037",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391625/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 1: Novel ovitrap design for easy self-replication and low maintenance. (a): diagram of F9 (∼9 cm funnel) and F14 (∼14 cm funnel) ovitraps, constructed from readily available materials. (b): operational view, showing water fill level and drainage hole, designed to attract gravid females, hatch eggs, and trap emerging adults.",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391625",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391631/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 4: Ovitrap placement in Ban Na Chum Kham, Ubon Ratchathani (Google Earth).",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391631",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391633/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 5: Ae. aegypti larval dynamics and environmental correlations. (a): bimonthly larval counts showing reduction despite increased rainfall. (b): linear regression of larval reduction (y � 851.49 − 2.719x, R2 � 0.833, p� 0.011). (c): weekly larval counts comparison between F14 and F9 ovitraps. (d): linear regression showing negative correlation between rainfall and larval counts (B � −2.036, SE� 0.403, β � −0.930, t � −5.049, p� 0.007).",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391633",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/15391635/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 6: Biweekly Ae.aegypti larval counts in F14 ovitraps. (a): April. (b): May. (c): June. Demonstrating a decline in larvae throughout the study period.",
+        "creator": "Haruay, Surat;Piratae, Supawadee;Niamhom, Kanatid;Loyha, Kulchaya;Srisura, Denduangdee;Yaoup, Kongkaew;Pimpabud, Suwat;Netthip, Worasorn;Khampoosa, Panita",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.15391635",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166052/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 1. Aedes (Stg.) aegypti — A, thorax (dorsal view); B, male fore­, mid­ and hindlegs (anterior view); Aedes (Stg.) albopictus — C, male fore­, mid­ and hindlegs (anterior view); D, thorax (dorsal view).",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166052",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166053/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 2. Aedes (Stg.) mascarensis — A, female tarsal claws (fore­, mid­ and hindlegs); B, female fore­, mid­ and hindlegs (anterior view); C, male fore­, mid­ and hindlegs (anterior view); D, male tarsal claws (fore­, mid­ and hindlegs).",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166053",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166054/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 3. Aedes (Stg.) aegypti — A, female tarsal claws (fore­, mid­ and hindlegs); D, male tarsal claws (fore­, mid­ and hindlegs); E, female abdomen (dorsal view); ssp. formosus — F, female abdomen (dorsal view); Aedes (Stg.) africanus — B, thorax (dorsal view); C, female fore­, mid­ and hindlegs (anterior view).",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166054",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/166098/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 48. Aedes (Stg.) strelitziae — A, male genitalia; B, claspette; Aedes (Stg.) mascarensis — C, male genitalia.",
+        "creator": "Yiau-Min Huang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.166098",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/16975388/files/figure.png",
+        "type": "StillImage",
+        "title": "Figures 2-3. Aedes aegypti. 2. Whole egg on a pallet sample. 3. Fourth instar larva: siphon, seta 1S, anal segment, incomplete saddle, VIII abdominal segment and comb scales. / Figuras 2-3. Aedes aegypti. 2. Huevo entero en muestra de paleta de ovitrampa. 3. Larva de cuarto estadio: sifón, seta 1S, segmento anal, silla incompleta, VIII segmento abdominal y dientes del peine.",
+        "creator": "Valderrama, Lara;Llanos, Lorena;Fernández, Jorge;Castillo, Andrés;Reyes, Carolina",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.16975388",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/16975390/files/figure.png",
+        "type": "StillImage",
+        "title": "Figure 4. Phylogenetic analysis of Ae. aegypti Los Andes isolate. The evolutionary history based on COI gene sequence was inferred using maximum likelihood method with TIM2+F+G4 as the bestfit model. The tree was drawn to scale, and branch lengths indicate number of substitutions per site. The Ae. aegypti isolated from Los Andes was labeled in red. A total of 827 nucleotide positions were aligned for phylogenetic inference. / Figura 4. Análisis filogenético del espécimen de Ae. aegypti Los Andes. La historia evolutiva basada en la secuencia del gen COI se infirió a través del método de máxima verosimilitud, utilizando el modelo TIM2+F+G4 como el de mejor ajuste. El árbol filogenético fue construido a escala, donde las longitudes de las ramas indica el número de sustituciones nucleotÍdicas por sitio. El espécimen de Ae. aegypti proveniente de Los Andes se resaltó en rojo.Para el análisis de inferencia filogenética se alinearon un total de 827 posiciones nucleotÍdicas.",
+        "creator": "Valderrama, Lara;Llanos, Lorena;Fernández, Jorge;Castillo, Andrés;Reyes, Carolina",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.16975390",
+      "collectedAt": 1790731666798,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Muỗi vằn",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Cục Phòng bệnh - Bộ Y tế",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://vncdc.gov.vn/thong-tin-tinh-hinh-va-hoat-dong-phong-chong-dich-benh-sot-xuat-huyet-nd14621.html",
+      "collectedAt": 1790731664932,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:aedes-aegypti",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 291
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
+      "collectedAt": 1790731665718,
+      "verified": false
+    }
+  ]
+}

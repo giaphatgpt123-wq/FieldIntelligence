@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "mushrooms",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 10,
+  "evidence": [
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2526548,
+        "scientificName": "Pleurotus pulmonarius (Fr.) Quél.",
+        "canonicalName": "Pleurotus pulmonarius",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731644708,
+      "verified": false,
+      "externalId": "2526548"
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/134281_ps_18_208.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731646916,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/127475_ps_16_180.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731646916,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/134280_ps_18_207.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731646916,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/127476_ps_16_181.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Tjerk Nawijn"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731646916,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/251822.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY",
+        "rightsHolder": "Hans Adema"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731646916,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/117266_pleurotus_pulmonarius_-_bleke_oesterzwammen.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY",
+        "rightsHolder": "Hannco Bakker"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2526548",
+      "collectedAt": 1790731646916,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/59421868/medium.jpeg",
+        "license": "cc-by",
+        "attribution": "(c) Alan Rockefeller, some rights reserved (CC BY), uploaded by Alan Rockefeller",
+        "photoId": 59421868
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/136399",
+      "collectedAt": 1790731645944,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Nấm sò trắng",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Sở Khoa học và Công nghệ thành phố Cần Thơ",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://sokhcn.cantho.gov.vn/default.aspx?nid=26372&pid=57",
+      "collectedAt": 1790731644708,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:pleurotus-pulmonarius",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 13
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
+      "collectedAt": 1790731645743,
+      "verified": false
+    }
+  ]
+}

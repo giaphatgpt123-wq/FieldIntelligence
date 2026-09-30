@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "freshwater-fish",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 8,
+  "evidence": [
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2391579,
+        "scientificName": "Anabas testudineus (Bloch, 1792)",
+        "canonicalName": "Anabas testudineus",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790731647753,
+      "verified": false,
+      "externalId": "2391579"
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/52464343/medium.jpg",
+        "license": "cc-by-sa",
+        "attribution": "(c) Abu Hamas, some rights reserved (CC BY-SA), uploaded by Abu Hamas",
+        "photoId": 52464343
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/93987",
+      "collectedAt": 1790731649621,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá Rô đồng",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790683592186,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá rô dông",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790683592186,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá ro dong",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2391579",
+      "collectedAt": 1790683592186,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá rô dông",
+        "localeRequested": "vi"
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/93987",
+      "collectedAt": 1790683592578,
+      "verified": false,
+      "candidateOnly": true
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Cá rô đồng",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Bộ Nông nghiệp và Phát triển nông thôn",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://www.mard.gov.vn/VanBanLayYKien/VBPLFile/BCTH-30122021-2.pdf",
+      "collectedAt": 1790731647753,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 198
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2391579",
+      "collectedAt": 1790731649056,
+      "verified": false
+    }
+  ]
+}

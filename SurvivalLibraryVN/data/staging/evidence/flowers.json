@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "flowers",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 4,
+  "evidence": [
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2882449,
+        "scientificName": "Nelumbo nucifera Gaertn.",
+        "canonicalName": "Nelumbo nucifera",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2882449",
+      "collectedAt": 1790731641102,
+      "verified": false,
+      "externalId": "2882449"
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/flowers-nelumbo-nucifera.jpg",
+        "sourceFile": "Nelumbo nucifera 01.JPG",
+        "creator": "Prenn",
+        "license": "CC BY-SA 3.0",
+        "checksumSha256": "391ed3a9c3b6a7750bdb0a785376067ebde1bc760c2480d75a189129602be4c0"
+      },
+      "sourceId": "curated-canary-media",
+      "publisher": "Wikimedia Commons",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://commons.wikimedia.org/wiki/File:Nelumbo_nucifera_01.JPG",
+      "collectedAt": 1790731641836,
+      "verified": false,
+      "rights": "CC BY-SA 3.0",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Sen",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Sở Nông nghiệp và Phát triển nông thôn Quảng Nam",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://khuyennong.danang.gov.vn/QTIUpload/VanBan3/3.%20HD%20KT%20trong%20Sen%20lay%20hat%20%2811.7.3%29F%29.signed.pdf",
+      "collectedAt": 1790731641102,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:nelumbo-nucifera",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 465
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2882449",
+      "collectedAt": 1790731641836,
+      "verified": false
+    }
+  ]
+}

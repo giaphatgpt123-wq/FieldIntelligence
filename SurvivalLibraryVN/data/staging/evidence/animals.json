@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "animals",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 16,
+  "evidence": [
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 7705930,
+        "scientificName": "Sus scrofa Linnaeus, 1758",
+        "canonicalName": "Sus scrofa",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731662454,
+      "verified": false,
+      "externalId": "7705930"
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://binary.pensoft.net/fig/1262211",
+        "type": "StillImage",
+        "title": "Figure 6. Detection for each species by habitat (green = NPF, blue = HDF, and yellow = HS).",
+        "creator": "Cook-Price, Dawn R.;Petko, Olga N.;Makchai, Sunchai;Artchawakom, Taksin;Suwanwaree, Pongthep",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure6",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://binary.pensoft.net/fig/1262213",
+        "type": "StillImage",
+        "title": "Figure 8. A female Sambar deer in national park forest habitat B male Sambar deer in national park forest habitat C wild boar family in human-disturbed forest habitat, and D three wild boar piglets in human-disturbed forest habitat.",
+        "creator": "Cook-Price, Dawn R.;Petko, Olga N.;Makchai, Sunchai;Artchawakom, Taksin;Suwanwaree, Pongthep",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.3897/zookeys.1229.118127.figure8",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/14797862/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 110. Records of the Eurasian Wild Pig Sus scrofa Linnaeus, 1758 in Syria.",
+        "creator": "Aidek, Ahmad E.;Ibrahim, Amir;Amr, Zuhair;Hutterer, Rainer;Kryštufek, Boris;Serra, Gianluca;Benda, Petr;Shkaky, Yesra;Barbanera, Filippo;Al-Sheikhly, Omar F.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.14797862",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/4571878/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 66. Range map of Sus scrofa in Korea.",
+        "creator": "Jo, Yeong-Seok;Baccus, John T.;Koprowski, John L.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.4571878",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/6513866/files/figure.png",
+        "type": "StillImage",
+        "title": "On following pages 10 Phılıppıne Warty Pıg (Sus phı/ıppensıs) Mındoro Wany Png (Sus olıven) 12 Pılawın Bearded Pıg (Sus ıhoanobırbus). 13 Bearded Psg (Sus barbatus), 14 Sulawesı Wany Pug (Sus celebensıs) 15 Javan Wany Pıg (Sus venucosusl. 16 Eurasıan Wıld Pıg (Sus scrola) 17 Pygmy Hog (Porcııla salvımı)",
+        "creator": "Don E. Wilson;Russell A. Mittermeier",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.6513866",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/csr%2F123278_imgp6817_porto_mari_7_dec_2017.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Carel de Haseth"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/109713_2-p5310162.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Henk van Woerden"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/139663_img_6872.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Lidwien Peterse"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/95220_dsc01141irf20vi15ldd_sus_scrofa.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Hans Jonkman"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/126820_wild_zwijn_aa1_9929-1.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Wijnand van Buuren"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/126818_wild_zwijn_aa1_9913-1_2.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Wijnand van Buuren"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/126819_wild_zwijn_aa1_9920-1-2.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Wijnand van Buuren"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/109712_1-dsc00616.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC-ND",
+        "rightsHolder": "Henk van Woerden"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/7705930",
+      "collectedAt": 1790731663632,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Lợn rừng",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Cổng thông tin Tiêu chuẩn Quốc gia",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+13842-3%3A2023",
+      "collectedAt": 1790731662454,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:sus-scrofa",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 131
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=7705930",
+      "collectedAt": 1790731662941,
+      "verified": false
+    }
+  ]
+}
