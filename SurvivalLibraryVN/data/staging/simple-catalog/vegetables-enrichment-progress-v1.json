@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 45,
-  "verifiedOpenImageLinks": 90,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 215,
+  "enrichedDisplayRecords": 51,
+  "verifiedOpenImageLinks": 102,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 209,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 6,
   "completedNames": [
@@ -17,10 +17,11 @@
     "Cải làn","Cải bắp","Xà lách","Cải bó xôi","Cải xoăn",
     "Bắp cải trắng","Bắp cải tím","Xà lách romaine","Xà lách iceberg",
     "Xà lách xoăn xanh","Xà lách xoăn đỏ","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée",
-    "Xà lách oakleaf xanh","Cải cầu vồng","Cải rocket"
+    "Xà lách oakleaf xanh","Cải cầu vồng","Cải rocket",
+    "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp"
   ],
   "deferredForIdentityResolution": [
-    "Rau đay","Cải ngọt","Cải ngồng"
+    "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi"
   ],
   "deferredForMediaVerification": [
     "Cải cúc"
@@ -29,17 +30,16 @@
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
     "Bắp cải trái tim","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"
   ],
-  "nextP1Queue": [
-    "Húng cây","Húng chanh","Húng láng","Lá mơ","Lá é","É trắng","É tía","Cần tàu","Mùi tây","Hương thảo","Xạ hương","Sả","Sả chanh","Lá nếp","Kinh giới núi"
+  "nextP2Queue": [
+    "Rau tàu bay","Đơn buốt","Cỏ chua lè","Kim thất tai","Nút áo","Lạc tiên","Lu lu đực","Rau cải trời","Rau muối","Rau khúc tẻ","Rau khúc nếp","Rau bầu đất","Diếp dại","Mè đất","Mã đề"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
-    "Rau đay, Cải ngọt và Cải ngồng tạm hoãn vì tên phổ thông/thương mại có thể chồng nhiều taxon hoặc cultivar; phải resolve trước khi gắn ảnh.",
-    "Cải cúc đã rõ identity nhưng đang chờ đủ 2 ảnh có license đã kiểm độc lập.",
-    "Xà lách búp, Xà lách mỡ, Lô lô xanh/tím và nhóm cải địa phương/cultivar được giữ ở commercial-name resolution để tránh hồ sơ trùng hoặc gắn sai cultivar.",
+    "Các tên P1 còn lại có độ mơ hồ cao được chuyển sang identity/commercial-name resolution thay vì tạo hồ sơ trùng hoặc sai.",
     "Xà lách frisée được sửa taxonomy về Cichorium endivia L.; Cải cầu vồng về Beta vulgaris L.; Cải rocket về Eruca vesicaria (L.) Cav.",
+    "Húng chanh dùng Coleus amboinicus; Hương thảo dùng Salvia rosmarinus; Sả chanh dùng Cymbopogon citratus; Lá nếp dùng Pandanus amaryllifolius.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng.",
     "Các tên thuộc collision bucket phải resolve danh tính trước khi gắn ảnh để tránh ảnh đúng tên nhưng sai loài."
   ],
-  "state": "ENRICHMENT_ACTIVE"
+  "state": "ENRICHMENT_ACTIVE_P2_READY"
 }
