@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 13,
-  "generatedAt": 1790739517636,
+  "version": 16,
+  "generatedAt": 1790740246672,
   "categoryId": "timber-trees",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Sao đen",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790739517636
+      "updatedAt": 1790740246672
     }
   ],
   "aliases": [
@@ -40,7 +40,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790739493808
+      "updatedAt": 1790740208651
     }
   ],
   "fields": [
@@ -52,7 +52,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739493808,
+      "updatedAt": 1790740208651,
       "valueJson": ""
     },
     {
@@ -63,7 +63,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790739494677,
+      "updatedAt": 1790740209765,
       "valueJson": ""
     },
     {
@@ -74,7 +74,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790739493808,
+      "updatedAt": 1790740208651,
       "valueJson": ""
     },
     {
@@ -85,7 +85,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739494677,
+      "updatedAt": 1790740209765,
       "valueJson": ""
     }
   ],
@@ -106,7 +106,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739493808
+      "updatedAt": 1790740208651
     },
     {
       "taskId": "taxon:hopea-odorata:distribution",
@@ -125,7 +125,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739494677
+      "updatedAt": 1790740209765
     },
     {
       "taskId": "taxon:hopea-odorata:media",
@@ -144,7 +144,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739494677
+      "updatedAt": 1790740209765
     },
     {
       "taskId": "taxon:hopea-odorata:aliases",
@@ -163,7 +163,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739493808
+      "updatedAt": 1790740208651
     }
   ]
 }

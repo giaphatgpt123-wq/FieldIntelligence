@@ -14,6 +14,7 @@ on:
       - 'SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
+      - 'SurvivalLibraryVN/data/staging/active-tasks.json'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
       - 'SurvivalLibraryVN/data/staging/curated_canary_media.json'
@@ -24,7 +25,7 @@ permissions:
   contents: write
 
 env:
-  DATA_ENGINE_TASK_SEED: SurvivalLibraryVN/data/staging/pilot-12-tasks.json
+  DATA_ENGINE_TASK_SEED: SurvivalLibraryVN/data/staging/active-tasks.json
 
 concurrency:
   group: survival-library-data-engine-pilot-${{ github.ref }}
@@ -80,7 +81,8 @@ jobs:
 
       - name: Merge evidence shards and build legacy progress snapshot
         run: |
-          python SurvivalLibraryVN/tools/data_engine_v2_state.py
+          python SurvivalLibraryVN/tools/data_engine_v2_state.py \
+            --tasks "$DATA_ENGINE_TASK_SEED"
 
       - name: Publish category progress shards
         run: |

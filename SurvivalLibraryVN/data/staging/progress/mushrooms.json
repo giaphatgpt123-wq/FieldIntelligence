@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 13,
-  "generatedAt": 1790739517636,
+  "version": 16,
+  "generatedAt": 1790740246672,
   "categoryId": "mushrooms",
   "entities": [
     {
@@ -11,7 +11,16 @@
       "vietnameseName": "Nấm sò trắng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790739517636
+      "updatedAt": 1790740246672
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "categoryId": "mushrooms",
+      "scientificName": "Volvariella volvacea",
+      "vietnameseName": "Nấm rơm",
+      "highRisk": false,
+      "published": false,
+      "updatedAt": 1790740246672
     }
   ],
   "aliases": [
@@ -22,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790739495678
+      "updatedAt": 1790740210625
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -31,7 +40,25 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790739517636
+      "updatedAt": 1790740246672
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "displayName": "Nấm rơm",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790740238565
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "displayName": "Nấm rơm",
+      "aliasType": "PRIMARY",
+      "region": "",
+      "sourceKey": "pilot-seed",
+      "verified": false,
+      "updatedAt": 1790740246672
     }
   ],
   "fields": [
@@ -43,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739495678,
+      "updatedAt": 1790740210625,
       "valueJson": ""
     },
     {
@@ -54,7 +81,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790739497690,
+      "updatedAt": 1790740212794,
       "valueJson": ""
     },
     {
@@ -65,7 +92,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790739495678,
+      "updatedAt": 1790740210625,
       "valueJson": ""
     },
     {
@@ -76,7 +103,51 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739496828,
+      "updatedAt": 1790740211864,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "field": "CANONICAL_IDENTITY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": true,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790740238565,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 3,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790740240939,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790740238565,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:volvariella-volvacea",
+      "field": "VIETNAM_DISTRIBUTION",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790740239901,
       "valueJson": ""
     }
   ],
@@ -97,7 +168,25 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739495678
+      "updatedAt": 1790740210625
+    },
+    {
+      "taskId": "taxon:volvariella-volvacea:identity",
+      "canonicalId": "taxon:volvariella-volvacea",
+      "taskType": "RESOLVE_CANONICAL",
+      "field": "CANONICAL_IDENTITY",
+      "priority": 100,
+      "preferredSourceTiers": [
+        "GLOBAL_AUTHORITY",
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790740238565
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:distribution",
@@ -116,7 +205,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739496828
+      "updatedAt": 1790740211864
+    },
+    {
+      "taskId": "taxon:volvariella-volvacea:distribution",
+      "canonicalId": "taxon:volvariella-volvacea",
+      "taskType": "COLLECT_DISTRIBUTION",
+      "field": "VIETNAM_DISTRIBUTION",
+      "priority": 93,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790740239901
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:media",
@@ -135,7 +243,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739497690
+      "updatedAt": 1790740212794
+    },
+    {
+      "taskId": "taxon:volvariella-volvacea:media",
+      "canonicalId": "taxon:volvariella-volvacea",
+      "taskType": "COLLECT_MEDIA",
+      "field": "MEDIA_PRIMARY",
+      "priority": 92,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE",
+        "GLOBAL_AUTHORITY",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790740240939
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:aliases",
@@ -154,7 +281,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739495678
+      "updatedAt": 1790740210625
+    },
+    {
+      "taskId": "taxon:volvariella-volvacea:aliases",
+      "canonicalId": "taxon:volvariella-volvacea",
+      "taskType": "COLLECT_VIETNAMESE_NAMES",
+      "field": "VIETNAMESE_ALIASES",
+      "priority": 88,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790740238565
     }
   ]
 }

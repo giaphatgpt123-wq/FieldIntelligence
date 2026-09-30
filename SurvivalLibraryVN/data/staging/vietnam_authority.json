@@ -133,6 +133,74 @@
           "publisher": "Cục Phòng bệnh - Bộ Y tế"
         }
       ]
+    },
+    {
+      "scientificName": "Basella alba",
+      "categoryId": "vegetables",
+      "aliases": [
+        {
+          "value": {"displayName": "Mồng tơi", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://thongtinkhoahoccongnghe.bacgiang.gov.vn/node/1126383",
+          "publisher": "Thông tin Khoa học Công nghệ tỉnh Bắc Giang"
+        }
+      ]
+    },
+    {
+      "scientificName": "Ipomoea batatas",
+      "categoryId": "roots",
+      "aliases": [
+        {
+          "value": {"displayName": "Khoai lang", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://banquanlyrungvakhuyennong.gov.vn/huong-dan-ky-thuat-trong-khoai-lang-ten-khoa-hoc-ipomoea-batatas-tt15567.html",
+          "publisher": "Ban Quản lý rừng và Khuyến nông"
+        }
+      ]
+    },
+    {
+      "scientificName": "Volvariella volvacea",
+      "categoryId": "mushrooms",
+      "aliases": [
+        {
+          "value": {"displayName": "Nấm rơm", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://vista.gov.vn/vi/news/khoa-hoc-doi-song/thanh-phan-dinh-duong-va-duoc-lieu-cua-nam-rom-volvariella-volvacea-11323.html",
+          "publisher": "Cục Thông tin, Thống kê - Bộ Khoa học và Công nghệ"
+        }
+      ]
+    },
+    {
+      "scientificName": "Litopenaeus vannamei",
+      "categoryId": "marine-life",
+      "aliases": [
+        {
+          "value": {"displayName": "Tôm thẻ chân trắng", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+10257%3A2014",
+          "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam"
+        }
+      ],
+      "fields": {
+        "VIETNAM_DISTRIBUTION": [
+          {
+            "value": {
+              "countryCode": "VN",
+              "status": "cultivated",
+              "scope": "nhiều vùng miền trên cả nước"
+            },
+            "sourceUri": "https://tthc.most.gov.vn/index.php/ban_b/article/view/93",
+            "publisher": "Tạp chí Khoa học và Công nghệ Việt Nam - Bộ Khoa học và Công nghệ"
+          }
+        ]
+      }
+    },
+    {
+      "scientificName": "Naja kaouthia",
+      "categoryId": "danger",
+      "aliases": [
+        {
+          "value": {"displayName": "Rắn hổ mang một mắt kính", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://dichvucong.gov.vn/p/home/dvc-chi-tiet-cau-hoi.html?id=14562&row_limit=1",
+          "publisher": "Cổng Dịch vụ công Quốc gia"
+        }
+      ]
     }
   ],
   "rules": [
