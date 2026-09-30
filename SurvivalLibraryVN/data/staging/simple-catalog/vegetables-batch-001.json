@@ -20,6 +20,17 @@
           "license": "CC BY-SA 3.0",
           "verifiedTaxon": true,
           "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh hoa để so sánh",
+          "fileName": "Hoa rau muống.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Hoa%20rau%20mu%E1%BB%91ng.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Hoa_rau_mu%E1%BB%91ng.jpg",
+          "creator": "Bùi Thụy Đào Nguyên",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
         }
       ],
       "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
@@ -43,6 +54,17 @@
           "sourcePage": "https://commons.wikimedia.org/wiki/File:Basella_alba-1.JPG",
           "creator": "Shizhao",
           "license": "CC BY-SA 3.0 / migrated",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Malabar Spinach in Delhi.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Malabar%20Spinach%20in%20Delhi.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Malabar_Spinach_in_Delhi.jpg",
+          "creator": "RJ Raawat",
+          "license": "CC BY-SA 4.0",
           "verifiedTaxon": true,
           "verifiedLicense": true
         }
@@ -70,6 +92,17 @@
           "license": "CC BY-SA 3.0",
           "verifiedTaxon": true,
           "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh quần thể để so sánh",
+          "fileName": "Gotukola.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Gotukola.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Gotukola.jpg",
+          "creator": "Sandunidahanayake97",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
         }
       ],
       "applicationVi": "Ăn được — dùng làm thực phẩm.",
@@ -95,6 +128,17 @@
           "license": "CC BY-SA 4.0",
           "verifiedTaxon": true,
           "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Houttuynia cordata.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Houttuynia%20cordata.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Houttuynia_cordata.jpg",
+          "creator": "Jeffdelonge",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
         }
       ],
       "applicationVi": "Ăn được — lá và chồi non dùng làm rau thực phẩm.",
@@ -117,6 +161,17 @@
           "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Perilla%20frutescens.jpg",
           "sourcePage": "https://commons.wikimedia.org/wiki/File:Perilla_frutescens.jpg",
           "creator": "Vorzinek",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá để so sánh",
+          "fileName": "Perilla frutescens' foliage.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Perilla%20frutescens%27%20foliage.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Perilla_frutescens%27_foliage.jpg",
+          "creator": "Dalgial",
           "license": "CC BY-SA 3.0",
           "verifiedTaxon": true,
           "verifiedLicense": true
