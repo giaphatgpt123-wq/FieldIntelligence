@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 258,
-  "enrichedDisplayRecords": 65,
-  "verifiedOpenImageLinks": 130,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 193,
+  "enrichedDisplayRecords": 66,
+  "verifiedOpenImageLinks": 132,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 192,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 5,
   "completedNames": [
@@ -21,7 +21,7 @@
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
-    "Rau sao nhái","Chòi mòi","Rau quế vị"
+    "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
@@ -29,24 +29,31 @@
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
-    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn"
+    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt"
   ],
-  "deferredForMediaVerification": ["Cải cúc","Lá bép"],
+  "deferredForMediaVerification": [
+    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn"
+  ],
   "deferredForCommercialNameResolution": [
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
     "Bắp cải trái tim","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"
   ],
-  "deferredForSafetyResolution": ["Lạc tiên","Lu lu đực"],
-  "deferredForCategoryReview": ["Mè đất","Ô rô trắng","Xuân tiết"],
+  "deferredForSafetyResolution": [
+    "Lạc tiên","Lu lu đực","Lá lộc vừng"
+  ],
+  "deferredForCategoryReview": [
+    "Mè đất","Ô rô trắng","Xuân tiết"
+  ],
   "nextP2Queue": [
-    "Lá bứa","Lá trâm ổi","Rau săng máu","Bí bái","Đọt sộp","Lá trâm sắn","Đọt mọt","Lá lộc vừng"
+    "Lá cóc","Hải đường xẻ","Bứa poilan","Bìm tán","Cứt quạ","Dưa núi","Lâu xác","Lộc mại nhỏ"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Master canonical đã hiệu chỉnh còn 258: Rau ngót rừng → Rau sắng; Rau lủi/Rau lúi → Rau bầu đất.",
-    "Rau quế vị được chuẩn hóa là Limnophila rugosa; nghiên cứu Đại học Nông Lâm TP.HCM xác nhận được trồng phổ biến và dùng làm rau gia vị.",
-    "Rau sao nhái và Chòi mòi đã hoàn thiện trong lô P2 trước; Chòi mòi dùng ngọn non làm rau và quả ăn được theo PROSEA.",
-    "Các tên vùng tiếp theo chỉ được hoàn thiện khi tách đúng taxon; không lấy danh sách ẩm thực địa phương làm bằng chứng danh tính duy nhất.",
+    "Bí bái được chuẩn hóa là Acronychia pedunculata; lá non được dùng làm rau gia vị và đã có 2 ảnh Commons kiểm license.",
+    "Lá bứa đã xác định Garcinia oblongifolia và có nguồn Việt Nam xác nhận lá dùng nấu canh chua, nhưng chưa đủ 2 ảnh mở được kiểm độc lập.",
+    "Rau săng máu đã xác định Horsfieldia amygdalina nhưng ảnh hiện có chủ yếu không đủ cho nhận biết lá/cành thực địa.",
+    "Lá lộc vừng đã xác định Barringtonia acutangula, nhưng có nguồn cảnh báo saponin nên chuyển hàng kiểm an toàn thay vì xuất bản 'ăn được' đơn giản.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
