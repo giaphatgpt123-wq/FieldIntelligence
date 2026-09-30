@@ -113,7 +113,7 @@ class StillImageDetectionOverlayTest {
     }
 
     @Test
-    fun ambiguousRegionDoesNotOpenProfileEvenWhenTopScoreExceedsStrongThreshold() {
+    fun ambiguousRegionCanBeSelectedButRemainsAmbiguousForProfileGate() {
         val box = NormalizedBox(0.2f, 0.2f, 0.8f, 0.8f)
         val top = VisualDetection("region-3", "A", "Alpha species", 0.75f, box)
         val closeSecond = VisualDetection("region-3", "B", "Beta species", 0.74f, box)
@@ -131,6 +131,9 @@ class StillImageDetectionOverlayTest {
             imageHeight = 200
         )
 
-        assertNull(hit)
+        // Hit-testing selects the region so the UI can show Top-3. Profile opening is gated later by the region verdict.
+        assertEquals(top, hit)
+        RegionRecognitionSelectionRegistry.publish(listOf(group))
+        assertEquals(RecognitionVerdict.AMBIGUOUS, RegionRecognitionSelectionRegistry.find(top)?.verdict)
     }
 }
