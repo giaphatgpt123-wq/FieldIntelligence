@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 259,
-  "enrichedDisplayRecords": 62,
-  "verifiedOpenImageLinks": 124,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 197,
+  "enrichedDisplayRecords": 64,
+  "verifiedOpenImageLinks": 128,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 195,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 5,
   "completedNames": [
@@ -20,7 +20,8 @@
     "Xà lách oakleaf xanh","Cải cầu vồng","Cải rocket",
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
-    "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai"
+    "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
+    "Rau sao nhái","Chòi mòi"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"}
@@ -29,30 +30,23 @@
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
     "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn"
   ],
-  "deferredForMediaVerification": [
-    "Cải cúc","Lá bép"
-  ],
+  "deferredForMediaVerification": ["Cải cúc","Lá bép"],
   "deferredForCommercialNameResolution": [
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
     "Bắp cải trái tim","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"
   ],
-  "deferredForSafetyResolution": [
-    "Lạc tiên","Lu lu đực"
-  ],
-  "deferredForCategoryReview": [
-    "Mè đất","Ô rô trắng","Xuân tiết"
-  ],
+  "deferredForSafetyResolution": ["Lạc tiên","Lu lu đực"],
+  "deferredForCategoryReview": ["Mè đất","Ô rô trắng","Xuân tiết"],
   "nextP2Queue": [
-    "Rau lủi","Rau quế vị","Lá bứa","Lá trâm ổi","Rau sao nhái","Rau săng máu","Bí bái","Chòi mòi"
+    "Rau lủi","Rau quế vị","Lá bứa","Lá trâm ổi","Rau săng máu","Bí bái","Đọt sộp","Lá trâm sắn"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
-    "Master canonical giảm 260 xuống 259 vì Rau ngót rừng được xác nhận là alias của Rau sắng (Melientha suavis), không phải hồ sơ độc lập.",
-    "Rau sắng: Kew xác nhận Melientha suavis; nguồn Việt Nam ghi Rau sắng/Rau ngót núi/Ngót rừng cùng taxon; lá, ngọn và hoa non được dùng làm rau.",
-    "Rau bò khai: Kew xác nhận Erythropalum scandens; nguồn Lạng Sơn và tài liệu khoa học xác nhận lá/ngọn non dùng làm rau.",
-    "Ô rô trắng (Chroesthes lanceolata) chuyển review danh mục vì nguồn thực vật Việt Nam mô tả là cây thuốc/nguồn gen hiếm, chưa đủ căn cứ làm hồ sơ Rau ăn.",
-    "Xuân tiết (Justicia adhatoda) có ghi nhận dùng làm thực phẩm ở một số cộng đồng Nam Á nhưng chưa đủ bằng chứng sử dụng như rau tại Việt Nam; giữ category review.",
-    "Lá diễn/Dicliptera chinensis giữ lại vì tài liệu rau của chi Dicliptera còn vấn đề định danh giữa các loài; chưa gắn ảnh/công dụng vội.",
+    "Master canonical đã hiệu chỉnh còn 259 vì Rau ngót rừng là alias của Rau sắng.",
+    "Rau sắng và Rau bò khai đã hoàn thiện hồ sơ bằng nguồn taxonomy Kew, nguồn Việt Nam và ảnh Commons có giấy phép mở.",
+    "Rau sao nhái được chuẩn hóa là Cosmos caudatus; nghiên cứu ĐHQG-HCM ghi lá non/ngọn dùng làm rau ăn, Kew xác nhận taxon và phân bố du nhập tại Việt Nam.",
+    "Chòi mòi được chuẩn hóa là Antidesma ghaesembilla; PROSEA ghi ngọn non dùng làm rau và quả ăn được.",
+    "Ô rô trắng và Xuân tiết vẫn ở review, không tự động coi là rau ăn tại Việt Nam.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
