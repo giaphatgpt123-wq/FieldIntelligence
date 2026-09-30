@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 258,
-  "enrichedDisplayRecords": 71,
-  "verifiedOpenImageLinks": 142,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 187,
+  "enrichedDisplayRecords": 75,
+  "verifiedOpenImageLinks": 150,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 183,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 5,
   "completedNames": [
@@ -22,7 +22,7 @@
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
     "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái","Lá cóc","Hải đường xẻ",
-    "Chua ngút","Móc mật","Vông vang"
+    "Chua ngút","Móc mật","Vông vang","Nhội","Thành ngạnh","Giảo cổ lam","Chân chim"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
@@ -30,10 +30,10 @@
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
-    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt","Tiết dê","Sóc dalton","Chàm đuôi dài","Ráy thon"
+    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt","Tiết dê","Sóc dalton","Chàm đuôi dài","Ráy thon","Rau bác bác"
   ],
   "deferredForMediaVerification": [
-    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn","Cứt quạ","Dương đầu leo"
+    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn","Cứt quạ","Dương đầu leo","Râu hùm","Đắng cẩy","Đơn nem"
   ],
   "deferredForCommercialNameResolution": [
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
@@ -46,17 +46,18 @@
     "Mè đất","Ô rô trắng","Xuân tiết","Bứa poilan","Bìm tán","Dưa núi","Lâu xác","Lộc mại nhỏ"
   ],
   "nextP2Queue": [
-    "Râu hùm","Đắng cẩy","Thành ngạnh","Nhội","Giảo cổ lam","Đơn nem","Chân chim","Rau bác bác"
+    "Rau đậu","Rau nho","Bươm bướm","Cánh ngạnh","Rau bìm bìm","Rau xứng","Rau săn","Kim cang"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Master canonical đã hiệu chỉnh còn 258: Rau ngót rừng → Rau sắng; Rau lủi/Rau lúi → Rau bầu đất.",
-    "Chua ngút được chuẩn hóa là Embelia ribes; Đại học Đà Lạt ghi lá non dùng làm rau ăn sống, vị hơi chua và chát.",
-    "Móc mật/Mắc mật được chuẩn hóa là Clausena indica; Cục Sở hữu trí tuệ ghi lá và quả tạo hương vị đặc trưng cho ẩm thực Lạng Sơn.",
-    "Vông vang được chuẩn hóa là Abelmoschus moschatus; PROSEA ghi lá non, chồi và quả non đôi khi dùng làm rau.",
-    "Dương đầu leo đã rõ Olax scandens và có bằng chứng lá dùng làm rau nhưng chưa đủ hai ảnh thực địa mở tốt.",
-    "Ráy thon cần đối chiếu mẫu Việt Nam và khóa quy tắc an toàn/nấu chín trước khi xuất bản.",
-    "Tiết dê còn xung đột giữa các taxon Cissampelos nên chưa gắn ảnh.",
+    "Nhội được chuẩn hóa là Bischofia javanica; nguồn Việt Nam và nghiên cứu Pù Luông đều ghi lá non dùng làm rau.",
+    "Thành ngạnh được chuẩn hóa là Cratoxylum formosum; nghiên cứu Pù Luông ghi lá non ăn sống.",
+    "Giảo cổ lam được giữ trong danh mục Rau vì nghiên cứu Pù Luông ghi lá nấu canh; nội dung hiển thị không kéo theo công dụng dược liệu.",
+    "Chân chim được cập nhật accepted name Heptapleurum heptaphyllum; Schefflera heptaphylla được giữ như tên khoa học lịch sử/synonym trong metadata.",
+    "Râu hùm ở nguồn Pù Luông đã sửa đúng thành Tacca plantaginea, không dùng Tacca chantrieri; đang chờ ảnh thứ hai kiểm license.",
+    "Đắng cẩy = Clerodendrum cyrtophyllum và Đơn nem = Maesa perlaria đã rõ identity/công dụng, nhưng chưa đủ bộ ảnh phù hợp theo gate.",
+    "Rau bác bác được xác nhận là tên rau dại ăn được ở Cù Lao Chàm nhưng chưa resolve taxon nên chưa gắn ảnh.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
