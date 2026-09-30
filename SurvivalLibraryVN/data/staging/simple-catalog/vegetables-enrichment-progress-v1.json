@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 37,
-  "verifiedOpenImageLinks": 74,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 223,
+  "enrichedDisplayRecords": 42,
+  "verifiedOpenImageLinks": 84,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 218,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 6,
   "completedNames": [
@@ -15,7 +15,8 @@
     "Cải thìa","Cải thảo","Kinh giới","Húng quế","Rau răm",
     "Rau mùi","Ngò gai","Thì là","Hẹ","Lá lốt",
     "Cải làn","Cải bắp","Xà lách","Cải bó xôi","Cải xoăn",
-    "Bắp cải trắng","Bắp cải tím","Xà lách romaine","Xà lách iceberg"
+    "Bắp cải trắng","Bắp cải tím","Xà lách romaine","Xà lách iceberg",
+    "Xà lách xoăn xanh","Xà lách xoăn đỏ","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée"
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng"
@@ -24,17 +25,18 @@
     "Cải cúc"
   ],
   "deferredForCommercialNameResolution": [
-    "Xà lách búp","Xà lách mỡ"
+    "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím"
   ],
   "nextP1Queue": [
-    "Bắp cải trái tim","Xà lách xoăn xanh","Xà lách xoăn đỏ","Lô lô xanh","Lô lô tím","Xà lách oakleaf xanh","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún"
+    "Bắp cải trái tim","Xà lách oakleaf xanh","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ","Cải cầu vồng","Cải rocket"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Rau đay, Cải ngọt và Cải ngồng tạm hoãn vì tên phổ thông/thương mại có thể chồng nhiều taxon hoặc cultivar; phải resolve trước khi gắn ảnh.",
     "Cải cúc đã rõ identity nhưng đang chờ đủ 2 ảnh có license đã kiểm độc lập.",
     "Xà lách búp và Xà lách mỡ cần map sang cultivar/group cụ thể trước khi coi là hồ sơ độc lập.",
-    "Bắp cải trắng/tím và các loại lettuce được lưu theo cultivar group, không biến tên thương mại thành loài sinh học riêng.",
+    "Lô lô xanh/tím chuyển sang commercial-name resolution vì có khả năng trùng với Lollo Bionda/Lollo Rosso; không tạo hồ sơ trùng.",
+    "Xà lách frisée được sửa taxonomy về Cichorium endivia L. (Crispum/Curled Endive Group), không gộp vào Lactuca sativa.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng.",
     "Các tên thuộc collision bucket phải resolve danh tính trước khi gắn ảnh để tránh ảnh đúng tên nhưng sai loài."
   ],
