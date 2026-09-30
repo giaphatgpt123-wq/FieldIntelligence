@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
-  "organizedCanonicalNameEntries": 259,
-  "enrichedDisplayRecords": 64,
-  "verifiedOpenImageLinks": 128,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 195,
+  "organizedCanonicalNameEntries": 258,
+  "enrichedDisplayRecords": 65,
+  "verifiedOpenImageLinks": 130,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 193,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 5,
   "completedNames": [
@@ -21,10 +21,11 @@
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
-    "Rau sao nhái","Chòi mòi"
+    "Rau sao nhái","Chòi mòi","Rau quế vị"
   ],
   "resolvedAsAliasNotSeparateProfile": [
-    {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"}
+    {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
+    {"alias":"Rau lủi","canonical":"Rau bầu đất","scientificName":"Gynura procumbens (Lour.) Merr."}
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
@@ -38,15 +39,14 @@
   "deferredForSafetyResolution": ["Lạc tiên","Lu lu đực"],
   "deferredForCategoryReview": ["Mè đất","Ô rô trắng","Xuân tiết"],
   "nextP2Queue": [
-    "Rau lủi","Rau quế vị","Lá bứa","Lá trâm ổi","Rau săng máu","Bí bái","Đọt sộp","Lá trâm sắn"
+    "Lá bứa","Lá trâm ổi","Rau săng máu","Bí bái","Đọt sộp","Lá trâm sắn","Đọt mọt","Lá lộc vừng"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
-    "Master canonical đã hiệu chỉnh còn 259 vì Rau ngót rừng là alias của Rau sắng.",
-    "Rau sắng và Rau bò khai đã hoàn thiện hồ sơ bằng nguồn taxonomy Kew, nguồn Việt Nam và ảnh Commons có giấy phép mở.",
-    "Rau sao nhái được chuẩn hóa là Cosmos caudatus; nghiên cứu ĐHQG-HCM ghi lá non/ngọn dùng làm rau ăn, Kew xác nhận taxon và phân bố du nhập tại Việt Nam.",
-    "Chòi mòi được chuẩn hóa là Antidesma ghaesembilla; PROSEA ghi ngọn non dùng làm rau và quả ăn được.",
-    "Ô rô trắng và Xuân tiết vẫn ở review, không tự động coi là rau ăn tại Việt Nam.",
+    "Master canonical đã hiệu chỉnh còn 258: Rau ngót rừng → Rau sắng; Rau lủi/Rau lúi → Rau bầu đất.",
+    "Rau quế vị được chuẩn hóa là Limnophila rugosa; nghiên cứu Đại học Nông Lâm TP.HCM xác nhận được trồng phổ biến và dùng làm rau gia vị.",
+    "Rau sao nhái và Chòi mòi đã hoàn thiện trong lô P2 trước; Chòi mòi dùng ngọn non làm rau và quả ăn được theo PROSEA.",
+    "Các tên vùng tiếp theo chỉ được hoàn thiện khi tách đúng taxon; không lấy danh sách ẩm thực địa phương làm bằng chứng danh tính duy nhất.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
