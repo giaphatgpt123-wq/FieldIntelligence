@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "pilotVersion": "VEGETABLES_CONTENT_V1",
+  "statusDate": "2026-09-30",
+  "state": "ACTIVE_STAGING",
+  "initialTargetCount": 20,
+  "detailedProfileCount": 2,
+  "readyCount": 0,
+  "publishedCount": 0,
+  "profiles": [
+    {
+      "recordId": "canary-vegetables-ipomoea-aquatica",
+      "vietnameseName": "Rau muống",
+      "scientificName": "Ipomoea aquatica Forssk.",
+      "stage": "REVIEW",
+      "fieldStatus": {
+        "identity": "VERIFIED",
+        "vietnamDistribution": "VERIFIED",
+        "identification": "PARTIAL_CONFUSABLE_MISSING",
+        "agronomy": "VERIFIED_LOCAL_WITH_SCOPE_LIMITS",
+        "foodUse": "PARTIAL",
+        "nutrition": "PENDING_PRIMARY_EXTRACTION",
+        "foodSafety": "VERIFIED_LOCAL_WITH_SCOPE_LIMITS",
+        "media": "PENDING_5_DIAGNOSTIC_IMAGES",
+        "usagePriority": "PENDING_EVIDENCE"
+      },
+      "blockingFields": ["confusable-species", "nutrition", "media", "usage-priority"]
+    },
+    {
+      "recordId": "vegetables-basella-alba-v1",
+      "vietnameseName": "Mồng tơi",
+      "scientificName": "Basella alba L.",
+      "stage": "REVIEW",
+      "fieldStatus": {
+        "identity": "VERIFIED",
+        "vietnamDistribution": "VERIFIED",
+        "identification": "VERIFIED_BASE_WITH_CONFUSABLE_MISSING",
+        "agronomy": "VERIFIED_BASE_WITH_DATE_LIMITS",
+        "foodUse": "PARTIAL",
+        "nutrition": "PENDING_PRIMARY_EXTRACTION",
+        "foodSafety": "PARTIAL",
+        "media": "PENDING_5_DIAGNOSTIC_IMAGES",
+        "usagePriority": "PENDING_EVIDENCE"
+      },
+      "blockingFields": ["vietnamese-name-second-source", "confusable-species", "nutrition", "media", "current-pesticide-registration", "usage-priority"]
+    }
+  ],
+  "aiManagement": {
+    "unitOfTruth": "FIELD_CLAIM_WITH_PROVENANCE",
+    "autoPublish": false,
+    "rules": [
+      "Không tăng trạng thái chỉ vì đã thu thập dữ liệu thô.",
+      "Không ngoại suy nguồn địa phương thành kết luận toàn quốc.",
+      "Không dùng thuốc BVTV/tên thương phẩm cũ làm khuyến nghị hiện hành nếu chưa tái kiểm tra đăng ký.",
+      "Không gán mức Thường dùng/Hay dùng nếu chưa có bằng chứng riêng.",
+      "Không điền số dinh dưỡng từ trí nhớ hoặc nguồn thứ cấp khi gate yêu cầu nguồn sơ cấp.",
+      "Ảnh chỉ được tính khi đúng taxon, đúng vai trò, có provenance/license và không trùng checksum."
+    ],
+    "nextQueue": [
+      "Hoàn thiện 5 ảnh chẩn đoán Rau muống",
+      "Hoàn thiện 5 ảnh chẩn đoán Mồng tơi",
+      "Trích nguồn sơ cấp dinh dưỡng Việt Nam cho hai hồ sơ",
+      "Xây confusable-species cho Rau muống và Mồng tơi",
+      "Khởi tạo hồ sơ Rau ngót sau khi resolve accepted taxon + tên Việt"
+    ]
+  }
+}
