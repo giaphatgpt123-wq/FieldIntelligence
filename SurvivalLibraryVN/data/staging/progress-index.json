@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "channel": "data-engine-v2-pilot",
   "snapshot": {
-    "version": 9,
+    "version": 10,
     "schemaVersion": 1,
-    "generatedAt": 1790731794878,
-    "sha256": "15d1e6986ad1e82061ae68ab7d2935f27254b664f913b41df31f9220b7b529c7",
+    "generatedAt": 1790732109343,
+    "sha256": "9b7642a0ed14301dd2e4d2cd3d620a484492227f4b357408e40d6c491deeb1df",
     "snapshotUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress-snapshot.json",
     "entityCount": 12,
     "taskCount": 48
@@ -15,5 +15,153 @@
     "evidenceCount": 88,
     "shardCount": 12,
     "indexUrl": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/evidence-index.json"
+  },
+  "progressShards": {
+    "schemaVersion": 1,
+    "version": 10,
+    "generatedAt": 1790732109343,
+    "shardCount": 12,
+    "maxShardBytes": 2097152,
+    "shards": [
+      {
+        "categoryId": "animals",
+        "file": "animals.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/animals.json",
+        "sha256": "1692e3f0a5a1b1b9d2a29fed35edb47e0f1b7dfd8c4bfd3445a48ec5acff8250",
+        "bytes": 4023,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "danger",
+        "file": "danger.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/danger.json",
+        "sha256": "5d50bd80612307b2887a67ead085e49d769a8cd220d1e59f9b447ecc5c2978c2",
+        "bytes": 4068,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "flowers",
+        "file": "flowers.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/flowers.json",
+        "sha256": "1276dbb4b0265320ec82b93b4cbd2279d4e0b31197f1c0c02b39dea0035d5185",
+        "bytes": 4121,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "freshwater-fish",
+        "file": "freshwater-fish.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/freshwater-fish.json",
+        "sha256": "e9ef5e270b7e29cb7d2802876e5ca09137705c0faba77cfa41500ec2dbaaa537",
+        "bytes": 4654,
+        "entityCount": 1,
+        "aliasCount": 4,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "fruit-crops",
+        "file": "fruit-crops.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/fruit-crops.json",
+        "sha256": "baac33de0b9c7fd0445f24a1e4a14254680baa637874f4a67a8223e22b4f236e",
+        "bytes": 4105,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "insects",
+        "file": "insects.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/insects.json",
+        "sha256": "f00361fbbe58bda3cc2d763f74454baced92096712458727d682e08db31a3eac",
+        "bytes": 4045,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "marine-life",
+        "file": "marine-life.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/marine-life.json",
+        "sha256": "f1006acfc6746eb9add63297288256151757531921c2478e73801fa137004e07",
+        "bytes": 4204,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "medicinal-plants",
+        "file": "medicinal-plants.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/medicinal-plants.json",
+        "sha256": "a26d029d236963f40006f9eb9fcb65028a231e6ddb939aed3ccdaf1d92004cb2",
+        "bytes": 4182,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "mushrooms",
+        "file": "mushrooms.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/mushrooms.json",
+        "sha256": "1672c3f2a45e16a0f84d35c6cf2f4f00bfdda4122c84d4ac5d794838500907d6",
+        "bytes": 4225,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "roots",
+        "file": "roots.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/roots.json",
+        "sha256": "2e5d4910ed283246be14cabd137117a967ce382e24788fae85d5f22cd6e7dafd",
+        "bytes": 4156,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "timber-trees",
+        "file": "timber-trees.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/timber-trees.json",
+        "sha256": "1bb4fddfc989f38e12ee0e773b5185530b360c51da3c903a3af1facd31eef232",
+        "bytes": 4302,
+        "entityCount": 1,
+        "aliasCount": 3,
+        "fieldCount": 4,
+        "taskCount": 4
+      },
+      {
+        "categoryId": "vegetables",
+        "file": "vegetables.json",
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/vegetables.json",
+        "sha256": "7cd300cf0e491c1cfcbba3cf3bb6dbfde11db60a0112415a126bf96f40f6da10",
+        "bytes": 4121,
+        "entityCount": 1,
+        "aliasCount": 2,
+        "fieldCount": 4,
+        "taskCount": 4
+      }
+    ],
+    "sourceHealth": {
+      "file": "source-health.json",
+      "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/staging/progress/source-health.json",
+      "sha256": "ecf8019b572905aa7760d582dcb520a3a49c16f686af6b4cbf1e2e7ef862a058",
+      "bytes": 1092,
+      "rowCount": 5
+    }
   }
 }

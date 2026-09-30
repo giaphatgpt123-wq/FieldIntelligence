@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "version": 10,
+  "generatedAt": 1790732109343,
+  "categoryId": "insects",
+  "entities": [
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "categoryId": "insects",
+      "scientificName": "Apis cerana",
+      "vietnameseName": "Ong nội",
+      "highRisk": false,
+      "published": false,
+      "updatedAt": 1790732109343
+    }
+  ],
+  "aliases": [
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "displayName": "Ong nội",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790732104306
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "displayName": "Ong nội",
+      "aliasType": "PRIMARY",
+      "region": "",
+      "sourceKey": "pilot-seed",
+      "verified": false,
+      "updatedAt": 1790732109343
+    }
+  ],
+  "fields": [
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "CANONICAL_IDENTITY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": true,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732104306,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "curated-canary-media",
+      "lastError": "",
+      "updatedAt": 1790732104751,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790732104306,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "VIETNAM_DISTRIBUTION",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732104751,
+      "valueJson": ""
+    }
+  ],
+  "tasks": [
+    {
+      "taskId": "taxon:apis-cerana:identity",
+      "canonicalId": "taxon:apis-cerana",
+      "taskType": "RESOLVE_CANONICAL",
+      "field": "CANONICAL_IDENTITY",
+      "priority": 100,
+      "preferredSourceTiers": [
+        "GLOBAL_AUTHORITY",
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732104306
+    },
+    {
+      "taskId": "taxon:apis-cerana:distribution",
+      "canonicalId": "taxon:apis-cerana",
+      "taskType": "COLLECT_DISTRIBUTION",
+      "field": "VIETNAM_DISTRIBUTION",
+      "priority": 93,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732104751
+    },
+    {
+      "taskId": "taxon:apis-cerana:media",
+      "canonicalId": "taxon:apis-cerana",
+      "taskType": "COLLECT_MEDIA",
+      "field": "MEDIA_PRIMARY",
+      "priority": 92,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE",
+        "GLOBAL_AUTHORITY",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732104751
+    },
+    {
+      "taskId": "taxon:apis-cerana:aliases",
+      "canonicalId": "taxon:apis-cerana",
+      "taskType": "COLLECT_VIETNAMESE_NAMES",
+      "field": "VIETNAMESE_ALIASES",
+      "priority": 88,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732104306
+    }
+  ]
+}

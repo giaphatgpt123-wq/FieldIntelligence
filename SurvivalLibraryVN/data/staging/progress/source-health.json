@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "version": 10,
+  "generatedAt": 1790732109343,
+  "sourceHealth": [
+    {
+      "sourceKey": "curated-canary-media",
+      "tier": "",
+      "consecutiveFailures": 0,
+      "cooldownUntil": 0,
+      "lastError": "",
+      "updatedAt": 1790732109282
+    },
+    {
+      "sourceKey": "gbif",
+      "tier": "",
+      "consecutiveFailures": 0,
+      "cooldownUntil": 0,
+      "lastError": "",
+      "updatedAt": 1790732109282
+    },
+    {
+      "sourceKey": "inaturalist",
+      "tier": "",
+      "consecutiveFailures": 0,
+      "cooldownUntil": 0,
+      "lastError": "",
+      "updatedAt": 1790732109282
+    },
+    {
+      "sourceKey": "vn-authority-local",
+      "tier": "",
+      "consecutiveFailures": 0,
+      "cooldownUntil": 0,
+      "lastError": "",
+      "updatedAt": 1790732109282
+    },
+    {
+      "sourceKey": "worms",
+      "tier": "",
+      "consecutiveFailures": 1,
+      "cooldownUntil": 1790732133745,
+      "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
+      "updatedAt": 1790732109282
+    }
+  ]
+}

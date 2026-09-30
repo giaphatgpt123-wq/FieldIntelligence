@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "version": 10,
+  "generatedAt": 1790732109343,
+  "categoryId": "freshwater-fish",
+  "entities": [
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "categoryId": "freshwater-fish",
+      "scientificName": "Anabas testudineus",
+      "vietnameseName": "Cá rô đồng",
+      "highRisk": false,
+      "published": false,
+      "updatedAt": 1790732109343
+    }
+  ],
+  "aliases": [
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "displayName": "Cá Rô đồng",
+      "aliasType": "OTHER_NAME",
+      "region": "",
+      "sourceKey": "gbif",
+      "verified": false,
+      "updatedAt": 1790683592186
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "displayName": "Cá ro dong",
+      "aliasType": "OTHER_NAME",
+      "region": "",
+      "sourceKey": "gbif",
+      "verified": false,
+      "updatedAt": 1790683592186
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "displayName": "Cá rô dông",
+      "aliasType": "OTHER_NAME",
+      "region": "",
+      "sourceKey": "inaturalist",
+      "verified": false,
+      "updatedAt": 1790683592578
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "displayName": "Cá rô đồng",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790732088677
+    }
+  ],
+  "fields": [
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "CANONICAL_IDENTITY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": true,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732088677,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "inaturalist",
+      "lastError": "",
+      "updatedAt": 1790732090312,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 5,
+      "verified": false,
+      "sourceKey": "multi-source",
+      "lastError": "",
+      "updatedAt": 1790732088677,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:anabas-testudineus",
+      "field": "VIETNAM_DISTRIBUTION",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732089896,
+      "valueJson": ""
+    }
+  ],
+  "tasks": [
+    {
+      "taskId": "taxon:anabas-testudineus:identity",
+      "canonicalId": "taxon:anabas-testudineus",
+      "taskType": "RESOLVE_CANONICAL",
+      "field": "CANONICAL_IDENTITY",
+      "priority": 100,
+      "preferredSourceTiers": [
+        "GLOBAL_AUTHORITY",
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732088677
+    },
+    {
+      "taskId": "taxon:anabas-testudineus:distribution",
+      "canonicalId": "taxon:anabas-testudineus",
+      "taskType": "COLLECT_DISTRIBUTION",
+      "field": "VIETNAM_DISTRIBUTION",
+      "priority": 93,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732089896
+    },
+    {
+      "taskId": "taxon:anabas-testudineus:media",
+      "canonicalId": "taxon:anabas-testudineus",
+      "taskType": "COLLECT_MEDIA",
+      "field": "MEDIA_PRIMARY",
+      "priority": 92,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE",
+        "GLOBAL_AUTHORITY",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732090731
+    },
+    {
+      "taskId": "taxon:anabas-testudineus:aliases",
+      "canonicalId": "taxon:anabas-testudineus",
+      "taskType": "COLLECT_VIETNAMESE_NAMES",
+      "field": "VIETNAMESE_ALIASES",
+      "priority": 88,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732088677
+    }
+  ]
+}
