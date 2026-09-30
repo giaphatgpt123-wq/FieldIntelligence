@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 258,
-  "enrichedDisplayRecords": 66,
-  "verifiedOpenImageLinks": 132,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 192,
+  "enrichedDisplayRecords": 68,
+  "verifiedOpenImageLinks": 136,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 190,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 5,
   "completedNames": [
@@ -21,7 +21,7 @@
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
-    "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái"
+    "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái","Lá cóc","Hải đường xẻ"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
@@ -32,7 +32,7 @@
     "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt"
   ],
   "deferredForMediaVerification": [
-    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn"
+    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn","Cứt quạ"
   ],
   "deferredForCommercialNameResolution": [
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
@@ -42,18 +42,18 @@
     "Lạc tiên","Lu lu đực","Lá lộc vừng"
   ],
   "deferredForCategoryReview": [
-    "Mè đất","Ô rô trắng","Xuân tiết"
+    "Mè đất","Ô rô trắng","Xuân tiết","Bứa poilan","Bìm tán","Dưa núi","Lâu xác","Lộc mại nhỏ"
   ],
   "nextP2Queue": [
-    "Lá cóc","Hải đường xẻ","Bứa poilan","Bìm tán","Cứt quạ","Dưa núi","Lâu xác","Lộc mại nhỏ"
+    "Sóc dalton","Chàm đuôi dài","Vông vang","Chua ngút","Dương đầu leo","Ráy thon","Tiết dê","Móc mật"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Master canonical đã hiệu chỉnh còn 258: Rau ngót rừng → Rau sắng; Rau lủi/Rau lúi → Rau bầu đất.",
-    "Bí bái được chuẩn hóa là Acronychia pedunculata; lá non được dùng làm rau gia vị và đã có 2 ảnh Commons kiểm license.",
-    "Lá bứa đã xác định Garcinia oblongifolia và có nguồn Việt Nam xác nhận lá dùng nấu canh chua, nhưng chưa đủ 2 ảnh mở được kiểm độc lập.",
-    "Rau săng máu đã xác định Horsfieldia amygdalina nhưng ảnh hiện có chủ yếu không đủ cho nhận biết lá/cành thực địa.",
-    "Lá lộc vừng đã xác định Barringtonia acutangula, nhưng có nguồn cảnh báo saponin nên chuyển hàng kiểm an toàn thay vì xuất bản 'ăn được' đơn giản.",
+    "Lá cóc được chuẩn hóa là Spondias dulcis; NParks xác nhận lá non ăn sống, hấp hoặc nấu như rau.",
+    "Hải đường xẻ được chuẩn hóa theo accepted name Begonia palmata; Begonia laciniata được giữ như synonym lịch sử. Nguồn K'Ho ghi lá được sử dụng làm thực phẩm.",
+    "Cứt quạ được chuẩn hóa taxonomy về Trichosanthes costata (Gymnopetalum cochinchinense/chinense là synonym), nhưng mới có một ảnh Commons phù hợp nên chưa hoàn thiện hồ sơ.",
+    "Bứa poilan, Bìm tán, Dưa núi, Lâu xác và Lộc mại nhỏ chuyển review danh mục vì nguồn hiện có không đủ để giữ mặc định là Rau ăn theo quy tắc mới.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
