@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 4,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "state": "SOURCE_CANDIDATES_NEED_CROSS_DEDUP",
+  "rules": {
+    "theseAreSearchAndIdentityCandidates": true,
+    "notAllCandidatesAreSeparateSpecies": true,
+    "notAllEdiblePlantsBelongInVegetableCategory": true,
+    "aliasCanRemainSearchableWithoutSeparateProfile": true,
+    "imageAndApplicationAddedOnlyAfterIdentityResolution": true
+  },
+  "metrics": {
+    "rawGroupEntries": 190,
+    "uniqueNamesWithinThisDeepSweep": 176,
+    "netNewVsExistingMaster": "NOT_YET_CROSS_DEDUPED",
+    "note": "176 là số tên duy nhất trong các cụm nguồn của đợt quét sâu này; có tên đã tồn tại trong seed/master cũ nên không được cộng thẳng vào tổng kho."
+  },
+  "candidateGroups": [
+    {
+      "sourceId": "KHO_BIDOUP_NUIBA",
+      "confidence": "PEER_REVIEWED_LOCAL_NAME",
+      "names": ["Dớn","Ráng gạt nai","Lá bép","Ô rô trắng","Lá diễn","Xuân tiết","Dền gai","Rau dệu","Rau má","Cần dại","Đơn buốt","Cỏ chua lè","Rau tàu bay","Kim thất tai","Nút áo","Hải đường xẻ","Đơn rau má","Chân danh hoa thưa","Bứa poilan","Bìm tán","Cứt quạ","Đài hái","Gấc","Dưa núi","Lâu xác","Nen lá liễu","Chòi mòi","Lộc mại nhỏ","Sóc dalton","Chàm đuôi dài","Kinh giới núi","Chiếc ít hoa","Vông vang","Mua leo","Dây cai","Chua ngút","Vối","Dương đầu leo","Lạc tiên","Mồng tơi núi","Lá lốt","Mác bao","Rau sam","Quắn hoa","Muối","Bướm bạc Biên Hòa","Lu lu đực","Dung nam lá trà","Ráy thon","Mây lá rộng","Măng lồ ô","Riềng rừng","Nghệ rừng","Ngải tiên","Gừng đỏ","Giềng gió"],
+      "identityHints": {
+        "Dớn":"Diplazium esculentum",
+        "Ráng gạt nai":"Ceratopteris thalictroides",
+        "Lá bép":"Gnetum gnemon var. griffithii",
+        "Ô rô trắng":"Chroesthes lanceolata",
+        "Lá diễn":"Dicliptera chinensis",
+        "Xuân tiết":"Justicia adhatoda",
+        "Dền gai":"Amaranthus spinosus",
+        "Rau dệu":"Alternanthera sessilis",
+        "Cần dại":"Oenanthe javanica",
+        "Đơn buốt":"Bidens pilosa",
+        "Cỏ chua lè":"Emilia sonchifolia",
+        "Rau tàu bay":"Gynura crepidioides",
+        "Kim thất tai":"Gynura divaricata",
+        "Nút áo":"Spilanthes oleracea",
+        "Hải đường xẻ":"Begonia laciniata",
+        "Bứa poilan":"Garcinia poilanei",
+        "Bìm tán":"Merremia umbellata",
+        "Cứt quạ":"Gymnopetalum cochinchinensis",
+        "Đài hái":"Hodgsonia macrocarpa",
+        "Gấc":"Momordica cochinchinensis",
+        "Dưa núi":"Trichosanthes cucumerina",
+        "Lâu xác":"Trichosanthes tricuspidata",
+        "Chòi mòi":"Antidesma ghaesembilla",
+        "Lộc mại nhỏ":"Claoxylon hainanense",
+        "Sóc dalton":"Glochidion daltoni",
+        "Chàm đuôi dài":"Indigofera longicauda",
+        "Kinh giới núi":"Elsholtzia blanda",
+        "Vông vang":"Abelmoschus moschatus",
+        "Dây cai":"Albizia attopeuensis",
+        "Chua ngút":"Embelia ribes",
+        "Dương đầu leo":"Olax scandens",
+        "Lạc tiên":"Passiflora foetida",
+        "Mồng tơi núi":"Pentaphragma honbaense",
+        "Lá lốt":"Piper sarmentosum",
+        "Mác bao":"Monochoria vaginalis",
+        "Rau sam":"Portulaca oleracea",
+        "Muối":"Rhus javanica var. roxburghii",
+        "Lu lu đực":"Solanum nigrum",
+        "Ráy thon":"Schismatoglottis calyptrata",
+        "Mây lá rộng":"Calamus bousigonii",
+        "Măng lồ ô":"Bambusa procera",
+        "Riềng rừng":"Alpinia conchigera",
+        "Nghệ rừng":"Curcuma aromatica",
+        "Ngải tiên":"Hedychium coronarium",
+        "Gừng đỏ":"Zingiber rubens",
+        "Giềng gió":"Zingiber zerumbet"
+      }
+    },
+    {
+      "sourceId": "STIENG_CATTien_2019",
+      "confidence": "PEER_REVIEWED_LOCAL_NAME",
+      "names": ["Riềng rừng","Rau dền cơm","Tre La Ngà","Lồ ô Bình Long","Song bột","Mây ruột gà","Rau má","Le","Mây đọt đắng","Mây cát","Mây rả","Nứa","Lồ ô","Lá bép"]
+    },
+    {
+      "sourceId": "PULUONG_WILD_EDIBLES_2021",
+      "confidence": "PEER_REVIEWED_LOCAL_NAME",
+      "names": ["Dền gai","Tre gai","Hải đường","Nhội","Song","Rau má","Tiết dê","Móc mật","Đắng cẩy","Thành ngạnh","Rau dớn","Chua ngút","Bò khai","Vả","Sung","Giảo cổ lam","Đơn nem","Rau sắng","Chuối","Chua me","Lạc tiên","Càng cua","Mã đề","Thồm lồm","Vàng anh","Rau ngót rừng","Chân chim","Lu lu đực","Râu hùm"]
+    },
+    {
+      "sourceId": "CULAOC_HAM_COMBINED",
+      "confidence": "ACADEMIC_PLUS_VIETNAM_BOTANICAL_SOURCE",
+      "names": ["Rau bác bác","Cỏ bạc đầu","Rau đắng đất","Rau đậu","Rau má","Mã đề","Mè đất","Rau nho","Ngổ điếc","Sam","Thành ngạnh","Thông đất","Bươm bướm","Cánh ngạnh","Rau bìm bìm","Rau dền cơm","Rau dớt","Rau má rừng","Cỏ hôi","Rau xứng","Rau săn","Cây muối","Kim cang","Cu cu","Đỏ ngọn","Cạnh cạnh","Rau chọi","Rau rác","Rau trai","Lá giác","Mặt trời","Chua lè","Mồng sa ria","Sâng đỏ","Sâng trắng"]
+    },
+    {
+      "sourceId": "PPD_CROP_IDENTIFIERS_2026",
+      "confidence": "OFFICIAL_VIETNAM_NAME",
+      "names": ["Húng","Tía tô","Kinh giới","Húng quế","Diếp cá","Giấp cá","Cải chân vịt","Tần ô","Rau mùi","Ngò rí","Rau răm","Rau ngổ","Thì là","Mùi tàu","Rau muống","Cần tây","Chùm ngây","Rau dền"]
+    },
+    {
+      "sourceId": "WORLD_VEGETABLE_CENTER_VIETNAM",
+      "confidence": "INTERNATIONAL_RESEARCH_TABLE",
+      "names": ["Rau om","Ngò om","Om Trung Quốc","Ngọc nước","Rau mác thon","Lá mác thon","Rau mác bao","Lá mác bao","Rau sắng","Rau ngót rừng","Rau lang","Rau khoai lang","Bạc hà","Rau mơ","Rau am mỏ","Lục bình"],
+      "collisionNotes": [
+        "Rau om/Ngò om thuộc nhóm Limnophila và không tự động gộp với Rau ngổ.",
+        "Rau mác thon và Rau mác bao phải tách theo Monochoria hastata / Monochoria vaginalis.",
+        "Tên Rau muống có thể xuất hiện như common-name collision ở nguồn khu vực nên hồ sơ ảnh luôn cần taxon trước."
+      ]
+    },
+    {
+      "sourceId": "GOV_FOREST_VEGETABLE_DISCOVERY",
+      "confidence": "OFFICIAL_DISCOVERY_IDENTITY_PENDING",
+      "names": ["Bướm trắng","Báng","Chằm Chằm","Bân Bấn","Rau Sắng"]
+    },
+    {
+      "sourceId": "SOUTHERN_REGIONAL_DISCOVERY",
+      "confidence": "DISCOVERY_ONLY_NEEDS_IDENTITY",
+      "names": ["Rau mặt trăng","Lá cóc rừng","Đọt bằng lăng","Trâm ổi","Lá nhái","Sao nhái","Đọt choại","Lá cách","Lá sung non","Đọt xoài non","Đọt me non","Rau quế vị","Húng rừng","Tía tô rừng","Rau bứa","Rau dừa","Đọt lục bình non"]
+    }
+  ],
+  "mandatoryCrossDedupTargets": [
+    "Rau lang / Rau khoai lang",
+    "Rau ngổ / Ngò om / Rau om / Ngổ điếc",
+    "Rau mát / Mác bao / Rau mác bao / Mác thon",
+    "Rau dớn / Rau dớt / Dớn",
+    "Rau má / Rau má rừng / Đơn rau má",
+    "Rau sắng / Rau Sắng / Rau ngót rừng",
+    "Lá bép and regional aliases",
+    "Rau sam / Sam",
+    "Mặt trời / Rau mặt trời / Cỏ chua lè / Chua lè"
+  ]
+}
