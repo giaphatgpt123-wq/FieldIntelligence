@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 56,
-  "verifiedOpenImageLinks": 112,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 204,
+  "enrichedDisplayRecords": 59,
+  "verifiedOpenImageLinks": 118,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 201,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 6,
   "completedNames": [
@@ -19,10 +19,12 @@
     "Xà lách xoăn xanh","Xà lách xoăn đỏ","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée",
     "Xà lách oakleaf xanh","Cải cầu vồng","Cải rocket",
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
-    "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè"
+    "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
+    "Rau cải trời","Rau bầu đất","Diếp dại"
   ],
   "deferredForIdentityResolution": [
-    "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề"
+    "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
+    "Rau muối","Rau khúc tẻ","Rau khúc nếp"
   ],
   "deferredForMediaVerification": ["Cải cúc"],
   "deferredForCommercialNameResolution": [
@@ -32,16 +34,22 @@
   "deferredForSafetyResolution": [
     "Lạc tiên","Lu lu đực"
   ],
+  "deferredForCategoryReview": [
+    "Mè đất"
+  ],
   "nextP2Queue": [
-    "Rau cải trời","Rau muối","Rau khúc tẻ","Rau khúc nếp","Rau bầu đất","Diếp dại","Mè đất"
+    "Rau chua me","Chua me đất hoa vàng","Rau cúc đắng","Rau mương","Rau mương hoa nhỏ","Rau ráu","Rau bèo"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Rau tàu bay đã chuẩn hóa từ tên đồng nghĩa cũ Gynura crepidioides sang accepted name Crassocephalum crepidioides.",
     "Nút áo đã chuẩn hóa từ Spilanthes oleracea trong nguồn cũ sang accepted name Acmella oleracea.",
-    "Lạc tiên tạm hoãn vì lá được ghi nhận cyanogenic/toxic dù có nơi nấu lá non làm rau.",
-    "Lu lu đực tạm hoãn vì glycoalkaloid cao hơn ở lá non và quả xanh; cần hồ sơ có cảnh báo xử lý/nấu trước khi hiển thị đơn giản.",
-    "Mã đề tạm hoãn để xác định đúng taxon Plantago của nguồn Việt Nam trước khi gắn ảnh.",
+    "Rau cải trời được chuẩn hóa là Blumea lacera; nguồn Việt Nam và PROSEA xác nhận lá/ngọn non dùng làm rau.",
+    "Rau bầu đất được chuẩn hóa là Gynura procumbens; NParks xác nhận lá ăn được và dùng như rau.",
+    "Diếp dại được chuẩn hóa là Lactuca indica; NParks/PROSEA xác nhận lá dùng làm rau.",
+    "Rau muối mới chắc tới cấp chi Chenopodium; chưa gắn ảnh loài.",
+    "Rau khúc tẻ/khúc nếp đang có nguồn Việt Nam gán taxon chưa thống nhất; giữ lại để resolve trước.",
+    "Mè đất hiện nguồn mạnh tìm được chủ yếu xác nhận dược liệu Leucas zeylanica; chuyển sang review danh mục thay vì mặc định là Rau ăn.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
