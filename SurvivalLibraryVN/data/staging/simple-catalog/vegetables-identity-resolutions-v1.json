@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "appliesTo": "vegetables-organized-master-v5.json",
+  "resolutions": [
+    {
+      "canonicalNameVi": "Rau sắng",
+      "scientificName": "Melientha suavis Pierre",
+      "removeCanonicalNames": ["Rau ngót rừng"],
+      "addSearchAliases": ["Rau ngót rừng", "Rau ngót núi", "Ngót rừng", "Phắc van"],
+      "evidence": [
+        "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Melientha+suavis",
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:608041-1",
+        "https://vjol.info.vn/tnu/vi/article/view/158583/"
+      ],
+      "resolution": "SAME_TAXON_ALIAS",
+      "notes": "Nguồn thực vật Việt Nam ghi Rau sắng, Rau ngót núi, Ngót rừng và Phắc van cho cùng Melientha suavis. Không tạo hồ sơ Rau ngót rừng riêng."
+    },
+    {
+      "canonicalNameVi": "Rau bò khai",
+      "scientificName": "Erythropalum scandens Blume",
+      "addSearchAliases": ["Bò khai", "Dây bò khai", "Dạ hiến", "Dã hiến", "Rau ngót leo", "Rau nghiến", "Khau hương"],
+      "evidence": [
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:607794-1/general-information",
+        "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Erythropalum+scandens",
+        "https://sokhcn.langson.gov.vn/upload/105367/20231214/6367519803f80cc88d6696dec5c13b99B_C3_A1o_20c_C3_A1o_20t_C3_B3m_20t_E1_BA_AFt.pdf"
+      ],
+      "resolution": "CANONICAL_CONFIRMED"
+    }
+  ],
+  "masterMetricCorrection": {
+    "organizedCanonicalNameEntriesBefore": 260,
+    "organizedCanonicalNameEntriesAfter": 259,
+    "reason": "Rau ngót rừng được xác nhận là alias của Rau sắng, không phải hồ sơ canonical độc lập."
+  },
+  "state": "RESOLVED"
+}
