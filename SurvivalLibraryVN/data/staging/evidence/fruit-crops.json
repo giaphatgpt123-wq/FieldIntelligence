@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "fruit-crops",
-  "updatedAt": 1790740246659,
+  "updatedAt": 1790740341408,
   "evidenceCount": 6,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/3190638",
-      "collectedAt": 1790740205463,
+      "collectedAt": 1790740295029,
       "verified": false,
       "externalId": "3190638"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.8293002",
-      "collectedAt": 1790740206734,
+      "collectedAt": 1790740296001,
       "verified": false
     },
     {
@@ -57,7 +57,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/3190638",
-      "collectedAt": 1790740206734,
+      "collectedAt": 1790740296001,
       "verified": false
     },
     {
@@ -72,7 +72,7 @@
       "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+14304%3A2025",
-      "collectedAt": 1790740205463,
+      "collectedAt": 1790740295029,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -105,7 +105,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3190638",
-      "collectedAt": 1790740205953,
+      "collectedAt": 1790740295479,
       "verified": false
     }
   ]

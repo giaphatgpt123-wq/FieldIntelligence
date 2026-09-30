@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 16,
-  "generatedAt": 1790740246672,
+  "version": 17,
+  "generatedAt": 1790740341420,
   "categoryId": "medicinal-plants",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Gừng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     }
   ],
   "aliases": [
@@ -22,7 +22,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790740228856
+      "updatedAt": 1790740323221
     },
     {
       "canonicalId": "taxon:zingiber-officinale",
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740228856,
+      "updatedAt": 1790740323221,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790740229354,
+      "updatedAt": 1790740323528,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740228856,
+      "updatedAt": 1790740323221,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740229354,
+      "updatedAt": 1790740323528,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740228856
+      "updatedAt": 1790740323221
     },
     {
       "taskId": "taxon:zingiber-officinale:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740229354
+      "updatedAt": 1790740323528
     },
     {
       "taskId": "taxon:zingiber-officinale:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740229354
+      "updatedAt": 1790740323528
     },
     {
       "taskId": "taxon:zingiber-officinale:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740228856
+      "updatedAt": 1790740323221
     }
   ]
 }

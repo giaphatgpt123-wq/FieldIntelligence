@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 16,
-  "generatedAt": 1790740246672,
+  "version": 17,
+  "generatedAt": 1790740341420,
   "categoryId": "insects",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Ong nội",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     }
   ],
   "aliases": [
@@ -22,7 +22,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790740226560
+      "updatedAt": 1790740321323
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740226560,
+      "updatedAt": 1790740321323,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790740227118,
+      "updatedAt": 1790740321646,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740226560,
+      "updatedAt": 1790740321323,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740227118,
+      "updatedAt": 1790740321646,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740226560
+      "updatedAt": 1790740321323
     },
     {
       "taskId": "taxon:apis-cerana:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740227118
+      "updatedAt": 1790740321646
     },
     {
       "taskId": "taxon:apis-cerana:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740227118
+      "updatedAt": 1790740321646
     },
     {
       "taskId": "taxon:apis-cerana:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740226560
+      "updatedAt": 1790740321323
     }
   ]
 }

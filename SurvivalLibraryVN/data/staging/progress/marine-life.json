@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 16,
-  "generatedAt": 1790740246672,
+  "version": 17,
+  "generatedAt": 1790740341420,
   "categoryId": "marine-life",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Tôm thẻ chân trắng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     },
     {
       "canonicalId": "taxon:penaeus-monodon",
@@ -20,7 +20,7 @@
       "vietnameseName": "Tôm sú",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     }
   ],
   "aliases": [
@@ -31,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790740241559
+      "updatedAt": 1790740336326
     },
     {
       "canonicalId": "taxon:litopenaeus-vannamei",
@@ -40,7 +40,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740246672
+      "updatedAt": 1790740341420
     },
     {
       "canonicalId": "taxon:penaeus-monodon",
@@ -58,7 +58,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790740217723
+      "updatedAt": 1790740311862
     }
   ],
   "fields": [
@@ -70,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740241559,
+      "updatedAt": 1790740336326,
       "valueJson": ""
     },
     {
@@ -81,7 +81,7 @@
       "verified": false,
       "sourceKey": "inaturalist",
       "lastError": "",
-      "updatedAt": 1790740243000,
+      "updatedAt": 1790740337511,
       "valueJson": ""
     },
     {
@@ -92,7 +92,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740241559,
+      "updatedAt": 1790740336326,
       "valueJson": ""
     },
     {
@@ -103,7 +103,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740241559,
+      "updatedAt": 1790740336326,
       "valueJson": ""
     },
     {
@@ -114,7 +114,7 @@
       "verified": true,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790740217722,
+      "updatedAt": 1790740311862,
       "valueJson": ""
     },
     {
@@ -125,7 +125,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790740226300,
+      "updatedAt": 1790740321015,
       "valueJson": ""
     },
     {
@@ -136,7 +136,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790740217723,
+      "updatedAt": 1790740311862,
       "valueJson": ""
     },
     {
@@ -147,7 +147,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740218015,
+      "updatedAt": 1790740312175,
       "valueJson": ""
     }
   ],
@@ -168,7 +168,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740241559
+      "updatedAt": 1790740336326
     },
     {
       "taskId": "taxon:penaeus-monodon:identity",
@@ -186,7 +186,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740217722
+      "updatedAt": 1790740311862
     },
     {
       "taskId": "taxon:litopenaeus-vannamei:distribution",
@@ -205,7 +205,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740242744
+      "updatedAt": 1790740337318
     },
     {
       "taskId": "taxon:penaeus-monodon:distribution",
@@ -224,7 +224,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "worms: HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
-      "updatedAt": 1790740226300
+      "updatedAt": 1790740321015
     },
     {
       "taskId": "taxon:litopenaeus-vannamei:media",
@@ -243,7 +243,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740243560
+      "updatedAt": 1790740338325
     },
     {
       "taskId": "taxon:penaeus-monodon:media",
@@ -262,7 +262,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740226300
+      "updatedAt": 1790740321015
     },
     {
       "taskId": "taxon:litopenaeus-vannamei:aliases",
@@ -281,7 +281,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740241559
+      "updatedAt": 1790740336326
     },
     {
       "taskId": "taxon:penaeus-monodon:aliases",
@@ -300,7 +300,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740217723
+      "updatedAt": 1790740311862
     }
   ]
 }

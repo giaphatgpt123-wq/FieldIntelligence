@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "vegetables",
-  "updatedAt": 1790740246659,
+  "updatedAt": 1790740341408,
   "evidenceCount": 8,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/3083504",
-      "collectedAt": 1790740232566,
+      "collectedAt": 1790740327359,
       "verified": false,
       "externalId": "3083504"
     },
@@ -37,7 +37,7 @@
       "publisher": "iNaturalist",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://www.inaturalist.org/taxa/159191",
-      "collectedAt": 1790740234728,
+      "collectedAt": 1790740328863,
       "verified": false
     },
     {
@@ -52,7 +52,7 @@
       "publisher": "Thông tin Khoa học Công nghệ tỉnh Bắc Giang",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://thongtinkhoahoccongnghe.bacgiang.gov.vn/node/1126383",
-      "collectedAt": 1790740232566,
+      "collectedAt": 1790740327359,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -68,7 +68,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3083504",
-      "collectedAt": 1790740234141,
+      "collectedAt": 1790740328323,
       "verified": false
     },
     {
@@ -87,7 +87,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790740201321,
+      "collectedAt": 1790740291691,
       "verified": false,
       "externalId": "2928525"
     },
@@ -106,7 +106,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790740203639,
+      "collectedAt": 1790740292771,
       "verified": false
     },
     {
@@ -121,7 +121,7 @@
       "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
-      "collectedAt": 1790740201322,
+      "collectedAt": 1790740291691,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -137,7 +137,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
-      "collectedAt": 1790740202785,
+      "collectedAt": 1790740291993,
       "verified": false
     }
   ]
