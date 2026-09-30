@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 17,
-  "generatedAt": 1790740341420,
+  "version": 18,
+  "generatedAt": 1790741244387,
   "categoryId": "mushrooms",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Nấm sò trắng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     },
     {
       "canonicalId": "taxon:volvariella-volvacea",
@@ -20,7 +20,7 @@
       "vietnameseName": "Nấm rơm",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     }
   ],
   "aliases": [
@@ -30,8 +30,8 @@
       "aliasType": "OTHER_NAME",
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
-      "verified": false,
-      "updatedAt": 1790740300212
+      "verified": true,
+      "updatedAt": 1790741200844
     },
     {
       "canonicalId": "taxon:pleurotus-pulmonarius",
@@ -40,7 +40,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     },
     {
       "canonicalId": "taxon:volvariella-volvacea",
@@ -48,8 +48,8 @@
       "aliasType": "OTHER_NAME",
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
-      "verified": false,
-      "updatedAt": 1790740333313
+      "verified": true,
+      "updatedAt": 1790741236665
     },
     {
       "canonicalId": "taxon:volvariella-volvacea",
@@ -58,7 +58,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     }
   ],
   "fields": [
@@ -70,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740300212,
+      "updatedAt": 1790741200844,
       "valueJson": ""
     },
     {
@@ -81,7 +81,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790740302000,
+      "updatedAt": 1790741202843,
       "valueJson": ""
     },
     {
@@ -89,10 +89,10 @@
       "field": "VIETNAMESE_ALIASES",
       "valuePresent": true,
       "evidenceCount": 1,
-      "verified": false,
+      "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740300212,
+      "updatedAt": 1790741200844,
       "valueJson": ""
     },
     {
@@ -103,7 +103,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740301002,
+      "updatedAt": 1790741201866,
       "valueJson": ""
     },
     {
@@ -114,7 +114,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740333313,
+      "updatedAt": 1790741236665,
       "valueJson": ""
     },
     {
@@ -125,7 +125,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740335324,
+      "updatedAt": 1790741238316,
       "valueJson": ""
     },
     {
@@ -133,10 +133,10 @@
       "field": "VIETNAMESE_ALIASES",
       "valuePresent": true,
       "evidenceCount": 1,
-      "verified": false,
+      "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740333313,
+      "updatedAt": 1790741236665,
       "valueJson": ""
     },
     {
@@ -147,7 +147,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740334347,
+      "updatedAt": 1790741237577,
       "valueJson": ""
     }
   ],
@@ -168,7 +168,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740300212
+      "updatedAt": 1790741200844
     },
     {
       "taskId": "taxon:volvariella-volvacea:identity",
@@ -186,7 +186,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740333313
+      "updatedAt": 1790741236665
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:distribution",
@@ -205,7 +205,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740301002
+      "updatedAt": 1790741201866
     },
     {
       "taskId": "taxon:volvariella-volvacea:distribution",
@@ -224,7 +224,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740334347
+      "updatedAt": 1790741237577
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:media",
@@ -243,7 +243,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740302000
+      "updatedAt": 1790741202843
     },
     {
       "taskId": "taxon:volvariella-volvacea:media",
@@ -262,7 +262,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740335324
+      "updatedAt": 1790741238316
     },
     {
       "taskId": "taxon:pleurotus-pulmonarius:aliases",
@@ -281,7 +281,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740300212
+      "updatedAt": 1790741200844
     },
     {
       "taskId": "taxon:volvariella-volvacea:aliases",
@@ -300,7 +300,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740333313
+      "updatedAt": 1790741236665
     }
   ]
 }

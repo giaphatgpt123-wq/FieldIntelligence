@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 17,
-  "generatedAt": 1790740341420,
+  "version": 18,
+  "generatedAt": 1790741244387,
   "categoryId": "insects",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Ong nội",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     }
   ],
   "aliases": [
@@ -21,8 +21,8 @@
       "aliasType": "OTHER_NAME",
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
-      "verified": false,
-      "updatedAt": 1790740321323
+      "verified": true,
+      "updatedAt": 1790741218149
     },
     {
       "canonicalId": "taxon:apis-cerana",
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740321323,
+      "updatedAt": 1790741218149,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790740321646,
+      "updatedAt": 1790741218698,
       "valueJson": ""
     },
     {
@@ -62,10 +62,10 @@
       "field": "VIETNAMESE_ALIASES",
       "valuePresent": true,
       "evidenceCount": 1,
-      "verified": false,
+      "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740321323,
+      "updatedAt": 1790741218149,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740321646,
+      "updatedAt": 1790741218698,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740321323
+      "updatedAt": 1790741218149
     },
     {
       "taskId": "taxon:apis-cerana:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740321646
+      "updatedAt": 1790741218698
     },
     {
       "taskId": "taxon:apis-cerana:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740321646
+      "updatedAt": 1790741218698
     },
     {
       "taskId": "taxon:apis-cerana:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740321323
+      "updatedAt": 1790741218149
     }
   ]
 }

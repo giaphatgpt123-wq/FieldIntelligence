@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 17,
-  "generatedAt": 1790740341420,
+  "version": 18,
+  "generatedAt": 1790741244387,
   "categoryId": "vegetables",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Mồng tơi",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -20,7 +20,7 @@
       "vietnameseName": "Rau muống",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     }
   ],
   "aliases": [
@@ -30,8 +30,8 @@
       "aliasType": "OTHER_NAME",
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
-      "verified": false,
-      "updatedAt": 1790740327359
+      "verified": true,
+      "updatedAt": 1790741234118
     },
     {
       "canonicalId": "taxon:basella-alba",
@@ -40,7 +40,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -48,8 +48,8 @@
       "aliasType": "OTHER_NAME",
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
-      "verified": false,
-      "updatedAt": 1790740291691
+      "verified": true,
+      "updatedAt": 1790741184749
     },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
@@ -58,7 +58,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790740341420
+      "updatedAt": 1790741244387
     }
   ],
   "fields": [
@@ -70,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740327359,
+      "updatedAt": 1790741234118,
       "valueJson": ""
     },
     {
@@ -89,10 +89,10 @@
       "field": "VIETNAMESE_ALIASES",
       "valuePresent": true,
       "evidenceCount": 1,
-      "verified": false,
+      "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740327359,
+      "updatedAt": 1790741234118,
       "valueJson": ""
     },
     {
@@ -103,7 +103,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740328323,
+      "updatedAt": 1790741234520,
       "valueJson": ""
     },
     {
@@ -114,7 +114,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740291691,
+      "updatedAt": 1790741184749,
       "valueJson": ""
     },
     {
@@ -125,7 +125,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740292771,
+      "updatedAt": 1790741193840,
       "valueJson": ""
     },
     {
@@ -133,10 +133,10 @@
       "field": "VIETNAMESE_ALIASES",
       "valuePresent": true,
       "evidenceCount": 1,
-      "verified": false,
+      "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790740291691,
+      "updatedAt": 1790741184749,
       "valueJson": ""
     },
     {
@@ -147,7 +147,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790740291993,
+      "updatedAt": 1790741185308,
       "valueJson": ""
     }
   ],
@@ -168,7 +168,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740327359
+      "updatedAt": 1790741234118
     },
     {
       "taskId": "taxon:ipomoea-aquatica:identity",
@@ -186,7 +186,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740291691
+      "updatedAt": 1790741184749
     },
     {
       "taskId": "taxon:basella-alba:distribution",
@@ -205,7 +205,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740328323
+      "updatedAt": 1790741234520
     },
     {
       "taskId": "taxon:ipomoea-aquatica:distribution",
@@ -224,7 +224,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740291993
+      "updatedAt": 1790741185308
     },
     {
       "taskId": "taxon:basella-alba:media",
@@ -239,11 +239,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "COMPLETED",
+      "status": "RETRY",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "",
-      "updatedAt": 1790740329340
+      "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
+      "updatedAt": 1790741234877
     },
     {
       "taskId": "taxon:ipomoea-aquatica:media",
@@ -261,8 +261,8 @@
       "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "",
-      "updatedAt": 1790740292771
+      "lastError": "inaturalist: HTTP JSON thất bại sau bounded retry: HTTP Error 503: downtime",
+      "updatedAt": 1790741193840
     },
     {
       "taskId": "taxon:basella-alba:aliases",
@@ -281,7 +281,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740327359
+      "updatedAt": 1790741234118
     },
     {
       "taskId": "taxon:ipomoea-aquatica:aliases",
@@ -300,7 +300,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790740291691
+      "updatedAt": 1790741184749
     }
   ]
 }
