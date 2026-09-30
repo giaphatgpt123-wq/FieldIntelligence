@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "roots",
-  "updatedAt": 1790732109336,
+  "updatedAt": 1790738894611,
   "evidenceCount": 5,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5330776",
-      "collectedAt": 1790732079220,
+      "collectedAt": 1790738866045,
       "verified": false,
       "externalId": "5330776"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
-      "collectedAt": 1790732080398,
+      "collectedAt": 1790738867282,
       "verified": false
     },
     {
@@ -71,7 +71,7 @@
       "publisher": "Bộ Khoa học và Công nghệ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://www.most.gov.vn/vn/Pages/chitiettin.aspx?IDNews=14040",
-      "collectedAt": 1790732079220,
+      "collectedAt": 1790738866045,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -87,7 +87,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
-      "collectedAt": 1790732079716,
+      "collectedAt": 1790738866373,
       "verified": false
     }
   ]
