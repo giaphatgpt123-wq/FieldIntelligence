@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-brassica-rapa-chinensis",
+      "nameVi": "Cải thìa",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Brassica rapa subsp. chinensis - Pak choi from lalbagh 2288.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Brassica_rapa_subsp._chinensis_-_Pak_choi_from_lalbagh_2288.JPG",
+          "creator": "Dinesh Valke / source page attribution",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Brassica rapa chinensis 2509666.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Brassica_rapa_chinensis_2509666.jpg",
+          "creator": "Jon Sullivan",
+          "license": "CC BY 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và cuống dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Brassica rapa subsp. chinensis",
+        "applicationSource": "https://www.echocommunity.org/resources/7aa4a5b3-fcb7-45ff-8b0d-6512db883d1a"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-brassica-rapa-pekinensis",
+      "nameVi": "Cải thảo",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "BrassicaPekinensis.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:BrassicaPekinensis.jpg",
+          "creator": "Fanghong",
+          "license": "CC BY-SA 3.0 / CC BY 2.5",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây và hoa để so sánh",
+          "fileName": "JfPechay696Mustardflowersfvf.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:JfPechay696Mustardflowersfvf.JPG",
+          "creator": "Judgefloro",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau, có thể nấu hoặc muối/chế biến.",
+      "internalEvidence": {
+        "scientificName": "Brassica rapa subsp. pekinensis",
+        "applicationSource": "https://edibleplantdb.org/plants/1717/brassica-rapa-subsp-pekinensis"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-elsholtzia-ciliata",
+      "nameVi": "Kinh giới",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Elsholtzia ciliata.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Elsholtzia_ciliata.JPG",
+          "creator": "Dalgial",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Elsholtzia ciliata LJM-5450566.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Elsholtzia_ciliata_LJM-5450566.jpg",
+          "creator": "Leslie J. Mehrhoff",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau gia vị.",
+      "internalEvidence": {
+        "scientificName": "Elsholtzia ciliata (Thunb.) Hyl.",
+        "identitySource": "https://mplant.ump.edu.vn/index.php/kinh-gioi-elsholtzia-ciliata-lamiaceae/",
+        "applicationSource": "https://www.vinmec.com/vie/bai-viet/rau-kinh-gioi-co-tot-khong-vi"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-ocimum-basilicum",
+      "nameVi": "Húng quế",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "J20160709-0013—Ocimum basilicum (28118020912).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:J20160709-0013%E2%80%94Ocimum_basilicum_(28118020912).jpg",
+          "creator": "John Rusk",
+          "license": "CC BY 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh hoa để so sánh",
+          "fileName": "Ocimum-basilicum-flowers.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Ocimum-basilicum-flowers.jpg",
+          "creator": "Sten",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thơm và gia vị.",
+      "internalEvidence": {
+        "scientificName": "Ocimum basilicum L.",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:452874-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-persicaria-odorata",
+      "nameVi": "Rau răm",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Persicaria odorata.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Persicaria_odorata.JPG",
+          "creator": "Prenn",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá để so sánh",
+          "fileName": "Starr-170614-0991-Persicaria odorata-leaves-Residences Sand Island-Midway Atoll (35547371743).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr-170614-0991-Persicaria_odorata-leaves-Residences_Sand_Island-Midway_Atoll_(35547371743).jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0 US",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thơm/gia vị trong món ăn.",
+      "internalEvidence": {
+        "scientificName": "Persicaria odorata (Lour.) Soják",
+        "applicationSource": "https://prosea.prota4u.org/view.aspx?id=587"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
