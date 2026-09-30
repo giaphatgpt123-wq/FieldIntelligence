@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-abelmoschus-moschatus",
+      "nameVi": "Vông vang",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh toàn cây Vông vang để nhận biết",
+          "fileName": "Abelmoschus moschatus Plant.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Abelmoschus_moschatus_Plant.jpg",
+          "creator": "Sugeesh",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh hoa Vông vang để so sánh",
+          "fileName": "Abelmoschus moschatus flower.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Abelmoschus_moschatus_flower.jpg",
+          "creator": "Drsssuresh1961",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non và chồi non có thể dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Abelmoschus moschatus Medik.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:558023-1",
+        "applicationSource": "https://prosea.prota4u.org/view.aspx?id=76"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
