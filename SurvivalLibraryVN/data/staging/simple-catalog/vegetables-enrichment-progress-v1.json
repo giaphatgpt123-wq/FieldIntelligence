@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 258,
-  "enrichedDisplayRecords": 68,
-  "verifiedOpenImageLinks": 136,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 190,
+  "enrichedDisplayRecords": 71,
+  "verifiedOpenImageLinks": 142,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 187,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 5,
   "completedNames": [
@@ -21,7 +21,8 @@
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
-    "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái","Lá cóc","Hải đường xẻ"
+    "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái","Lá cóc","Hải đường xẻ",
+    "Chua ngút","Móc mật","Vông vang"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
@@ -29,31 +30,33 @@
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
-    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt"
+    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn","Đọt sộp","Đọt mọt","Tiết dê","Sóc dalton","Chàm đuôi dài","Ráy thon"
   ],
   "deferredForMediaVerification": [
-    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn","Cứt quạ"
+    "Cải cúc","Lá bép","Lá bứa","Rau săng máu","Lá trâm sắn","Cứt quạ","Dương đầu leo"
   ],
   "deferredForCommercialNameResolution": [
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
     "Bắp cải trái tim","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"
   ],
   "deferredForSafetyResolution": [
-    "Lạc tiên","Lu lu đực","Lá lộc vừng"
+    "Lạc tiên","Lu lu đực","Lá lộc vừng","Ráy thon"
   ],
   "deferredForCategoryReview": [
     "Mè đất","Ô rô trắng","Xuân tiết","Bứa poilan","Bìm tán","Dưa núi","Lâu xác","Lộc mại nhỏ"
   ],
   "nextP2Queue": [
-    "Sóc dalton","Chàm đuôi dài","Vông vang","Chua ngút","Dương đầu leo","Ráy thon","Tiết dê","Móc mật"
+    "Râu hùm","Đắng cẩy","Thành ngạnh","Nhội","Giảo cổ lam","Đơn nem","Chân chim","Rau bác bác"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Master canonical đã hiệu chỉnh còn 258: Rau ngót rừng → Rau sắng; Rau lủi/Rau lúi → Rau bầu đất.",
-    "Lá cóc được chuẩn hóa là Spondias dulcis; NParks xác nhận lá non ăn sống, hấp hoặc nấu như rau.",
-    "Hải đường xẻ được chuẩn hóa theo accepted name Begonia palmata; Begonia laciniata được giữ như synonym lịch sử. Nguồn K'Ho ghi lá được sử dụng làm thực phẩm.",
-    "Cứt quạ được chuẩn hóa taxonomy về Trichosanthes costata (Gymnopetalum cochinchinense/chinense là synonym), nhưng mới có một ảnh Commons phù hợp nên chưa hoàn thiện hồ sơ.",
-    "Bứa poilan, Bìm tán, Dưa núi, Lâu xác và Lộc mại nhỏ chuyển review danh mục vì nguồn hiện có không đủ để giữ mặc định là Rau ăn theo quy tắc mới.",
+    "Chua ngút được chuẩn hóa là Embelia ribes; Đại học Đà Lạt ghi lá non dùng làm rau ăn sống, vị hơi chua và chát.",
+    "Móc mật/Mắc mật được chuẩn hóa là Clausena indica; Cục Sở hữu trí tuệ ghi lá và quả tạo hương vị đặc trưng cho ẩm thực Lạng Sơn.",
+    "Vông vang được chuẩn hóa là Abelmoschus moschatus; PROSEA ghi lá non, chồi và quả non đôi khi dùng làm rau.",
+    "Dương đầu leo đã rõ Olax scandens và có bằng chứng lá dùng làm rau nhưng chưa đủ hai ảnh thực địa mở tốt.",
+    "Ráy thon cần đối chiếu mẫu Việt Nam và khóa quy tắc an toàn/nấu chín trước khi xuất bản.",
+    "Tiết dê còn xung đột giữa các taxon Cissampelos nên chưa gắn ảnh.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
