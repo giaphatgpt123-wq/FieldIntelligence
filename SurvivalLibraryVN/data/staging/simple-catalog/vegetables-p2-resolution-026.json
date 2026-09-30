@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "resolutionDate": "2026-09-30",
+  "items": [
+    {
+      "nameVi": "Râu hùm",
+      "scientificName": "Tacca plantaginea (Hance) Drenth",
+      "identityState": "IDENTITY_CONFIRMED_FOR_PU_LUONG_SOURCE",
+      "foodUseState": "YOUNG_LEAVES_COOKED_AS_SOUP_CONFIRMED",
+      "mediaState": "WAITING_FOR_SECOND_INDEPENDENT_LICENSE_VERIFIED_FIELD_IMAGE",
+      "evidence": [
+        "https://www.researchgate.net/publication/355728022_Edible_wild_plants_in_the_flora_of_Pu_Luong_Nature_Reserve_Thanh_Hoa_Province_northern_Vietnam",
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:827927-1",
+        "https://commons.wikimedia.org/wiki/File:Tacca_plantaginea_-_Botanischer_Garten,_Dresden,_Germany_-_DSC08629.JPG"
+      ],
+      "note": "Sửa định danh trước đó: nguồn Pù Luông ghi rõ Tacca plantaginea, không dùng Tacca chantrieri cho hồ sơ này."
+    },
+    {
+      "nameVi": "Đắng cẩy",
+      "scientificName": "Clerodendrum cyrtophyllum Turcz.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "YOUNG_LEAVES_AS_VEGETABLE_CONFIRMED",
+      "mediaState": "ONE_VERIFIED_OPEN_IMAGE_SECOND_IMAGE_PENDING",
+      "evidence": [
+        "https://www.researchgate.net/publication/355728022_Edible_wild_plants_in_the_flora_of_Pu_Luong_Nature_Reserve_Thanh_Hoa_Province_northern_Vietnam",
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:862022-1/general-information",
+        "https://commons.wikimedia.org/wiki/File:Clerodendrum_cyrtophyllum.JPG",
+        "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Clerodendrum+cyrtophyllum"
+      ]
+    },
+    {
+      "nameVi": "Đơn nem",
+      "scientificName": "Maesa perlaria (Lour.) Merr.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "YOUNG_LEAVES_EATEN_RAW_CONFIRMED",
+      "mediaState": "WAITING_FOR_IMAGES_MATCHING_VIETNAM_MAIN_VARIETY",
+      "evidence": [
+        "https://www.researchgate.net/publication/355728022_Edible_wild_plants_in_the_flora_of_Pu_Luong_Nature_Reserve_Thanh_Hoa_Province_northern_Vietnam",
+        "https://mpns.science.kew.org/mpns-portal/plantDetail?dbs=wcsCmp&plantId=2502730",
+        "https://commons.wikimedia.org/wiki/Category:Maesa_perlaria"
+      ],
+      "note": "Commons có nhiều ảnh var. formosana từ Đài Loan; chưa dùng để đại diện hồ sơ Việt Nam nếu chưa khóa đúng variety."
+    },
+    {
+      "nameVi": "Rau bác bác",
+      "identityState": "LOCAL_EDIBLE_NAME_CONFIRMED_TAXON_UNRESOLVED",
+      "foodUseState": "CULAOCHAM_EDIBLE_WILD_VEGETABLE_CONFIRMED",
+      "mediaState": "BLOCKED_UNTIL_TAXON_RESOLVED",
+      "evidence": [
+        "https://www.botanyvn.com/cnt.asp?newsid=1326&param=news",
+        "https://hoianheritage.danang.gov.vn/vi/bao-chi/bao-chi-ve-di-san/rau-rung-cu-lao-cham-nau-cua-an-can-noi-com-218.html"
+      ]
+    }
+  ],
+  "state": "RESOLUTION_RECORDED"
+}
