@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-lollo-bionda-lettuce",
+      "nameVi": "Xà lách xoăn xanh",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách xoăn xanh",
+          "fileName": "Insalata lollo bionda.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Insalata_lollo_bionda.jpg",
+          "creator": "Nick Saltmarsh",
+          "license": "CC BY 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Lollo Bionda để so sánh",
+          "fileName": "Lollo Bionda lettuce J1.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lollo_Bionda_lettuce_J1.jpg",
+          "creator": "Jamain",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Cutting/Curled Lettuce Group - Lollo Bionda type",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-lollo-rosso-lettuce",
+      "nameVi": "Xà lách xoăn đỏ",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách xoăn đỏ",
+          "fileName": "Insalata lollo rossa.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Insalata_lollo_rossa.jpg",
+          "creator": "Dehner Garten-Center",
+          "license": "CC BY 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Lollo Rosso để so sánh",
+          "fileName": "Lactuca sativa var. crispa 'Lollo Rosso' kz01.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lactuca_sativa_var._crispa_%27Lollo_Rosso%27_kz01.jpg",
+          "creator": "Kenraiz",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Cutting/Curled Lettuce Group - Lollo Rosso type",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-red-oakleaf-lettuce",
+      "nameVi": "Xà lách oakleaf đỏ",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách oakleaf đỏ",
+          "fileName": "Starr-081031-0399-Lactuca sativa-red oak leaf lettuce-Makawao-Maui (24631228000).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr-081031-0399-Lactuca_sativa-red_oak_leaf_lettuce-Makawao-Maui_(24631228000).jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0 US",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh oakleaf đỏ để so sánh",
+          "fileName": "Starr-081031-0390-Lactuca sativa-red oak leaf lettuce-Makawao-Maui (24631209520).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr-081031-0390-Lactuca_sativa-red_oak_leaf_lettuce-Makawao-Maui_(24631209520).jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0 US",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Oakleaf / leaf lettuce cultivar",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-butterhead-lettuce",
+      "nameVi": "Xà lách butterhead",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách butterhead",
+          "fileName": "Butterhead lettuce.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Butterhead_lettuce.jpg",
+          "creator": "CNEcija12345",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh butterhead xanh để so sánh",
+          "fileName": "Green butterhead lettuce.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Green_butterhead_lettuce.jpg",
+          "creator": "P1898",
+          "license": "CC BY 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Butterhead Group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-frisee-endive",
+      "nameVi": "Xà lách frisée",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết frisée",
+          "fileName": "Kluse - Cichorium endivia var crispum 13 ies.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Kluse_-_Cichorium_endivia_var_crispum_13_ies.jpg",
+          "creator": "Frank Vincentz",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh frisée để so sánh",
+          "fileName": "Friséesalat.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Fris%C3%A9esalat.jpg",
+          "creator": "Sarang",
+          "license": "Public domain (PD-self)",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau lá/salad.",
+      "internalEvidence": {
+        "scientificName": "Cichorium endivia L.",
+        "cultivarGroup": "Crispum / Curled Endive Group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:194527-1/general-information",
+        "identityNote": "Frisée không thuộc Lactuca sativa; giữ tên thương mại xà lách frisée nhưng taxonomy là Cichorium endivia."
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
