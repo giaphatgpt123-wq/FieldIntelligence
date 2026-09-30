@@ -66,18 +66,30 @@ class DataEngineScaleSmokeTest {
                 db.endTransaction()
             }
 
+            fun countRows(table: String): Int = db.rawQuery("SELECT COUNT(*) FROM $table", null).use { cursor ->
+                check(cursor.moveToFirst())
+                cursor.getInt(0)
+            }
+            assertEquals("direct staging_entities row count", 250, countRows("staging_entities"))
+            assertEquals("direct staging_fields row count", 250, countRows("staging_fields"))
+            assertEquals("direct library_load_tasks row count", 250, countRows("library_load_tasks"))
+
             // Use the same open database in instrumentation so SQL/runtime exceptions are
             // visible in CI instead of being converted to the production-safe EMPTY fallback.
             val snapshot = DataEngineProgressSqlRepository.buildSnapshot(db)
-            assertEquals(250, snapshot.stagedEntities)
-            assertEquals(250, snapshot.verifiedFields)
-            assertEquals(250, snapshot.completedTasks)
-            assertEquals(DataEngineProgressSqlRepository.ENTITY_DETAIL_LIMIT, snapshot.entities.size)
-            assertTrue(snapshot.entities.size < snapshot.stagedEntities)
+            assertEquals("snapshot.stagedEntities", 250, snapshot.stagedEntities)
+            assertEquals("snapshot.verifiedFields", 250, snapshot.verifiedFields)
+            assertEquals("snapshot.completedTasks", 250, snapshot.completedTasks)
+            assertEquals(
+                "snapshot bounded entity detail window",
+                DataEngineProgressSqlRepository.ENTITY_DETAIL_LIMIT,
+                snapshot.entities.size
+            )
+            assertTrue("entity detail window must stay bounded", snapshot.entities.size < snapshot.stagedEntities)
             val vegetables = snapshot.categories.first { it.categoryId == "vegetables" }
-            assertEquals(250, vegetables.stagedEntities)
-            assertEquals(250, vegetables.verifiedFields)
-            assertEquals(250, vegetables.completedTasks)
+            assertEquals("vegetables.stagedEntities", 250, vegetables.stagedEntities)
+            assertEquals("vegetables.verifiedFields", 250, vegetables.verifiedFields)
+            assertEquals("vegetables.completedTasks", 250, vegetables.completedTasks)
         } finally {
             db.delete("staging_aliases", null, null)
             db.delete("staging_fields", null, null)
