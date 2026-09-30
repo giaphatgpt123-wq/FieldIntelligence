@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-embelia-ribes",
+      "nameVi": "Chua ngút",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết Chua ngút",
+          "fileName": "Embelia ribes (16712777633).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Embelia_ribes_(16712777633).jpg",
+          "creator": "Dinesh Valke",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Chua ngút để so sánh",
+          "fileName": "Embelia ribes (17145289448).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Embelia_ribes_(17145289448).jpg",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non dùng làm rau ăn sống, có vị hơi chua và chát.",
+      "internalEvidence": {
+        "scientificName": "Embelia ribes Burm.f.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/588451-1",
+        "applicationSource": "https://museum.dlu.edu.vn/handle/2710/1069"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-clausena-indica",
+      "nameVi": "Móc mật",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá Móc mật để nhận biết",
+          "fileName": "Clausena indica - Leaf.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Clausena_indica_-_Leaf.JPG",
+          "creator": "Siddarthmachado",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây Móc mật để so sánh",
+          "fileName": "Clausena indica (1).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Clausena_indica_(1).jpg",
+          "creator": "Vinayaraj",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau gia vị, đặc biệt trong các món quay/nướng.",
+      "internalEvidence": {
+        "scientificName": "Clausena indica (Dalzell) Oliv.",
+        "searchAliases": ["Mắc mật", "Mác mật", "Mắc một", "Móc mật"],
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:772140-1",
+        "applicationSource": "https://www.ipvietnam.gov.vn/en_US/web/english/domestic-ip-activities/-/asset_publisher/ZMuTgR44COLR/content/geographical-indication-protection-lang-son-for-clausena-indica-products"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
