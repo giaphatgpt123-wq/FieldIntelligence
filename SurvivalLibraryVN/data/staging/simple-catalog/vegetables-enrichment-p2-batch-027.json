@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-plantago-major",
+      "nameVi": "Mã đề",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh Mã đề để nhận biết",
+          "fileName": "Plantago major 213068781.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Plantago_major_213068781.jpg",
+          "creator": "alcesevropsky / upload Rudolphous",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Mã đề để so sánh",
+          "fileName": "Plantago major-4366.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Plantago_major-4366.jpg",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non được dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Plantago major L.",
+        "identitySources": [
+          "https://www.botanyvn.com/cnt.asp?lg=en&list=species&param=edir&v=Plantago+major",
+          "https://pharmacy.tdtu.edu.vn/duoc-lieu/ma-de"
+        ],
+        "applicationSource": "https://www.thuvientailieu.vn/tai-lieu/da-dang-sinh-hoc-cac-loai-rau-rung-co-gia-tri-tai-khu-du-tru-sinh-quyen-dao-cu-lao-cham-thanh-pho-hoi-an-pham-thi-kim-50326/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
