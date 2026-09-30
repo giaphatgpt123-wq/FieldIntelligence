@@ -11,16 +11,16 @@ Vì vậy mỗi danh mục được hiển thị đúng một dòng; một loài
   tham chiếu là bằng chứng nhận dạng cá thể ngoài thực địa.
 - Những chỉ số chưa có bằng chứng được ghi **chưa đo**. Chưa có chỉ tiêu nên không tính %.
 
-## Nạp Hoa, Cây gỗ, Cây ăn quả
+## Nạp Rau, Hoa, Cây gỗ, Cây ăn quả
 
 1. Thu thập theo từng loài; giữ nguyên tên khoa học, tên Việt, nguồn trong nước,
    nguồn phân loại, xuất xứ và quyền sử dụng ảnh. Loài dễ nhầm phải tách hồ sơ.
 2. Đối chiếu thủ công và điền `data/reviewed-collections.csv` theo các cột
    `collection_id,scientific_name,vietnamese_name,source_url,reviewed_by`.
-   Các ID hợp lệ: `flowers`, `timber-trees`, `fruit-crops`.
+   Các ID hợp lệ: `vegetables`, `flowers`, `timber-trees`, `fruit-crops`.
    Mỗi đợt có thể thêm 1, 50 hoặc nhiều loài; giữ các dòng đã duyệt từ đợt trước.
    Nếu có chỉ tiêu thực tế, điền `target_count` vào
-   `data/reviewed-collection-goals.csv` (ví dụ 1000). Không dùng ví dụ làm chỉ tiêu.
+   `data/reviewed-collection-goals.csv`. Không dùng số ví dụ làm chỉ tiêu thật.
 3. CI tạo taxonomy SQLite, ghép các gói cá/nấm/dược liệu, rồi chạy
    `tools/attach_reviewed_collections.py`. Bản ghi chỉ vào danh mục khi tên khoa
    học trùng **chính xác một** bản ghi Thực vật đã có trong gói. Dòng thiếu nguồn
@@ -35,6 +35,11 @@ Vì vậy mỗi danh mục được hiển thị đúng một dòng; một loài
    bản app chứa tính năng này được cài.
 5. Ảnh cần quy trình license/đối chiếu riêng; công dụng và cách dùng cần nguồn
    chuyên ngành riêng. Không chuyển dữ liệu phân loại thành hướng dẫn sử dụng.
+6. Với **Rau**, bản ghi đã đối chiếu tên/định danh có thể vào lớp reviewed để theo
+   dõi và nạp theo đợt, nhưng **không đồng nghĩa đã đạt cổng phát hành V1**. Hồ sơ
+   chỉ được đưa vào vùng ưu tiên khi ảnh, mức sử dụng, công dụng/cách dùng và cảnh
+   báo an toàn (nếu có) đạt đúng điều kiện trong `docs/LIBRARY_RULES_V1.md`.
 
-Tệp CSV hiện chỉ có tiêu đề. **Chưa có đợt hồ sơ mới được duyệt để nạp**;
-các hồ sơ lõi đã có trong mã nguồn vẫn hiển thị. Cây gỗ đang có 0 hồ sơ lõi.
+`data/reviewed-collections.csv` hiện đã có các hồ sơ được duyệt cho Hoa, Cây gỗ và
+Cây ăn quả. Rau được mở pipeline từ P2; chỉ thêm từng hồ sơ sau khi nguồn trong nước
+và định danh đã được đối chiếu. Cây gỗ lõi vẫn có thể là 0 nếu chưa có hồ sơ starter.
