@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "recordId": "vegetables-basella-alba-v1",
+  "categoryId": "vegetables",
+  "vietnameseName": "Mồng tơi",
+  "scientificName": "Basella alba L.",
+  "family": "Basellaceae",
+  "state": "REVIEW",
+  "publicationState": "BLOCKED_PENDING_MEDIA_NUTRITION_SAFETY_REVIEW",
+  "qualityProfile": "IDENTIFICATION_V1",
+  "vietnamRelevant": true,
+  "usageLevelCandidate": "THUONG_DUNG",
+  "usageLevelVerified": false,
+  "identity": {
+    "acceptedTaxon": true,
+    "nativeInVietnam": true,
+    "confidence": "HIGH",
+    "evidence": ["KEW_POWO_BASELLA_ALBA"]
+  },
+  "identification": {
+    "summaryVi": "Cây leo thân mọng, nhẵn, phân nhánh; thân có thể xanh hoặc đỏ. Lá có cuống, phiến thường hình trứng đến gần tròn, mép nguyên. Cụm hoa dạng bông; hoa nhỏ màu trắng, hồng hoặc tím nhạt; quả khi chín có thể tím đen.",
+    "keyFeatures": [
+      "Dây leo thân mọng, nhẵn",
+      "Lá dày, mọng, mép nguyên",
+      "Cụm hoa dạng bông",
+      "Hoa nhỏ màu trắng, hồng hoặc tím nhạt",
+      "Quả chín có thể tím đen"
+    ],
+    "confusableWith": [],
+    "confusableState": "NEEDS_CURATED_VIETNAM_SOURCE",
+    "evidence": ["KEW_POWO_BASELLA_ALBA"]
+  },
+  "vietnamDistribution": {
+    "summaryVi": "Kew ghi nhận Basella alba có vùng phân bố bản địa bao gồm Việt Nam.",
+    "scope": "COUNTRY_PRESENCE",
+    "confidence": "HIGH",
+    "evidence": ["KEW_POWO_BASELLA_ALBA"]
+  },
+  "agronomy": {
+    "sourceAgeNote": "Nguồn Khuyến nông Việt Nam công bố năm 2012; dùng làm nguồn kỹ thuật nền, các khuyến nghị vật tư/thuốc phải tái kiểm tra theo đăng ký hiện hành trước khi xuất bản.",
+    "season": "Nguồn Khuyến nông mô tả gieo chủ yếu từ đầu tháng 3 đến tháng 5, thu hoạch từ tháng 5 đến tháng 9; không ngoại suy cứng cho mọi vùng sinh thái Việt Nam.",
+    "soil": "Đất thịt nhẹ, thịt trung bình hoặc cát pha; pH tham khảo 6,0-6,7.",
+    "spacing": "Hàng 20-25 cm, cây 20 cm; nguồn nêu mật độ khoảng 160.000-170.000 cây/ha.",
+    "irrigation": "Sử dụng nguồn nước sạch và duy trì ẩm đất khoảng 80% theo tài liệu nguồn.",
+    "fertilizerSafety": "Không dùng phân chuồng tươi, phân bắc hoặc nước phân tươi. Thời điểm thu hoạch phải bảo đảm khoảng cách sau bón/tưới phân theo hướng dẫn nguồn.",
+    "pestDisease": {
+      "verifiedProblems": ["sâu khoang", "một số sâu ăn lá", "bệnh đốm mắt cua"],
+      "currentPesticideRecommendation": "BLOCKED_REQUIRES_CURRENT_REGISTRATION_CHECK",
+      "reason": "Tên thương phẩm trong tài liệu 2012 không được coi là khuyến nghị hiện hành nếu chưa đối chiếu đăng ký thuốc BVTV mới nhất."
+    },
+    "evidence": ["VIETNAM_EXTENSION_BASELLA_SAFE_GROWING_2012"]
+  },
+  "foodUse": {
+    "edibleParts": ["lá", "ngọn non"],
+    "summaryVi": "Kew ghi nhận loài được trồng để lấy lá mọng và có chất nhầy làm thực phẩm.",
+    "culinaryMethods": [],
+    "culinaryMethodsState": "NEEDS_VIETNAM_CULINARY_SOURCE",
+    "evidence": ["KEW_POWO_BASELLA_ALBA"]
+  },
+  "nutrition": {
+    "state": "PRIMARY_VIETNAM_SOURCE_PENDING",
+    "secondaryCorroboration": {
+      "sourceId": "DULIEUPHAPLUAT_BASELLA_NUTRITION_2026",
+      "note": "Nguồn thứ cấp công bố dữ liệu gắn với Bảng thành phần thực phẩm Việt Nam và quy định nhãn dinh dưỡng 2026; chưa dùng làm nguồn duy nhất để mở gate dinh dưỡng."
+    },
+    "numericValues": {},
+    "rule": "Chỉ mở gate khi trích được đúng thực phẩm Mồng tơi từ nguồn sơ cấp/official food-composition dataset."
+  },
+  "foodSafety": {
+    "state": "PARTIAL",
+    "verifiedPrinciples": [
+      "Sử dụng nguồn nước sạch cho tưới",
+      "Không sử dụng phân chuồng tươi, phân bắc hoặc nước phân tươi",
+      "Phải bảo đảm thời gian cách ly theo hướng dẫn hiện hành đối với phân bón và thuốc BVTV"
+    ],
+    "limitations": "Các hoạt chất/thuốc thương phẩm nêu trong tài liệu kỹ thuật cũ không được đưa vào khuyến nghị người dùng nếu chưa kiểm tra đăng ký hiện hành.",
+    "evidence": ["VIETNAM_EXTENSION_BASELLA_SAFE_GROWING_2012"]
+  },
+  "mediaPlan": {
+    "minimumDiagnosticImages": 5,
+    "requiredViewRoles": ["WHOLE", "LEAF", "STEM", "FLOWER", "FRUIT"],
+    "primaryViewRole": "WHOLE",
+    "candidateSource": "WIKIMEDIA_COMMONS_BASELLA_ALBA_CATEGORY",
+    "candidateCountObserved": 153,
+    "verifiedMediaCount": 0,
+    "state": "NEEDS_LICENSE_TAXON_ROLE_CHECK_PER_FILE"
+  },
+  "sources": [
+    {
+      "sourceId": "KEW_POWO_BASELLA_ALBA",
+      "publisher": "Royal Botanic Gardens, Kew",
+      "title": "Basella alba L. | Plants of the World Online",
+      "uri": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:164286-1/general-information",
+      "roles": ["taxonomy", "distribution", "morphology", "food-use"],
+      "authorityLevel": "HIGH"
+    },
+    {
+      "sourceId": "VIETNAM_EXTENSION_BASELLA_SAFE_GROWING_2012",
+      "publisher": "Trung tâm Khuyến nông Quốc gia",
+      "title": "Kỹ thuật trồng rau mồng tơi an toàn",
+      "uri": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-trong-rau-mong-toi-an-toan-5596.html",
+      "publishedDate": "2012-05-07",
+      "roles": ["agronomy", "food-safety"],
+      "authorityLevel": "HIGH_WITH_DATE_LIMITATION"
+    },
+    {
+      "sourceId": "WIKIMEDIA_COMMONS_BASELLA_ALBA_CATEGORY",
+      "publisher": "Wikimedia Commons",
+      "title": "Category:Basella alba",
+      "uri": "https://commons.wikimedia.org/wiki/Category:Basella_alba",
+      "roles": ["media-candidate-discovery"],
+      "authorityLevel": "MEDIA_ONLY_FILE_LEVEL_LICENSE_REQUIRED"
+    },
+    {
+      "sourceId": "DULIEUPHAPLUAT_BASELLA_NUTRITION_2026",
+      "publisher": "Dữ Liệu Pháp Luật",
+      "title": "Giá trị dinh dưỡng của Rau mồng tơi, tươi",
+      "uri": "https://dulieuphapluat.vn/cong-cu/gia-tri-dinh-duong-thuc-pham/rau-mong-toi-tuoi.html",
+      "roles": ["nutrition-secondary-corroboration"],
+      "authorityLevel": "SECONDARY_NOT_PUBLICATION_GATE"
+    }
+  ],
+  "blockers": [
+    "Chưa kiểm chứng tên Việt bằng nguồn Việt Nam chuyên ngành độc lập ngoài nguồn kỹ thuật",
+    "Chưa xây danh sách loài/dạng dễ nhầm có nguồn",
+    "Chưa có 5 ảnh chẩn đoán đã kiểm license + taxon + vai trò",
+    "Chưa trích dinh dưỡng từ nguồn sơ cấp",
+    "Khuyến nghị BVTV hiện hành chưa được kiểm tra",
+    "Mức độ sử dụng Thường dùng chưa có nguồn thực chứng riêng"
+  ]
+}
