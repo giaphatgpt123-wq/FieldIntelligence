@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-cai-xanh-mustard-greens",
+      "nameVi": "Cải xanh",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá nhận biết",
+          "fileName": "Starr-150403-0144-Brassica juncea-leaf-Southeast Eastern Island-Midway Atoll (24648901563).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr-150403-0144-Brassica_juncea-leaf-Southeast_Eastern_Island-Midway_Atoll_(24648901563).jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0 US",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cụm lá để so sánh",
+          "fileName": "Starr-150403-1408-Brassica juncea-leaves-Southeast Eastern Island-Midway Atoll (24982012140).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr-150403-1408-Brassica_juncea-leaves-Southeast_Eastern_Island-Midway_Atoll_(24982012140).jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0 US",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "identityNote": "Tên Cải xanh trong kho được xử lý theo nhóm mustard greens/Brassica juncea dùng làm rau ăn lá; taxonomy nội bộ giữ lưu ý Kew 2026 xử lý Brassica × juncea dưới tên lai được chấp nhận × Brassarda juncea.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77354001-1/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77354001-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
