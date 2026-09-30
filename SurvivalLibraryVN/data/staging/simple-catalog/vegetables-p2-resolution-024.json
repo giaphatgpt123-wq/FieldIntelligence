@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "resolutionDate": "2026-09-30",
+  "items": [
+    {
+      "nameVi": "Dương đầu leo",
+      "scientificName": "Olax scandens Roxb.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "LEAF_VEGETABLE_USE_CONFIRMED",
+      "mediaState": "INSUFFICIENT_TWO_OPEN_FIELD_IMAGES",
+      "evidence": [
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:608144-1",
+        "https://pubmed.ncbi.nlm.nih.gov/27833375/",
+        "https://commons.wikimedia.org/wiki/Category:Plants_of_the_coast_of_Coromandel,_Volume_2"
+      ],
+      "note": "Lá được ghi nhận dùng như rau; hiện nguồn Commons chắc chắn chủ yếu là minh họa thực vật học, chưa đủ 2 ảnh thực địa mở cho nhận biết tốt."
+    },
+    {
+      "nameVi": "Ráy thon",
+      "scientificName": "Schismatoglottis calyptrata (Roxb.) Zoll. & Moritzi",
+      "identityState": "TAXON_CONFIRMED_SOURCE_DISTRIBUTION_RECHECK_REQUIRED",
+      "foodUseState": "COOKED_USE_RECORDED",
+      "safetyState": "COOKING_AND_ARACEAE_SAFETY_REVIEW_REQUIRED",
+      "evidence": [
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:88710-1",
+        "https://prosea.prota4u.org/view.aspx?id=2304",
+        "https://commons.wikimedia.org/wiki/Category:Schismatoglottis_calyptrata"
+      ],
+      "note": "PROSEA ghi lá non/cụm hoa/thân bò được ăn sau khi nấu; Kew hiện không liệt kê Việt Nam trong native range nên cần đối chiếu mẫu K'Ho trước khi khóa hồ sơ Việt Nam."
+    },
+    {
+      "nameVi": "Tiết dê",
+      "identityState": "NAME_TO_TAXON_CONFLICT",
+      "candidateTaxa": ["Cissampelos andromorpha DC.", "Cissampelos pareira L."],
+      "mediaState": "BLOCKED_UNTIL_IDENTITY_RESOLVED",
+      "note": "Nguồn vùng khác nhau dùng tên Tiết dê cho các taxon Cissampelos khác nhau; không gắn ảnh trước khi resolve."
+    },
+    {
+      "nameVi": "Chàm đuôi dài",
+      "scientificNameCandidate": "Indigofera longicauda Thuan",
+      "identityState": "TAXON_ACCEPTED_NEEDS_LOCAL_NAME_CROSSCHECK",
+      "foodUseState": "LOCAL_ETHNOBOTANY_RECORDED_NEEDS_SECOND_SOURCE",
+      "mediaState": "WAITING_FOR_VERIFIED_OPEN_IMAGES",
+      "evidence": ["https://powo.science.kew.org/taxon/933592-1"]
+    },
+    {
+      "nameVi": "Sóc dalton",
+      "scientificNameCandidate": "Glochidion daltonii / Glochidion daltoni",
+      "identityState": "SPELLING_AND_TAXON_BACKBONE_REVIEW_REQUIRED",
+      "mediaState": "BLOCKED_UNTIL_IDENTITY_RESOLVED"
+    }
+  ],
+  "state": "RESOLUTION_RECORDED"
+}
