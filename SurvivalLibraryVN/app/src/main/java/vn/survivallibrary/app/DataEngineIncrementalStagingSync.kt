@@ -8,9 +8,10 @@ import javax.net.ssl.HttpsURLConnection
 /**
  * Compatibility facade for the V2-G progress transport.
  *
- * New clients prefer SHA-addressed category shards. If the remote index is still legacy,
- * or the sharded path fails validation/network checks, the proven full-snapshot synchronizer
- * remains available as a rollback path.
+ * New clients prefer SHA-addressed category shards. Changed shards are staged on disk and
+ * fully verified before one database transaction begins. If the remote index is still legacy,
+ * or the sharded path fails validation/network/apply checks, the proven full-snapshot
+ * synchronizer remains available as a rollback path.
  */
 object DataEngineIncrementalStagingSync {
     private const val PREFS = "data_engine_staging_sync"
@@ -36,7 +37,7 @@ object DataEngineIncrementalStagingSync {
                     message = "Tiến độ AI/Data Engine đã là phiên bản mới nhất."
                 )
             } else if (remoteIndex.progressShards != null) {
-                runCatching { DataEngineShardedStagingSync.sync(appContext, remoteIndex) }
+                runCatching { DataEngineDiskBackedStagingSync.sync(appContext, remoteIndex) }
                     .getOrElse { DataEngineStagingSync.checkAndSync(appContext) }
             } else {
                 DataEngineStagingSync.checkAndSync(appContext)
