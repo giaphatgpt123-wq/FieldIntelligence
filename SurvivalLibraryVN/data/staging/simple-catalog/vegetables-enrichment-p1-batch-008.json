@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-white-cabbage",
+      "nameVi": "Bắp cải trắng",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết bắp cải trắng",
+          "fileName": "White Cabbage.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:White_Cabbage.jpg",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh bắp cải trắng để so sánh",
+          "fileName": "CSIRO ScienceImage 2840 White Cabbage.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_2840_White_Cabbage.jpg",
+          "creator": "Robert Kerton / CSIRO",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Brassica oleracea L.",
+        "cultivarGroup": "Capitata Group - white/green cabbage",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:279435-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-red-cabbage",
+      "nameVi": "Bắp cải tím",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết bắp cải tím",
+          "fileName": "Red cabbage which is actually purple.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Red_cabbage_which_is_actually_purple.jpg",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh bắp cải tím để so sánh",
+          "fileName": "Red cabbage PL.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Red_cabbage_PL.jpg",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Brassica oleracea L.",
+        "cultivarGroup": "Capitata Group - red/purple cabbage",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:279435-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-romaine-lettuce",
+      "nameVi": "Xà lách romaine",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách romaine",
+          "fileName": "Cos lettuce 2017 A1.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Cos_lettuce_2017_A1.jpg",
+          "creator": "Fructibus",
+          "license": "CC0 1.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh romaine/cos để so sánh",
+          "fileName": "Cos lettuce 2017 A2.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Cos_lettuce_2017_A2.jpg",
+          "creator": "Fructibus",
+          "license": "CC0 1.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Romaine/Cos Group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-iceberg-lettuce",
+      "nameVi": "Xà lách iceberg",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách iceberg",
+          "fileName": "Iceberg lettuce in UK (39892).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Iceberg_lettuce_in_UK_(39892).jpg",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh iceberg để so sánh",
+          "fileName": "Iceberg lettuce in UK (12490).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Iceberg_lettuce_in_UK_(12490).jpg",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Crisphead/Iceberg Group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
