@@ -32,11 +32,17 @@ internal fun stillImageHitTest(
     val ny = (tapY - offsetY) / renderedHeight
     if (nx !in 0f..1f || ny !in 0f..1f) return null
 
-    return buildRegionRecognitionGroups(detections)
+    val selectedGroup = buildRegionRecognitionGroups(detections)
         .asSequence()
         .filter { nx >= it.box.left && nx <= it.box.right && ny >= it.box.top && ny <= it.box.bottom }
         .minByOrNull { (it.box.right - it.box.left) * (it.box.bottom - it.box.top) }
-        ?.primary
+        ?: return null
+
+    // A tap may only open a scientific profile from a region whose full Top-N decision is strong.
+    // This prevents cases such as 75% vs 74% from being treated as a confident identification.
+    return selectedGroup.primary?.takeIf {
+        selectedGroup.verdict == RecognitionVerdict.STRONG_CANDIDATE
+    }
 }
 
 /** Draws one box per detected region over a ContentScale.Fit still image. */
