@@ -4,7 +4,9 @@
   "categoryNameVi": "Rau",
   "purpose": "Kho tên để tìm kiếm và tạo hồ sơ sau; không đồng nghĩa tất cả tên đã có ảnh/công dụng hoàn chỉnh.",
   "rules": "Chỉ lưu tên/từ khóa tìm kiếm ở bước này. Củ, quả, hoa và nấm tách sang danh mục riêng.",
-  "nameCount": 125,
+  "groupEntryCount": 137,
+  "uniqueGroupedNameCount": 130,
+  "uniqueSearchNameCountIncludingAliasOnly": 132,
   "groups": {
     "rau_an_la_pho_bien": [
       "Rau muống","Mồng tơi","Rau ngót","Bồ ngót","Rau má","Rau dền","Rau dền xanh","Rau dền đỏ","Rau dền cơm","Rau dền tía","Rau đay","Rau đay xanh","Rau đay đỏ","Rau càng cua","Rau sam","Rau nhút","Rau đắng","Rau đắng đất","Rau đắng biển","Diếp cá","Rau ngổ","Cần nước","Cần tây","Cải xoong","Chùm ngây"
