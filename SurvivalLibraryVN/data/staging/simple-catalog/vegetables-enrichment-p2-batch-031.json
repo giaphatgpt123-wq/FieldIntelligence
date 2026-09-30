@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-stenochlaena-palustris",
+      "nameVi": "Đọt choại",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh Đọt choại để nhận biết",
+          "fileName": "Stenochlaena-palustris-SF25020-01.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Stenochlaena-palustris-SF25020-01.jpg",
+          "creator": "Junglenut",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Đọt choại để so sánh",
+          "fileName": "Stenochlaena-palustris-SF24028-04.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Stenochlaena-palustris-SF24028-04.jpg",
+          "creator": "Steve Fitzgerald / Junglenut",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — đọt non dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Stenochlaena palustris (Burm.f.) Bedd.",
+        "searchAliases": ["Rau choại", "Rau chạy", "Đọt chạy", "Dây choại"],
+        "identitySources": [
+          "https://jst.ntt.edu.vn/index.php/jst/article/view/567",
+          "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Stenochlaena+palustris"
+        ],
+        "applicationSource": "https://jst.ntt.edu.vn/index.php/jst/article/view/567"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
