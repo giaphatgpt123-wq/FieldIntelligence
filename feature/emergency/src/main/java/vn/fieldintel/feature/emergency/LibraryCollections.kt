@@ -163,5 +163,5 @@ object LibraryCollections {
 
     internal fun evidenceCollections(): List<LibraryCollection> = baseItems.filter { it.evidenceDomain != null }
     internal fun reviewedCollections(): List<LibraryCollection> = baseItems.filter { it.id in REVIEWED_IDS }
-    private val REVIEWED_IDS = setOf("flowers", "timber-trees", "fruit-crops")
+    private val REVIEWED_IDS = setOf("vegetables", "flowers", "timber-trees", "fruit-crops")
 }

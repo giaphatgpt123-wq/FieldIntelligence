@@ -11,7 +11,7 @@ import re
 import sqlite3
 from pathlib import Path
 
-COLLECTIONS = {"flowers", "timber-trees", "fruit-crops"}
+COLLECTIONS = {"vegetables", "flowers", "timber-trees", "fruit-crops"}
 FIELDS = {"collection_id", "scientific_name", "vietnamese_name", "source_url", "reviewed_by"}
 
 
@@ -79,7 +79,11 @@ def attach(db_path: Path, csv_path: Path, goals_path: Path | None = None) -> dic
                 collection_id TEXT NOT NULL, source_id TEXT NOT NULL, source_record_id TEXT NOT NULL,
                 vietnamese_name TEXT NOT NULL, source_url TEXT NOT NULL, reviewed_by TEXT NOT NULL,
                 PRIMARY KEY(collection_id,source_id,source_record_id))""")
-            db.execute("DELETE FROM reviewed_collection WHERE collection_id IN (?,?,?)", tuple(sorted(COLLECTIONS)))
+            placeholders = ",".join("?" for _ in COLLECTIONS)
+            db.execute(
+                f"DELETE FROM reviewed_collection WHERE collection_id IN ({placeholders})",
+                tuple(sorted(COLLECTIONS)),
+            )
             db.executemany("INSERT INTO reviewed_collection VALUES (?,?,?,?,?,?)", approved)
             db.execute("""CREATE TABLE IF NOT EXISTS reviewed_collection_goal (
                 collection_id TEXT PRIMARY KEY, target_count INTEGER NOT NULL CHECK(target_count>0))""")

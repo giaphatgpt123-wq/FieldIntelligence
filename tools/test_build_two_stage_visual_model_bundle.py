@@ -26,9 +26,9 @@ class TwoStageVisualModelBundleBuilderTest(unittest.TestCase):
             validation_note="Synthetic fixture only; not a biological model.",
             supported_group=["plants", "fungi"],
             proposal_threshold=0.30,
-            classification_threshold=0.45,
+            classification_threshold=0.35,
             max_regions=12,
-            max_candidates_per_region=1,
+            max_candidates_per_region=3,
             detector_score_threshold=0.25,
             detector_max_results=24,
             classifier_score_threshold=0.35,
@@ -56,6 +56,8 @@ class TwoStageVisualModelBundleBuilderTest(unittest.TestCase):
             self.assertEqual(manifest["modelFormat"], "TFLITE_TASK_VISION")
             self.assertFalse(manifest["speciesSafetyClaims"])
             self.assertEqual(manifest["supportedGroups"], ["plants", "fungi"])
+            self.assertEqual(manifest["maxCandidatesPerRegion"], 3)
+            self.assertEqual(manifest["classificationThreshold"], 0.35)
             self.assertEqual(manifest["detector"]["file"], "region-detector.tflite")
             self.assertEqual(manifest["classifier"]["file"], "region-classifier.tflite")
             self.assertEqual(manifest["detector"]["sha256"], hashlib.sha256(detector_bytes).hexdigest())

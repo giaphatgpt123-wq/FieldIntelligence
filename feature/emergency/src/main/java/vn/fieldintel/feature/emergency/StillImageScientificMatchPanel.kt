@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,9 +36,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Resolves a selected visual candidate to the same species in the offline taxonomy pack.
- * Canonical model labels may omit authorship; the resolver accepts that representation without
- * falling back to a neighbouring species. Visual confidence remains separate from taxonomy/safety.
+ * Shows the complete Top-N decision for one selected region. Taxonomy is opened only when the
+ * verdict of the whole region is STRONG_CANDIDATE; a high primary score alone is not sufficient.
  */
 @Composable
 fun StillImageScientificMatchPanel(detection: VisualDetection) {
@@ -45,14 +45,22 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
     val uriHandler = LocalUriHandler.current
     val store = remember(context) { ScientificLibraryStore(context.applicationContext) }
     val mediaStore = remember(context) { ScientificMediaStore(context.applicationContext) }
-    val scientificName = detection.scientificName?.trim().orEmpty()
-    var record by remember(detection) { mutableStateOf<SpeciesRecord?>(null) }
-    var localMedia by remember(detection) { mutableStateOf<List<ScientificLocalMedia>>(emptyList()) }
-    var loading by remember(detection) { mutableStateOf(scientificName.isNotBlank()) }
-    var lookupFinished by remember(detection) { mutableStateOf(false) }
+    val group = RegionRecognitionSelectionRegistry.find(detection)
+    val candidates = group?.candidates.orEmpty().ifEmpty { listOf(detection) }
+    val verdict = group?.verdict ?: PlantRecognitionPolicy.evaluate(
+        candidates.map { RecognitionScore(it.scientificName ?: it.label, it.confidence) }
+    ).verdict
+    val primary = candidates.first()
+    val scientificName = primary.scientificName?.trim().orEmpty()
+    val canOpenProfile = verdict == RecognitionVerdict.STRONG_CANDIDATE
 
-    LaunchedEffect(scientificName) {
-        if (scientificName.isBlank()) {
+    var record by remember(primary, verdict) { mutableStateOf<SpeciesRecord?>(null) }
+    var localMedia by remember(primary, verdict) { mutableStateOf<List<ScientificLocalMedia>>(emptyList()) }
+    var loading by remember(primary, verdict) { mutableStateOf(canOpenProfile && scientificName.isNotBlank()) }
+    var lookupFinished by remember(primary, verdict) { mutableStateOf(false) }
+
+    LaunchedEffect(scientificName, verdict) {
+        if (!canOpenProfile || scientificName.isBlank()) {
             loading = false
             lookupFinished = true
             record = null
@@ -76,22 +84,70 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF102C33)),
-        border = BorderStroke(1.dp, Color(0x3345E58C))
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            Text("ỨNG VIÊN ĐÃ CHỌN", fontWeight = FontWeight.Black)
-            Text(detection.label, fontWeight = FontWeight.Bold)
-            if (scientificName.isNotBlank()) {
-                Text(scientificName, color = FieldColors.primary, fontWeight = FontWeight.Bold)
+        border = BorderStroke(
+            1.dp,
+            when (verdict) {
+                RecognitionVerdict.STRONG_CANDIDATE -> Color(0x6645E58C)
+                RecognitionVerdict.AMBIGUOUS -> Color(0x66FFD166)
+                RecognitionVerdict.UNKNOWN -> Color(0x66FF8A80)
             }
+        )
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("KẾT QUẢ VÙNG ĐÃ CHỌN", fontWeight = FontWeight.Black)
             Text(
-                "Độ tin cậy hình ảnh ${(detection.confidence * 100).toInt()}% • không phải kết luận định danh hay an toàn.",
+                recognitionVerdictLabel(verdict),
+                color = when (verdict) {
+                    RecognitionVerdict.STRONG_CANDIDATE -> FieldColors.primary
+                    RecognitionVerdict.AMBIGUOUS -> Color(0xFFFFD166)
+                    RecognitionVerdict.UNKNOWN -> Color(0xFFFF8A80)
+                },
+                fontWeight = FontWeight.Black
+            )
+
+            candidates.take(PlantRecognitionPolicy.MAX_CANDIDATES).forEachIndexed { index, candidate ->
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    color = if (index == 0) Color(0xFF16353B) else Color(0xFF0C252B)
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                        Text("Ứng viên ${index + 1}", fontWeight = FontWeight.Bold, color = FieldColors.primary)
+                        Text(candidate.label, fontWeight = FontWeight.Bold)
+                        candidate.scientificName?.takeIf { it.isNotBlank() }?.let {
+                            Text(it, color = FieldColors.onSurfaceVariant)
+                        }
+                        Text(
+                            "${(candidate.confidence * 100).toInt()}% • điểm model",
+                            color = FieldColors.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
+            Text(
+                "Điểm model chỉ dùng để xếp hạng ứng viên, không phải xác nhận định danh hay an toàn.",
                 color = FieldColors.onSurfaceVariant
             )
 
             when {
+                !canOpenProfile -> {
+                    Text(
+                        "CHƯA MỞ HỒ SƠ KHOA HỌC",
+                        color = Color(0xFFFFD166),
+                        fontWeight = FontWeight.Black
+                    )
+                    Text(
+                        if (verdict == RecognitionVerdict.AMBIGUOUS) {
+                            "Các ứng viên còn quá gần nhau. Hãy chụp thêm góc lá, thân, hoa hoặc quả để tách loài."
+                        } else {
+                            "Chưa có ứng viên đủ điều kiện. Hãy chụp gần hơn, đủ sáng và giữ mẫu chính rõ trong khung."
+                        },
+                        color = FieldColors.onSurfaceVariant
+                    )
+                }
                 scientificName.isBlank() -> Text(
-                    "Model chưa cung cấp tên khoa học chuẩn nên không tự nối nhãn này vào hồ sơ taxonomy.",
+                    "Ứng viên mạnh nhưng model chưa cung cấp tên khoa học chuẩn nên không tự nối vào taxonomy.",
                     color = Color(0xFFFFD166)
                 )
                 loading -> Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -100,7 +156,7 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
                 }
                 record != null -> {
                     val matched = record!!
-                    Text("HỒ SƠ TAXONOMY", fontWeight = FontWeight.Black, color = FieldColors.primary)
+                    Text("HỒ SƠ TAXONOMY ĐỐI CHIẾU", fontWeight = FontWeight.Black, color = FieldColors.primary)
                     Text(matched.vietnameseName, fontWeight = FontWeight.Bold)
                     Text(matched.scientificName, color = FieldColors.primary)
                     Text("Nhóm: ${matched.group} • ${localMedia.size} ảnh tham chiếu offline", color = FieldColors.onSurfaceVariant)
