@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "pilotVersion": "VEGETABLES_CONTENT_V1",
+  "state": "STAGING_ONLY",
+  "policy": {
+    "workingRules": "SurvivalLibraryVN/WORKING_RULES.md",
+    "vietnameseFirst": true,
+    "fieldLevelEvidenceRequired": true,
+    "doNotAutoPublish": true,
+    "minimumDiagnosticImages": 5,
+    "requiredProfileSections": [
+      "IDENTITY",
+      "VIETNAMESE_NAMES",
+      "USAGE_PRIORITY",
+      "IDENTIFICATION",
+      "CONFUSABLE_SPECIES",
+      "VIETNAM_DISTRIBUTION",
+      "AGRONOMY",
+      "EDIBLE_PARTS",
+      "CULINARY_USE",
+      "NUTRITION",
+      "FOOD_SAFETY",
+      "MEDIA_DIAGNOSTIC_SET",
+      "PROVENANCE"
+    ]
+  },
+  "coveragePlan": {
+    "strategy": "Ưu tiên rau thường gặp và thường dùng tại Việt Nam; không cố đạt số lượng bằng cách hạ chuẩn.",
+    "initialTargetCount": 20,
+    "targets": [
+      {"vietnameseName":"Rau muống","scientificNameCandidate":"Ipomoea aquatica Forssk.","priority":"P1","identityState":"VERIFIED_BASELINE","contentState":"IN_PROGRESS"},
+      {"vietnameseName":"Mồng tơi","scientificNameCandidate":"Basella alba L.","priority":"P1","identityState":"VERIFIED_BASELINE","contentState":"IN_PROGRESS"},
+      {"vietnameseName":"Rau ngót","scientificNameCandidate":"Breynia androgyna (L.) Chakrab. & N.P.Balakr.","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Rau dền","scientificNameCandidate":"Amaranthus spp.","priority":"P1","identityState":"MUST_SPLIT_BY_SPECIES","contentState":"QUEUED"},
+      {"vietnameseName":"Rau đay","scientificNameCandidate":"Corchorus spp.","priority":"P1","identityState":"MUST_SPLIT_BY_SPECIES","contentState":"QUEUED"},
+      {"vietnameseName":"Rau má","scientificNameCandidate":"Centella asiatica (L.) Urb.","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Diếp cá","scientificNameCandidate":"Houttuynia cordata Thunb.","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Lá lốt","scientificNameCandidate":"Piper sarmentosum Roxb.","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Tía tô","scientificNameCandidate":"Perilla frutescens (L.) Britton","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Kinh giới","scientificNameCandidate":"Elsholtzia ciliata (Thunb.) Hyl.","priority":"P2","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Húng quế","scientificNameCandidate":"Ocimum basilicum L.","priority":"P1","identityState":"NEEDS_VARIETY_CHECK","contentState":"QUEUED"},
+      {"vietnameseName":"Rau răm","scientificNameCandidate":"Persicaria odorata (Lour.) Soják","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Hẹ","scientificNameCandidate":"Allium tuberosum Rottler ex Spreng.","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Cần nước","scientificNameCandidate":"Oenanthe javanica (Blume) DC.","priority":"P2","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Tần ô / cải cúc","scientificNameCandidate":"Glebionis coronaria (L.) Cass. ex Spach","priority":"P1","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Xà lách","scientificNameCandidate":"Lactuca sativa L.","priority":"P1","identityState":"NEEDS_CULTIVAR_MODEL","contentState":"QUEUED"},
+      {"vietnameseName":"Cải xanh","scientificNameCandidate":"Brassica juncea (L.) Czern.","priority":"P1","identityState":"NEEDS_CULTIVAR_MODEL","contentState":"QUEUED"},
+      {"vietnameseName":"Cải thìa","scientificNameCandidate":"Brassica rapa L. Chinensis Group","priority":"P1","identityState":"NEEDS_CULTIVAR_MODEL","contentState":"QUEUED"},
+      {"vietnameseName":"Cải xoong","scientificNameCandidate":"Nasturtium officinale W.T.Aiton","priority":"P2","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"},
+      {"vietnameseName":"Rau nhút","scientificNameCandidate":"Neptunia oleracea Lour.","priority":"P2","identityState":"NEEDS_RESOLUTION","contentState":"QUEUED"}
+    ]
+  },
+  "profiles": [
+    {
+      "recordId": "canary-vegetables-ipomoea-aquatica",
+      "vietnameseName": "Rau muống",
+      "scientificName": "Ipomoea aquatica Forssk.",
+      "family": "Convolvulaceae",
+      "usageLevelCandidate": "THUONG_DUNG",
+      "usageLevelVerified": false,
+      "vietnamRelevant": true,
+      "verificationState": "DA_DOI_CHIEU",
+      "publicationState": "BLOCKED_PENDING_FULL_CONTENT_GATE",
+      "identity": {
+        "acceptedTaxon": true,
+        "nativeInVietnam": true,
+        "confidence": "HIGH",
+        "evidence": ["KEW_POWO_IPOMOEA_AQUATICA", "GBIF_EXISTING_BASELINE"]
+      },
+      "identification": {
+        "summaryVi": "Cây thân thảo thủy sinh hoặc bán thủy sinh. Thân bò hoặc nổi trên nước, có thể ra rễ ở các đốt. Phiến lá biến thiên từ dạng thuôn đến tam giác hoặc dạng mũi tên. Hoa hình phễu, màu trắng, hồng hoặc tím nhạt tùy dạng.",
+        "keyFeatures": [
+          "Dáng cây bò hoặc nổi trên nước",
+          "Thân có khả năng ra rễ ở các đốt",
+          "Lá biến thiên rõ về hình dạng, thường từ thuôn đến tam giác hoặc dạng mũi tên",
+          "Hoa dạng phễu"
+        ],
+        "confusableWith": [],
+        "confusableState": "NEEDS_CURATED_SOURCE",
+        "evidence": ["KEW_POWO_IPOMOEA_AQUATICA"]
+      },
+      "vietnamDistribution": {
+        "summaryVi": "Có ghi nhận bản địa tại Việt Nam trong dữ liệu phân bố của Kew; tại Thành phố Hồ Chí Minh có vùng chuyên canh rau muống nước.",
+        "confidence": "HIGH_FOR_COUNTRY_PRESENCE_LOCAL_FOR_HCMC_PRODUCTION",
+        "evidence": ["KEW_POWO_IPOMOEA_AQUATICA", "HCMC_PPD_WATER_SPINACH_SURVEY"]
+      },
+      "agronomy": {
+        "productionType": ["thủy sinh", "đất ẩm / vùng trũng"],
+        "verifiedFacts": [
+          "Nguồn Chi cục Trồng trọt và BVTV TP.HCM mô tả rau muống nước dễ trồng, phù hợp vùng đất trũng và có thời gian sinh trưởng ngắn.",
+          "FAO EcoCrop mô tả I. aquatica var. reptans là cây rau lâu năm, chịu ngập và có chu kỳ cây trồng tham khảo 30-70 ngày; số liệu này chỉ dùng làm tham chiếu cho dạng được mô tả, không áp cứng cho mọi giống tại Việt Nam."
+        ],
+        "propagation": "PENDING_VIETNAM_CURATED_SOURCE",
+        "soilWaterRequirements": "PENDING_VIETNAM_CURATED_SOURCE",
+        "fertilization": "PENDING_VIETNAM_CURATED_SOURCE",
+        "pestsDiseases": "PENDING_VIETNAM_CURATED_SOURCE",
+        "harvest": "PENDING_VIETNAM_CURATED_SOURCE",
+        "postHarvest": "PENDING_VIETNAM_CURATED_SOURCE",
+        "evidence": ["HCMC_PPD_WATER_SPINACH_SURVEY", "FAO_ECOCROP_I_AQUATICA_REPTANS"]
+      },
+      "foodUse": {
+        "edibleParts": ["lá", "chồi non"],
+        "summaryVi": "Được sử dụng làm rau thực phẩm. Phần ăn chủ yếu là lá và chồi non.",
+        "culinaryMethods": ["nấu chín"],
+        "specificVietnameseDishes": [],
+        "specificDishesState": "NEEDS_CULINARY_SOURCE",
+        "evidence": ["KEW_POWO_IPOMOEA_AQUATICA", "FAO_ECOCROP_I_AQUATICA_REPTANS"]
+      },
+      "nutrition": {
+        "state": "SOURCE_IDENTIFIED_VALUES_PENDING_EXTRACTION",
+        "source": "VIETNAM_FOOD_COMPOSITION_TABLE_2017",
+        "numericValues": {},
+        "rule": "Không điền số dinh dưỡng từ trí nhớ hoặc nguồn thứ cấp khi chưa trích đúng bảng thực phẩm Việt Nam."
+      },
+      "foodSafety": {
+        "summaryVi": "Rau muống nước cần đặc biệt chú ý nguồn nước và điều kiện sản xuất. Một khảo sát địa phương của Chi cục Trồng trọt và BVTV TP.HCM ghi nhận nguy cơ ô nhiễm vi sinh tại một số vùng/mẫu khảo sát và khuyến nghị mua từ nguồn rau an toàn, rửa kỹ và nấu chín. Không ngoại suy tỷ lệ của khảo sát này cho toàn Việt Nam.",
+        "consumerActions": [
+          "Ưu tiên nguồn sản xuất và điểm bán có kiểm soát an toàn thực phẩm",
+          "Rửa kỹ trước khi chế biến",
+          "Với rau muống nước không rõ nguồn, không dùng khảo sát địa phương như bằng chứng rằng mọi sản phẩm đều ô nhiễm; đánh giá theo nguồn và điều kiện thực tế"
+        ],
+        "confidence": "HIGH_FOR_LOCAL_EVIDENCE_LIMITED_GENERALIZATION",
+        "evidence": ["HCMC_PPD_WATER_SPINACH_SURVEY", "MOH_NUTRITION_2030_GENERAL_FOOD_SAFETY"]
+      },
+      "mediaPolicy": {
+        "minimumImages": 5,
+        "requiredViewRoles": ["WHOLE", "LEAF", "STEM", "FLOWER", "HABITAT"],
+        "primaryViewRole": "WHOLE",
+        "candidateSources": [
+          {"viewRole":"WHOLE","sourceUri":"https://commons.wikimedia.org/wiki/File:Ipomoea_aquatica_(2).JPG","licenseState":"CHECK_BEFORE_IMPORT"},
+          {"viewRole":"FLOWER","sourceUri":"https://commons.wikimedia.org/wiki/File:Hoa_rau_mu%E1%BB%91ng.jpg","licenseState":"CC_LICENSE_PAGE_AVAILABLE"},
+          {"viewRole":"HABITAT","sourceUri":"https://commons.wikimedia.org/wiki/File:Starr_080531-4958_Ipomoea_aquatica.jpg","licenseState":"CHECK_BEFORE_IMPORT"}
+        ],
+        "verifiedDiagnosticImageCount": 0,
+        "state": "BLOCKED_UNTIL_5_VERIFIED_DIAGNOSTIC_IMAGES"
+      },
+      "aiDecision": {
+        "contentCompletenessPercent": 58,
+        "publishable": false,
+        "blockers": [
+          "Mức sử dụng THUONG_DUNG mới là ứng viên, chưa có evidence riêng đủ chuẩn để nâng verified",
+          "Chưa có danh sách loài dễ nhầm đã kiểm chứng",
+          "Chưa hoàn tất quy trình canh tác Việt Nam theo trường: giống, đất/nước, dinh dưỡng, sâu bệnh, thu hoạch, sau thu hoạch",
+          "Chưa trích số liệu dinh dưỡng từ Bảng thành phần thực phẩm Việt Nam 2017",
+          "Chưa đủ 5 ảnh chẩn đoán đã kiểm license, provenance và checksum"
+        ]
+      }
+    }
+  ],
+  "evidenceRegistry": [
+    {
+      "id": "KEW_POWO_IPOMOEA_AQUATICA",
+      "tier": "GLOBAL_TAXONOMIC_AUTHORITY",
+      "publisher": "Royal Botanic Gardens, Kew - Plants of the World Online",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:268410-1",
+      "supports": ["IDENTITY", "FAMILY", "MORPHOLOGY", "GLOBAL_DISTRIBUTION", "VIETNAM_PRESENCE", "FOOD_USE"]
+    },
+    {
+      "id": "HCMC_PPD_WATER_SPINACH_SURVEY",
+      "tier": "OFFICIAL_VIETNAM_LOCAL_AGRICULTURE",
+      "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
+      "url": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/mot-so-ket-qua-dieu-tra-ve-tinh-hinh-tap-quan-trong-rau-muong-nuoc-vi-sinh-va-doc-chat-tai-tp-ho-chi-minh-527.html",
+      "supports": ["VIETNAM_LOCAL_PRODUCTION", "AGRONOMY_CONTEXT", "FOOD_SAFETY_LOCAL_EVIDENCE"]
+    },
+    {
+      "id": "FAO_ECOCROP_I_AQUATICA_REPTANS",
+      "tier": "INTERNATIONAL_AGRICULTURE_AUTHORITY",
+      "publisher": "FAO EcoCrop",
+      "url": "https://ecocrop.apps.fao.org/ecocrop/srv/en/dataSheet?id=17650",
+      "supports": ["CROP_ECOLOGY_REFERENCE", "EDIBLE_PARTS", "CROP_CYCLE_REFERENCE"]
+    },
+    {
+      "id": "VIETNAM_FOOD_COMPOSITION_TABLE_2017",
+      "tier": "OFFICIAL_NUTRITION_CATALOG",
+      "publisher": "Ministry of Health, Viet Nam; indexed by FAO/INFOODS",
+      "url": "https://www.fao.org/food-composition/tables-and-databases/detail/%28viet-nam--2017%29-vietnamese-food-composition-table/en",
+      "supports": ["NUTRITION_SOURCE_DISCOVERY"]
+    },
+    {
+      "id": "MOH_NUTRITION_2030_GENERAL_FOOD_SAFETY",
+      "tier": "OFFICIAL_VIETNAM_HEALTH",
+      "publisher": "Bộ Y tế",
+      "url": "https://adminmoh.moh.gov.vn/web/guest/tin-lien-quan/-/asset_publisher/vjYyM7O9aWnX/content/bo-y-te-cong-bo-muoi-loi-khuyen-dinh-duong-hop-ly-en-nam-2030-",
+      "supports": ["GENERAL_VEGETABLE_DIET_CONTEXT", "GENERAL_FOOD_SAFETY"]
+    },
+    {
+      "id": "GBIF_EXISTING_BASELINE",
+      "tier": "GLOBAL_BIODIVERSITY_AUTHORITY",
+      "publisher": "GBIF",
+      "url": "https://www.gbif.org/species/2928525",
+      "supports": ["IDENTITY_BASELINE", "OCCURRENCE_BASELINE"]
+    }
+  ]
+}
