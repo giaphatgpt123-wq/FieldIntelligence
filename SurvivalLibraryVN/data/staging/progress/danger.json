@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 11,
-  "generatedAt": 1790738894621,
+  "version": 12,
+  "generatedAt": 1790739367553,
   "categoryId": "danger",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Muỗi vằn",
       "highRisk": true,
       "published": false,
-      "updatedAt": 1790738894621
+      "updatedAt": 1790739367553
     }
   ],
   "aliases": [
@@ -22,7 +22,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790738893204
+      "updatedAt": 1790739361235
     },
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790738894621
+      "updatedAt": 1790739367553
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790738893204,
+      "updatedAt": 1790739361235,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790738894525,
+      "updatedAt": 1790739367459,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790738893204,
+      "updatedAt": 1790739361235,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790738893611,
+      "updatedAt": 1790739366457,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738893204
+      "updatedAt": 1790739361235
     },
     {
       "taskId": "taxon:aedes-aegypti:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738893611
+      "updatedAt": 1790739366457
     },
     {
       "taskId": "taxon:aedes-aegypti:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738894525
+      "updatedAt": 1790739367459
     },
     {
       "taskId": "taxon:aedes-aegypti:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790738893204
+      "updatedAt": 1790739361235
     }
   ]
 }
