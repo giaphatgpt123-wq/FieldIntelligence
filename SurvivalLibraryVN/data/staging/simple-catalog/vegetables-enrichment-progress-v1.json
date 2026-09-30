@@ -3,25 +3,26 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 17,
-  "verifiedOpenImageLinks": 34,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 243,
+  "enrichedDisplayRecords": 18,
+  "verifiedOpenImageLinks": 36,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 242,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 6,
   "completedNames": [
     "Rau muống","Mồng tơi","Rau má","Diếp cá","Tía tô",
     "Rau lang","Rau sam","Rau càng cua","Chùm ngây","Rau dệu","Dền gai",
-    "Rau ngót","Rau dền cơm","Rau nhút","Rau đắng đất","Cải xoong","Cần nước"
+    "Rau ngót","Rau dền cơm","Rau nhút","Rau đắng đất","Cải xoong","Cần nước","Cải xanh"
   ],
   "deferredForIdentityResolution": [
     "Rau đay"
   ],
   "nextP1Queue": [
-    "Cải xanh","Cải ngọt","Cải thìa","Cải thảo","Kinh giới","Húng quế","Rau răm","Rau mùi","Ngò gai","Thì là","Hẹ","Lá lốt"
+    "Cải ngọt","Cải thìa","Cải thảo","Kinh giới","Húng quế","Rau răm","Rau mùi","Ngò gai","Thì là","Hẹ","Lá lốt"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Rau đay tạm hoãn vì tên phổ thông có thể chỉ nhiều taxon/giống Corchorus; phải resolve trước khi gắn ảnh.",
+    "Cải xanh đã được xử lý theo nhóm mustard greens/Brassica juncea; taxonomy nội bộ lưu lưu ý cập nhật Kew 2026.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng.",
     "Các tên thuộc collision bucket phải resolve danh tính trước khi gắn ảnh để tránh ảnh đúng tên nhưng sai loài."
   ],
