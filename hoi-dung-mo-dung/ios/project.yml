@@ -1,0 +1,20 @@
+name: HoiDungMoDung
+options:
+  bundleIdPrefix: vn.local
+  deploymentTarget:
+    iOS: '17.0'
+targets:
+  HoiDungMoDung:
+    type: application
+    platform: iOS
+    sources:
+      - path: HoiDungMoDung
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: vn.local.hoidungmodung
+        SWIFT_VERSION: 5.0
+        INFOPLIST_KEY_CFBundleDisplayName: 'Hỏi đúng – Mở đúng'
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+    scheme:
+      testTargets: []
