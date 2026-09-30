@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 54,
-  "verifiedOpenImageLinks": 108,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 206,
+  "enrichedDisplayRecords": 56,
+  "verifiedOpenImageLinks": 112,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 204,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 6,
   "completedNames": [
@@ -19,10 +19,10 @@
     "Xà lách xoăn xanh","Xà lách xoăn đỏ","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée",
     "Xà lách oakleaf xanh","Cải cầu vồng","Cải rocket",
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
-    "Rau tàu bay","Đơn buốt","Kim thất tai"
+    "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè"
   ],
   "deferredForIdentityResolution": [
-    "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi"
+    "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề"
   ],
   "deferredForMediaVerification": ["Cải cúc"],
   "deferredForCommercialNameResolution": [
@@ -30,18 +30,19 @@
     "Bắp cải trái tim","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"
   ],
   "deferredForSafetyResolution": [
-    "Lạc tiên"
+    "Lạc tiên","Lu lu đực"
   ],
   "nextP2Queue": [
-    "Cỏ chua lè","Nút áo","Lu lu đực","Rau cải trời","Rau muối","Rau khúc tẻ","Rau khúc nếp","Rau bầu đất","Diếp dại","Mè đất","Mã đề"
+    "Rau cải trời","Rau muối","Rau khúc tẻ","Rau khúc nếp","Rau bầu đất","Diếp dại","Mè đất"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
     "Rau tàu bay đã chuẩn hóa từ tên đồng nghĩa cũ Gynura crepidioides sang accepted name Crassocephalum crepidioides.",
-    "Lạc tiên tạm hoãn vì nguồn ghi lá cyanogenic/toxic nhưng cũng có ghi nhận địa phương nấu lá non làm rau; phải phân giải an toàn trước khi hiển thị ứng dụng ăn lá.",
-    "Các tên P1 còn mơ hồ tiếp tục nằm ở hàng identity/commercial-name resolution.",
-    "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng.",
-    "Các tên thuộc collision bucket phải resolve danh tính trước khi gắn ảnh để tránh ảnh đúng tên nhưng sai loài."
+    "Nút áo đã chuẩn hóa từ Spilanthes oleracea trong nguồn cũ sang accepted name Acmella oleracea.",
+    "Lạc tiên tạm hoãn vì lá được ghi nhận cyanogenic/toxic dù có nơi nấu lá non làm rau.",
+    "Lu lu đực tạm hoãn vì glycoalkaloid cao hơn ở lá non và quả xanh; cần hồ sơ có cảnh báo xử lý/nấu trước khi hiển thị đơn giản.",
+    "Mã đề tạm hoãn để xác định đúng taxon Plantago của nguồn Việt Nam trước khi gắn ảnh.",
+    "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
 }
