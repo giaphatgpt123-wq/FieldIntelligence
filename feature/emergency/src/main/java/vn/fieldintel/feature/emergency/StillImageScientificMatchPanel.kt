@@ -38,6 +38,9 @@ import kotlinx.coroutines.withContext
  * Resolves a selected visual candidate to the same species in the offline taxonomy pack.
  * Canonical model labels may omit authorship; the resolver accepts that representation without
  * falling back to a neighbouring species. Visual confidence remains separate from taxonomy/safety.
+ *
+ * A weak visual candidate is deliberately not resolved into a taxonomy profile. This prevents the
+ * UI from turning a low-confidence model suggestion into what looks like a confirmed species page.
  */
 @Composable
 fun StillImageScientificMatchPanel(detection: VisualDetection) {
@@ -46,13 +49,14 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
     val store = remember(context) { ScientificLibraryStore(context.applicationContext) }
     val mediaStore = remember(context) { ScientificMediaStore(context.applicationContext) }
     val scientificName = detection.scientificName?.trim().orEmpty()
+    val strongEnoughForProfile = detection.confidence >= PlantRecognitionPolicy.STRONG_SCORE
     var record by remember(detection) { mutableStateOf<SpeciesRecord?>(null) }
     var localMedia by remember(detection) { mutableStateOf<List<ScientificLocalMedia>>(emptyList()) }
-    var loading by remember(detection) { mutableStateOf(scientificName.isNotBlank()) }
+    var loading by remember(detection) { mutableStateOf(strongEnoughForProfile && scientificName.isNotBlank()) }
     var lookupFinished by remember(detection) { mutableStateOf(false) }
 
-    LaunchedEffect(scientificName) {
-        if (scientificName.isBlank()) {
+    LaunchedEffect(scientificName, strongEnoughForProfile) {
+        if (!strongEnoughForProfile || scientificName.isBlank()) {
             loading = false
             lookupFinished = true
             record = null
@@ -90,6 +94,17 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
             )
 
             when {
+                !strongEnoughForProfile -> {
+                    Text(
+                        "CHƯA MỞ HỒ SƠ KHOA HỌC • ứng viên hình ảnh chưa đạt ngưỡng mạnh ${"%.0f".format(PlantRecognitionPolicy.STRONG_SCORE * 100)}%.",
+                        color = Color(0xFFFFD166),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        "Hãy chụp gần hơn, rõ lá/hoa/quả hoặc xem các ứng viên khác của vùng. Ứng dụng không tự biến gợi ý mơ hồ thành đúng loài.",
+                        color = FieldColors.onSurfaceVariant
+                    )
+                }
                 scientificName.isBlank() -> Text(
                     "Model chưa cung cấp tên khoa học chuẩn nên không tự nối nhãn này vào hồ sơ taxonomy.",
                     color = Color(0xFFFFD166)
@@ -100,7 +115,7 @@ fun StillImageScientificMatchPanel(detection: VisualDetection) {
                 }
                 record != null -> {
                     val matched = record!!
-                    Text("HỒ SƠ TAXONOMY", fontWeight = FontWeight.Black, color = FieldColors.primary)
+                    Text("HỒ SƠ TAXONOMY ĐỐI CHIẾU", fontWeight = FontWeight.Black, color = FieldColors.primary)
                     Text(matched.vietnameseName, fontWeight = FontWeight.Bold)
                     Text(matched.scientificName, color = FieldColors.primary)
                     Text("Nhóm: ${matched.group} • ${localMedia.size} ảnh tham chiếu offline", color = FieldColors.onSurfaceVariant)
