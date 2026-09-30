@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-nephrolepis-falcata-rau-cu",
+      "nameVi": "Rau cu",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh Rau cu để nhận biết",
+          "fileName": "Nephrolepis falcata 1.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Nephrolepis_falcata_1.JPG",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Rau cu để so sánh",
+          "fileName": "Nephrolepis falcata 3.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Nephrolepis_falcata_3.JPG",
+          "creator": "Consultaplantas",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non được dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Nephrolepis falcata (Cav.) C.Chr.",
+        "localIdentityAndUseSource": "https://vafs.gov.vn/vn/wp-content/uploads/sites/2/2014/04/2.No4_.bai-Pham-Thi-Kim-Thoa.pdf",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:17408170-1",
+        "distributionConflict": "Kew 2026 backbone lists native range Philippines, while the Cu Lao Cham field survey records Nephrolepis falcata in Vietnam; retain local field provenance and recheck voucher identity before final publication."
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
