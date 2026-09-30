@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 28,
-  "verifiedOpenImageLinks": 56,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 232,
+  "enrichedDisplayRecords": 33,
+  "verifiedOpenImageLinks": 66,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 227,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 6,
   "completedNames": [
@@ -13,19 +13,23 @@
     "Rau lang","Rau sam","Rau càng cua","Chùm ngây","Rau dệu","Dền gai",
     "Rau ngót","Rau dền cơm","Rau nhút","Rau đắng đất","Cải xoong","Cần nước","Cải xanh",
     "Cải thìa","Cải thảo","Kinh giới","Húng quế","Rau răm",
-    "Rau mùi","Ngò gai","Thì là","Hẹ","Lá lốt"
+    "Rau mùi","Ngò gai","Thì là","Hẹ","Lá lốt",
+    "Cải làn","Cải bắp","Xà lách","Cải bó xôi","Cải xoăn"
   ],
   "deferredForIdentityResolution": [
-    "Rau đay","Cải ngọt"
+    "Rau đay","Cải ngọt","Cải ngồng"
+  ],
+  "deferredForMediaVerification": [
+    "Cải cúc"
   ],
   "nextP1Queue": [
-    "Cải ngồng","Cải làn","Cải bắp","Xà lách","Xà lách romaine","Cải cúc","Cải bó xôi","Cải xoăn"
+    "Xà lách romaine","Bắp cải trắng","Bắp cải tím","Bắp cải trái tim","Xà lách búp","Xà lách mỡ","Xà lách iceberg","Xà lách xoăn xanh","Xà lách xoăn đỏ","Lô lô xanh","Lô lô tím"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
-    "Rau đay tạm hoãn vì tên phổ thông có thể chỉ nhiều taxon/giống Corchorus; phải resolve trước khi gắn ảnh.",
-    "Cải ngọt tạm hoãn vì tên thương mại có thể chồng giữa các nhóm Brassica rapa; phải resolve cultivar/taxon trước khi gắn ảnh.",
-    "Đã tiếp tục tuần tự qua hai lô P1 trong cùng lượt, không dừng xin xác nhận.",
+    "Rau đay, Cải ngọt và Cải ngồng tạm hoãn vì tên phổ thông/thương mại có thể chồng nhiều taxon hoặc cultivar; phải resolve trước khi gắn ảnh.",
+    "Cải cúc đã rõ identity nhưng tạm hoãn lô này vì chưa đủ 2 ảnh có license đã kiểm độc lập.",
+    "Cải làn được lưu theo Brassica oleracea Alboglabra Group; Cải bắp và Cải xoăn được lưu theo cultivar group để tránh biến tên thương mại thành loài sinh học riêng.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng.",
     "Các tên thuộc collision bucket phải resolve danh tính trước khi gắn ảnh để tránh ảnh đúng tên nhưng sai loài."
   ],
