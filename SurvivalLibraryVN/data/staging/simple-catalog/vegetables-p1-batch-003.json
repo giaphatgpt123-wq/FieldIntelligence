@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-phyllanthus-androgynus",
+      "nameVi": "Rau ngót",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá và quả để nhận biết",
+          "fileName": "Lá và quả rau ngót.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/L%C3%A1%20v%C3%A0%20qu%E1%BA%A3%20rau%20ng%C3%B3t.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:L%C3%A1_v%C3%A0_qu%E1%BA%A3_rau_ng%C3%B3t.jpg",
+          "creator": "Bùi Thụy Đào Nguyên",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Sauropus androgynus 7823.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Sauropus%20androgynus%207823.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Sauropus_androgynus_7823.jpg",
+          "creator": "Vengolis",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non và ngọn non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Phyllanthus androgynus (L.) Chakrab. & N.P.Balakr.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77119613-1",
+        "applicationSource": "https://ecocrop.apps.fao.org/ecocrop/srv/en/cropView?id=9593"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-amaranthus-viridis",
+      "nameVi": "Rau dền cơm",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh toàn cây để nhận biết",
+          "fileName": "Amaranthus viridis.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Amaranthus%20viridis.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Amaranthus_viridis.jpg",
+          "creator": "Tauʻolunga",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh thân lá để so sánh",
+          "fileName": "Amaranthus viridis sl51.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Amaranthus%20viridis%20sl51.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Amaranthus_viridis_sl51.jpg",
+          "creator": "Stefan.lefnaer",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Amaranthus viridis L.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:316349-2/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:316349-2/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-neptunia-oleracea",
+      "nameVi": "Rau nhút",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh toàn cây thủy sinh",
+          "fileName": "Neptunia oleracea kz7.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Neptunia%20oleracea%20kz7.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Neptunia_oleracea_kz7.jpg",
+          "creator": "Krzysztof Ziarnek, Kenraiz",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh thân lá để so sánh",
+          "fileName": "Neptunia oleracea kz9.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Neptunia%20oleracea%20kz9.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Neptunia_oleracea_kz9.jpg",
+          "creator": "Krzysztof Ziarnek, Kenraiz",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Neptunia oleracea Lour.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:509607-1/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:509607-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-glinus-oppositifolius",
+      "nameVi": "Rau đắng đất",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh toàn cây để nhận biết",
+          "fileName": "Glinus oppositifolius.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Glinus%20oppositifolius.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Glinus_oppositifolius.jpg",
+          "creator": "Gannu03",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh thân lá và hoa để so sánh",
+          "fileName": "Glinus oppositifolius (7596803456).jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Glinus%20oppositifolius%20%287596803456%29.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Glinus_oppositifolius_(7596803456).jpg",
+          "creator": "Kevin Thiele",
+          "license": "CC BY 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá có thể nấu dùng như rau.",
+      "internalEvidence": {
+        "scientificName": "Glinus oppositifolius (L.) Aug.DC.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/361968-1",
+        "applicationSource": "https://prosea.prota4u.org/view.aspx?id=2268"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-nasturtium-officinale",
+      "nameVi": "Cải xoong",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh toàn cây để nhận biết",
+          "fileName": "Nasturtium officinale00.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Nasturtium%20officinale00.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Nasturtium_officinale00.jpg",
+          "creator": "Paul venter",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh thân lá để so sánh",
+          "fileName": "Nasturtium officinale 01.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Nasturtium%20officinale%2001.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Nasturtium_officinale_01.jpg",
+          "creator": "Roland.aprent",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Nasturtium officinale W.T.Aiton",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:287534-1/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:287534-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-oenanthe-javanica",
+      "nameVi": "Cần nước",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá và thân để nhận biết",
+          "fileName": "Oenanthe javanica.JPG",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Oenanthe%20javanica.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Oenanthe_javanica.JPG",
+          "creator": "Eric Chan W.C.",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Oenanthe javanica1.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Oenanthe%20javanica1.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Oenanthe_javanica1.jpg",
+          "creator": "KENPEI",
+          "license": "CC BY-SA 2.1 Japan / CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và thân non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Oenanthe javanica (Blume) DC.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:845307-1",
+        "applicationSource": "https://commons.wikimedia.org/wiki/File:Oenanthe_javanica.JPG"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
