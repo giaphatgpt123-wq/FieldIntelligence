@@ -23,6 +23,9 @@ on:
 permissions:
   contents: write
 
+env:
+  DATA_ENGINE_TASK_SEED: SurvivalLibraryVN/data/staging/pilot-12-tasks.json
+
 concurrency:
   group: survival-library-data-engine-pilot-${{ github.ref }}
   cancel-in-progress: true
@@ -42,23 +45,27 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Validate task seed
+      - name: Validate active task seed
         run: |
           python - <<'PY'
-          import json
+          import json, os
           from pathlib import Path
-          p = Path('SurvivalLibraryVN/data/staging/pilot-12-tasks.json')
+
+          p = Path(os.environ['DATA_ENGINE_TASK_SEED'])
           rows = json.loads(p.read_text(encoding='utf-8'))
-          assert len(rows) == 48, len(rows)
+          assert rows, 'task seed must not be empty'
           ids = [r['taskId'] for r in rows]
-          assert len(ids) == len(set(ids))
+          assert len(ids) == len(set(ids)), 'duplicate task id'
           entities = {r['canonicalId'] for r in rows}
-          assert len(entities) == 12, len(entities)
+          categories = {r['categoryId'] for r in rows}
           required = {'CANONICAL_IDENTITY','VIETNAMESE_ALIASES','VIETNAM_DISTRIBUTION','MEDIA_PRIMARY'}
           for entity in entities:
               fields = {r['field'] for r in rows if r['canonicalId'] == entity}
               assert fields == required, (entity, fields)
-          print('Pilot seed OK: 12 entities / 48 independent tasks')
+          print(
+              f'Active seed OK: {len(entities)} entities / {len(rows)} independent tasks / '
+              f'{len(categories)} categories'
+          )
           PY
 
       - name: Collect independent evidence tasks with bounded runtime
@@ -66,7 +73,7 @@ jobs:
           DATA_ENGINE_HTTP_TIMEOUT: '20'
         run: |
           python SurvivalLibraryVN/tools/data_engine_v2_runtime.py \
-            --tasks SurvivalLibraryVN/data/staging/pilot-12-tasks.json \
+            --tasks "$DATA_ENGINE_TASK_SEED" \
             --output SurvivalLibraryVN/data/staging/latest-collector-results.json \
             --health-file SurvivalLibraryVN/data/staging/source-health-pipeline.json \
             --limit 500
@@ -82,8 +89,14 @@ jobs:
       - name: Validate snapshot, evidence and progress shard contracts
         run: |
           python - <<'PY'
-          import hashlib, json
+          import hashlib, json, os
           from pathlib import Path
+
+          seed_rows = json.loads(Path(os.environ['DATA_ENGINE_TASK_SEED']).read_text(encoding='utf-8'))
+          expected_tasks = len(seed_rows)
+          expected_entities = len({row['canonicalId'] for row in seed_rows})
+          expected_categories = len({row['categoryId'] for row in seed_rows})
+
           root = Path('SurvivalLibraryVN/data/staging')
           snapshot_raw = (root / 'progress-snapshot.json').read_bytes()
           snapshot = json.loads(snapshot_raw)
@@ -91,11 +104,11 @@ jobs:
           evidence_index = json.loads((root / 'evidence-index.json').read_text(encoding='utf-8'))
           progress = index['progressShards']
           assert snapshot['schemaVersion'] == 1
-          assert len(snapshot['entities']) == 12
-          assert len(snapshot['tasks']) == 48
+          assert len(snapshot['entities']) == expected_entities, (len(snapshot['entities']), expected_entities)
+          assert len(snapshot['tasks']) == expected_tasks, (len(snapshot['tasks']), expected_tasks)
           assert hashlib.sha256(snapshot_raw).hexdigest() == index['snapshot']['sha256']
-          assert index['snapshot']['entityCount'] == 12
-          assert index['snapshot']['taskCount'] == 48
+          assert index['snapshot']['entityCount'] == expected_entities
+          assert index['snapshot']['taskCount'] == expected_tasks
           assert index['evidence']['evidenceCount'] == evidence_index['evidenceCount']
           assert index['evidence']['shardCount'] == evidence_index['shardCount']
 
@@ -113,7 +126,7 @@ jobs:
 
           assert progress['schemaVersion'] == 1
           assert progress['version'] == snapshot['version']
-          assert progress['shardCount'] == 12
+          assert progress['shardCount'] == expected_categories, (progress['shardCount'], expected_categories)
           entity_total = alias_total = field_total = task_total = 0
           for shard in progress['shards']:
               path = root / 'progress' / shard['file']
@@ -148,7 +161,8 @@ jobs:
           retry = sum(1 for t in snapshot['tasks'] if t['status'] == 'RETRY')
           completed = sum(1 for t in snapshot['tasks'] if t['status'] == 'COMPLETED')
           print(
-              f'Pilot: completed={completed} retry={retry} blocked={blocked} '
+              f'Active seed: entities={expected_entities} tasks={expected_tasks} '
+              f'completed={completed} retry={retry} blocked={blocked} '
               f'evidence={evidence_total} progressShards={progress["shardCount"]}'
           )
           assert blocked == 0
