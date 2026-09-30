@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": 1790739517543,
+  "updatedAt": 1790739734186,
   "sources": {
     "curated-canary-media": {
       "failures": 0,
@@ -24,7 +24,7 @@
     },
     "worms": {
       "failures": 1,
-      "cooldownUntil": 1790739542.1963353,
+      "cooldownUntil": 1790739756.469826,
       "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''"
     }
   }

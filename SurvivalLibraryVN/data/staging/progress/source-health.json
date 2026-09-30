@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 13,
-  "generatedAt": 1790739517636,
+  "version": 14,
+  "generatedAt": 1790739734262,
   "sourceHealth": [
     {
       "sourceKey": "curated-canary-media",
@@ -9,7 +9,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790739517543
+      "updatedAt": 1790739734186
     },
     {
       "sourceKey": "gbif",
@@ -17,7 +17,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790739517543
+      "updatedAt": 1790739734186
     },
     {
       "sourceKey": "inaturalist",
@@ -25,7 +25,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790739517543
+      "updatedAt": 1790739734186
     },
     {
       "sourceKey": "vn-authority-local",
@@ -33,15 +33,15 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790739517543
+      "updatedAt": 1790739734186
     },
     {
       "sourceKey": "worms",
       "tier": "",
       "consecutiveFailures": 1,
-      "cooldownUntil": 1790739542196,
+      "cooldownUntil": 1790739756469,
       "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
-      "updatedAt": 1790739517543
+      "updatedAt": 1790739734186
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 13,
-  "generatedAt": 1790739517636,
+  "version": 14,
+  "generatedAt": 1790739734262,
   "categoryId": "marine-life",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Tôm sú",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790739517636
+      "updatedAt": 1790739734262
     }
   ],
   "aliases": [
@@ -31,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790739502939
+      "updatedAt": 1790739715602
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790739502939,
+      "updatedAt": 1790739715602,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "curated-canary-media",
       "lastError": "",
-      "updatedAt": 1790739512196,
+      "updatedAt": 1790739726469,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790739502939,
+      "updatedAt": 1790739715602,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739503199,
+      "updatedAt": 1790739716107,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739502939
+      "updatedAt": 1790739715602
     },
     {
       "taskId": "taxon:penaeus-monodon:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "worms: HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
-      "updatedAt": 1790739512196
+      "updatedAt": 1790739726469
     },
     {
       "taskId": "taxon:penaeus-monodon:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739512196
+      "updatedAt": 1790739726469
     },
     {
       "taskId": "taxon:penaeus-monodon:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739502939
+      "updatedAt": 1790739715602
     }
   ]
 }
