@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "insects",
-  "updatedAt": 1790741244378,
+  "updatedAt": 1790741447368,
   "evidenceCount": 4,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/1341979",
-      "collectedAt": 1790741218149,
+      "collectedAt": 1790741427303,
       "verified": false,
       "externalId": "1341979"
     },
@@ -38,7 +38,7 @@
       "publisher": "Wikimedia Commons",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
-      "collectedAt": 1790741218698,
+      "collectedAt": 1790741427721,
       "verified": false,
       "rights": "CC BY-SA 4.0",
       "curatedLocalAuthority": true
@@ -55,7 +55,7 @@
       "publisher": "Trung tâm Khuyến nông Quốc gia",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-nuoi-ong-mat-ong-noi-apis-cerana-16705.html",
-      "collectedAt": 1790741218149,
+      "collectedAt": 1790741427303,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -71,7 +71,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
-      "collectedAt": 1790741218698,
+      "collectedAt": 1790741427720,
       "verified": false
     }
   ]

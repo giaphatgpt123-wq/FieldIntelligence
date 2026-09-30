@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "mushrooms",
-  "updatedAt": 1790741244378,
+  "updatedAt": 1790741447368,
   "evidenceCount": 16,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741200844,
+      "collectedAt": 1790741410218,
       "verified": false,
       "externalId": "2526548"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741202843,
+      "collectedAt": 1790741412221,
       "verified": false
     },
     {
@@ -57,7 +57,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741202843,
+      "collectedAt": 1790741412221,
       "verified": false
     },
     {
@@ -75,7 +75,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741202843,
+      "collectedAt": 1790741412221,
       "verified": false
     },
     {
@@ -93,7 +93,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741202843,
+      "collectedAt": 1790741412221,
       "verified": false
     },
     {
@@ -111,7 +111,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741202843,
+      "collectedAt": 1790741412221,
       "verified": false
     },
     {
@@ -129,7 +129,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790741202843,
+      "collectedAt": 1790741412221,
       "verified": false
     },
     {
@@ -160,7 +160,7 @@
       "publisher": "Sở Khoa học và Công nghệ thành phố Cần Thơ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://sokhcn.cantho.gov.vn/default.aspx?nid=26372&pid=57",
-      "collectedAt": 1790741200844,
+      "collectedAt": 1790741410218,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -176,7 +176,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
-      "collectedAt": 1790741201866,
+      "collectedAt": 1790741411220,
       "verified": false
     },
     {
@@ -195,7 +195,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5241445",
-      "collectedAt": 1790741236665,
+      "collectedAt": 1790741439283,
       "verified": false,
       "externalId": "5241445"
     },
@@ -214,7 +214,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.13215046",
-      "collectedAt": 1790741238316,
+      "collectedAt": 1790741441285,
       "verified": false
     },
     {
@@ -232,7 +232,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.13215048",
-      "collectedAt": 1790741238316,
+      "collectedAt": 1790741441285,
       "verified": false
     },
     {
@@ -250,7 +250,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.13215050",
-      "collectedAt": 1790741238316,
+      "collectedAt": 1790741441285,
       "verified": false
     },
     {
@@ -265,7 +265,7 @@
       "publisher": "Cục Thông tin, Thống kê - Bộ Khoa học và Công nghệ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://vista.gov.vn/vi/news/khoa-hoc-doi-song/thanh-phan-dinh-duong-va-duoc-lieu-cua-nam-rom-volvariella-volvacea-11323.html",
-      "collectedAt": 1790741236665,
+      "collectedAt": 1790741439283,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -281,7 +281,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5241445",
-      "collectedAt": 1790741237577,
+      "collectedAt": 1790741440303,
       "verified": false
     }
   ]

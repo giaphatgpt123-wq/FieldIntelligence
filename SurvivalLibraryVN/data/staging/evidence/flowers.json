@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "flowers",
-  "updatedAt": 1790741244378,
+  "updatedAt": 1790741447368,
   "evidenceCount": 4,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2882449",
-      "collectedAt": 1790741196858,
+      "collectedAt": 1790741406203,
       "verified": false,
       "externalId": "2882449"
     },
@@ -38,7 +38,7 @@
       "publisher": "Wikimedia Commons",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://commons.wikimedia.org/wiki/File:Nelumbo_nucifera_01.JPG",
-      "collectedAt": 1790741197873,
+      "collectedAt": 1790741407206,
       "verified": false,
       "rights": "CC BY-SA 3.0",
       "curatedLocalAuthority": true
@@ -55,7 +55,7 @@
       "publisher": "Sở Nông nghiệp và Phát triển nông thôn Quảng Nam",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://khuyennong.danang.gov.vn/QTIUpload/VanBan3/3.%20HD%20KT%20trong%20Sen%20lay%20hat%20%2811.7.3%29F%29.signed.pdf",
-      "collectedAt": 1790741196858,
+      "collectedAt": 1790741406203,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -71,7 +71,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2882449",
-      "collectedAt": 1790741197873,
+      "collectedAt": 1790741407206,
       "verified": false
     }
   ]

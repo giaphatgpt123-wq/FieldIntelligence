@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 18,
-  "generatedAt": 1790741244387,
+  "version": 19,
+  "generatedAt": 1790741447379,
   "sourceHealth": [
     {
       "sourceKey": "curated-canary-media",
@@ -9,7 +9,7 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790741244315
+      "updatedAt": 1790741447301
     },
     {
       "sourceKey": "gbif",
@@ -17,15 +17,15 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790741244315
+      "updatedAt": 1790741447301
     },
     {
       "sourceKey": "inaturalist",
       "tier": "",
-      "consecutiveFailures": 2,
-      "cooldownUntil": 1790741292957,
+      "consecutiveFailures": 3,
+      "cooldownUntil": 1790741522803,
       "lastError": "HTTP JSON thất bại sau bounded retry: HTTP Error 503: downtime",
-      "updatedAt": 1790741244315
+      "updatedAt": 1790741447301
     },
     {
       "sourceKey": "vn-authority-local",
@@ -33,15 +33,15 @@
       "consecutiveFailures": 0,
       "cooldownUntil": 0,
       "lastError": "",
-      "updatedAt": 1790741244315
+      "updatedAt": 1790741447301
     },
     {
       "sourceKey": "worms",
       "tier": "",
       "consecutiveFailures": 1,
-      "cooldownUntil": 1790741247703,
+      "cooldownUntil": 1790741456883,
       "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''",
-      "updatedAt": 1790741244315
+      "updatedAt": 1790741447301
     }
   ]
 }

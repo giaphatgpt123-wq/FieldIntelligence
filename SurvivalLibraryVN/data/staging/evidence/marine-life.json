@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "marine-life",
-  "updatedAt": 1790741244378,
+  "updatedAt": 1790741447368,
   "evidenceCount": 10,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2223871",
-      "collectedAt": 1790741239294,
+      "collectedAt": 1790741442301,
       "verified": false,
       "externalId": "2223871"
     },
@@ -52,7 +52,7 @@
       "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+10257%3A2014",
-      "collectedAt": 1790741239294,
+      "collectedAt": 1790741442301,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -69,7 +69,7 @@
       "publisher": "Tạp chí Khoa học và Công nghệ Việt Nam - Bộ Khoa học và Công nghệ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://tthc.most.gov.vn/index.php/ban_b/article/view/93",
-      "collectedAt": 1790741239294,
+      "collectedAt": 1790741442301,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -90,7 +90,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/8406925",
-      "collectedAt": 1790741206814,
+      "collectedAt": 1790741416219,
       "verified": false,
       "externalId": "8406925"
     },
@@ -110,7 +110,7 @@
       "publisher": "World Register of Marine Species",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.marinespecies.org/aphia.php?p=taxdetails&id=1809193",
-      "collectedAt": 1790741207819,
+      "collectedAt": 1790741416992,
       "verified": false,
       "externalId": "1809193"
     },
@@ -128,7 +128,7 @@
       "publisher": "Wikimedia Commons",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
-      "collectedAt": 1790741217703,
+      "collectedAt": 1790741426883,
       "verified": false,
       "rights": "CC BY-SA 3.0",
       "curatedLocalAuthority": true
@@ -160,7 +160,7 @@
       "publisher": "Trung tâm Khuyến nông Quốc gia",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://khuyennongvn.gov.vn/portals/0/tailieu/2014/12/host/kthuat_nuoitom_suthamcanh.pdf",
-      "collectedAt": 1790741207819,
+      "collectedAt": 1790741416992,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -176,7 +176,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
-      "collectedAt": 1790741208241,
+      "collectedAt": 1790741417395,
       "verified": false
     }
   ]

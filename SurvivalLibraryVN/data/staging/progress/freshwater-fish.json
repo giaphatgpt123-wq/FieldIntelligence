@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 18,
-  "generatedAt": 1790741244387,
+  "version": 19,
+  "generatedAt": 1790741447379,
   "categoryId": "freshwater-fish",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Cá rô đồng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790741244387
+      "updatedAt": 1790741447379
     }
   ],
   "aliases": [
@@ -49,7 +49,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": true,
-      "updatedAt": 1790741203837
+      "updatedAt": 1790741413205
     }
   ],
   "fields": [
@@ -61,7 +61,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741203837,
+      "updatedAt": 1790741413205,
       "valueJson": ""
     },
     {
@@ -83,7 +83,7 @@
       "verified": true,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790741203837,
+      "updatedAt": 1790741413205,
       "valueJson": ""
     },
     {
@@ -94,7 +94,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741205084,
+      "updatedAt": 1790741414203,
       "valueJson": ""
     }
   ],
@@ -115,7 +115,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741203837
+      "updatedAt": 1790741413205
     },
     {
       "taskId": "taxon:anabas-testudineus:distribution",
@@ -134,7 +134,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741205084
+      "updatedAt": 1790741414203
     },
     {
       "taskId": "taxon:anabas-testudineus:media",
@@ -149,11 +149,11 @@
         "GLOBAL_AUTHORITY",
         "COMMUNITY_REFERENCE"
       ],
-      "status": "RETRY",
+      "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790741205831
+      "updatedAt": 1790741415202
     },
     {
       "taskId": "taxon:anabas-testudineus:aliases",
@@ -172,7 +172,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741203837
+      "updatedAt": 1790741413205
     }
   ]
 }

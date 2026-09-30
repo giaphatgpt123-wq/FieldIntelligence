@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 18,
-  "generatedAt": 1790741244387,
+  "version": 19,
+  "generatedAt": 1790741447379,
   "categoryId": "danger",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Muỗi vằn",
       "highRisk": true,
       "published": false,
-      "updatedAt": 1790741244387
+      "updatedAt": 1790741447379
     },
     {
       "canonicalId": "taxon:naja-kaouthia",
@@ -20,7 +20,7 @@
       "vietnameseName": "Rắn hổ mang một mắt kính",
       "highRisk": true,
       "published": false,
-      "updatedAt": 1790741244387
+      "updatedAt": 1790741447379
     }
   ],
   "aliases": [
@@ -31,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": true,
-      "updatedAt": 1790741221071
+      "updatedAt": 1790741430301
     },
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -40,7 +40,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790741244387
+      "updatedAt": 1790741447379
     },
     {
       "canonicalId": "taxon:naja-kaouthia",
@@ -49,7 +49,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": true,
-      "updatedAt": 1790741242313
+      "updatedAt": 1790741445284
     },
     {
       "canonicalId": "taxon:naja-kaouthia",
@@ -58,7 +58,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790741244387
+      "updatedAt": 1790741447379
     }
   ],
   "fields": [
@@ -70,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741221071,
+      "updatedAt": 1790741430301,
       "valueJson": ""
     },
     {
@@ -81,7 +81,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741233600,
+      "updatedAt": 1790741432415,
       "valueJson": ""
     },
     {
@@ -92,7 +92,7 @@
       "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790741221071,
+      "updatedAt": 1790741430301,
       "valueJson": ""
     },
     {
@@ -103,7 +103,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741224917,
+      "updatedAt": 1790741431286,
       "valueJson": ""
     },
     {
@@ -114,7 +114,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741242313,
+      "updatedAt": 1790741445284,
       "valueJson": ""
     },
     {
@@ -125,7 +125,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741244315,
+      "updatedAt": 1790741447301,
       "valueJson": ""
     },
     {
@@ -136,7 +136,7 @@
       "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790741242313,
+      "updatedAt": 1790741445284,
       "valueJson": ""
     },
     {
@@ -147,7 +147,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741243351,
+      "updatedAt": 1790741446287,
       "valueJson": ""
     }
   ],
@@ -168,7 +168,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741221071
+      "updatedAt": 1790741430301
     },
     {
       "taskId": "taxon:naja-kaouthia:identity",
@@ -186,7 +186,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741242313
+      "updatedAt": 1790741445284
     },
     {
       "taskId": "taxon:aedes-aegypti:distribution",
@@ -205,7 +205,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741224917
+      "updatedAt": 1790741431286
     },
     {
       "taskId": "taxon:naja-kaouthia:distribution",
@@ -224,7 +224,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741243351
+      "updatedAt": 1790741446287
     },
     {
       "taskId": "taxon:aedes-aegypti:media",
@@ -242,8 +242,8 @@
       "status": "COMPLETED",
       "attempts": 1,
       "retryAfter": 0,
-      "lastError": "inaturalist: HTTP JSON thất bại sau bounded retry: HTTP Error 503: downtime",
-      "updatedAt": 1790741233600
+      "lastError": "",
+      "updatedAt": 1790741432415
     },
     {
       "taskId": "taxon:naja-kaouthia:media",
@@ -262,7 +262,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741244315
+      "updatedAt": 1790741447301
     },
     {
       "taskId": "taxon:aedes-aegypti:aliases",
@@ -281,7 +281,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741221071
+      "updatedAt": 1790741430301
     },
     {
       "taskId": "taxon:naja-kaouthia:aliases",
@@ -300,7 +300,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741242313
+      "updatedAt": 1790741445284
     }
   ]
 }

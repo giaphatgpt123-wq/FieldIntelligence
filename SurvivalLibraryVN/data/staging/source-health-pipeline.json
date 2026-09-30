@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": 1790741244315,
+  "updatedAt": 1790741447301,
   "sources": {
     "curated-canary-media": {
       "failures": 0,
@@ -13,8 +13,8 @@
       "lastError": ""
     },
     "inaturalist": {
-      "failures": 2,
-      "cooldownUntil": 1790741292.957508,
+      "failures": 3,
+      "cooldownUntil": 1790741522.8030562,
       "lastError": "HTTP JSON thất bại sau bounded retry: HTTP Error 503: downtime"
     },
     "vn-authority-local": {
@@ -24,7 +24,7 @@
     },
     "worms": {
       "failures": 1,
-      "cooldownUntil": 1790741247.7030835,
+      "cooldownUntil": 1790741456.8834004,
       "lastError": "HTTP JSON thất bại sau bounded retry: response không phải JSON hợp lệ: ''"
     }
   }
