@@ -13,8 +13,9 @@ import android.widget.TextView
  * Operational dashboard for Data Engine V2.
  *
  * Counts come only from local published DB + DataEngineStore staging/task/source tables.
- * Pipeline progress is mirrored through DataEngineStagingSync with a SHA-256 verified snapshot;
- * the mirror is never treated as PUBLISHED library content.
+ * Pipeline progress is mirrored through a SHA-256 verified transport; V2-G prefers
+ * category shards and keeps the legacy full snapshot as a rollback path.
+ * The mirror is never treated as PUBLISHED library content.
  */
 class DataEngineProgressActivity : PublishedBaseActivity() {
     private lateinit var holder: LinearLayout
@@ -51,9 +52,9 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
     private fun syncProgress() {
         if (syncing) return
         syncing = true
-        status.text = "Đang tải snapshot tiến độ có kiểm tra SHA-256…"
+        status.text = "Đang kiểm tra các shard tiến độ có SHA-256…"
         Thread {
-            val result = DataEngineStagingSync.checkAndSync(applicationContext)
+            val result = DataEngineIncrementalStagingSync.checkAndSync(applicationContext)
             runOnUiThread {
                 syncing = false
                 if (isFinishing || isDestroyed) return@runOnUiThread
@@ -104,7 +105,7 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
         holder.addView(sectionTitle("Hồ sơ cần xử lý", "Ưu tiên BLOCKED/RETRY rồi đến trường còn thiếu"))
         holder.addView(space(9))
         if (engine.entities.isEmpty()) {
-            holder.addView(notice("Staging trên thiết bị chưa có hồ sơ. Bấm Đồng bộ tiến độ AI để lấy snapshot đã checksum từ pipeline; nếu pipeline chưa phát hành snapshot thì app vẫn giữ dữ liệu cũ an toàn."))
+            holder.addView(notice("Staging trên thiết bị chưa có hồ sơ. Bấm Đồng bộ tiến độ AI để lấy dữ liệu đã kiểm SHA-256 từ pipeline; nếu shard mới chưa dùng được thì app vẫn có thể quay về snapshot cũ an toàn."))
         } else {
             engine.entities.take(30).forEachIndexed { index, entity ->
                 holder.addView(entityCard(entity))
@@ -129,7 +130,7 @@ class DataEngineProgressActivity : PublishedBaseActivity() {
         }
 
         holder.addView(space(16))
-        holder.addView(notice("Snapshot staging chỉ dùng cho tiến độ và chẩn đoán. Hồ sơ chỉ xuất hiện trong thư viện chính sau khi vượt LibraryRules và được cài như gói PUBLISHED đã kiểm tra SHA-256."))
+        holder.addView(notice("Staging chỉ dùng cho tiến độ và chẩn đoán. Hồ sơ chỉ xuất hiện trong thư viện chính sau khi vượt LibraryRules và được cài như gói PUBLISHED đã kiểm tra SHA-256."))
     }
 
     private fun summaryGrid(engine: DataEngineDashboardSnapshot, published: PublishedLibrarySnapshot): View =
