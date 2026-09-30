@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 5,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "state": "ORGANIZED_MASTER_V5",
+  "purpose": "Master sắp xếp kho tên Rau sau quét sâu: tên chính theo lớp; alias chắc chắn gộp về tên chính; tên đồng âm/dễ nhầm giữ riêng; thực vật ăn được chưa chắc thuộc Rau chuyển sang review.",
+  "displayContract": ["nameVi","categoryNameVi","images","applicationVi"],
+  "metrics": {"organizedCanonicalNameEntries":260,"resolvedAliasTerms":46,"collisionBuckets":6,"categoryReviewNames":19,"note":"260 là số tên chính/ứng viên tên chính đã xếp lớp, không đồng nghĩa 260 loài sinh học đã xác minh."},
+  "layers": {
+    "R1_RAU_CHO_AN_LA": ["Rau muống","Mồng tơi","Rau ngót","Rau má","Rau dền","Rau dền xanh","Rau dền đỏ","Rau dền cơm","Rau dền tía","Rau đay","Rau đay xanh","Rau đay đỏ","Rau càng cua","Rau sam","Rau nhút","Rau đắng","Rau đắng đất","Rau đắng biển","Diếp cá","Cần nước","Cần tây","Cải xoong","Chùm ngây","Rau lang","Tầm bóp","Rau dệu","Dền gai","Mã đề"],
+    "R2_NHOM_CAI_XA_LACH": ["Cải xanh","Cải bẹ xanh","Cải ngọt","Cải thìa","Cải thảo","Cải bắp","Bắp cải trắng","Bắp cải tím","Bắp cải trái tim","Cải bó xôi","Cải xoăn","Cải cúc","Cải ngồng","Cải làn","Cải bẹ","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ","Cải cầu vồng","Cải rocket","Cải mèo","Xà lách","Xà lách búp","Xà lách mỡ","Xà lách romaine","Xà lách iceberg","Xà lách xoăn xanh","Xà lách xoăn đỏ","Lô lô xanh","Lô lô tím","Xà lách oakleaf xanh","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée"],
+    "R3_RAU_THOM_GIA_VI": ["Tía tô","Kinh giới","Húng quế","Húng lủi","Húng cây","Húng chanh","Húng láng","Rau răm","Rau mùi","Ngò gai","Thì là","Hành lá","Hẹ","Lá lốt","Lá mơ","Lá é","É trắng","É tía","Cần tàu","Mùi tây","Hương thảo","Xạ hương","Sả","Sả chanh","Lá nếp","Kinh giới núi"],
+    "R4_RAU_NUOC_DAT_NGAP": ["Rau muống nước","Rau muống cạn","Rau ngổ","Ngò om","Rau om","Rau bợ","Rau trai","Rau má nước","Rau mát","Mác bao","Rau mác bao","Rau mác thon","Lục bình","Ngổ điếc","Rau mương","Rau mương hoa nhỏ","Rau rút dại","Rau ráu","Rau bèo","Rau chóc","Rau mác","Hèo nèo","Kèo nèo","Rau nhúc","Rau ngúc","Ráng gạt nai"],
+    "R5_RAU_DONG_HOANG_DAI": ["Rau tàu bay","Đơn buốt","Cỏ chua lè","Kim thất tai","Nút áo","Lạc tiên","Lu lu đực","Rau cải trời","Rau muối","Rau khúc tẻ","Rau khúc nếp","Rau cần trời","Rau bầu đất","Diếp dại","Rau diếp trời","Rau cúc sữa","Rau diếp đắng","Rau chua me","Chua me đất hoa vàng","Rau cúc đắng","Mè đất","Cỏ bạc đầu","Cỏ hôi","Mặt trời","Thông đất"],
+    "R6_RAU_RUNG_NUI": ["Lá bép","Rau lủi","Rau mặt trăng","Rau quế vị","Lá bứa","Lá trâm ổi","Rau sao nhái","Rau săng máu","Bí bái","Chòi mòi","Đọt sộp","Lá trâm sắn","Đọt mọt","Lá lộc vừng","Lá cóc","Rau dớn","Rau sắng","Rau bò khai","Rau ngót rừng","Mồng tơi núi","Ô rô trắng","Lá diễn","Xuân tiết","Hải đường xẻ","Bứa poilan","Bìm tán","Cứt quạ","Dưa núi","Lâu xác","Lộc mại nhỏ","Sóc dalton","Chàm đuôi dài","Vông vang","Mua leo","Dây cai","Chua ngút","Dương đầu leo","Ráy thon","Râu hùm","Tiết dê","Móc mật","Đắng cẩy","Thành ngạnh","Nhội","Giảo cổ lam","Đơn nem","Chân chim","Rau bác bác","Rau đậu","Rau nho","Bươm bướm","Cánh ngạnh","Rau bìm bìm","Rau xứng","Rau săn","Kim cang","Cu cu","Đỏ ngọn","Cạnh cạnh","Rau chọi","Rau rác","Lá giác","Mồng sa ria","Sâng đỏ","Sâng trắng","Bướm trắng","Báng","Chằm Chằm","Bân Bấn","Rau pắc khỉ","Rau ngó xuân","Cây vón vén","Rau tập tàng rừng","Rêu đá","Mầm đá","Rau tiến vua"],
+    "R7_DOT_CHOAI_MANG_MAY": ["Ngọn su su","Đọt bí","Đọt mướp","Ngọn đậu Hà Lan","Đọt choại","Đọt mây","Đọt song","Măng tre","Măng đắng","Măng sặt","Măng nứa","Măng vầu","Măng mai","Măng le","Măng giang","Măng lồ ô","Măng tầm vông","Mây lá rộng","Mây đọt đắng","Mây cát","Mây rả","Song","Song bột","Tre gai","Tre La Ngà","Lồ ô Bình Long","Le","Nứa","Lồ ô","Đọt bằng lăng","Lá sung non","Đọt xoài non","Đọt me non","Đọt cóc","Đọt bứa"],
+    "R8_RAU_MAM_GIA": ["Giá đỗ xanh","Giá đậu nành","Rau mầm cải xanh","Rau mầm cải củ","Rau mầm hướng dương","Rau mầm đậu Hà Lan","Rau mầm súp lơ xanh"]
+  },
+  "resolvedAliases": {
+    "Bồ ngót":"Rau ngót","Rau khoai lang":"Rau lang","Ngò rí":"Rau mùi","Giấp cá":"Diếp cá","Cải chân vịt":"Cải bó xôi","Rau bina":"Cải bó xôi","Cải kale":"Cải xoăn","Tần ô":"Cải cúc","Mùi tàu":"Ngò gai","Cải chíp":"Cải thìa","Xà lách cos":"Xà lách romaine","Hành":"Hành lá","Lá dứa":"Lá nếp","Rau lạc tiên":"Lạc tiên","Càng cua":"Rau càng cua","Sam":"Rau sam","Bò khai":"Rau bò khai","Rau Sắng":"Rau sắng","Dớn":"Rau dớn","Rau dớt":"Rau dớn","Rau lúi":"Rau lủi","Rau lũi":"Rau lủi","Rau nhíp":"Lá bép","Rau bét":"Lá bép","Rau lá bướm":"Lá bép","Rau danh":"Lá bép","Rau xá xị":"Rau quế vị","Xá xị":"Rau quế vị","Quế đất":"Rau quế vị","Hồi nước":"Rau quế vị","Hồi đất":"Rau quế vị","Om sần":"Rau quế vị","Chùm mồi":"Chòi mòi","Trâu cổ":"Đọt sộp","Lá lụa":"Đọt mọt","Cây mót":"Đọt mọt","Lá chiếc":"Lá lộc vừng","Rau chạy":"Đọt choại","Đọt chạy":"Đọt choại","Dây choại":"Đọt choại","Dạ hiến":"Rau bò khai","Dã hiến":"Rau bò khai","Dây dương":"Rau bò khai","Rau ngót leo":"Rau bò khai","Rau nghiến":"Rau bò khai","Khau hương":"Rau bò khai"
+  },
+  "collisionBuckets": [
+    {"bucket":"C1_NGO","searchTerms":["Rau ngổ","Ngổ","Ngổ nước","Ngổ đất","Ngổ hương","Rau ngổ thơm","Rau ngổ ăn","Rau ngổ lá đối","Ngò om","Rau om","Ngổ ôm","Ngò ôm","Mò om","Ngổ điếc","Om bò"],"rule":"KEEP_SEPARATE_UNTIL_TAXON_RESOLVED"},
+    {"bucket":"C2_RAU_MAT_MAC","searchTerms":["Rau mát","Rau mát bao","Mác bao","Rau mác bao","Lá mác bao","Rau mác thon","Lá mác thon","Cây cùi dìa","Cùi dừa"],"rule":"KEEP_SEPARATE_UNTIL_TAXON_RESOLVED"},
+    {"bucket":"C3_RAU_MA","searchTerms":["Rau má","Rau má nước","Rau má rừng","Rau má mỡ","Rau má chuột","Rau má họ","Rau má lá to","Rau má núi","Rau má lông","Rau má thìa","Đơn rau má"],"rule":"RESOLVE_EACH_REGIONAL_NAME"},
+    {"bucket":"C4_DUONG_XI","searchTerms":["Rau dớn","Rau dớt","Dớn","Rau quyết","Ráng gạt nai"],"rule":"RESOLVE_BY_TAXON_REGION_IMAGE"},
+    {"bucket":"C5_BAC_HA","searchTerms":["Bạc hà"],"rule":"REGIONAL_SEMANTIC_COLLISION"},
+    {"bucket":"C6_RAU_SANG_NGOT_RUNG","searchTerms":["Rau sắng","Rau Sắng","Rau ngót rừng"],"rule":"DO_NOT_TREAT_AS_ALIASES_WITHOUT_TAXON"}
+  ],
+  "pendingAliasResolution": [
+    {"alias":"Rau gắm","candidateCanonical":"Lá bép"},{"alias":"Rau mơ","candidateCanonical":"Lá mơ"},{"alias":"Rau mặt trời","candidateCanonical":"Mặt trời"},{"alias":"Chua lè","candidateCanonical":"Cỏ chua lè"}
+  ],
+  "categoryReview": ["Gấc","Đài hái","Vả","Sung","Chuối","Vối","Muối","Cây muối","Riềng rừng","Nghệ rừng","Ngải tiên","Gừng đỏ","Giềng gió","Quắn hoa","Bướm bạc Biên Hòa","Dung nam lá trà","Ngọc nước","Om Trung Quốc","Rau am mỏ"],
+  "processingOrder": [
+    {"priority":"P1","layers":["R1_RAU_CHO_AN_LA","R2_NHOM_CAI_XA_LACH","R3_RAU_THOM_GIA_VI"],"action":"Gắn ảnh + ứng dụng cho tên đã rõ identity."},
+    {"priority":"P1","layers":["R4_RAU_NUOC_DAT_NGAP"],"action":"Resolve collision trước, nhất là Rau ngổ/Ngò om và Rau mát/Mác."},
+    {"priority":"P2","layers":["R5_RAU_DONG_HOANG_DAI","R6_RAU_RUNG_NUI"],"action":"Resolve identity theo vùng/nguồn rồi gắn ảnh + ứng dụng."},
+    {"priority":"P2","layers":["R7_DOT_CHOAI_MANG_MAY"],"action":"Tách đúng cây mẹ/loài và phần non được dùng làm rau."},
+    {"priority":"P3","layers":["R8_RAU_MAM_GIA"],"action":"Gắn ảnh + ứng dụng."}
+  ],
+  "sourceFiles": ["vegetables-name-seed-v1.json","vegetables-wild-regional-expansion-v2.json","vegetables-discovery-master-v3.json","vegetables-source-candidates-v4.json","vegetables-deep-source-scan-v4.json"]
+}
