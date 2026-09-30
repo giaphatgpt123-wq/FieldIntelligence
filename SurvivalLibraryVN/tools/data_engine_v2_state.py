@@ -2,9 +2,9 @@
 """Merge Data Engine V2 collector results into persistent, device-syncable progress state.
 
 This script does not publish library records. It keeps field-level evidence, task status,
-source health, aliases and a compact staging snapshot. Only conservative identity evidence
-is auto-verified; media, Vietnamese names, usage and safety still require their dedicated
-rules/evidence gates.
+source health, aliases and a compact staging snapshot. Only evidence that satisfies a
+field-specific conservative verification rule is marked verified. Media, usage and safety
+remain behind their dedicated quality/evidence gates.
 
 V2-F persists evidence as category shards. The legacy evidence-store.json is read only as a
 one-time migration source; it is no longer rewritten on every collector run.
@@ -29,7 +29,7 @@ from data_engine_v2_shards import (
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING = ROOT / "data" / "staging"
-DEFAULT_TASKS = STAGING / "pilot-12-tasks.json"
+DEFAULT_TASKS = STAGING / "active-tasks.json"
 DEFAULT_RESULTS = STAGING / "latest-collector-results.json"
 DEFAULT_EVIDENCE = STAGING / "evidence-store.json"  # legacy migration source only
 DEFAULT_EVIDENCE_DIR = STAGING / "evidence"
@@ -81,6 +81,10 @@ PREFERRED_TIERS = {
     "SAFETY": ["OFFICIAL_VIETNAM", "GLOBAL_AUTHORITY", "SPECIALIST_VIETNAM"],
 }
 
+TRUSTED_VIETNAM_TIERS = {"OFFICIAL_VIETNAM", "SPECIALIST_VIETNAM"}
+VIETNAM_REGION_KEYS = {"việt nam", "viet nam", "vietnam", "vn"}
+VIETNAMESE_LANGUAGE_KEYS = {"vi", "vie", "vietnamese", "tiếng việt", "tieng viet"}
+
 
 def load_json(path: Path, default: Any) -> Any:
     if not path.exists():
@@ -103,11 +107,22 @@ def evidence_key(row: dict[str, Any]) -> str:
     return hashlib.sha256(canonical_json(material).encode("utf-8")).hexdigest()
 
 
+def trusted_curated_vietnam_row(row: dict[str, Any]) -> bool:
+    """Return True only for locally curated evidence from an approved Vietnam source tier."""
+    tier = str(row.get("sourceTier") or "").strip().upper()
+    source_uri = str(row.get("sourceUri") or "").strip()
+    return (
+        tier in TRUSTED_VIETNAM_TIERS
+        and row.get("curatedLocalAuthority") is True
+        and source_uri.startswith("https://")
+    )
+
+
 def identity_auto_verified(evidence: list[dict[str, Any]]) -> bool:
     for row in evidence:
         tier = str(row.get("sourceTier") or "")
         value = row.get("value") if isinstance(row.get("value"), dict) else {}
-        if tier == "OFFICIAL_VIETNAM" and row.get("curatedLocalAuthority") is True:
+        if trusted_curated_vietnam_row(row):
             return True
         if tier != "GLOBAL_AUTHORITY":
             continue
@@ -120,9 +135,43 @@ def identity_auto_verified(evidence: list[dict[str, Any]]) -> bool:
     return False
 
 
+def vietnamese_name_evidence_verified(row: dict[str, Any]) -> bool:
+    if not trusted_curated_vietnam_row(row):
+        return False
+    value = row.get("value") if isinstance(row.get("value"), dict) else {}
+    display_name = str(value.get("displayName") or "").strip()
+    language = str(value.get("language") or "").strip().casefold()
+    region = str(value.get("region") or value.get("country") or "").strip().casefold()
+    country_code = str(value.get("countryCode") or "").strip().upper()
+    language_ok = language in VIETNAMESE_LANGUAGE_KEYS
+    region_ok = region in VIETNAM_REGION_KEYS or country_code == "VN"
+    return bool(display_name and language_ok and region_ok)
+
+
+def vietnamese_name_auto_verified(evidence: list[dict[str, Any]]) -> bool:
+    return any(vietnamese_name_evidence_verified(row) for row in evidence)
+
+
+def vietnam_distribution_evidence_verified(row: dict[str, Any]) -> bool:
+    if not trusted_curated_vietnam_row(row):
+        return False
+    value = row.get("value") if isinstance(row.get("value"), dict) else {}
+    country_code = str(value.get("countryCode") or "").strip().upper()
+    country = str(value.get("country") or value.get("region") or "").strip().casefold()
+    return country_code == "VN" or country in VIETNAM_REGION_KEYS
+
+
+def vietnam_distribution_auto_verified(evidence: list[dict[str, Any]]) -> bool:
+    return any(vietnam_distribution_evidence_verified(row) for row in evidence)
+
+
 def field_verified(field: str, evidence: list[dict[str, Any]]) -> bool:
     if field == "CANONICAL_IDENTITY":
         return identity_auto_verified(evidence)
+    if field in {"VIETNAMESE_PRIMARY_NAME", "VIETNAMESE_ALIASES"}:
+        return vietnamese_name_auto_verified(evidence)
+    if field == "VIETNAM_DISTRIBUTION":
+        return vietnam_distribution_auto_verified(evidence)
     return False
 
 
@@ -227,7 +276,7 @@ def build_snapshot(
                     "aliasType": "OTHER_NAME",
                     "region": region,
                     "sourceKey": str(row.get("sourceId") or ""),
-                    "verified": False,
+                    "verified": vietnamese_name_evidence_verified(row),
                     "updatedAt": int(row.get("collectedAt") or now),
                 }
 
