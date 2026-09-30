@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 3,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "resolutionDate": "2026-09-30",
+  "resolutions": [
+    {
+      "canonicalNameVi": "Rau Mặt trời",
+      "scientificName": "Emilia sonchifolia (L.) DC. ex DC.",
+      "renameCompletedProfileFrom": "Cỏ chua lè",
+      "removeCanonicalNames": ["Mặt trời"],
+      "regionalSearchNames": [
+        {"region":"Cù Lao Chàm, Quảng Nam","names":["Rau Mặt trời","Mặt trời"]},
+        {"region":"K'Ho/Bidoup-Núi Bà, Lâm Đồng","names":["Cỏ chua lè"]}
+      ],
+      "resolution": "SAME_TAXON_REGIONAL_NAMES",
+      "note": "Không tạo hồ sơ riêng Mặt trời và Cỏ chua lè khi cùng chỉ Emilia sonchifolia; tên vùng phải giữ provenance."
+    },
+    {
+      "searchName": "Chua lè",
+      "resolution": "REGIONAL_NAME_COLLISION",
+      "regionalTargets": [
+        {"region":"Cù Lao Chàm, Quảng Nam","scientificName":"Emilia gaudichaudii Gagnep."},
+        {"region":"K'Ho/Bidoup-Núi Bà, Lâm Đồng","scientificName":"Emilia sonchifolia (L.) DC. ex DC.","nameForm":"Cỏ chua lè"}
+      ],
+      "rule": "REGION_REQUIRED_BEFORE_PROFILE_MATCH"
+    }
+  ],
+  "masterMetricCorrection": {
+    "organizedCanonicalNameEntriesBefore": 257,
+    "organizedCanonicalNameEntriesAfter": 256,
+    "reason": "Mặt trời và hồ sơ Cỏ chua lè cùng trỏ Emilia sonchifolia; hợp nhất thành Rau Mặt trời."
+  },
+  "state": "RESOLVED"
+}
