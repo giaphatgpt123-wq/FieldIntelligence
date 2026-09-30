@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-green-oakleaf-lettuce",
+      "nameVi": "Xà lách oakleaf xanh",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xà lách oakleaf xanh",
+          "fileName": "Green Oak Leaf lettuce J1.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Green_Oak_Leaf_lettuce_J1.jpg",
+          "creator": "Jamain",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh oakleaf xanh để so sánh",
+          "fileName": "Oak Leaf Lettuce.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Oak_Leaf_Lettuce.JPG",
+          "creator": "Bjankuloski06en",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "cultivarGroup": "Oakleaf / leaf lettuce cultivar",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-rainbow-chard",
+      "nameVi": "Cải cầu vồng",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết cải cầu vồng",
+          "fileName": "Rainbow chard.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Rainbow_chard.jpg",
+          "creator": "Ruth Hartnup",
+          "license": "CC BY 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh chard nhiều màu để so sánh",
+          "fileName": "SwissChard.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:SwissChard.jpg",
+          "creator": "Jonathunder",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và cuống lá dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Beta vulgaris L.",
+        "cultivarGroup": "Chard / Swiss chard group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:164505-1/general-information",
+        "identityNote": "Tên Việt có chữ cải nhưng taxonomy thuộc Beta vulgaris, không thuộc Brassica."
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-rocket-arugula",
+      "nameVi": "Cải rocket",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết cải rocket",
+          "fileName": "Rocket Salad, Arugula, Roquette, Rucola, Rugula (Eruca vesicaria subsp. sativa).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Rocket_Salad,_Arugula,_Roquette,_Rucola,_Rugula_(Eruca_vesicaria_subsp._sativa).jpg",
+          "creator": "Dave Whitinger",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Eruca vesicaria để so sánh",
+          "fileName": "Eruca vesicaria.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Eruca_vesicaria.jpg",
+          "creator": "Joaquinasad",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm/salad.",
+      "internalEvidence": {
+        "scientificName": "Eruca vesicaria (L.) Cav.",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1137625-2/general-information",
+        "identityNote": "Rocket/arugula thuộc chi Eruca; không đồng nhất với các nhóm Brassica khác."
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
