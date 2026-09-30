@@ -21,7 +21,7 @@ import android.widget.TextView
  */
 private const val PAGE_PROBE_SIZE = PagingPolicy.PAGE_SIZE + 1
 
-private data class WindowPage(
+data class WindowPage(
     val rows: List<PublishedRecord>,
     val hasNext: Boolean,
     val offset: Int
