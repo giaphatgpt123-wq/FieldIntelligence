@@ -90,9 +90,9 @@ object DataEngineProgressSqlRepository {
         ).use { cursor ->
             while (cursor.moveToNext()) {
                 categoryAccumulators.getOrPut(cursor.getString(0)) { CategoryAccumulator() }.apply {
-                    stagedEntities = cursor.getInt(1)
-                    publishedEntities = cursor.getInt(2)
-                    highRiskEntities = cursor.getInt(3)
+                    this.stagedEntities = cursor.getInt(1)
+                    this.publishedEntities = cursor.getInt(2)
+                    this.highRiskEntities = cursor.getInt(3)
                 }
             }
         }
@@ -111,8 +111,8 @@ object DataEngineProgressSqlRepository {
         ).use { cursor ->
             while (cursor.moveToNext()) {
                 categoryAccumulators.getOrPut(cursor.getString(0)) { CategoryAccumulator() }.apply {
-                    verifiedFields = cursor.getInt(1)
-                    fieldsWithData = cursor.getInt(2)
+                    this.verifiedFields = cursor.getInt(1)
+                    this.fieldsWithData = cursor.getInt(2)
                 }
             }
         }
