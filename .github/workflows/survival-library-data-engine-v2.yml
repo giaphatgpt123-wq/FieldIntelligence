@@ -11,6 +11,8 @@ on:
       - 'SurvivalLibraryVN/tools/data_engine_v2_runtime.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_shards.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2*.py'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
@@ -25,6 +27,8 @@ on:
       - 'SurvivalLibraryVN/tools/data_engine_v2_runtime.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_shards.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2*.py'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
@@ -55,6 +59,8 @@ jobs:
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_runtime.py
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_state.py
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_shards.py
+          python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py
+          python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py
 
       - name: Unit tests without network
         run: python -m unittest discover -s SurvivalLibraryVN/tools/tests -p 'test_data_engine_v2*.py' -v

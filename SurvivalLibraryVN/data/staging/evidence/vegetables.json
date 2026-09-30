@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "vegetables",
-  "updatedAt": 1790731794867,
+  "updatedAt": 1790732109336,
   "evidenceCount": 4,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790731764299,
+      "collectedAt": 1790732076874,
       "verified": false,
       "externalId": "2928525"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790731765611,
+      "collectedAt": 1790732078676,
       "verified": false
     },
     {
@@ -54,7 +54,7 @@
       "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
-      "collectedAt": 1790731764299,
+      "collectedAt": 1790732076875,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -70,7 +70,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
-      "collectedAt": 1790731764910,
+      "collectedAt": 1790732077622,
       "verified": false
     }
   ]

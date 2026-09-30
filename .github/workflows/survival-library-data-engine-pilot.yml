@@ -11,6 +11,8 @@ on:
       - 'SurvivalLibraryVN/tools/data_engine_v2_runtime.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_state.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_shards.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
@@ -69,11 +71,15 @@ jobs:
             --health-file SurvivalLibraryVN/data/staging/source-health-pipeline.json \
             --limit 500
 
-      - name: Merge evidence shards and build progress snapshot
+      - name: Merge evidence shards and build legacy progress snapshot
         run: |
           python SurvivalLibraryVN/tools/data_engine_v2_state.py
 
-      - name: Validate snapshot and evidence shard contracts
+      - name: Publish category progress shards
+        run: |
+          python SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py
+
+      - name: Validate snapshot, evidence and progress shard contracts
         run: |
           python - <<'PY'
           import hashlib, json
@@ -83,6 +89,7 @@ jobs:
           snapshot = json.loads(snapshot_raw)
           index = json.loads((root / 'progress-index.json').read_text(encoding='utf-8'))
           evidence_index = json.loads((root / 'evidence-index.json').read_text(encoding='utf-8'))
+          progress = index['progressShards']
           assert snapshot['schemaVersion'] == 1
           assert len(snapshot['entities']) == 12
           assert len(snapshot['tasks']) == 48
@@ -91,8 +98,8 @@ jobs:
           assert index['snapshot']['taskCount'] == 48
           assert index['evidence']['evidenceCount'] == evidence_index['evidenceCount']
           assert index['evidence']['shardCount'] == evidence_index['shardCount']
-          assert evidence_index['shardCount'] >= 1
-          total = 0
+
+          evidence_total = 0
           for shard in evidence_index['shards']:
               path = root / 'evidence' / shard['file']
               raw = path.read_bytes()
@@ -101,20 +108,57 @@ jobs:
               assert len(raw) == shard['bytes']
               assert len(payload['evidence']) == shard['evidenceCount']
               assert len(raw) <= evidence_index['maxShardBytes']
-              total += shard['evidenceCount']
-          assert total == evidence_index['evidenceCount']
+              evidence_total += shard['evidenceCount']
+          assert evidence_total == evidence_index['evidenceCount']
+
+          assert progress['schemaVersion'] == 1
+          assert progress['version'] == snapshot['version']
+          assert progress['shardCount'] == 12
+          entity_total = alias_total = field_total = task_total = 0
+          for shard in progress['shards']:
+              path = root / 'progress' / shard['file']
+              raw = path.read_bytes()
+              payload = json.loads(raw)
+              assert hashlib.sha256(raw).hexdigest() == shard['sha256']
+              assert len(raw) == shard['bytes']
+              assert len(raw) <= progress['maxShardBytes']
+              assert payload['categoryId'] == shard['categoryId']
+              assert payload['version'] == snapshot['version']
+              assert len(payload['entities']) == shard['entityCount']
+              assert len(payload['aliases']) == shard['aliasCount']
+              assert len(payload['fields']) == shard['fieldCount']
+              assert len(payload['tasks']) == shard['taskCount']
+              entity_total += shard['entityCount']
+              alias_total += shard['aliasCount']
+              field_total += shard['fieldCount']
+              task_total += shard['taskCount']
+          assert entity_total == len(snapshot['entities'])
+          assert alias_total == len(snapshot['aliases'])
+          assert field_total == len(snapshot['fields'])
+          assert task_total == len(snapshot['tasks'])
+          source_meta = progress['sourceHealth']
+          source_raw = (root / 'progress' / source_meta['file']).read_bytes()
+          source_payload = json.loads(source_raw)
+          assert hashlib.sha256(source_raw).hexdigest() == source_meta['sha256']
+          assert len(source_raw) == source_meta['bytes']
+          assert len(source_payload['sourceHealth']) == source_meta['rowCount']
+          assert len(source_payload['sourceHealth']) == len(snapshot['sourceHealth'])
+
           blocked = sum(1 for t in snapshot['tasks'] if t['status'] == 'BLOCKED')
           retry = sum(1 for t in snapshot['tasks'] if t['status'] == 'RETRY')
           completed = sum(1 for t in snapshot['tasks'] if t['status'] == 'COMPLETED')
-          print(f'Pilot snapshot: completed={completed} retry={retry} blocked={blocked} evidence={total} shards={evidence_index["shardCount"]}')
-          assert blocked == 0, 'Pilot must not introduce BLOCKED tasks'
+          print(
+              f'Pilot: completed={completed} retry={retry} blocked={blocked} '
+              f'evidence={evidence_total} progressShards={progress["shardCount"]}'
+          )
+          assert blocked == 0
           PY
 
       - name: Drop ephemeral collector output before Git commit
         run: |
           git restore --worktree SurvivalLibraryVN/data/staging/latest-collector-results.json || true
 
-      - name: Commit partial progress without rewriting monolithic evidence
+      - name: Commit sharded progress without rewriting monolithic evidence
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -122,12 +166,13 @@ jobs:
             SurvivalLibraryVN/data/staging/source-health-pipeline.json \
             SurvivalLibraryVN/data/staging/evidence-index.json \
             SurvivalLibraryVN/data/staging/evidence \
+            SurvivalLibraryVN/data/staging/progress \
             SurvivalLibraryVN/data/staging/progress-snapshot.json \
             SurvivalLibraryVN/data/staging/progress-index.json
           if git diff --cached --quiet; then
             echo "No staging progress changes to commit."
           else
-            git commit -m "Update sharded Data Engine V2 pilot staging progress"
+            git commit -m "Update category-sharded Data Engine V2 progress"
             git fetch origin "${GITHUB_REF_NAME}"
             git rebase "origin/${GITHUB_REF_NAME}"
             git push origin HEAD:"${GITHUB_REF_NAME}"

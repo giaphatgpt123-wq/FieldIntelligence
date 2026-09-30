@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "mushrooms",
-  "updatedAt": 1790731794867,
+  "updatedAt": 1790732109336,
   "evidenceCount": 10,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731773202,
+      "collectedAt": 1790732085675,
       "verified": false,
       "externalId": "2526548"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731775015,
+      "collectedAt": 1790732087790,
       "verified": false
     },
     {
@@ -57,7 +57,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731775015,
+      "collectedAt": 1790732087790,
       "verified": false
     },
     {
@@ -75,7 +75,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731775015,
+      "collectedAt": 1790732087790,
       "verified": false
     },
     {
@@ -93,7 +93,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731775015,
+      "collectedAt": 1790732087790,
       "verified": false
     },
     {
@@ -111,7 +111,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731775015,
+      "collectedAt": 1790732087790,
       "verified": false
     },
     {
@@ -129,7 +129,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2526548",
-      "collectedAt": 1790731775015,
+      "collectedAt": 1790732087790,
       "verified": false
     },
     {
@@ -145,7 +145,7 @@
       "publisher": "iNaturalist",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://www.inaturalist.org/taxa/136399",
-      "collectedAt": 1790731774381,
+      "collectedAt": 1790732087390,
       "verified": false
     },
     {
@@ -160,7 +160,7 @@
       "publisher": "Sở Khoa học và Công nghệ thành phố Cần Thơ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://sokhcn.cantho.gov.vn/default.aspx?nid=26372&pid=57",
-      "collectedAt": 1790731773202,
+      "collectedAt": 1790732085675,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -176,7 +176,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2526548",
-      "collectedAt": 1790731774044,
+      "collectedAt": 1790732087008,
       "verified": false
     }
   ]

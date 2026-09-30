@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "version": 10,
+  "generatedAt": 1790732109343,
+  "categoryId": "roots",
+  "entities": [
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "categoryId": "roots",
+      "scientificName": "Colocasia esculenta",
+      "vietnameseName": "Khoai môn",
+      "highRisk": false,
+      "published": false,
+      "updatedAt": 1790732109343
+    }
+  ],
+  "aliases": [
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "displayName": "Khoai môn",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790732079220
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "displayName": "Khoai môn",
+      "aliasType": "PRIMARY",
+      "region": "",
+      "sourceKey": "pilot-seed",
+      "verified": false,
+      "updatedAt": 1790732109343
+    }
+  ],
+  "fields": [
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "CANONICAL_IDENTITY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": true,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732079220,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732080398,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 2,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790732079220,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAM_DISTRIBUTION",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790732079716,
+      "valueJson": ""
+    }
+  ],
+  "tasks": [
+    {
+      "taskId": "taxon:colocasia-esculenta:identity",
+      "canonicalId": "taxon:colocasia-esculenta",
+      "taskType": "RESOLVE_CANONICAL",
+      "field": "CANONICAL_IDENTITY",
+      "priority": 100,
+      "preferredSourceTiers": [
+        "GLOBAL_AUTHORITY",
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732079220
+    },
+    {
+      "taskId": "taxon:colocasia-esculenta:distribution",
+      "canonicalId": "taxon:colocasia-esculenta",
+      "taskType": "COLLECT_DISTRIBUTION",
+      "field": "VIETNAM_DISTRIBUTION",
+      "priority": 93,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732079716
+    },
+    {
+      "taskId": "taxon:colocasia-esculenta:media",
+      "canonicalId": "taxon:colocasia-esculenta",
+      "taskType": "COLLECT_MEDIA",
+      "field": "MEDIA_PRIMARY",
+      "priority": 92,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE",
+        "GLOBAL_AUTHORITY",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732080398
+    },
+    {
+      "taskId": "taxon:colocasia-esculenta:aliases",
+      "canonicalId": "taxon:colocasia-esculenta",
+      "taskType": "COLLECT_VIETNAMESE_NAMES",
+      "field": "VIETNAMESE_ALIASES",
+      "priority": 88,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790732079220
+    }
+  ]
+}
