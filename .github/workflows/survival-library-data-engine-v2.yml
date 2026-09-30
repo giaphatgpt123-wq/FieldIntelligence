@@ -13,10 +13,13 @@ on:
       - 'SurvivalLibraryVN/tools/data_engine_v2_shards.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_publication_readiness.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2*.py'
       - 'SurvivalLibraryVN/data/staging/active-tasks.json'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
+      - 'SurvivalLibraryVN/data/staging/progress-snapshot.json'
+      - 'SurvivalLibraryVN/data/staging/evidence/**'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
       - 'SurvivalLibraryVN/data/staging/curated_canary_media.json'
       - '.github/workflows/survival-library-data-engine-v2.yml'
@@ -30,10 +33,13 @@ on:
       - 'SurvivalLibraryVN/tools/data_engine_v2_shards.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py'
+      - 'SurvivalLibraryVN/tools/data_engine_v2_publication_readiness.py'
       - 'SurvivalLibraryVN/tools/data_engine_v2_sources.json'
       - 'SurvivalLibraryVN/tools/tests/test_data_engine_v2*.py'
       - 'SurvivalLibraryVN/data/staging/active-tasks.json'
       - 'SurvivalLibraryVN/data/staging/pilot-12-tasks.json'
+      - 'SurvivalLibraryVN/data/staging/progress-snapshot.json'
+      - 'SurvivalLibraryVN/data/staging/evidence/**'
       - 'SurvivalLibraryVN/data/staging/vietnam_authority.json'
       - 'SurvivalLibraryVN/data/staging/curated_canary_media.json'
       - '.github/workflows/survival-library-data-engine-v2.yml'
@@ -66,6 +72,7 @@ jobs:
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_shards.py
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_progress_shards.py
           python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_progress_publish.py
+          python -m py_compile SurvivalLibraryVN/tools/data_engine_v2_publication_readiness.py
 
       - name: Unit tests without network
         run: python -m unittest discover -s SurvivalLibraryVN/tools/tests -p 'test_data_engine_v2*.py' -v
@@ -101,5 +108,22 @@ jobs:
           print(
               f'Registry OK: {len(ids)} sources · '
               f'active seed {len(entities)} entities / {len(tasks)} tasks / {len(categories)} categories'
+          )
+          PY
+
+      - name: Report expansion publication readiness
+        run: |
+          python SurvivalLibraryVN/tools/data_engine_v2_publication_readiness.py \
+            --scope expansion \
+            --output /tmp/publication-readiness.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/publication-readiness.json').read_text(encoding='utf-8'))
+          assert report['selectedCount'] == 5, report['selectedCount']
+          assert report['readyCount'] + report['blockedCount'] == report['selectedCount']
+          print(
+              f"Expansion publication gate: selected={report['selectedCount']} "
+              f"ready={report['readyCount']} blocked={report['blockedCount']}"
           )
           PY
