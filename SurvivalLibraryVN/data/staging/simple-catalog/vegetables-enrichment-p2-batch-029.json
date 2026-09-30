@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-commelina-diffusa",
+      "nameVi": "Rau trai",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh Rau trai để nhận biết",
+          "fileName": "Commelina diffusa.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Commelina_diffusa.jpg",
+          "creator": "Jayachandranjay",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Rau trai để so sánh",
+          "fileName": "Commelina diffusa 08115.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Commelina_diffusa_08115.jpg",
+          "creator": "Vengolis",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — ngọn non có thể luộc làm rau.",
+      "internalEvidence": {
+        "scientificName": "Commelina diffusa Burm.f.",
+        "searchAliases": ["Thài lài trắng", "Rau trai"],
+        "identityAndUseSource": "https://vqgphongnhakebang.ifee.edu.vn/ddsh/thucvat/show/273",
+        "cualaochamSource": "https://www.thuvientailieu.vn/tai-lieu/da-dang-sinh-hoc-cac-loai-rau-rung-co-gia-tri-tai-khu-du-tru-sinh-quyen-dao-cu-lao-cham-thanh-pho-hoi-an-pham-thi-kim-50326/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
