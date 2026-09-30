@@ -66,7 +66,9 @@ class DataEngineScaleSmokeTest {
                 db.endTransaction()
             }
 
-            val snapshot = DataEngineProgressSqlRepository.snapshot(context)
+            // Use the same open database in instrumentation so SQL/runtime exceptions are
+            // visible in CI instead of being converted to the production-safe EMPTY fallback.
+            val snapshot = DataEngineProgressSqlRepository.buildSnapshot(db)
             assertEquals(250, snapshot.stagedEntities)
             assertEquals(250, snapshot.verifiedFields)
             assertEquals(250, snapshot.completedTasks)
