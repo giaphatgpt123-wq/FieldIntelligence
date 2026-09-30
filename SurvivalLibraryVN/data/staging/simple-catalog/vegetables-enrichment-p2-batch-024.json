@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-bischofia-javanica",
+      "nameVi": "Nhội",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh cây/lá Nhội để nhận biết",
+          "fileName": "Bischofia javanica SF25185-02.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Bischofia_javanica_SF25185-02.jpg",
+          "creator": "Junglenut",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh hoa Nhội để so sánh",
+          "fileName": "Bischofia javanica flowering.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Bischofia_javanica_flowering.jpg",
+          "creator": "Tauʻolunga",
+          "license": "CC BY-SA 2.5 / 2.0 / 1.0 + GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Bischofia javanica Blume",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:339921-1",
+        "applicationSource": "https://thuocdongduoc.vn/nhoi"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
