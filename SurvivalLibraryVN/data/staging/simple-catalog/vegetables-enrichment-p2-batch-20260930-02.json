@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-blumea-lacera",
+      "nameVi": "Rau cải trời",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết toàn cây",
+          "fileName": "Blumea lacera.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Blumea_lacera.jpg",
+          "creator": "Nativeplants garden",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh so sánh cây và lá",
+          "fileName": "Blumea lacera (16756379509).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Blumea_lacera_(16756379509).jpg",
+          "creator": "Rison Thumboor",
+          "license": "CC BY 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và ngọn non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Blumea lacera (Burm.f.) DC.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:185603-1",
+        "applicationSources": [
+          "https://botanyvn.com/cnt.asp?newsid=910&param=news",
+          "https://plantuse.plantnet.org/en/Blumea_lacera_(PROSEA)"
+        ]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-gynura-procumbens",
+      "nameVi": "Rau bầu đất",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết lá và thân",
+          "fileName": "Gynura procumbens.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Gynura_procumbens.jpg",
+          "creator": "AbasoloaileenND",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Gynura Procumbens, Najran KSA.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Gynura_Procumbens,_Najran_KSA.jpg",
+          "creator": "AbasoloaileenND",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Gynura procumbens (Lour.) Merr.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:211304-1",
+        "applicationSources": [
+          "https://www.nparks.gov.sg/florafaunaweb/flora/4/2/4245",
+          "https://botanyvn.com/print.asp?newsid=143&param=news"
+        ]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-lactuca-indica",
+      "nameVi": "Diếp dại",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết toàn cây",
+          "fileName": "Lactuca indica - Saigon Zoo and Botanical Gardens - Ho Chi Minh City, Vietnam - DSC01245.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lactuca_indica_-_Saigon_Zoo_and_Botanical_Gardens_-_Ho_Chi_Minh_City,_Vietnam_-_DSC01245.JPG",
+          "creator": "Daderot",
+          "license": "CC0 1.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá và dáng cây để so sánh",
+          "fileName": "Lactuca indica 3.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lactuca_indica_3.JPG",
+          "creator": "Dalgial",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau, có thể ăn tươi hoặc nấu chín.",
+      "internalEvidence": {
+        "scientificName": "Lactuca indica L.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228047-1",
+        "applicationSources": [
+          "https://www.nparks.gov.sg/florafaunaweb/flora/4/8/4845",
+          "https://plantuse.plantnet.org/en/Lactuca_indica_(PROSEA)"
+        ]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
