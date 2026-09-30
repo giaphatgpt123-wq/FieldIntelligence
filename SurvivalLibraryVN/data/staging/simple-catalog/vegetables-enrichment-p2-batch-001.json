@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-crassocephalum-crepidioides",
+      "nameVi": "Rau tàu bay",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết rau tàu bay",
+          "fileName": "Crassocephalum crepidioides 08765.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Crassocephalum_crepidioides_08765.jpg",
+          "creator": "Vengolis",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Crassocephalum crepidioides 4.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Crassocephalum_crepidioides_4.jpg",
+          "creator": "Franz Xaver",
+          "license": "CC BY-SA 4.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — cây non/lá non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Crassocephalum crepidioides (Benth.) S.Moore",
+        "synonymNote": "Gynura crepidioides Benth. là tên đồng nghĩa cũ thường gặp.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/199488-1",
+        "applicationSource": "https://prosea.prota4u.org/view.aspx?id=2500"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-bidens-pilosa",
+      "nameVi": "Đơn buốt",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết đơn buốt",
+          "fileName": "Bidens pilosa.png",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Bidens_pilosa.png",
+          "creator": "X-shashi",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Bidens pilosa 4.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Bidens_pilosa_4.jpg",
+          "creator": "Nativeplants garden",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non và chồi non có nơi dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Bidens pilosa L.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:32564-2/general-information",
+        "applicationSource": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7099298/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-gynura-divaricata",
+      "nameVi": "Kim thất tai",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết kim thất tai",
+          "fileName": "Gynura divaricata - Hong Kong Botanical Garden - IMG 9576.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Gynura_divaricata_-_Hong_Kong_Botanical_Garden_-_IMG_9576.JPG",
+          "creator": "Daderot",
+          "license": "Public domain",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây để so sánh",
+          "fileName": "Gynura divaricata - Hong Kong Botanical Garden - IMG 9577.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Gynura_divaricata_-_Hong_Kong_Botanical_Garden_-_IMG_9577.JPG",
+          "creator": "Daderot",
+          "license": "Public domain",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — chồi/lá non dùng làm rau, có thể nấu canh.",
+      "internalEvidence": {
+        "scientificName": "Gynura divaricata (L.) DC.",
+        "identitySource": "KHO_BIDOUP_NUIBA source candidate in vegetables-source-candidates-v4.json",
+        "applicationSource": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5412215/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ],
+  "deferredSafetyReview": [
+    {
+      "nameVi": "Lạc tiên",
+      "identityHint": "Passiflora foetida L.",
+      "reason": "Nguồn hiện có mâu thuẫn về việc dùng lá non làm rau trong khi lá và quả non được ghi nhận là cyanogenic/toxic; không xuất bản ứng dụng ăn lá cho đến khi phân giải an toàn theo vùng/cách chế biến.",
+      "state": "SAFETY_CONFLICT_REVIEW"
+    }
+  ]
+}
