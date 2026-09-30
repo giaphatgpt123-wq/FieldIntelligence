@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-brassica-oleracea-alboglabra",
+      "nameVi": "Cải làn",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết cải làn",
+          "fileName": "Cải rổ.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:C%E1%BA%A3i_r%E1%BB%95.jpg",
+          "creator": "Bùi Thụy Đào Nguyên",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh thân lá để so sánh",
+          "fileName": "Gailan.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Gailan.jpg",
+          "creator": "Kowloonese",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và thân non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Brassica oleracea L.",
+        "cultivarGroup": "Alboglabra Group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:279435-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-brassica-oleracea-cabbage",
+      "nameVi": "Cải bắp",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh bắp cải nhận biết",
+          "fileName": "Starr 070730-7852 Brassica oleracea var. capitata.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr_070730-7852_Brassica_oleracea_var._capitata.jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây ngoài ruộng để so sánh",
+          "fileName": "Starr 070618-7334 Brassica oleracea var. capitata.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr_070618-7334_Brassica_oleracea_var._capitata.jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Brassica oleracea L.",
+        "cultivarGroup": "Capitata Group",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:279435-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-lactuca-sativa",
+      "nameVi": "Xà lách",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh xà lách nhận biết",
+          "fileName": "Lactuca sativa 2.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lactuca_sativa_2.jpg",
+          "creator": "Comedora",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh quần thể xà lách để so sánh",
+          "fileName": "Lettuce (зелена салата).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lettuce_(%D0%B7%D0%B5%D0%BB%D0%B5%D0%BD%D0%B0_%D1%81%D0%B0%D0%BB%D0%B0%D1%82%D0%B0).jpg",
+          "creator": "SA, The Green Ark, Bostanie",
+          "license": "CC BY 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm, thường dùng tươi.",
+      "internalEvidence": {
+        "scientificName": "Lactuca sativa L.",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:228239-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-spinacia-oleracea",
+      "nameVi": "Cải bó xôi",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết cải bó xôi",
+          "fileName": "Spinacia Oleracea.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Spinacia_Oleracea.jpg",
+          "creator": "Merstel007",
+          "license": "CC0 1.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Spinacia oleracea bd-1.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Spinacia_oleracea_bd-1.jpg",
+          "creator": "Kayser Ahmad",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Spinacia oleracea L.",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:167384-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-brassica-oleracea-kale",
+      "nameVi": "Cải xoăn",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết cải xoăn",
+          "fileName": "Boerenkool.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Boerenkool.jpg",
+          "creator": "Rasbak",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Brassica oleracea var. laciniata, boerenkool.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Brassica_oleracea_var._laciniata,_boerenkool.jpg",
+          "creator": "Rasbak",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Brassica oleracea L.",
+        "cultivarGroup": "Acephala Group / kale",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:279435-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
