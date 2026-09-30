@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
-  "organizedCanonicalNameEntries": 260,
-  "enrichedDisplayRecords": 60,
-  "verifiedOpenImageLinks": 120,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 200,
+  "organizedCanonicalNameEntries": 259,
+  "enrichedDisplayRecords": 62,
+  "verifiedOpenImageLinks": 124,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 197,
   "appVisibleCount": 0,
-  "collisionBucketsStillOpen": 6,
+  "collisionBucketsStillOpen": 5,
   "completedNames": [
     "Rau muống","Mồng tơi","Rau má","Diếp cá","Tía tô",
     "Rau lang","Rau sam","Rau càng cua","Chùm ngây","Rau dệu","Dền gai",
@@ -20,11 +20,14 @@
     "Xà lách oakleaf xanh","Cải cầu vồng","Cải rocket",
     "Húng chanh","Hương thảo","Xạ hương","Sả chanh","Mùi tây","Lá nếp",
     "Rau tàu bay","Đơn buốt","Kim thất tai","Nút áo","Cỏ chua lè",
-    "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn"
+    "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai"
+  ],
+  "resolvedAsAliasNotSeparateProfile": [
+    {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"}
   ],
   "deferredForIdentityResolution": [
     "Rau đay","Cải ngọt","Cải ngồng","Húng cây","Húng láng","Lá é","É trắng","É tía","Cần tàu","Sả","Kinh giới núi","Mã đề",
-    "Rau muối","Rau khúc tẻ","Rau khúc nếp"
+    "Rau muối","Rau khúc tẻ","Rau khúc nếp","Mồng tơi núi","Lá diễn"
   ],
   "deferredForMediaVerification": [
     "Cải cúc","Lá bép"
@@ -37,23 +40,19 @@
     "Lạc tiên","Lu lu đực"
   ],
   "deferredForCategoryReview": [
-    "Mè đất"
+    "Mè đất","Ô rô trắng","Xuân tiết"
   ],
   "nextP2Queue": [
-    "Rau sắng","Rau bò khai","Rau ngót rừng","Mồng tơi núi","Ô rô trắng","Lá diễn","Xuân tiết"
+    "Rau lủi","Rau quế vị","Lá bứa","Lá trâm ổi","Rau sao nhái","Rau săng máu","Bí bái","Chòi mòi"
   ],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
-    "Rau tàu bay đã chuẩn hóa từ tên đồng nghĩa cũ Gynura crepidioides sang accepted name Crassocephalum crepidioides.",
-    "Nút áo đã chuẩn hóa từ Spilanthes oleracea trong nguồn cũ sang accepted name Acmella oleracea.",
-    "Rau cải trời được chuẩn hóa là Blumea lacera; nguồn Việt Nam và PROSEA xác nhận lá/ngọn non dùng làm rau.",
-    "Rau bầu đất được chuẩn hóa là Gynura procumbens; NParks xác nhận lá ăn được và dùng như rau.",
-    "Diếp dại được chuẩn hóa là Lactuca indica; NParks/PROSEA xác nhận lá dùng làm rau.",
-    "Rau dớn được chuẩn hóa là Diplazium esculentum; đọt/lá non được dùng làm rau ở Việt Nam và nhiều nước châu Á.",
-    "Lá bép đã xác định taxon Gnetum gnemon var. griffithii theo nguồn Lâm Đồng và Kew nhưng chưa có đủ 2 ảnh mở xác nhận đúng variety; chưa gắn ảnh loài chung thay thế.",
-    "Rau muối mới chắc tới cấp chi Chenopodium; chưa gắn ảnh loài.",
-    "Rau khúc tẻ/khúc nếp đang có nguồn Việt Nam gán taxon chưa thống nhất; giữ lại để resolve trước.",
-    "Mè đất hiện nguồn mạnh tìm được chủ yếu xác nhận dược liệu Leucas zeylanica; chuyển sang review danh mục thay vì mặc định là Rau ăn.",
+    "Master canonical giảm 260 xuống 259 vì Rau ngót rừng được xác nhận là alias của Rau sắng (Melientha suavis), không phải hồ sơ độc lập.",
+    "Rau sắng: Kew xác nhận Melientha suavis; nguồn Việt Nam ghi Rau sắng/Rau ngót núi/Ngót rừng cùng taxon; lá, ngọn và hoa non được dùng làm rau.",
+    "Rau bò khai: Kew xác nhận Erythropalum scandens; nguồn Lạng Sơn và tài liệu khoa học xác nhận lá/ngọn non dùng làm rau.",
+    "Ô rô trắng (Chroesthes lanceolata) chuyển review danh mục vì nguồn thực vật Việt Nam mô tả là cây thuốc/nguồn gen hiếm, chưa đủ căn cứ làm hồ sơ Rau ăn.",
+    "Xuân tiết (Justicia adhatoda) có ghi nhận dùng làm thực phẩm ở một số cộng đồng Nam Á nhưng chưa đủ bằng chứng sử dụng như rau tại Việt Nam; giữ category review.",
+    "Lá diễn/Dicliptera chinensis giữ lại vì tài liệu rau của chi Dicliptera còn vấn đề định danh giữa các loài; chưa gắn ảnh/công dụng vội.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
