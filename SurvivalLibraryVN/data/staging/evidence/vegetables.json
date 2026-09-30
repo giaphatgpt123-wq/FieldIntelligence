@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "vegetables",
-  "updatedAt": 1790741447368,
+  "updatedAt": 1790741636615,
   "evidenceCount": 8,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/3083504",
-      "collectedAt": 1790741433308,
+      "collectedAt": 1790741622531,
       "verified": false,
       "externalId": "3083504"
     },
@@ -52,7 +52,7 @@
       "publisher": "Thông tin Khoa học Công nghệ tỉnh Bắc Giang",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://thongtinkhoahoccongnghe.bacgiang.gov.vn/node/1126383",
-      "collectedAt": 1790741433308,
+      "collectedAt": 1790741622531,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -68,7 +68,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3083504",
-      "collectedAt": 1790741434284,
+      "collectedAt": 1790741623569,
       "verified": false
     },
     {
@@ -87,7 +87,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790741394307,
+      "collectedAt": 1790741582137,
       "verified": false,
       "externalId": "2928525"
     },
@@ -106,7 +106,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790741403242,
+      "collectedAt": 1790741592246,
       "verified": false
     },
     {
@@ -121,7 +121,7 @@
       "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
-      "collectedAt": 1790741394307,
+      "collectedAt": 1790741582137,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -137,7 +137,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
-      "collectedAt": 1790741394726,
+      "collectedAt": 1790741583466,
       "verified": false
     }
   ]

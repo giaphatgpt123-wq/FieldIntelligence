@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "freshwater-fish",
-  "updatedAt": 1790741447368,
+  "updatedAt": 1790741636615,
   "evidenceCount": 8,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2391579",
-      "collectedAt": 1790741413205,
+      "collectedAt": 1790741602092,
       "verified": false,
       "externalId": "2391579"
     },
@@ -112,7 +112,7 @@
       "publisher": "Bộ Nông nghiệp và Phát triển nông thôn",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://www.mard.gov.vn/VanBanLayYKien/VBPLFile/BCTH-30122021-2.pdf",
-      "collectedAt": 1790741413205,
+      "collectedAt": 1790741602092,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -128,7 +128,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2391579",
-      "collectedAt": 1790741414203,
+      "collectedAt": 1790741603281,
       "verified": false
     }
   ]

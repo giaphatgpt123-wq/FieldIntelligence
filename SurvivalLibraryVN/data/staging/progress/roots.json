@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 19,
-  "generatedAt": 1790741447379,
+  "version": 20,
+  "generatedAt": 1790741636625,
   "categoryId": "roots",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Khoai môn",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790741447379
+      "updatedAt": 1790741636625
     },
     {
       "canonicalId": "taxon:ipomoea-batatas",
@@ -20,7 +20,7 @@
       "vietnameseName": "Khoai lang",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790741447379
+      "updatedAt": 1790741636625
     }
   ],
   "aliases": [
@@ -31,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": true,
-      "updatedAt": 1790741403646
+      "updatedAt": 1790741592661
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -40,7 +40,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790741447379
+      "updatedAt": 1790741636625
     },
     {
       "canonicalId": "taxon:ipomoea-batatas",
@@ -49,7 +49,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": true,
-      "updatedAt": 1790741436298
+      "updatedAt": 1790741625529
     },
     {
       "canonicalId": "taxon:ipomoea-batatas",
@@ -58,7 +58,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790741447379
+      "updatedAt": 1790741636625
     }
   ],
   "fields": [
@@ -70,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741403645,
+      "updatedAt": 1790741592661,
       "valueJson": ""
     },
     {
@@ -81,7 +81,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741404516,
+      "updatedAt": 1790741593782,
       "valueJson": ""
     },
     {
@@ -92,7 +92,7 @@
       "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790741403646,
+      "updatedAt": 1790741592661,
       "valueJson": ""
     },
     {
@@ -103,7 +103,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741404089,
+      "updatedAt": 1790741593324,
       "valueJson": ""
     },
     {
@@ -114,7 +114,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741436298,
+      "updatedAt": 1790741625529,
       "valueJson": ""
     },
     {
@@ -125,7 +125,7 @@
       "verified": false,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790741438302,
+      "updatedAt": 1790741627516,
       "valueJson": ""
     },
     {
@@ -136,7 +136,7 @@
       "verified": true,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790741436298,
+      "updatedAt": 1790741625529,
       "valueJson": ""
     },
     {
@@ -147,7 +147,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741437300,
+      "updatedAt": 1790741626605,
       "valueJson": ""
     }
   ],
@@ -168,7 +168,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741403645
+      "updatedAt": 1790741592661
     },
     {
       "taskId": "taxon:ipomoea-batatas:identity",
@@ -186,7 +186,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741436298
+      "updatedAt": 1790741625529
     },
     {
       "taskId": "taxon:colocasia-esculenta:distribution",
@@ -205,7 +205,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741404089
+      "updatedAt": 1790741593324
     },
     {
       "taskId": "taxon:ipomoea-batatas:distribution",
@@ -224,7 +224,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741437300
+      "updatedAt": 1790741626605
     },
     {
       "taskId": "taxon:colocasia-esculenta:media",
@@ -243,7 +243,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741404516
+      "updatedAt": 1790741593782
     },
     {
       "taskId": "taxon:ipomoea-batatas:media",
@@ -262,7 +262,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741438302
+      "updatedAt": 1790741627516
     },
     {
       "taskId": "taxon:colocasia-esculenta:aliases",
@@ -281,7 +281,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741403646
+      "updatedAt": 1790741592661
     },
     {
       "taskId": "taxon:ipomoea-batatas:aliases",
@@ -300,7 +300,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741436298
+      "updatedAt": 1790741625529
     }
   ]
 }

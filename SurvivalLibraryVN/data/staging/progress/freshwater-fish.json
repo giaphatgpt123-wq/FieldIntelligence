@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 19,
-  "generatedAt": 1790741447379,
+  "version": 20,
+  "generatedAt": 1790741636625,
   "categoryId": "freshwater-fish",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Cá rô đồng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790741447379
+      "updatedAt": 1790741636625
     }
   ],
   "aliases": [
@@ -49,7 +49,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": true,
-      "updatedAt": 1790741413205
+      "updatedAt": 1790741602092
     }
   ],
   "fields": [
@@ -61,7 +61,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741413205,
+      "updatedAt": 1790741602092,
       "valueJson": ""
     },
     {
@@ -83,7 +83,7 @@
       "verified": true,
       "sourceKey": "multi-source",
       "lastError": "",
-      "updatedAt": 1790741413205,
+      "updatedAt": 1790741602092,
       "valueJson": ""
     },
     {
@@ -94,7 +94,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790741414203,
+      "updatedAt": 1790741603281,
       "valueJson": ""
     }
   ],
@@ -115,7 +115,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741413205
+      "updatedAt": 1790741602092
     },
     {
       "taskId": "taxon:anabas-testudineus:distribution",
@@ -134,7 +134,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741414203
+      "updatedAt": 1790741603281
     },
     {
       "taskId": "taxon:anabas-testudineus:media",
@@ -153,7 +153,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "Các nguồn hiện chưa trả evidence phù hợp; giữ task để bổ sung sau",
-      "updatedAt": 1790741415202
+      "updatedAt": 1790741604091
     },
     {
       "taskId": "taxon:anabas-testudineus:aliases",
@@ -172,7 +172,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790741413205
+      "updatedAt": 1790741602092
     }
   ]
 }
