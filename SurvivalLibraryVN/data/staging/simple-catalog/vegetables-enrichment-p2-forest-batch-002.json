@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-cosmos-caudatus",
+      "nameVi": "Rau sao nhái",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Cosmos caudatus.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Cosmos_caudatus.jpg",
+          "creator": "Nativeplants garden",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây để so sánh",
+          "fileName": "Cosmos caudatus (5213981191).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Cosmos_caudatus_(5213981191).jpg",
+          "creator": "Dinesh Valke",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non và ngọn non dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Cosmos caudatus Kunth",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:198324-1/general-information",
+        "vietnamUseSource": "https://vjol.info.vn/index.php/JSTD/article/download/1834/2559/",
+        "regionalNameSource": "https://sunworld.vn/vi/ba-den/check-in/rau-sao-nhai"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-antidesma-ghaesembilla",
+      "nameVi": "Chòi mòi",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Antidesma ghaesembilla (9526931637).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Antidesma_ghaesembilla_(9526931637).jpg",
+          "creator": "Dinesh Valke",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây/quả để so sánh",
+          "fileName": "Antidesma ghaesembilla (9529708986).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Antidesma_ghaesembilla_(9529708986).jpg",
+          "creator": "Dinesh Valke",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — ngọn non dùng làm rau; quả cũng ăn được.",
+      "internalEvidence": {
+        "scientificName": "Antidesma ghaesembilla Gaertn.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:128660-3/general-information",
+        "vietnamNameSource": "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Antidesma+ghaesembilla",
+        "applicationSource": "https://prosea.prota4u.org/view.aspx?id=1575"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
