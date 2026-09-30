@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "medicinal-plants",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 4,
+  "evidence": [
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2757280,
+        "scientificName": "Zingiber officinale Roscoe",
+        "canonicalName": "Zingiber officinale",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2757280",
+      "collectedAt": 1790731664042,
+      "verified": false,
+      "externalId": "2757280"
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/medicinal-plants-zingiber-officinale.jpg",
+        "sourceFile": "Zingiber officinale 1123783.jpg",
+        "creator": "Colin Meurk",
+        "license": "CC BY-SA 4.0",
+        "checksumSha256": "b31e8feec85c03c19a1dd6f78129f6abbd5bdc598375f96f9d88a8b83e553e8a"
+      },
+      "sourceId": "curated-canary-media",
+      "publisher": "Wikimedia Commons",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_1123783.jpg",
+      "collectedAt": 1790731664498,
+      "verified": false,
+      "rights": "CC BY-SA 4.0",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Gừng",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Cổng thông tin quy phạm pháp luật tỉnh Điện Biên",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://qppl.dienbien.gov.vn/qlvb/vbpq.nsf/3d0f058120469ad34725726600365420/4C6659461B62F3AE47258C810010000D/%24file/845%20t3.pdf",
+      "collectedAt": 1790731664042,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:zingiber-officinale",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 53
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2757280",
+      "collectedAt": 1790731664498,
+      "verified": false
+    }
+  ]
+}

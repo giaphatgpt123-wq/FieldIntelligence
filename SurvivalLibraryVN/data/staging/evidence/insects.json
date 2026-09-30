@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "insects",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 4,
+  "evidence": [
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 1341979,
+        "scientificName": "Apis cerana Fabricius, 1793",
+        "canonicalName": "Apis cerana",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/1341979",
+      "collectedAt": 1790731661620,
+      "verified": false,
+      "externalId": "1341979"
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/insects-apis-cerana.jpg",
+        "sourceFile": "Apis cerana08409.jpg",
+        "creator": "Vengolis",
+        "license": "CC BY-SA 4.0",
+        "checksumSha256": "7b7e3e3be29082b62c136333f99cfa82a27fd2dc64f990f95c61c08194cc8136"
+      },
+      "sourceId": "curated-canary-media",
+      "publisher": "Wikimedia Commons",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://commons.wikimedia.org/wiki/File:Apis_cerana08409.jpg",
+      "collectedAt": 1790731662079,
+      "verified": false,
+      "rights": "CC BY-SA 4.0",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Ong nội",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Trung tâm Khuyến nông Quốc gia",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-nuoi-ong-mat-ong-noi-apis-cerana-16705.html",
+      "collectedAt": 1790731661620,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:apis-cerana",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 395
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1341979",
+      "collectedAt": 1790731662079,
+      "verified": false
+    }
+  ]
+}

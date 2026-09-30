@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "timber-trees",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 6,
+  "evidence": [
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 5669231,
+        "scientificName": "Hopea odorata Roxb.",
+        "canonicalName": "Hopea odorata",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5669231",
+      "collectedAt": 1790731642926,
+      "verified": false,
+      "externalId": "5669231"
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://raw.githubusercontent.com/giaphatgpt123-wq/FieldIntelligence/survival-library-vn/SurvivalLibraryVN/data/media/canary/timber-trees-hopea-odorata.jpg",
+        "sourceFile": "Hopea odorata Sao den.JPG",
+        "creator": "Hungda",
+        "license": "CC BY-SA 3.0",
+        "checksumSha256": "ed7f2ea2b13593d8011151dc7b1483fe473c2f888a73578d5f61b76640201b47"
+      },
+      "sourceId": "curated-canary-media",
+      "publisher": "Wikimedia Commons",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://commons.wikimedia.org/wiki/File:Hopea_odorata_Sao_den.JPG",
+      "collectedAt": 1790731643819,
+      "verified": false,
+      "rights": "CC BY-SA 3.0",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Sao đen",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5669231",
+      "collectedAt": 1790683586020,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Sao Den",
+        "language": "vie",
+        "country": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5669231",
+      "collectedAt": 1790683586020,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Sao đen",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Viện Khoa học Lâm nghiệp Việt Nam",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://vafs.gov.vn/vn/ky-thuat-trong-sao-den/",
+      "collectedAt": 1790731642926,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:hopea-odorata",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 41
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5669231",
+      "collectedAt": 1790731643819,
+      "verified": false
+    }
+  ]
+}

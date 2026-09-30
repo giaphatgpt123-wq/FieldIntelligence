@@ -5,6 +5,9 @@ This script does not publish library records. It keeps field-level evidence, tas
 source health, aliases and a compact staging snapshot. Only conservative identity evidence
 is auto-verified; media, Vietnamese names, usage and safety still require their dedicated
 rules/evidence gates.
+
+V2-F persists evidence as category shards. The legacy evidence-store.json is read only as a
+one-time migration source; it is no longer rewritten on every collector run.
 """
 
 from __future__ import annotations
@@ -16,11 +19,21 @@ import time
 from pathlib import Path
 from typing import Any
 
+from data_engine_v2_shards import (
+    category_lookup,
+    load_all_rows,
+    migrate_legacy_if_needed,
+    rows_from_results,
+    update_touched_shards,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
 STAGING = ROOT / "data" / "staging"
 DEFAULT_TASKS = STAGING / "pilot-12-tasks.json"
 DEFAULT_RESULTS = STAGING / "latest-collector-results.json"
-DEFAULT_EVIDENCE = STAGING / "evidence-store.json"
+DEFAULT_EVIDENCE = STAGING / "evidence-store.json"  # legacy migration source only
+DEFAULT_EVIDENCE_DIR = STAGING / "evidence"
+DEFAULT_EVIDENCE_INDEX = STAGING / "evidence-index.json"
 DEFAULT_HEALTH = STAGING / "source-health-pipeline.json"
 DEFAULT_SNAPSHOT = STAGING / "progress-snapshot.json"
 DEFAULT_INDEX = STAGING / "progress-index.json"
@@ -108,15 +121,13 @@ def identity_auto_verified(evidence: list[dict[str, Any]]) -> bool:
 
 
 def field_verified(field: str, evidence: list[dict[str, Any]]) -> bool:
-    # Conservative by design: only canonical identity has an automatic deterministic gate.
-    # Names/media/distribution/usage/safety remain collected but unverified until stronger
-    # field-specific rules are implemented.
     if field == "CANONICAL_IDENTITY":
         return identity_auto_verified(evidence)
     return False
 
 
 def merge_evidence(existing: list[dict[str, Any]], results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Compatibility helper kept for unit tests and callers outside the sharded persistence path."""
     rows: dict[str, dict[str, Any]] = {}
     for row in existing:
         if isinstance(row, dict):
@@ -220,7 +231,6 @@ def build_snapshot(
                     "updatedAt": int(row.get("collectedAt") or now),
                 }
 
-    # Always keep the pilot display name visible as an unverified primary candidate.
     for entity in entity_seed.values():
         display = str(entity.get("vietnameseName") or "").strip()
         if display:
@@ -300,7 +310,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Merge V2 collector evidence and build Android progress snapshot")
     parser.add_argument("--tasks", type=Path, default=DEFAULT_TASKS)
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
-    parser.add_argument("--evidence", type=Path, default=DEFAULT_EVIDENCE)
+    parser.add_argument("--evidence", type=Path, default=DEFAULT_EVIDENCE, help="Legacy monolithic migration source")
+    parser.add_argument("--evidence-dir", type=Path, default=DEFAULT_EVIDENCE_DIR)
+    parser.add_argument("--evidence-index", type=Path, default=DEFAULT_EVIDENCE_INDEX)
     parser.add_argument("--health", type=Path, default=DEFAULT_HEALTH)
     parser.add_argument("--snapshot", type=Path, default=DEFAULT_SNAPSHOT)
     parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
@@ -314,18 +326,11 @@ def main() -> int:
     if not task_ids or len(task_ids) != len(set(task_ids)):
         raise RuntimeError("Task seed trống hoặc có taskId trùng")
 
-    current_evidence_payload = load_json(args.evidence, {"schemaVersion": 1, "evidence": []})
-    existing_evidence = current_evidence_payload.get("evidence", []) if isinstance(current_evidence_payload, dict) else []
-    merged_evidence = merge_evidence(existing_evidence, results)
-    write_json(
-        args.evidence,
-        {
-            "schemaVersion": 1,
-            "updatedAt": int(time.time() * 1000),
-            "evidenceCount": len(merged_evidence),
-            "evidence": merged_evidence,
-        },
-    )
+    mapping = category_lookup(tasks)
+    migrated = migrate_legacy_if_needed(args.evidence, args.evidence_dir, args.evidence_index, mapping)
+    incoming_rows = rows_from_results(results)
+    touched = update_touched_shards(args.evidence_dir, args.evidence_index, incoming_rows, mapping)
+    merged_evidence = load_all_rows(args.evidence_dir, args.evidence_index)
 
     version = load_version(args.index) + 1
     health = load_json(args.health, {"schemaVersion": 1, "sources": {}})
@@ -333,6 +338,7 @@ def main() -> int:
     snapshot_raw = write_json(args.snapshot, snapshot)
     digest = hashlib.sha256(snapshot_raw).hexdigest()
 
+    evidence_index = load_json(args.evidence_index, {})
     index = {
         "schemaVersion": 1,
         "channel": "data-engine-v2-pilot",
@@ -345,6 +351,12 @@ def main() -> int:
             "entityCount": len(snapshot["entities"]),
             "taskCount": len(snapshot["tasks"]),
         },
+        "evidence": {
+            "schemaVersion": int(evidence_index.get("schemaVersion") or 1),
+            "evidenceCount": int(evidence_index.get("evidenceCount") or len(merged_evidence)),
+            "shardCount": int(evidence_index.get("shardCount") or 0),
+            "indexUrl": RAW_ROOT + args.evidence_index.name,
+        },
     }
     write_json(args.index, index)
 
@@ -354,7 +366,8 @@ def main() -> int:
     verified = sum(1 for row in snapshot["fields"] if row["verified"])
     print(
         f"V2 state: entities={len(snapshot['entities'])} tasks={len(snapshot['tasks'])} "
-        f"completed={completed} retry={retry} blocked={blocked} evidence={len(merged_evidence)} verifiedFields={verified}"
+        f"completed={completed} retry={retry} blocked={blocked} evidence={len(merged_evidence)} "
+        f"verifiedFields={verified} migratedLegacy={migrated} touchedShards={len(touched)}"
     )
     return 0
 

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "roots",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 5,
+  "evidence": [
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 5330776,
+        "scientificName": "Colocasia esculenta (L.) Schott",
+        "canonicalName": "Colocasia esculenta",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/5330776",
+      "collectedAt": 1790731637751,
+      "verified": false,
+      "externalId": "5330776"
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://ia902609.us.archive.org/23/items/colocasia-esculenta-sc-2022053-01/Colocasia%20esculenta_SC_2022053_01.JPG",
+        "type": "StillImage",
+        "title": "Colocasia esculenta_SC_2022053_01",
+        "creator": "Nicolás Rodríguez Cerón",
+        "license": "https://creativecommons.org/licenses/by-nc-sa/2.0/deed.en",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
+      "collectedAt": 1790731639018,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Khoai môn",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Trang thông tin quốc gia về bảo tồn thiên nhiên và đa dạng sinh học",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://nbca.gov.vn/doi-tuong-bao-ton/loai-nguy-cap-quy-hiem/loai-nguy-cap-quy-hiem-duoc-uu-tien-bao-ve/",
+      "collectedAt": 1790683579718,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Khoai môn",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Bộ Khoa học và Công nghệ",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://www.most.gov.vn/vn/Pages/chitiettin.aspx?IDNews=14040",
+      "collectedAt": 1790731637752,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:colocasia-esculenta",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 51
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
+      "collectedAt": 1790731638372,
+      "verified": false
+    }
+  ]
+}

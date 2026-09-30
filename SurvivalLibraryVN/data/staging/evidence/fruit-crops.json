@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "fruit-crops",
+  "updatedAt": 1790731666860,
+  "evidenceCount": 6,
+  "evidence": [
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 3190638,
+        "scientificName": "Mangifera indica L.",
+        "canonicalName": "Mangifera indica",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 97
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/3190638",
+      "collectedAt": 1790731639434,
+      "verified": false,
+      "externalId": "3190638"
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/8293002/files/figure.png",
+        "type": "StillImage",
+        "title": "Fig. 2. Chemical structure of mangiferin, found in Mangifera indica L. and investigated for its antihypertensive effects.",
+        "creator": "Micucci, M.;Bolchi, C.;Budriesi, R.;Cevenini, M.;Maroni, L.;Capozza, S.;Chiarini, A.;Pallavicini, M.;Angeletti, A.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.8293002",
+      "collectedAt": 1790731640741,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://images.naturalis.nl/original/csr%2FIMGP5500.jpg",
+        "type": "StillImage",
+        "title": "",
+        "creator": "",
+        "license": "CC BY-NC",
+        "rightsHolder": "Carel de Haseth"
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/3190638",
+      "collectedAt": 1790731640741,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Xoài",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+14304%3A2025",
+      "collectedAt": 1790731639434,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Xoài",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Viện Khoa học Lâm nghiệp Việt Nam",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://vafs.gov.vn/vn/magazine/so-4-2022/",
+      "collectedAt": 1790683581153,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:mangifera-indica",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 163
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3190638",
+      "collectedAt": 1790731639884,
+      "verified": false
+    }
+  ]
+}
