@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "timber-trees",
-  "updatedAt": 1790739942693,
+  "updatedAt": 1790740246659,
   "evidenceCount": 6,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5669231",
-      "collectedAt": 1790739903931,
+      "collectedAt": 1790740208651,
       "verified": false,
       "externalId": "5669231"
     },
@@ -38,7 +38,7 @@
       "publisher": "Wikimedia Commons",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://commons.wikimedia.org/wiki/File:Hopea_odorata_Sao_den.JPG",
-      "collectedAt": 1790739904916,
+      "collectedAt": 1790740209765,
       "verified": false,
       "rights": "CC BY-SA 3.0",
       "curatedLocalAuthority": true
@@ -85,7 +85,7 @@
       "publisher": "Viện Khoa học Lâm nghiệp Việt Nam",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://vafs.gov.vn/vn/ky-thuat-trong-sao-den/",
-      "collectedAt": 1790739903931,
+      "collectedAt": 1790740208651,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -101,7 +101,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5669231",
-      "collectedAt": 1790739904916,
+      "collectedAt": 1790740209765,
       "verified": false
     }
   ]

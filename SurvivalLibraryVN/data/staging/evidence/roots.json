@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "roots",
-  "updatedAt": 1790739942693,
+  "updatedAt": 1790740246659,
   "evidenceCount": 11,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5330776",
-      "collectedAt": 1790739898719,
+      "collectedAt": 1790740203974,
       "verified": false,
       "externalId": "5330776"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
-      "collectedAt": 1790739899827,
+      "collectedAt": 1790740205192,
       "verified": false
     },
     {
@@ -71,7 +71,7 @@
       "publisher": "Bộ Khoa học và Công nghệ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://www.most.gov.vn/vn/Pages/chitiettin.aspx?IDNews=14040",
-      "collectedAt": 1790739898719,
+      "collectedAt": 1790740203974,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -87,7 +87,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
-      "collectedAt": 1790739899147,
+      "collectedAt": 1790740204476,
       "verified": false
     },
     {
@@ -106,7 +106,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928551",
-      "collectedAt": 1790739931601,
+      "collectedAt": 1790740235559,
       "verified": false,
       "externalId": "2928551"
     },
@@ -125,7 +125,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://archive.org/details/ipomoea-batatas-sc-2022053-01",
-      "collectedAt": 1790739933635,
+      "collectedAt": 1790740237565,
       "verified": false
     },
     {
@@ -143,7 +143,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928551",
-      "collectedAt": 1790739933635,
+      "collectedAt": 1790740237565,
       "verified": false
     },
     {
@@ -159,7 +159,7 @@
       "publisher": "iNaturalist",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://www.inaturalist.org/taxa/62941",
-      "collectedAt": 1790739932816,
+      "collectedAt": 1790740236994,
       "verified": false
     },
     {
@@ -174,7 +174,7 @@
       "publisher": "Ban Quản lý rừng và Khuyến nông",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://banquanlyrungvakhuyennong.gov.vn/huong-dan-ky-thuat-trong-khoai-lang-ten-khoa-hoc-ipomoea-batatas-tt15567.html",
-      "collectedAt": 1790739931602,
+      "collectedAt": 1790740235559,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -190,7 +190,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928551",
-      "collectedAt": 1790739932658,
+      "collectedAt": 1790740236635,
       "verified": false
     }
   ]
