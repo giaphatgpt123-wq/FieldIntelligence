@@ -1,0 +1,34 @@
+name: Hoi Dung Mo Dung iOS Build
+run-name: iOS v0.7 simulator build ${{ github.sha }}
+
+on:
+  push:
+    branches: [ hoi-dung-mo-dung-build-v0.7 ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: hoi-dung-mo-dung/ios
+    steps:
+      - uses: actions/checkout@v4
+      - name: Privacy gate
+        run: bash tools/privacy_gate.sh
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Build iOS Simulator app
+        run: xcodebuild -project HoiDungMoDung.xcodeproj -scheme HoiDungMoDung -sdk iphonesimulator -configuration Debug CODE_SIGNING_ALLOWED=NO build | xcpretty
+      - name: Package Simulator app
+        run: |
+          APP=$(find ~/Library/Developer/Xcode/DerivedData -path '*Build/Products/Debug-iphonesimulator/HoiDungMoDung.app' -print -quit)
+          test -n "$APP"
+          ditto -c -k --sequesterRsrc --keepParent "$APP" HoiDungMoDung-simulator.zip
+      - name: Upload Simulator app
+        uses: actions/upload-artifact@v4
+        with:
+          name: hoi-dung-mo-dung-ios-simulator
+          path: hoi-dung-mo-dung/ios/HoiDungMoDung-simulator.zip
