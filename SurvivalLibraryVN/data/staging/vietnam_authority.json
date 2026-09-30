@@ -19,8 +19,8 @@
       "aliases": [
         {
           "value": {"displayName": "Khoai môn", "language": "vi", "region": "Việt Nam"},
-          "sourceUri": "https://nbca.gov.vn/doi-tuong-bao-ton/loai-nguy-cap-quy-hiem/loai-nguy-cap-quy-hiem-duoc-uu-tien-bao-ve/",
-          "publisher": "Trang thông tin quốc gia về bảo tồn thiên nhiên và đa dạng sinh học"
+          "sourceUri": "https://www.most.gov.vn/vn/Pages/chitiettin.aspx?IDNews=14040",
+          "publisher": "Bộ Khoa học và Công nghệ"
         }
       ]
     },
@@ -30,8 +30,8 @@
       "aliases": [
         {
           "value": {"displayName": "Xoài", "language": "vi", "region": "Việt Nam"},
-          "sourceUri": "https://vafs.gov.vn/vn/magazine/so-4-2022/",
-          "publisher": "Viện Khoa học Lâm nghiệp Việt Nam"
+          "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+14304%3A2025",
+          "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam"
         }
       ]
     },
@@ -47,6 +47,17 @@
       ]
     },
     {
+      "scientificName": "Hopea odorata",
+      "categoryId": "timber-trees",
+      "aliases": [
+        {
+          "value": {"displayName": "Sao đen", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://vafs.gov.vn/vn/ky-thuat-trong-sao-den/",
+          "publisher": "Viện Khoa học Lâm nghiệp Việt Nam"
+        }
+      ]
+    },
+    {
       "scientificName": "Pleurotus pulmonarius",
       "categoryId": "mushrooms",
       "aliases": [
@@ -54,6 +65,28 @@
           "value": {"displayName": "Nấm sò trắng", "language": "vi", "region": "Việt Nam"},
           "sourceUri": "https://sokhcn.cantho.gov.vn/default.aspx?nid=26372&pid=57",
           "publisher": "Sở Khoa học và Công nghệ thành phố Cần Thơ"
+        }
+      ]
+    },
+    {
+      "scientificName": "Anabas testudineus",
+      "categoryId": "freshwater-fish",
+      "aliases": [
+        {
+          "value": {"displayName": "Cá rô đồng", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://www.mard.gov.vn/VanBanLayYKien/VBPLFile/BCTH-30122021-2.pdf",
+          "publisher": "Bộ Nông nghiệp và Phát triển nông thôn"
+        }
+      ]
+    },
+    {
+      "scientificName": "Penaeus monodon",
+      "categoryId": "marine-life",
+      "aliases": [
+        {
+          "value": {"displayName": "Tôm sú", "language": "vi", "region": "Việt Nam"},
+          "sourceUri": "https://khuyennongvn.gov.vn/portals/0/tailieu/2014/12/host/kthuat_nuoitom_suthamcanh.pdf",
+          "publisher": "Trung tâm Khuyến nông Quốc gia"
         }
       ]
     },
