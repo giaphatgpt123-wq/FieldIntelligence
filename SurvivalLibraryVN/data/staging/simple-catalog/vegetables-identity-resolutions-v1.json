@@ -18,6 +18,19 @@
       "notes": "Nguồn thực vật Việt Nam ghi Rau sắng, Rau ngót núi, Ngót rừng và Phắc van cho cùng Melientha suavis. Không tạo hồ sơ Rau ngót rừng riêng."
     },
     {
+      "canonicalNameVi": "Rau bầu đất",
+      "scientificName": "Gynura procumbens (Lour.) Merr.",
+      "removeCanonicalNames": ["Rau lủi"],
+      "addSearchAliases": ["Rau lủi", "Rau lúi", "Bầu đất", "Kim thất"],
+      "evidence": [
+        "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Gynura+procumbens",
+        "https://kiemlamangiang.gov.vn/index.php?id=2589&page=front&tuychon=chitietloai",
+        "https://vov.vn/suc-khoe/tac-dung-va-bai-thuoc-tu-cay-bau-dat-post1296519.vov"
+      ],
+      "resolution": "SAME_TAXON_ALIAS",
+      "notes": "Nguồn Việt Nam ghi Rau lúi/Rau lủi là tên gọi của Bầu đất - Gynura procumbens. Không tạo hồ sơ Rau lủi riêng."
+    },
+    {
       "canonicalNameVi": "Rau bò khai",
       "scientificName": "Erythropalum scandens Blume",
       "addSearchAliases": ["Bò khai", "Dây bò khai", "Dạ hiến", "Dã hiến", "Rau ngót leo", "Rau nghiến", "Khau hương"],
@@ -31,8 +44,8 @@
   ],
   "masterMetricCorrection": {
     "organizedCanonicalNameEntriesBefore": 260,
-    "organizedCanonicalNameEntriesAfter": 259,
-    "reason": "Rau ngót rừng được xác nhận là alias của Rau sắng, không phải hồ sơ canonical độc lập."
+    "organizedCanonicalNameEntriesAfter": 258,
+    "reason": "Đã loại hai hồ sơ canonical trùng: Rau ngót rừng → Rau sắng và Rau lủi → Rau bầu đất; các tên vẫn được giữ làm alias tìm kiếm."
   },
   "state": "RESOLVED"
 }
