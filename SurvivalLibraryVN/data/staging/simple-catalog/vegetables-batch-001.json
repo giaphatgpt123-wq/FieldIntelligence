@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "rules": "SurvivalLibraryVN/WORKING_RULES.md",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-ipomoea-aquatica",
+      "nameVi": "Rau muống",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Ipomoea aquatica (2).JPG",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ipomoea%20aquatica%20%282%29.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Ipomoea_aquatica_(2).JPG",
+          "creator": "Prenn",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Ipomoea aquatica Forssk.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:268410-1/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:268410-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-basella-alba",
+      "nameVi": "Mồng tơi",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Basella alba-1.JPG",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Basella%20alba-1.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Basella_alba-1.JPG",
+          "creator": "Shizhao",
+          "license": "CC BY-SA 3.0 / migrated",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Basella alba L.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:164286-1/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:164286-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-centella-asiatica",
+      "nameVi": "Rau má",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Centella asiatica.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Centella%20asiatica.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Centella_asiatica.jpg",
+          "creator": "Mark Marathon",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Centella asiatica (L.) Urb.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1197718-2/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1197718-2/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-houttuynia-cordata",
+      "nameVi": "Diếp cá",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá nhận biết",
+          "fileName": "Houttuynia cordata leaf.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Houttuynia%20cordata%20leaf.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Houttuynia_cordata_leaf.jpg",
+          "creator": "ThiênĐế98",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và chồi non dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Houttuynia cordata Thunb.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:927252-1/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:927252-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-perilla-frutescens",
+      "nameVi": "Tía tô",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Perilla frutescens.jpg",
+          "url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Perilla%20frutescens.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Perilla_frutescens.jpg",
+          "creator": "Vorzinek",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm rau gia vị.",
+      "internalEvidence": {
+        "scientificName": "Perilla frutescens (L.) Britton",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:190343-2/general-information",
+        "applicationSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:190343-2/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}
