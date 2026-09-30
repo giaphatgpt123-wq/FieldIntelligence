@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 12,
-  "generatedAt": 1790739367553,
+  "version": 13,
+  "generatedAt": 1790739517636,
   "categoryId": "animals",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Lợn rừng",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790739367553
+      "updatedAt": 1790739517636
     }
   ],
   "aliases": [
@@ -22,7 +22,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790739359073
+      "updatedAt": 1790739512994
     },
     {
       "canonicalId": "taxon:sus-scrofa",
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790739367553
+      "updatedAt": 1790739517636
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739359073,
+      "updatedAt": 1790739512993,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739360335,
+      "updatedAt": 1790739514299,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790739359073,
+      "updatedAt": 1790739512994,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739359684,
+      "updatedAt": 1790739513378,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739359073
+      "updatedAt": 1790739512993
     },
     {
       "taskId": "taxon:sus-scrofa:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739359684
+      "updatedAt": 1790739513378
     },
     {
       "taskId": "taxon:sus-scrofa:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739360335
+      "updatedAt": 1790739514299
     },
     {
       "taskId": "taxon:sus-scrofa:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739359073
+      "updatedAt": 1790739512994
     }
   ]
 }
