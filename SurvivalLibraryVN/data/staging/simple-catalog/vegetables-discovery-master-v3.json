@@ -10,14 +10,17 @@
     "sameVietnameseNameMayMapToMultipleTaxa": true,
     "sameTaxonMayHaveMultipleRegionalNames": true,
     "candidateNameCanBeStoredBeforeProfileReady": true,
+    "noFixedMaximumNameCount": true,
     "appDisplayStillLimitedTo": ["nameVi", "categoryNameVi", "images", "applicationVi"]
   },
   "sourcePools": [
     {"source":"Nghiên cứu rau rừng A Lưới - Đại học Huế","recordedSpecies":107,"note":"73 loài rau ăn, 27 loài gia vị, 15 loài vị chua; có chồng lấn nhóm sử dụng"},
     {"source":"Tri thức thực vật ăn được người Cil - Đam Rông 4, Lâm Đồng","recordedSpecies":67,"note":"Nguồn 2026, phân bố nhiều ở bờ suối, sình lầy và rừng"},
     {"source":"Thực vật ăn được người K'Ho - Bidoup Núi Bà","recordedSpecies":73,"note":"Nguồn dân tộc học thực vật Nam Việt Nam"},
+    {"source":"Thực vật rừng ăn được người S'Tiêng - VQG Cát Tiên","recordedSpecies":94,"note":"59,6% số loài được sử dụng dưới dạng rau"},
     {"source":"Cộng đồng Mường - Chiềng Yên, Mộc Châu","recordedVegetableSpecies":34,"note":"Rau ăn sử dụng thường xuyên"},
     {"source":"Cộng đồng Dao Tiền - Chiềng Yên, Mộc Châu","recordedVegetableSpecies":22,"note":"Rau ăn sử dụng thường xuyên"},
+    {"source":"Rau rừng Cù Lao Chàm - nguồn di sản/địa phương","recordedVegetableNamesApprox":35,"note":"Dùng để thu tên địa phương rồi resolve danh tính"},
     {"source":"Vietnam Plant Data Center / BVNGroup","recordedSpecies":null,"note":"Dùng để resolve tên Việt, synonym và taxon cho các tên rau"},
     {"source":"Food Plants for Healthy Diets in Vietnam / FAO link","recordedSpecies":null,"note":"Nguồn bổ sung thực vật thực phẩm địa phương"}
   ],
@@ -53,7 +56,8 @@
     "Rau thối","Rau thối rừng",
     "Lá lồm","Lá nồm","Dây dang","Lá chua",
     "Măng nứa","Măng vầu","Măng mai","Măng le","Măng giang","Măng lồ ô","Măng tầm vông",
-    "Đọt cóc","Đọt bứa","Rau tập tàng","Rau củ khởi"
+    "Đọt cóc","Đọt bứa","Rau tập tàng","Rau củ khởi",
+    "Rau bác bác","Rau đậu","Mã đề","Mè đất","Rau nho","Thành ngành","Thông đất","Rau sân"
   ],
   "collisionGroups": [
     {
@@ -92,20 +96,22 @@
     {"layerId":"D7","nameVi":"Đọt, chồi, dây leo, măng","coverage":"rừng và nương rẫy"},
     {"layerId":"D8","nameVi":"Rau dân tộc và tên địa phương","coverage":"Tày, Nùng, Thái, Mường, Dao, H'Mông, Cil, K'Ho, S'Tiêng, Chơ Ro và cộng đồng khác"},
     {"layerId":"D9","nameVi":"Rau vùng cát, ven biển, đất mặn","coverage":"duyên hải"},
-    {"layerId":"D10","nameVi":"Tên đồng âm/dễ nhầm cần resolve","coverage":"toàn quốc"}
+    {"layerId":"D10","nameVi":"Rau đảo và hệ sinh thái biệt lập","coverage":"Cù Lao Chàm và các đảo có tri thức rau địa phương"},
+    {"layerId":"D11","nameVi":"Tên đồng âm/dễ nhầm cần resolve","coverage":"toàn quốc"}
   ],
   "processing": {
     "phase1":"Thu toàn bộ tên Việt/tên địa phương từ từng bộ nguồn và giữ provenance.",
     "phase2":"Khử trùng theo alias nhưng không gộp tên đồng âm trước khi resolve taxon.",
     "phase3":"Xác nhận đối tượng có được dùng như rau/thực phẩm hay chỉ là cây thuốc/cỏ.",
     "phase4":"Chỉ sau đó bổ sung ảnh nhận biết và ứng dụng ngắn gọn.",
-    "phase5":"Đưa hồ sơ đủ 4 trường vào app theo từng cụm nhỏ."
+    "phase5":"Đưa hồ sơ đủ 4 trường vào app theo từng cụm nhỏ.",
+    "continuousRule":"Mỗi nghiên cứu vùng mới phải được quét toàn bộ bảng tên; không dừng khi đã đạt một số lượng cố định."
   },
   "metrics": {
     "baseSearchKeywords":132,
-    "newDiscoveryKeywordsThisSweep":98,
-    "rawSearchKeywordFloorAfterThisSweep":230,
-    "note":"230 là mức sàn từ seed cũ + lô từ khóa mới, chưa cộng đầy đủ 25+27 tên của regional expansion v2 sau khử trùng; không dùng làm số hồ sơ loài chính thức."
+    "newDiscoveryKeywordsThisSweep":106,
+    "rawSearchKeywordFloorAfterThisSweep":238,
+    "note":"238 là mức sàn từ seed cũ + lô từ khóa mới, chưa cộng đầy đủ regional expansion v2 sau khử trùng. Số hồ sơ loài cuối cùng sẽ thấp hơn hoặc cao hơn tùy alias và tên đồng âm."
   },
   "state":"DISCOVERY_EXPANDED_NOT_YET_DEDUPED"
 }
