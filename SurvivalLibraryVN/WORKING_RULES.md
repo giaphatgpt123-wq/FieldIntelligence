@@ -1,61 +1,76 @@
 # BỘ QUY TẮC TRỌNG TÂM – THƯ VIỆN SINH TỒN
 
-## 1. Mục tiêu cao nhất
-Xây dựng Thư viện sinh tồn có dữ liệu thật, dễ hiểu bằng tiếng Việt, có hình ảnh nhận biết rõ, nội dung hữu ích và được hiển thị trực tiếp trong ứng dụng. Mọi công việc kỹ thuật chỉ là phương tiện phục vụ mục tiêu này.
+## 1. Quy tắc nội dung chính thức
+Mỗi đối tượng trong bất kỳ danh mục nào chỉ tập trung vào 4 câu hỏi:
 
-## 2. Không lệch sang kỹ thuật nền
-Không biến CI, GitHub, PR, branch, workflow, Data Engine, log hoặc test thành nội dung chính. Chỉ xử lý và báo kỹ thuật khi nó làm dữ liệu không nạp/hiển thị được, gây sai dữ liệu, gây lỗi ứng dụng hoặc ảnh hưởng trực tiếp đến chất lượng thư viện.
+1. **Đây là gì?**
+   - Tên tiếng Việt chính xác.
+   - Tên gọi khác chỉ khi thực sự phổ biến.
+   - Tên khoa học chỉ dùng để đối chiếu, không ưu tiên hiển thị.
 
-## 3. Caravan/Canary chỉ là kiểm chứng
-Bộ 12 hồ sơ ban đầu chỉ dùng để kiểm tra cấu trúc, luồng nạp, hiển thị và quy tắc chất lượng. Sau khi đạt yêu cầu phải chuyển sang nạp dữ liệu thật với số lượng lớn, không tiếp tục xoay quanh 12 hồ sơ.
+2. **Thuộc danh mục gì?**
+   - Xếp đúng một danh mục chính: Rau, Củ, Quả, Hoa, Cây gỗ, Cây ăn quả, Nấm, Cá, Côn trùng, Động vật, Cây thuốc, Nguy hiểm hoặc danh mục đã được thống nhất.
+   - Không gộp tên mơ hồ nếu có nhiều loài khác nhau cần tách riêng.
 
-## 4. Nạp theo từng danh mục
-Mỗi danh mục được quản lý độc lập: Rau, Củ, Quả, Hoa, Cây gỗ, Cây ăn quả, Cây thuốc, Nấm, Cá nước ngọt, Sinh vật biển, Côn trùng, Động vật, Loài nguy hiểm và các nhóm đã thống nhất khác. Không nạp hỗn hợp không kiểm soát.
+3. **Ảnh nào giúp nhận biết, so sánh và tìm đúng đối tượng?**
+   - Ảnh là thành phần bắt buộc.
+   - Ưu tiên ảnh toàn thể và ảnh cận cảnh đặc điểm dễ nhận biết.
+   - Thêm ảnh bộ phận quan trọng tùy đối tượng: lá, thân, hoa, quả, củ, đầu, vây, cánh, vỏ, hình dáng toàn thân...
+   - Dùng nhiều góc khi cần để người dùng có thể nhìn ngoài thực tế rồi so sánh trong app.
+   - Không dùng ảnh chỉ để trang trí; ảnh sai hoặc chưa chắc đúng đối tượng không được tính đạt chuẩn.
 
-## 5. Ưu tiên loài thường gặp tại Việt Nam
-Thứ tự: thường dùng/hay gặp → khá thường gặp → ít gặp → hiếm → gần như không có khả năng sử dụng hoặc gặp. Không chạy theo “càng nhiều loài càng tốt” nếu dữ liệu ít giá trị thực tế.
+4. **Ứng dụng vào việc gì?**
+   - Chỉ ghi ngắn gọn, thực tế và có căn cứ.
+   - Ví dụ: ăn được; dùng làm thực phẩm; gia vị; cây thuốc; làm cảnh; lấy gỗ; thủy sản; có ích trong nông nghiệp; có nguy cơ gây hại; không có ứng dụng thực tế đáng kể; hoặc chưa đủ căn cứ xác định.
 
-## 6. Tiếng Việt là lớp hiển thị chính
-Ưu tiên: tên tiếng Việt → ảnh → công dụng/cách dùng → cảnh báo → thông tin bổ sung. Tên khoa học và nội dung chuyên sâu để trong phần mở rộng hoặc “Xem thêm”.
+## 2. Cấu trúc hiển thị chuẩn
+Màn hình chính của một hồ sơ chỉ ưu tiên:
 
-## 7. Không gom nhiều loài vào tên chung
-Phải tách đúng loài/biến thể thực tế, ví dụ nghệ vàng, nghệ đen; cá rô đồng và các loài khác; các loại nấm, rau, củ, quả phải có hồ sơ riêng khi có nguy cơ nhầm lẫn.
+**Tên đối tượng → Danh mục → Ảnh nhận biết → Ứng dụng chính**
 
-## 8. Ảnh là thành phần bắt buộc
-Ảnh phục vụ nhận biết thực tế, không chỉ trang trí. Ưu tiên toàn thể; cận cảnh đặc điểm quan trọng; lá/thân/rễ/quả/hoa khi cần; con non/con trưởng thành khi khác biệt; nhiều góc nhìn; ảnh dễ so sánh ngoài thực địa.
+Phần **Xem thêm** chỉ dùng cho tên khoa học, tên đồng nghĩa, nguồn kiểm chứng và thông tin phân loại bổ sung khi cần.
 
-## 9. Không dùng ảnh sai hoặc không chắc chắn
-Ảnh chưa chắc đúng loài không được coi là ảnh chuẩn. Ảnh đẹp nhưng có nguy cơ nhầm loài không được ưu tiên hơn ảnh xác định đúng.
+## 3. Không nạp thông tin dư thừa
+Không ưu tiên thu thập hoặc hiển thị các nội dung không phục vụ trực tiếp 4 câu hỏi trên.
 
-## 10. Nội dung hồ sơ phải hữu dụng
-Mỗi hồ sơ hướng tới tối thiểu: tên tiếng Việt, tên khoa học, danh mục, ảnh nhận biết, đặc điểm nhận dạng, nơi thường gặp, mức độ thường gặp/sử dụng, công dụng, cách dùng nếu phù hợp, cảnh báo, loài dễ nhầm và nguồn kiểm chứng.
+Ví dụ với danh mục Rau, không ưu tiên: kỹ thuật trồng, phân bón, tưới nước, sâu bệnh, năng suất, thời vụ, quy trình sản xuất hoặc hướng dẫn canh tác.
 
-## 11. Nhóm nguy hiểm áp dụng chuẩn cao hơn
-Cây độc, nấm độc, rắn, côn trùng nguy hiểm, sinh vật biển nguy hiểm và loài có thể gây ngộ độc/chấn thương phải có thêm: dấu hiệu nhận biết, loài dễ nhầm, mức độ nguy hiểm, điều không được làm, xử trí ban đầu và khuyến cáo hỗ trợ y tế khi phù hợp. Không tự động xuất bản nội dung an toàn chưa kiểm chứng.
+Quy tắc tương tự áp dụng cho mọi danh mục: không mở rộng sang nội dung chuyên môn không giúp người dùng nhận biết, phân loại hoặc hiểu ứng dụng thực tế của đối tượng.
 
-## 12. Dữ liệu đạt đến đâu hiển thị đến đó
-Không chờ cả thư viện hoàn tất. Có bao nhiêu hồ sơ đạt chuẩn thì hiển thị bấy nhiêu trên app và cập nhật theo từng đợt nhỏ.
+## 4. Quy tắc nguồn và độ tin cậy
+- Mọi tên, phân loại, ảnh và ứng dụng phải dựa trên nguồn có chứng cứ hoặc nguồn khoa học/chuyên ngành phù hợp.
+- Không tự suy diễn từ trí nhớ nếu chưa có căn cứ.
+- Nếu chưa chắc chắn, ghi rõ **Chưa đủ căn cứ** thay vì điền cho đủ.
+- Ảnh phải kiểm đúng đối tượng và provenance/license khi cần sử dụng trong app.
 
-## 13. Ba trạng thái bắt buộc
-Mỗi hồ sơ thuộc một trong ba trạng thái: Đang thu thập → Đủ dữ liệu nhưng đang kiểm tra → Đạt chuẩn và hiển thị. “Đã thu thập” không đồng nghĩa “được phép hiển thị”.
+## 5. Quy tắc AI quản lý
+AI quản lý từng hồ sơ theo đúng 4 trường chính:
 
-## 14. Bảng tiến độ phải phản ánh thư viện thật
-Theo từng danh mục phải có tối thiểu: tổng hồ sơ dự kiến, đã thu thập, đủ tên tiếng Việt, đủ ảnh, đủ nội dung, đã kiểm chứng, đang bị chặn, đã hiển thị trên app, tỷ lệ hoàn thành. Không chỉ báo số task kỹ thuật.
+`NAME → CATEGORY → IDENTIFICATION_IMAGES → APPLICATION`
 
-## 15. Không chạy số lượng bằng cách hạ chuẩn
-Không giảm số ảnh, chấp nhận nguồn yếu, bỏ cảnh báo, bỏ kiểm tra loài dễ nhầm hoặc tự đánh dấu hoàn thành chỉ để tăng số lượng.
+AI không được tự mở rộng hồ sơ sang dữ liệu ngoài phạm vi này trừ khi thông tin đó cần thiết để tránh nhận dạng sai hoặc tránh nguy hiểm trực tiếp.
 
-## 16. Mỗi đợt mở rộng phải có kết quả nhìn thấy được
-Sau mỗi đợt phải trả lời được: thư viện tăng thêm bao nhiêu hồ sơ đạt chuẩn; danh mục nào được cải thiện; người dùng mở app sẽ nhìn thấy thêm gì.
+Nếu một công việc kỹ thuật, dữ liệu hoặc nội dung không cải thiện một trong 4 trường trên thì không được coi là tiến độ nội dung chính.
 
-## 17. Kỹ thuật phải phục vụ khả năng mở rộng
-Hệ thống phải giúp nạp nhiều dữ liệu hơn, cập nhật từng phần, tránh cài lại app mỗi khi dữ liệu thay đổi, chống trùng lặp, giữ nguồn/lịch sử, kiểm soát chất lượng và không làm chậm app khi thư viện lớn.
+## 6. Quy tắc phát hành
+- Có bao nhiêu hồ sơ đạt chuẩn thì hiển thị bấy nhiêu; không chờ hoàn thiện toàn bộ danh mục.
+- Hồ sơ chưa đủ tên đúng, danh mục đúng, ảnh nhận biết hoặc ứng dụng có căn cứ thì chưa được coi là hoàn chỉnh.
+- Không hạ chuẩn chỉ để tăng số lượng.
 
-## 18. Quy tắc báo cáo tiến độ
-Thứ tự ưu tiên: dữ liệu đã tăng → dữ liệu đang thiếu → dữ liệu đã hiển thị → lỗi ảnh hưởng thực tế → hành động tiếp theo. Không mở đầu bằng commit/SHA/PR/log CI trừ khi người dùng yêu cầu.
+## 7. Quy tắc báo cáo tiến độ
+Khi báo cáo, ưu tiên:
 
-## 19. Quy tắc chống lệch trọng tâm
-Trước mỗi bước phải tự hỏi: “Việc này có làm thư viện nhiều hơn, đúng hơn, dễ nhận biết hơn hoặc hiển thị tốt hơn không?”. Nếu không, phải dừng hoặc chuyển về nhiệm vụ chính.
+1. Đã có thêm bao nhiêu loại.
+2. Tên các loại là gì.
+3. Loại nào đã có ảnh nhận biết đạt chuẩn.
+4. Ứng dụng chính của từng loại.
+5. Loại nào còn thiếu dữ liệu để hiển thị.
 
-## 20. Nguyên tắc cuối cùng
-Chất lượng hồ sơ + khả năng nhận biết thực tế + giá trị sử dụng cho người Việt quan trọng hơn số lượng dữ liệu, kỹ thuật nền hoặc báo cáo đẹp.
+Không dùng PR, CI, branch, task count hoặc log kỹ thuật làm nội dung báo cáo chính trừ khi người dùng yêu cầu.
+
+## 8. Nguyên tắc cuối cùng
+Toàn bộ thư viện phải trả lời nhanh và rõ 4 câu hỏi:
+
+**Đây là gì? → Thuộc nhóm nào? → Nhìn ảnh thế nào để nhận biết/tìm đúng? → Dùng vào việc gì?**
+
+Thông tin không phục vụ 4 câu hỏi này không được ưu tiên load và không đưa lên giao diện chính.
