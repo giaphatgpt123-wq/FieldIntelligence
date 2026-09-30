@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "danger",
-  "updatedAt": 1790740341408,
+  "updatedAt": 1790741447368,
   "evidenceCount": 21,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/1651891",
-      "collectedAt": 1790740324324,
+      "collectedAt": 1790741430301,
       "verified": false,
       "externalId": "1651891"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.10454534",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -57,7 +57,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.10479037",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -75,7 +75,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391625",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -93,7 +93,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391631",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -111,7 +111,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391633",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -129,7 +129,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391635",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -147,7 +147,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166052",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -165,7 +165,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166053",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -183,7 +183,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166054",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -201,7 +201,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166098",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -219,7 +219,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.16975388",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -237,7 +237,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.16975390",
-      "collectedAt": 1790740326446,
+      "collectedAt": 1790741432415,
       "verified": false
     },
     {
@@ -252,7 +252,7 @@
       "publisher": "Cục Phòng bệnh - Bộ Y tế",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://vncdc.gov.vn/thong-tin-tinh-hinh-va-hoat-dong-phong-chong-dich-benh-sot-xuat-huyet-nd14621.html",
-      "collectedAt": 1790740324324,
+      "collectedAt": 1790741430301,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -268,7 +268,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
-      "collectedAt": 1790740325342,
+      "collectedAt": 1790741431286,
       "verified": false
     },
     {
@@ -287,7 +287,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2470368",
-      "collectedAt": 1790740339345,
+      "collectedAt": 1790741445284,
       "verified": false,
       "externalId": "2470368"
     },
@@ -306,7 +306,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.17890906",
-      "collectedAt": 1790740341323,
+      "collectedAt": 1790741447301,
       "verified": false
     },
     {
@@ -324,7 +324,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.17890908",
-      "collectedAt": 1790740341323,
+      "collectedAt": 1790741447301,
       "verified": false
     },
     {
@@ -342,7 +342,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.17890912",
-      "collectedAt": 1790740341323,
+      "collectedAt": 1790741447301,
       "verified": false
     },
     {
@@ -357,7 +357,7 @@
       "publisher": "Cổng Dịch vụ công Quốc gia",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://dichvucong.gov.vn/p/home/dvc-chi-tiet-cau-hoi.html?id=14562&row_limit=1",
-      "collectedAt": 1790740339346,
+      "collectedAt": 1790741445284,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -373,7 +373,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2470368",
-      "collectedAt": 1790740340339,
+      "collectedAt": 1790741446287,
       "verified": false
     }
   ]

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "categoryId": "medicinal-plants",
-  "updatedAt": 1790740341408,
+  "updatedAt": 1790741447368,
   "evidenceCount": 4,
   "evidence": [
     {
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2757280",
-      "collectedAt": 1790740323221,
+      "collectedAt": 1790741429352,
       "verified": false,
       "externalId": "2757280"
     },
@@ -38,7 +38,7 @@
       "publisher": "Wikimedia Commons",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_1123783.jpg",
-      "collectedAt": 1790740323528,
+      "collectedAt": 1790741429786,
       "verified": false,
       "rights": "CC BY-SA 4.0",
       "curatedLocalAuthority": true
@@ -55,7 +55,7 @@
       "publisher": "Cổng thông tin quy phạm pháp luật tỉnh Điện Biên",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://qppl.dienbien.gov.vn/qlvb/vbpq.nsf/3d0f058120469ad34725726600365420/4C6659461B62F3AE47258C810010000D/%24file/845%20t3.pdf",
-      "collectedAt": 1790740323221,
+      "collectedAt": 1790741429352,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -71,7 +71,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2757280",
-      "collectedAt": 1790740323528,
+      "collectedAt": 1790741429786,
       "verified": false
     }
   ]
