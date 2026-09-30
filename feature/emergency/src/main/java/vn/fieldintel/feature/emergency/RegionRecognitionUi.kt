@@ -42,3 +42,28 @@ fun recognitionVerdictLabel(verdict: RecognitionVerdict): String = when (verdict
     RecognitionVerdict.AMBIGUOUS -> "MƠ HỒ"
     RecognitionVerdict.STRONG_CANDIDATE -> "ỨNG VIÊN MẠNH"
 }
+
+/**
+ * Keeps the most recent still-image region decisions so the selected-candidate panel can show the
+ * complete Top-N verdict rather than judging only the primary candidate score.
+ */
+object RegionRecognitionSelectionRegistry {
+    @Volatile
+    private var groups: List<RegionRecognitionGroup> = emptyList()
+
+    fun publish(value: List<RegionRecognitionGroup>) {
+        groups = value
+    }
+
+    fun clear() {
+        groups = emptyList()
+    }
+
+    fun find(detection: VisualDetection): RegionRecognitionGroup? {
+        val track = detection.trackHint?.takeIf { it.isNotBlank() }
+        return groups.firstOrNull { group ->
+            val primary = group.primary
+            (track != null && primary?.trackHint == track) || group.box == detection.box
+        }
+    }
+}
