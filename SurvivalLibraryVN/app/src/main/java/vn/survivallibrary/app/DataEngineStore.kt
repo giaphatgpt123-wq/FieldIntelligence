@@ -95,8 +95,10 @@ class DataEngineStore(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_staging_category ON staging_entities(category_id)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_alias_normalized ON staging_aliases(normalized_name)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_field_verified ON staging_fields(verified, field_key)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_fields_entity_verified ON staging_fields(canonical_id, verified)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_tasks_ready ON library_load_tasks(status, retry_after, priority)")
         db.execSQL("CREATE INDEX IF NOT EXISTS idx_tasks_entity ON library_load_tasks(canonical_id)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_tasks_entity_status ON library_load_tasks(canonical_id, status)")
     }
 
     fun upsertEntity(entity: StagedLibraryEntity) {
@@ -344,6 +346,6 @@ class DataEngineStore(context: Context) : SQLiteOpenHelper(context, DB_NAME, nul
 
     companion object {
         private const val DB_NAME = "survival_library_data_engine_v2.db"
-        private const val DB_VERSION = 1
+        private const val DB_VERSION = 2
     }
 }
