@@ -93,7 +93,7 @@ class StillImageDetectionOverlayTest {
     }
 
     @Test
-    fun tappingGroupedRegionReturnsItsStrongestCandidate() {
+    fun tappingStrongGroupedRegionReturnsItsStrongestCandidate() {
         val box = NormalizedBox(0.2f, 0.2f, 0.8f, 0.8f)
         val weaker = VisualDetection("region-2", "B", "Beta species", 0.61f, box)
         val stronger = VisualDetection("region-2", "A", "Alpha species", 0.91f, box)
@@ -110,5 +110,27 @@ class StillImageDetectionOverlayTest {
 
         assertEquals(stronger, hit)
         assertTrue(buildRegionRecognitionGroups(listOf(weaker, stronger)).single().candidates.size == 2)
+    }
+
+    @Test
+    fun ambiguousRegionDoesNotOpenProfileEvenWhenTopScoreExceedsStrongThreshold() {
+        val box = NormalizedBox(0.2f, 0.2f, 0.8f, 0.8f)
+        val top = VisualDetection("region-3", "A", "Alpha species", 0.75f, box)
+        val closeSecond = VisualDetection("region-3", "B", "Beta species", 0.74f, box)
+
+        val group = buildRegionRecognitionGroups(listOf(top, closeSecond)).single()
+        assertEquals(RecognitionVerdict.AMBIGUOUS, group.verdict)
+
+        val hit = stillImageHitTest(
+            detections = listOf(top, closeSecond),
+            tapX = 100f,
+            tapY = 100f,
+            canvasWidth = 200f,
+            canvasHeight = 200f,
+            imageWidth = 200,
+            imageHeight = 200
+        )
+
+        assertNull(hit)
     }
 }
