@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "categoryId": "roots",
-  "updatedAt": 1790739734252,
-  "evidenceCount": 5,
+  "updatedAt": 1790739942693,
+  "evidenceCount": 11,
   "evidence": [
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/5330776",
-      "collectedAt": 1790739700842,
+      "collectedAt": 1790739898719,
       "verified": false,
       "externalId": "5330776"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://archive.org/details/colocasia-esculenta-sc-2022053-01",
-      "collectedAt": 1790739702340,
+      "collectedAt": 1790739899827,
       "verified": false
     },
     {
@@ -71,7 +71,7 @@
       "publisher": "Bộ Khoa học và Công nghệ",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://www.most.gov.vn/vn/Pages/chitiettin.aspx?IDNews=14040",
-      "collectedAt": 1790739700842,
+      "collectedAt": 1790739898719,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -87,7 +87,110 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=5330776",
-      "collectedAt": 1790739701506,
+      "collectedAt": 1790739899147,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2928551,
+        "scientificName": "Ipomoea batatas (L.) Lam.",
+        "canonicalName": "Ipomoea batatas",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 97
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2928551",
+      "collectedAt": 1790739931601,
+      "verified": false,
+      "externalId": "2928551"
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://ia902604.us.archive.org/33/items/ipomoea-batatas-sc-2022053-01/Ipomoea%20batatas_SC_2022053_01.JPG",
+        "type": "StillImage",
+        "title": "Ipomoea batatas_SC_2022053_01",
+        "creator": "Nicolás Rodríguez Cerón",
+        "license": "https://creativecommons.org/licenses/by-nc-sa/2.0/deed.en",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://archive.org/details/ipomoea-batatas-sc-2022053-01",
+      "collectedAt": 1790739933635,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://binary.pensoft.net/fig/391112",
+        "type": "StillImage",
+        "title": "Figure 110. Photographs of Ipomoea species. A I. grandifolia B I. lacunosa C I. littoralis D I. cryptica E, F I. batatas. A, D-F John Wood B Steven Turner C Rick Miller.",
+        "creator": "Wood, John R. I.;Munoz-Rodriguez, Pablo;Williams, Bethany R. M.;Scotland, Robert W.",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2928551",
+      "collectedAt": 1790739933635,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/64415778/medium.jpeg",
+        "license": "cc0",
+        "attribution": "no rights reserved, uploaded by 葉子",
+        "photoId": 64415778
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/62941",
+      "collectedAt": 1790739932816,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Khoai lang",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Ban Quản lý rừng và Khuyến nông",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://banquanlyrungvakhuyennong.gov.vn/huong-dan-ky-thuat-trong-khoai-lang-ten-khoa-hoc-ipomoea-batatas-tt15567.html",
+      "collectedAt": 1790739931602,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 34
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928551",
+      "collectedAt": 1790739932658,
       "verified": false
     }
   ]

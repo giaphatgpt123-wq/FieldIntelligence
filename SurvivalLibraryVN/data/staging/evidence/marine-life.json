@@ -1,9 +1,62 @@
 {
   "schemaVersion": 1,
   "categoryId": "marine-life",
-  "updatedAt": 1790739734252,
-  "evidenceCount": 6,
+  "updatedAt": 1790739942693,
+  "evidenceCount": 9,
   "evidence": [
+    {
+      "canonicalId": "taxon:litopenaeus-vannamei",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2223871,
+        "scientificName": "Litopenaeus vannamei (Boone, 1931)",
+        "canonicalName": "Litopenaeus vannamei",
+        "rank": "SPECIES",
+        "status": "SYNONYM",
+        "matchType": "EXACT",
+        "confidence": 98
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2223871",
+      "collectedAt": 1790739937603,
+      "verified": false,
+      "externalId": "2223871"
+    },
+    {
+      "canonicalId": "taxon:litopenaeus-vannamei",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/1441420/medium.jpg",
+        "license": "cc-by-sa",
+        "attribution": "(c) José Francisco Colorado-Dapa, some rights reserved (CC BY-SA), uploaded by José Francisco Colorado-Dapa",
+        "photoId": 1441420
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/1071972",
+      "collectedAt": 1790739939008,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:litopenaeus-vannamei",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Tôm thẻ chân trắng",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Viện Tiêu chuẩn Chất lượng Việt Nam",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+10257%3A2014",
+      "collectedAt": 1790739937603,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
     {
       "canonicalId": "taxon:penaeus-monodon",
       "field": "CANONICAL_IDENTITY",
@@ -20,7 +73,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/8406925",
-      "collectedAt": 1790739713738,
+      "collectedAt": 1790739911901,
       "verified": false,
       "externalId": "8406925"
     },
@@ -40,7 +93,7 @@
       "publisher": "World Register of Marine Species",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.marinespecies.org/aphia.php?p=taxdetails&id=1809193",
-      "collectedAt": 1790739715602,
+      "collectedAt": 1790739913058,
       "verified": false,
       "externalId": "1809193"
     },
@@ -58,7 +111,7 @@
       "publisher": "Wikimedia Commons",
       "sourceTier": "OPEN_SCIENCE",
       "sourceUri": "https://commons.wikimedia.org/wiki/File:Penaeus_monodon.jpg",
-      "collectedAt": 1790739726469,
+      "collectedAt": 1790739922195,
       "verified": false,
       "rights": "CC BY-SA 3.0",
       "curatedLocalAuthority": true
@@ -90,7 +143,7 @@
       "publisher": "Trung tâm Khuyến nông Quốc gia",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://khuyennongvn.gov.vn/portals/0/tailieu/2014/12/host/kthuat_nuoitom_suthamcanh.pdf",
-      "collectedAt": 1790739715602,
+      "collectedAt": 1790739913058,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -106,7 +159,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=8406925",
-      "collectedAt": 1790739716107,
+      "collectedAt": 1790739913481,
       "verified": false
     }
   ]

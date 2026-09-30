@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "categoryId": "danger",
-  "updatedAt": 1790739734252,
-  "evidenceCount": 15,
+  "updatedAt": 1790739942693,
+  "evidenceCount": 21,
   "evidence": [
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -20,7 +20,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/1651891",
-      "collectedAt": 1790739732789,
+      "collectedAt": 1790739926331,
       "verified": false,
       "externalId": "1651891"
     },
@@ -39,7 +39,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.10454534",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -57,7 +57,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.10479037",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -75,7 +75,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391625",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -93,7 +93,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391631",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -111,7 +111,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391633",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -129,7 +129,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.15391635",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -147,7 +147,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166052",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -165,7 +165,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166053",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -183,7 +183,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166054",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -201,7 +201,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.166098",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -219,7 +219,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.16975388",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -237,7 +237,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://doi.org/10.5281/zenodo.16975390",
-      "collectedAt": 1790739734186,
+      "collectedAt": 1790739927735,
       "verified": false
     },
     {
@@ -252,7 +252,7 @@
       "publisher": "Cục Phòng bệnh - Bộ Y tế",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://vncdc.gov.vn/thong-tin-tinh-hinh-va-hoat-dong-phong-chong-dich-benh-sot-xuat-huyet-nd14621.html",
-      "collectedAt": 1790739732789,
+      "collectedAt": 1790739926331,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -268,7 +268,112 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=1651891",
-      "collectedAt": 1790739733350,
+      "collectedAt": 1790739926765,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 2470368,
+        "scientificName": "Naja kaouthia Lesson, 1831",
+        "canonicalName": "Naja kaouthia",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/2470368",
+      "collectedAt": 1790739940634,
+      "verified": false,
+      "externalId": "2470368"
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/17890906/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 8. Neotype of Naja kaouthia Lesson, 1831, an adult male specimen collected by G. A. Schad on 12 January 1966 in Taldelal, Canning Thana, 24 Parganas, West Bengal, India (FMNH 165082). Photographs of the entire specimen from A) dorsal and B) ventral views. Magnified images of the head depict C) dorsal, D) ventral, E) left lateral and F) right lateral aspects.",
+        "creator": "Balchan, Neil R.;Esquerré, Damien;Wogan, Guinevere O. U.;Wüster, Wolfgang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.17890906",
+      "collectedAt": 1790739942621,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/17890908/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 9. Illustration of the holotype of Naja kaouthia (A) in Lesson, 1832 in Bélanger (1831–1834: pl. 2). Note that Lesson’s drawing of the head scalation (B; expanded) erroneously depicts the parietal scales as being divided. Bogert (1943) more accurately draws head scalation for the Asiatic cobras (C; illustration based on Naja naja), depicting the parietal scales as singular, the condition in which they occur for all Asiatic cobra species.",
+        "creator": "Balchan, Neil R.;Esquerré, Damien;Wogan, Guinevere O. U.;Wüster, Wolfgang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.17890908",
+      "collectedAt": 1790739942621,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://zenodo.org/record/17890912/files/figure.png",
+        "type": "StillImage",
+        "title": "FIGURE 10. Three additional specimens of Naja kaouthia (FMNH 165079 [adult female, 835 mm SVL, 136 mm TL], FMNH 165083 [adult male, 1225 mm SVL, 225 mm TL], and FMNH 165076 [adult male, 1470 mm SVL, 283 mm TL]) collected in 24 Parganas, West Bengal, India by G.A. Schad in 1965–1966.",
+        "creator": "Balchan, Neil R.;Esquerré, Damien;Wogan, Guinevere O. U.;Wüster, Wolfgang",
+        "license": "",
+        "rightsHolder": ""
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://doi.org/10.5281/zenodo.17890912",
+      "collectedAt": 1790739942621,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Rắn hổ mang một mắt kính",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Cổng Dịch vụ công Quốc gia",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://dichvucong.gov.vn/p/home/dvc-chi-tiet-cau-hoi.html?id=14562&row_limit=1",
+      "collectedAt": 1790739940634,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 26
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2470368",
+      "collectedAt": 1790739941598,
       "verified": false
     }
   ]

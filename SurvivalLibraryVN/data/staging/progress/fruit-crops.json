@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 14,
-  "generatedAt": 1790739734262,
+  "version": 15,
+  "generatedAt": 1790739942704,
   "categoryId": "fruit-crops",
   "entities": [
     {
@@ -11,7 +11,7 @@
       "vietnameseName": "Xoài",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790739734262
+      "updatedAt": 1790739942704
     }
   ],
   "aliases": [
@@ -31,7 +31,7 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790739734262
+      "updatedAt": 1790739942704
     }
   ],
   "fields": [
@@ -43,7 +43,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739702762,
+      "updatedAt": 1790739900256,
       "valueJson": ""
     },
     {
@@ -54,7 +54,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739704278,
+      "updatedAt": 1790739901300,
       "valueJson": ""
     },
     {
@@ -65,7 +65,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790739702762,
+      "updatedAt": 1790739900256,
       "valueJson": ""
     },
     {
@@ -76,7 +76,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739703534,
+      "updatedAt": 1790739900722,
       "valueJson": ""
     }
   ],
@@ -97,7 +97,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739702762
+      "updatedAt": 1790739900256
     },
     {
       "taskId": "taxon:mangifera-indica:distribution",
@@ -116,7 +116,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739703534
+      "updatedAt": 1790739900722
     },
     {
       "taskId": "taxon:mangifera-indica:media",
@@ -135,7 +135,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739704278
+      "updatedAt": 1790739901300
     },
     {
       "taskId": "taxon:mangifera-indica:aliases",
@@ -154,7 +154,7 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739702762
+      "updatedAt": 1790739900256
     }
   ]
 }

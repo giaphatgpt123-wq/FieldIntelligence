@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 14,
-  "generatedAt": 1790739734262,
+  "version": 15,
+  "generatedAt": 1790739942704,
   "categoryId": "roots",
   "entities": [
     {
@@ -11,7 +11,16 @@
       "vietnameseName": "Khoai môn",
       "highRisk": false,
       "published": false,
-      "updatedAt": 1790739734262
+      "updatedAt": 1790739942704
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "categoryId": "roots",
+      "scientificName": "Ipomoea batatas",
+      "vietnameseName": "Khoai lang",
+      "highRisk": false,
+      "published": false,
+      "updatedAt": 1790739942704
     }
   ],
   "aliases": [
@@ -22,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790739700842
+      "updatedAt": 1790739898719
     },
     {
       "canonicalId": "taxon:colocasia-esculenta",
@@ -31,7 +40,25 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790739734262
+      "updatedAt": 1790739942704
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "displayName": "Khoai lang",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790739931602
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "displayName": "Khoai lang",
+      "aliasType": "PRIMARY",
+      "region": "",
+      "sourceKey": "pilot-seed",
+      "verified": false,
+      "updatedAt": 1790739942704
     }
   ],
   "fields": [
@@ -43,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739700842,
+      "updatedAt": 1790739898719,
       "valueJson": ""
     },
     {
@@ -54,7 +81,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739702340,
+      "updatedAt": 1790739899827,
       "valueJson": ""
     },
     {
@@ -65,7 +92,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790739700842,
+      "updatedAt": 1790739898719,
       "valueJson": ""
     },
     {
@@ -76,7 +103,51 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739701506,
+      "updatedAt": 1790739899147,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "CANONICAL_IDENTITY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": true,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790739931601,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 3,
+      "verified": false,
+      "sourceKey": "multi-source",
+      "lastError": "",
+      "updatedAt": 1790739933635,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790739931602,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:ipomoea-batatas",
+      "field": "VIETNAM_DISTRIBUTION",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790739932658,
       "valueJson": ""
     }
   ],
@@ -97,7 +168,25 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739700842
+      "updatedAt": 1790739898719
+    },
+    {
+      "taskId": "taxon:ipomoea-batatas:identity",
+      "canonicalId": "taxon:ipomoea-batatas",
+      "taskType": "RESOLVE_CANONICAL",
+      "field": "CANONICAL_IDENTITY",
+      "priority": 100,
+      "preferredSourceTiers": [
+        "GLOBAL_AUTHORITY",
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739931602
     },
     {
       "taskId": "taxon:colocasia-esculenta:distribution",
@@ -116,7 +205,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739701506
+      "updatedAt": 1790739899147
+    },
+    {
+      "taskId": "taxon:ipomoea-batatas:distribution",
+      "canonicalId": "taxon:ipomoea-batatas",
+      "taskType": "COLLECT_DISTRIBUTION",
+      "field": "VIETNAM_DISTRIBUTION",
+      "priority": 93,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739932658
     },
     {
       "taskId": "taxon:colocasia-esculenta:media",
@@ -135,7 +243,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739702340
+      "updatedAt": 1790739899827
+    },
+    {
+      "taskId": "taxon:ipomoea-batatas:media",
+      "canonicalId": "taxon:ipomoea-batatas",
+      "taskType": "COLLECT_MEDIA",
+      "field": "MEDIA_PRIMARY",
+      "priority": 92,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE",
+        "GLOBAL_AUTHORITY",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739933635
     },
     {
       "taskId": "taxon:colocasia-esculenta:aliases",
@@ -154,7 +281,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739700842
+      "updatedAt": 1790739898719
+    },
+    {
+      "taskId": "taxon:ipomoea-batatas:aliases",
+      "canonicalId": "taxon:ipomoea-batatas",
+      "taskType": "COLLECT_VIETNAMESE_NAMES",
+      "field": "VIETNAMESE_ALIASES",
+      "priority": 88,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739931602
     }
   ]
 }

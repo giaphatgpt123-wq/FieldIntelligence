@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": 14,
-  "generatedAt": 1790739734262,
+  "version": 15,
+  "generatedAt": 1790739942704,
   "categoryId": "danger",
   "entities": [
     {
@@ -11,7 +11,16 @@
       "vietnameseName": "Muỗi vằn",
       "highRisk": true,
       "published": false,
-      "updatedAt": 1790739734262
+      "updatedAt": 1790739942704
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "categoryId": "danger",
+      "scientificName": "Naja kaouthia",
+      "vietnameseName": "Rắn hổ mang một mắt kính",
+      "highRisk": true,
+      "published": false,
+      "updatedAt": 1790739942704
     }
   ],
   "aliases": [
@@ -22,7 +31,7 @@
       "region": "Việt Nam",
       "sourceKey": "vn-authority-local",
       "verified": false,
-      "updatedAt": 1790739732789
+      "updatedAt": 1790739926331
     },
     {
       "canonicalId": "taxon:aedes-aegypti",
@@ -31,7 +40,25 @@
       "region": "",
       "sourceKey": "pilot-seed",
       "verified": false,
-      "updatedAt": 1790739734262
+      "updatedAt": 1790739942704
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "displayName": "Rắn hổ mang một mắt kính",
+      "aliasType": "OTHER_NAME",
+      "region": "Việt Nam",
+      "sourceKey": "vn-authority-local",
+      "verified": false,
+      "updatedAt": 1790739940634
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "displayName": "Rắn hổ mang một mắt kính",
+      "aliasType": "PRIMARY",
+      "region": "",
+      "sourceKey": "pilot-seed",
+      "verified": false,
+      "updatedAt": 1790739942704
     }
   ],
   "fields": [
@@ -43,7 +70,7 @@
       "verified": true,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739732789,
+      "updatedAt": 1790739926331,
       "valueJson": ""
     },
     {
@@ -54,7 +81,7 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739734186,
+      "updatedAt": 1790739927735,
       "valueJson": ""
     },
     {
@@ -65,7 +92,7 @@
       "verified": false,
       "sourceKey": "vn-authority-local",
       "lastError": "",
-      "updatedAt": 1790739732789,
+      "updatedAt": 1790739926331,
       "valueJson": ""
     },
     {
@@ -76,7 +103,51 @@
       "verified": false,
       "sourceKey": "gbif",
       "lastError": "",
-      "updatedAt": 1790739733350,
+      "updatedAt": 1790739926765,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "CANONICAL_IDENTITY",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": true,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790739940634,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "MEDIA_PRIMARY",
+      "valuePresent": true,
+      "evidenceCount": 3,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790739942621,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "VIETNAMESE_ALIASES",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "vn-authority-local",
+      "lastError": "",
+      "updatedAt": 1790739940634,
+      "valueJson": ""
+    },
+    {
+      "canonicalId": "taxon:naja-kaouthia",
+      "field": "VIETNAM_DISTRIBUTION",
+      "valuePresent": true,
+      "evidenceCount": 1,
+      "verified": false,
+      "sourceKey": "gbif",
+      "lastError": "",
+      "updatedAt": 1790739941598,
       "valueJson": ""
     }
   ],
@@ -97,7 +168,25 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739732789
+      "updatedAt": 1790739926331
+    },
+    {
+      "taskId": "taxon:naja-kaouthia:identity",
+      "canonicalId": "taxon:naja-kaouthia",
+      "taskType": "RESOLVE_CANONICAL",
+      "field": "CANONICAL_IDENTITY",
+      "priority": 100,
+      "preferredSourceTiers": [
+        "GLOBAL_AUTHORITY",
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739940634
     },
     {
       "taskId": "taxon:aedes-aegypti:distribution",
@@ -116,7 +205,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739733350
+      "updatedAt": 1790739926765
+    },
+    {
+      "taskId": "taxon:naja-kaouthia:distribution",
+      "canonicalId": "taxon:naja-kaouthia",
+      "taskType": "COLLECT_DISTRIBUTION",
+      "field": "VIETNAM_DISTRIBUTION",
+      "priority": 93,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739941598
     },
     {
       "taskId": "taxon:aedes-aegypti:media",
@@ -135,7 +243,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739734186
+      "updatedAt": 1790739927735
+    },
+    {
+      "taskId": "taxon:naja-kaouthia:media",
+      "canonicalId": "taxon:naja-kaouthia",
+      "taskType": "COLLECT_MEDIA",
+      "field": "MEDIA_PRIMARY",
+      "priority": 92,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "OPEN_SCIENCE",
+        "GLOBAL_AUTHORITY",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739942621
     },
     {
       "taskId": "taxon:aedes-aegypti:aliases",
@@ -154,7 +281,26 @@
       "attempts": 1,
       "retryAfter": 0,
       "lastError": "",
-      "updatedAt": 1790739732789
+      "updatedAt": 1790739926331
+    },
+    {
+      "taskId": "taxon:naja-kaouthia:aliases",
+      "canonicalId": "taxon:naja-kaouthia",
+      "taskType": "COLLECT_VIETNAMESE_NAMES",
+      "field": "VIETNAMESE_ALIASES",
+      "priority": 88,
+      "preferredSourceTiers": [
+        "OFFICIAL_VIETNAM",
+        "SPECIALIST_VIETNAM",
+        "GLOBAL_AUTHORITY",
+        "OPEN_SCIENCE",
+        "COMMUNITY_REFERENCE"
+      ],
+      "status": "COMPLETED",
+      "attempts": 1,
+      "retryAfter": 0,
+      "lastError": "",
+      "updatedAt": 1790739940634
     }
   ]
 }

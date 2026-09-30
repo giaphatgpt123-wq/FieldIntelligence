@@ -1,9 +1,76 @@
 {
   "schemaVersion": 1,
   "categoryId": "vegetables",
-  "updatedAt": 1790739734252,
-  "evidenceCount": 4,
+  "updatedAt": 1790739942693,
+  "evidenceCount": 8,
   "evidence": [
+    {
+      "canonicalId": "taxon:basella-alba",
+      "field": "CANONICAL_IDENTITY",
+      "value": {
+        "usageKey": 3083504,
+        "scientificName": "Basella alba L.",
+        "canonicalName": "Basella alba",
+        "rank": "SPECIES",
+        "status": "ACCEPTED",
+        "matchType": "EXACT",
+        "confidence": 99
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/species/3083504",
+      "collectedAt": 1790739928748,
+      "verified": false,
+      "externalId": "3083504"
+    },
+    {
+      "canonicalId": "taxon:basella-alba",
+      "field": "MEDIA_PRIMARY",
+      "value": {
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/59103714/medium.jpeg",
+        "license": "cc0",
+        "attribution": "no rights reserved, uploaded by 葉子",
+        "photoId": 59103714
+      },
+      "sourceId": "inaturalist",
+      "publisher": "iNaturalist",
+      "sourceTier": "OPEN_SCIENCE",
+      "sourceUri": "https://www.inaturalist.org/taxa/159191",
+      "collectedAt": 1790739930177,
+      "verified": false
+    },
+    {
+      "canonicalId": "taxon:basella-alba",
+      "field": "VIETNAMESE_ALIASES",
+      "value": {
+        "displayName": "Mồng tơi",
+        "language": "vi",
+        "region": "Việt Nam"
+      },
+      "sourceId": "vn-authority-local",
+      "publisher": "Thông tin Khoa học Công nghệ tỉnh Bắc Giang",
+      "sourceTier": "OFFICIAL_VIETNAM",
+      "sourceUri": "https://thongtinkhoahoccongnghe.bacgiang.gov.vn/node/1126383",
+      "collectedAt": 1790739928748,
+      "verified": false,
+      "rights": "",
+      "curatedLocalAuthority": true
+    },
+    {
+      "canonicalId": "taxon:basella-alba",
+      "field": "VIETNAM_DISTRIBUTION",
+      "value": {
+        "countryCode": "VN",
+        "occurrenceCount": 72
+      },
+      "sourceId": "gbif",
+      "publisher": "Global Biodiversity Information Facility",
+      "sourceTier": "GLOBAL_AUTHORITY",
+      "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=3083504",
+      "collectedAt": 1790739929620,
+      "verified": false
+    },
     {
       "canonicalId": "taxon:ipomoea-aquatica",
       "field": "CANONICAL_IDENTITY",
@@ -20,7 +87,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790739698922,
+      "collectedAt": 1790739896988,
       "verified": false,
       "externalId": "2928525"
     },
@@ -39,7 +106,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/species/2928525",
-      "collectedAt": 1790739700400,
+      "collectedAt": 1790739898260,
       "verified": false
     },
     {
@@ -54,7 +121,7 @@
       "publisher": "Chi cục Trồng trọt và Bảo vệ thực vật Thành phố Hồ Chí Minh",
       "sourceTier": "OFFICIAL_VIETNAM",
       "sourceUri": "https://chicucttbvtvhcm.gov.vn/chuyen-de-ky-thuat/ky-thuat-trong-cay-rau-muong-338.html",
-      "collectedAt": 1790739698923,
+      "collectedAt": 1790739896988,
       "verified": false,
       "rights": "",
       "curatedLocalAuthority": true
@@ -70,7 +137,7 @@
       "publisher": "Global Biodiversity Information Facility",
       "sourceTier": "GLOBAL_AUTHORITY",
       "sourceUri": "https://www.gbif.org/occurrence/search?country=VN&taxon_key=2928525",
-      "collectedAt": 1790739699473,
+      "collectedAt": 1790739897397,
       "verified": false
     }
   ]
