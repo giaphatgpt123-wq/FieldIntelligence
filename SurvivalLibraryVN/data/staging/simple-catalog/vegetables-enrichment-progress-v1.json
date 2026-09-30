@@ -3,9 +3,9 @@
   "categoryId": "vegetables",
   "categoryNameVi": "Rau",
   "organizedCanonicalNameEntries": 256,
-  "enrichedDisplayRecords": 78,
-  "verifiedOpenImageLinks": 156,
-  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 178,
+  "enrichedDisplayRecords": 79,
+  "verifiedOpenImageLinks": 158,
+  "remainingOrganizedNamesWithoutCompletedDisplayRecord": 177,
   "appVisibleCount": 0,
   "collisionBucketsStillOpen": 8,
   "completedNames": [
@@ -23,7 +23,7 @@
     "Rau cải trời","Rau bầu đất","Diếp dại","Rau dớn","Rau sắng","Rau bò khai",
     "Rau sao nhái","Chòi mòi","Rau quế vị","Bí bái","Lá cóc","Hải đường xẻ",
     "Chua ngút","Móc mật","Vông vang","Nhội","Thành ngạnh","Giảo cổ lam","Chân chim",
-    "Sâng đỏ","Mã đề","Cỏ hôi"
+    "Sâng đỏ","Mã đề","Cỏ hôi","Rau trai"
   ],
   "resolvedAsAliasNotSeparateProfile": [
     {"alias":"Rau ngót rừng","canonical":"Rau sắng","scientificName":"Melientha suavis Pierre"},
@@ -50,24 +50,17 @@
     "Xà lách búp","Xà lách mỡ","Lô lô xanh","Lô lô tím",
     "Bắp cải trái tim","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"
   ],
-  "deferredForSafetyResolution": [
-    "Lạc tiên","Lu lu đực","Lá lộc vừng","Ráy thon"
-  ],
-  "deferredForCategoryReview": [
-    "Mè đất","Ô rô trắng","Xuân tiết","Bứa poilan","Bìm tán","Dưa núi","Lâu xác","Lộc mại nhỏ"
-  ],
-  "nextP2Queue": [
-    "Rau trai","Đỏ ngọn","Rau Sứng","Bươm bướm","Sâng trắng","Rau đậu","Rau nho","Kim cang"
-  ],
+  "deferredForSafetyResolution": ["Lạc tiên","Lu lu đực","Lá lộc vừng","Ráy thon"],
+  "deferredForCategoryReview": ["Mè đất","Ô rô trắng","Xuân tiết","Bứa poilan","Bìm tán","Dưa núi","Lâu xác","Lộc mại nhỏ"],
+  "nextP2Queue": ["Đỏ ngọn","Rau Sứng","Bươm bướm","Sâng trắng","Rau đậu","Rau nho","Kim cang"],
   "notes": [
     "Chỉ tính enrichedDisplayRecords khi đã có tên + danh mục + ít nhất 2 ảnh nguồn mở đã kiểm + ứng dụng ngắn gọn.",
-    "Master hiệu dụng còn 256 tên chính sau khi gộp Rau ngót rừng → Rau sắng; Rau lủi → Rau bầu đất; Mồng sa ria → Rau Sứng; Mặt trời/Cỏ chua lè cùng taxon → Rau Mặt trời.",
-    "Sâng đỏ được chuẩn hóa là Zanthoxylum nitidum; Xâng/Sâng/Sưng giữ làm alias vùng Cù Lao Chàm.",
-    "Mã đề được giải blocker bằng bảng Cù Lao Chàm: Plantago major, lá non dùng làm rau.",
-    "Cỏ hôi được chuẩn hóa là Ageratum conyzoides; BVNGroup xác nhận tên Việt và lá/ngọn non có thể chế biến làm rau.",
-    "Bươm bướm = Mussaenda cambodiana và Rau Sứng = Strophioblachia fimbricalyx đã rõ identity nhưng chưa đủ 2 ảnh thực địa mở theo gate.",
-    "Thành ngạnh được mở lại collision theo vùng: hồ sơ đã hoàn thiện là identity Pù Luông, không áp tự động cho Cù Lao Chàm.",
-    "Kim cang chưa được gán taxon vì danh lục Cù Lao Chàm có đồng thời Smilax zeylanica và Smilax bauhinioides; tên Kim cang còn dùng cho nhiều Smilax ở Việt Nam.",
+    "Master hiệu dụng còn 256 tên chính sau các lần gộp alias/trùng taxon đã xác minh.",
+    "Sâng đỏ = Zanthoxylum nitidum; Xâng/Sâng/Sưng là alias vùng Cù Lao Chàm.",
+    "Mã đề = Plantago major và Rau trai = Commelina diffusa đã được giải trực tiếp từ nguồn Việt Nam/Cù Lao Chàm.",
+    "Cỏ hôi = Ageratum conyzoides; BVNGroup xác nhận tên Việt và lá/ngọn non có thể chế biến làm rau.",
+    "Bươm bướm = Mussaenda cambodiana và Rau Sứng = Strophioblachia fimbricalyx đã rõ identity nhưng còn thiếu đủ media mở theo gate.",
+    "Thành ngạnh, Kim cang và Chua lè được quản lý như tên va chạm theo vùng; không tự gộp toàn quốc.",
     "appVisibleCount vẫn bằng 0 vì dữ liệu hiện còn ở staging, chưa nối vào repository phát hành của ứng dụng."
   ],
   "state": "ENRICHMENT_ACTIVE_P2"
