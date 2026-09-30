@@ -49,14 +49,18 @@ interface RegionCropClassifier {
  * Coordinates detector -> crop classifier -> normalized VisualDetection output.
  * The coordinator deliberately caps region count and applies confidence thresholds so a dense scene
  * cannot trigger unbounded classifier work on a phone.
+ *
+ * Multiple candidates from the same proposal intentionally keep the same trackHint and box. The UI
+ * can therefore present a per-region Top-N list instead of turning the highest score into a claimed
+ * species identity.
  */
 class TwoStageRegionScanCoordinator(
     private val proposer: RegionProposalRunner,
     private val classifier: RegionCropClassifier,
     private val proposalThreshold: Float = 0.35f,
-    private val classificationThreshold: Float = 0.45f,
+    private val classificationThreshold: Float = PlantRecognitionPolicy.MIN_CANDIDATE_SCORE,
     private val maxRegions: Int = 12,
-    private val maxCandidatesPerRegion: Int = 1
+    private val maxCandidatesPerRegion: Int = PlantRecognitionPolicy.MAX_CANDIDATES
 ) {
     init {
         require(proposalThreshold in 0.05f..0.99f)
@@ -75,6 +79,7 @@ class TwoStageRegionScanCoordinator(
                 classifier.classify(frame, proposal)
                     .asSequence()
                     .filter { it.confidence >= classificationThreshold }
+                    .distinctBy { (it.scientificName ?: it.label).trim().lowercase() }
                     .sortedByDescending { it.confidence }
                     .take(maxCandidatesPerRegion)
                     .map { candidate ->
@@ -87,7 +92,7 @@ class TwoStageRegionScanCoordinator(
                         )
                     }
             }
-            .sortedByDescending { it.confidence }
+            .sortedWith(compareBy<VisualDetection> { it.trackHint ?: "" }.thenByDescending { it.confidence })
             .toList()
     }
 
