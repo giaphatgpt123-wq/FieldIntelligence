@@ -1,4 +1,4 @@
-name: Hoi Dung Mo Dung iOS IPA Ad Hoc
+name: Hoi Dung Mo Dung iOS Build and IPA
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-ipa:
+  build-ios:
     runs-on: macos-latest
     defaults:
       run:
@@ -20,24 +20,12 @@ jobs:
       IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
       IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
       IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Privacy gate
         run: bash tools/privacy_gate.sh
-
-      - name: Validate signing secrets
-        shell: bash
-        run: |
-          set -euo pipefail
-          missing=0
-          for v in IOS_CERTIFICATE_BASE64 IOS_CERTIFICATE_PASSWORD IOS_PROVISIONING_PROFILE_BASE64 IOS_TEAM_ID; do
-            if [ -z "${!v:-}" ]; then
-              echo "::error::Missing required GitHub Secret: $v"
-              missing=1
-            fi
-          done
-          exit "$missing"
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -45,7 +33,62 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
+      - name: Build unsigned simulator app
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project HoiDungMoDung.xcodeproj \
+            -scheme HoiDungMoDung \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+          APP_PATH=$(find "$RUNNER_TEMP/DerivedData/Build/Products" -type d -name 'HoiDungMoDung.app' | head -n 1)
+          test -n "$APP_PATH"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$RUNNER_TEMP/HoiDungMoDung-simulator.app.zip"
+          shasum -a 256 "$RUNNER_TEMP/HoiDungMoDung-simulator.app.zip"
+
+      - name: Upload simulator build
+        uses: actions/upload-artifact@v4
+        with:
+          name: hoi-dung-mo-dung-ios-simulator
+          path: ${{ runner.temp }}/HoiDungMoDung-simulator.app.zip
+          if-no-files-found: error
+
+      - name: Check signing readiness
+        id: signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=()
+          for v in IOS_CERTIFICATE_BASE64 IOS_CERTIFICATE_PASSWORD IOS_PROVISIONING_PROFILE_BASE64 IOS_TEAM_ID; do
+            if [ -z "${!v:-}" ]; then
+              missing+=("$v")
+            fi
+          done
+
+          if [ ${#missing[@]} -eq 0 ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+            echo 'Apple signing assets are present; signed IPA build will run.'
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo "Signed IPA skipped because GitHub Secrets are missing: ${missing[*]}"
+            {
+              echo '### Signed IPA status'
+              echo
+              echo 'Simulator build completed. Signed IPA was not attempted because Apple signing assets are not configured.'
+              echo
+              echo 'Required repository secrets:'
+              for v in "${missing[@]}"; do echo "- \`$v\`"; done
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Install signing assets into temporary keychain
+        if: steps.signing.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -78,12 +121,13 @@ jobs:
           echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> "$GITHUB_ENV"
 
       - name: Verify provisioning profile matches app
+        if: steps.signing.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
           case "$PROFILE_APP_ID" in
             "$IOS_TEAM_ID.$BUNDLE_ID"|"$IOS_TEAM_ID.*")
-              echo "Provisioning profile matches bundle id."
+              echo 'Provisioning profile matches bundle id.'
               ;;
             *)
               echo "::error::Provisioning profile application-identifier '$PROFILE_APP_ID' does not match '$IOS_TEAM_ID.$BUNDLE_ID'"
@@ -92,6 +136,7 @@ jobs:
           esac
 
       - name: Archive signed app
+        if: steps.signing.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -108,6 +153,7 @@ jobs:
             archive
 
       - name: Create export options
+        if: steps.signing.outputs.ready == 'true'
         shell: bash
         run: |
           cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
@@ -128,6 +174,7 @@ jobs:
           EOF
 
       - name: Export IPA
+        if: steps.signing.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -139,7 +186,8 @@ jobs:
           test -f "$RUNNER_TEMP/ipa/HoiDungMoDung.ipa"
           shasum -a 256 "$RUNNER_TEMP/ipa/HoiDungMoDung.ipa"
 
-      - name: Upload IPA
+      - name: Upload signed IPA
+        if: steps.signing.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: hoi-dung-mo-dung-ios-adhoc-ipa
