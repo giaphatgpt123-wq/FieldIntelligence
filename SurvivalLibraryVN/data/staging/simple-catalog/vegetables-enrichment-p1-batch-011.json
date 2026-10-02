@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-coleus-amboinicus",
+      "nameVi": "Húng chanh",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết húng chanh",
+          "fileName": "Image of Coleus amboinicus IMG 20260830 174918 513.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Image_of_Coleus_amboinicus_IMG_20260830_174918_513.jpg",
+          "creator": "Atheenasiji",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh húng chanh để so sánh",
+          "fileName": "Image of Coleus amboinicusIMG 20260830 161435 099.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Image_of_Coleus_amboinicusIMG_20260830_161435_099.jpg",
+          "creator": "Atheenasiji",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng trong thực phẩm/gia vị.",
+      "internalEvidence": {
+        "scientificName": "Coleus amboinicus Lour.",
+        "synonymNote": "Plectranthus amboinicus (Lour.) Spreng. là tên đồng nghĩa thường gặp.",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:445902-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-salvia-rosmarinus",
+      "nameVi": "Hương thảo",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết hương thảo",
+          "fileName": "Salvia rosmarinus 5Dsr 0083.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Salvia_rosmarinus_5Dsr_0083.jpg",
+          "creator": "SAplants",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh hương thảo để so sánh",
+          "fileName": "Salvia rosmarinus.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Salvia_rosmarinus.jpg",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm gia vị/thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Salvia rosmarinus Spenn.",
+        "synonymNote": "Rosmarinus officinalis L. là tên đồng nghĩa phổ biến trong tài liệu cũ.",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/457138-1"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-thymus-vulgaris",
+      "nameVi": "Xạ hương",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết xạ hương",
+          "fileName": "Thymus vulgaris 0zz.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Thymus_vulgaris_0zz.jpg",
+          "creator": "David Stang",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh xạ hương để so sánh",
+          "fileName": "Thymus vulgaris.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Thymus_vulgaris.jpg",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm gia vị/thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Thymus vulgaris L.",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:461765-1"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-cymbopogon-citratus",
+      "nameVi": "Sả chanh",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết sả chanh",
+          "fileName": "Lemongrass (Cymbopogon citratus).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Lemongrass_(Cymbopogon_citratus).jpg",
+          "creator": "Mokkie",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây sả chanh để so sánh",
+          "fileName": "Cymbopogon citratus 0zz.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Cymbopogon_citratus_0zz.jpg",
+          "creator": "David Stang",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — dùng làm gia vị và tạo hương cho thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Cymbopogon citratus (DC.) Stapf",
+        "taxonomyAndUseSource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:396896-1/general-information"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

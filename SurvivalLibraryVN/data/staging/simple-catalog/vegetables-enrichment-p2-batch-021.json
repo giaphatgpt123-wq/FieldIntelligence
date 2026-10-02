@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-spondias-dulcis-leaf",
+      "nameVi": "Lá cóc",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá cóc để nhận biết",
+          "fileName": "Starr 071024-0451 Spondias dulcis.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Starr_071024-0451_Spondias_dulcis.jpg",
+          "creator": "Forest & Kim Starr",
+          "license": "CC BY 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây cóc để so sánh",
+          "fileName": "Spondias dulcis (5).JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Spondias_dulcis_(5).JPG",
+          "creator": "Prenn",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non có vị chua, dùng ăn sống hoặc làm rau.",
+      "internalEvidence": {
+        "scientificName": "Spondias dulcis Parkinson",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:71455-1",
+        "applicationSources": [
+          "https://www.nparks.gov.sg/florafaunaweb/flora/3/1/3134",
+          "https://gardeningsg.nparks.gov.sg/gardening-resource-library/kedondong/"
+        ]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-begonia-palmata",
+      "nameVi": "Hải đường xẻ",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá Hải đường xẻ để nhận biết",
+          "fileName": "裂葉秋海棠 Begonia palmata -香港西貢獅子會自然教育中心 Saikung, Hong Kong- (9237479765).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:%E8%A3%82%E8%91%89%E7%A7%8B%E6%B5%B7%E6%A3%A0_Begonia_palmata_-%E9%A6%99%E6%B8%AF%E8%A5%BF%E8%B2%A2%E7%8D%85%E5%AD%90%E6%9C%83%E8%87%AA%E7%84%B6%E6%95%99%E8%82%B2%E4%B8%AD%E5%BF%83_Saikung,_Hong_Kong-_(9237479765).jpg",
+          "creator": "阿橋 HQ",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây/lá để so sánh",
+          "fileName": "裂葉秋海棠 - 溪頭自然教育園區 Begonia palmata - Xitou Nature Education Area, Taiwan 20211214091808 43.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:%E8%A3%82%E8%91%89%E7%A7%8B%E6%B5%B7%E6%A3%A0_-_%E6%BA%AA%E9%A0%AD%E8%87%AA%E7%84%B6%E6%95%99%E8%82%B2%E5%9C%92%E5%8D%80_Begonia_palmata_-_Xitou_Nature_Education_Area,_Taiwan_20211214091808_43.jpg",
+          "creator": "Ping an Chang",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá được dùng làm rau trong tri thức thực vật địa phương.",
+      "internalEvidence": {
+        "scientificName": "Begonia palmata D.Don",
+        "historicalScientificName": "Begonia laciniata Roxb.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/104988-1",
+        "applicationSource": "https://www.researchgate.net/publication/355033371_Diversity_And_Indigenous_Knowledge_About_The_Use_Of_Wild_Edible_Plants_As_Food_By_The_K%27ho_Community_In_Bidoup-Nui_Ba_National_Park_South_Vietnam"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

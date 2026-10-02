@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "resolutionDate": "2026-09-30",
+  "resolutions": [
+    {
+      "canonicalNameVi": "Rau Sứng",
+      "scientificName": "Strophioblachia fimbricalyx Boerl.",
+      "removeCanonicalNames": ["Mồng sa ria"],
+      "renameCanonicalFrom": "Rau xứng",
+      "addSearchAliases": ["Rau xứng", "Mồng sa ria"],
+      "resolution": "SAME_TAXON_ALIAS_AND_ORTHOGRAPHIC_NORMALIZATION",
+      "evidence": [
+        "https://journal.hcmue.edu.vn/index.php/hcmuejos/article/view/2805",
+        "https://www.botanyvn.com/cnt.asp?newsid=1326&param=news",
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:356629-1"
+      ],
+      "note": "Nguồn HCMUE 2020 dùng Rau Sứng; nguồn BVNGroup Cù Lao Chàm ghi Mồng sa ria = Strophioblachia fimbricalyx. Không tạo hai hồ sơ."
+    },
+    {
+      "canonicalNameVi": "Sâng đỏ",
+      "scientificName": "Zanthoxylum nitidum (Roxb.) DC.",
+      "addSearchAliases": ["Xâng", "Sâng", "Sưng", "Rau Xâng"],
+      "resolution": "CANONICAL_CONFIRMED_REGIONAL_ALIASES",
+      "evidence": [
+        "https://www.thuvientailieu.vn/tai-lieu/da-dang-sinh-hoc-cac-loai-rau-rung-co-gia-tri-tai-khu-du-tru-sinh-quyen-dao-cu-lao-cham-thanh-pho-hoi-an-pham-thi-kim-50326/",
+        "https://www.botanyvn.com/cnt.asp?newsid=1326&param=news",
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:775896-1/general-information"
+      ]
+    },
+    {
+      "searchName": "Thành ngạnh",
+      "resolution": "REGIONAL_NAME_COLLISION",
+      "regionalTargets": [
+        {"region":"Pù Luông, Thanh Hóa","scientificName":"Cratoxylum formosum (Jack) Benth. & Hook.f. ex Dyer"},
+        {"region":"Cù Lao Chàm, Quảng Nam","scientificName":"Cratoxylum maingayi Dyer"}
+      ],
+      "rule": "REGION_REQUIRED_BEFORE_PROFILE_MATCH"
+    }
+  ],
+  "masterMetricCorrection": {
+    "organizedCanonicalNameEntriesBefore": 258,
+    "organizedCanonicalNameEntriesAfter": 257,
+    "reason": "Mồng sa ria được xác nhận là alias của Rau Sứng; Rau xứng được chuẩn hóa chính tả thành Rau Sứng."
+  },
+  "state": "RESOLVED"
+}

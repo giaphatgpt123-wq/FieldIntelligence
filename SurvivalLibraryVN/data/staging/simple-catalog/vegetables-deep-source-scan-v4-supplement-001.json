@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 4,
+  "categoryId": "vegetables",
+  "supplementId": "DEEP-SCAN-S001",
+  "scanDate": "2026-09-30",
+  "state": "SOURCE_EXTRACTION_ACTIVE",
+  "newSources": [
+    {
+      "sourceId": "MNONG_EDE_LAK_2026",
+      "title": "Vegetable Diversity and Nutritional Value of Some Local Useful Plants of Mnong and Ede Ethnic, Dak Lak Province, Vietnam",
+      "sourceType": "ACADEMIC_BOOK_CHAPTER",
+      "authorityTier": "A",
+      "year": 2026,
+      "doi": "10.1007/978-3-031-91945-9_20",
+      "recordedUsefulSpecies": 71,
+      "vegetableKnowledgeSpecies": 57,
+      "note": "Bảng 20.2 chứa tên địa phương, bộ phận dùng và cách dùng; phải trích toàn bảng trước khi hợp nhất. Ví dụ đã đọc được: Luân rô đỏ (Cyclacanthus coccineus) và Xuân tiết (Justicia adhatoda) có lá/chồi/hoa dùng như rau."
+    },
+    {
+      "sourceId": "NAMDONG_FULL_FLORA_2023",
+      "title": "Plant diversity and useful plant species in Nam Dong Conservation Area, Thanh Hoa province, northern Vietnam",
+      "sourceType": "PEER_REVIEWED_ACADEMIC",
+      "authorityTier": "A",
+      "year": 2023,
+      "doi": "10.1088/1755-1315/1154/1/012082",
+      "recordedVascularSpecies": 1312,
+      "recordedUsefulSpecies": 842,
+      "recordedFoodSpecies": 242,
+      "note": "Nguồn tổng kiểm kê lớn hơn tiểu tập 49 loài hai lá mầm năm 2020; 242 là nhóm thực phẩm, không phải tất cả đều thuộc danh mục Rau. Phải lọc theo lá/ngọn/chồi/thân non/rau gia vị trước khi đưa vào kho Rau."
+    },
+    {
+      "sourceId": "CHO_RO_DONGNAI_2018",
+      "title": "Thành phần loài thực vật được sử dụng làm thức ăn của cộng đồng Chơ Ro tại Khu Bảo tồn Thiên nhiên - Văn hóa Đồng Nai, tỉnh Đồng Nai",
+      "sourceType": "PEER_REVIEWED_ETHNOBOTANY",
+      "authorityTier": "A",
+      "year": 2018,
+      "url": "https://journal.vnuf.edu.vn/vi/article/view/980",
+      "note": "Đã được nguồn Cil 2026 trích dẫn như nghiên cứu nền. Đưa vào hàng đợi trích danh lục để bổ sung Đông Nam Bộ."
+    },
+    {
+      "sourceId": "STIENG_BEP_BUDANG_2023",
+      "title": "Tri thức bản địa về thực vật ăn được và gây trồng cây Bép của đồng bào S'Tiêng tại huyện Bù Đăng, tỉnh Bình Phước",
+      "sourceType": "PEER_REVIEWED_ETHNOBOTANY",
+      "authorityTier": "A",
+      "year": 2023,
+      "doi": "10.55250/jo.vnuf.12.6.2023.076-086",
+      "focusTaxon": "Gnetum gnemon var. griffithii",
+      "searchNames": ["Lá bép","Rau bép","Bép"],
+      "note": "Nguồn mạnh để resolve nhóm alias Lá bép ở Đông Nam Bộ/Tây Nguyên."
+    }
+  ],
+  "namDongFoodTaxaForVegetableFiltering": [
+    "Antidesma montanum","Arenga pinnata","Bischofia javanica","Ficus auriculata","Ficus racemosa","Melientha suavis","Oroxylum indicum","Phyllanthus emblica","Rhus chinensis","Sauropus racemosus","Solanum nigrum","Solanum torvum","Amaranthus viridis","Artemisia vulgaris","Begonia aptera","Blumea lanceolata","Centella asiatica","Colocasia gigantea","Diplazium esculentum","Eryngium foetidum","Musa acuminata","Oxalis corymbosa","Peperomia pellucida","Physalis angulata","Plantago asiatica","Polygonum chinensis","Tacca plantaginea","Erythropalum scandens","Gnetum montanum","Gynostemma pentaphyllum","Hodgsonia macrocarpa","Passiflora foetida"
+  ],
+  "filteringRule": {
+    "includeInRauWhen": ["lá dùng như rau","ngọn/chồi dùng như rau","thân/cuống non dùng như rau","hoa dùng như rau/gia vị nếu người dùng thường nhận diện trong nhóm rau","rau thơm/gia vị lá"],
+    "excludeOrRouteElsewhereWhen": ["chỉ dùng quả -> Quả","chỉ dùng củ/rễ -> Củ","chỉ dùng hạt -> nhóm khác","chỉ dùng làm thuốc -> Cây thuốc","cây có độc tính/nhầm lẫn cao -> cần safety review trước"],
+    "keepNameSearchableEvenIfRoutedElsewhere": true
+  },
+  "nextExtractionQueue": [
+    "Trích đầy đủ bảng 20.2 M'nông-Ê Đê Lắk 2026",
+    "Resolve 32 taxon thực phẩm Nam Động có khả năng thuộc Rau sang tên Việt",
+    "Trích danh lục Chơ Ro Đồng Nai 2018",
+    "Đối chiếu alias Lá bép/Rau bép/Bép với nguồn S'Tiêng Bù Đăng 2023",
+    "Tiếp tục Tây Nam Bộ đất ngập nước và rau mùa nước nổi"
+  ]
+}

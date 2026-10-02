@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-chenopodium-album",
+      "nameVi": "Rau muối",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết toàn cây",
+          "fileName": "Chenopodium album plant.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Chenopodium_album_plant.jpg",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây để so sánh",
+          "fileName": "Chenopodium album (3715094220).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Chenopodium_album_(3715094220).jpg",
+          "creator": "Matt Lavin",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và phần non được dùng làm rau thực phẩm.",
+      "internalEvidence": {
+        "scientificName": "Chenopodium album L.",
+        "taxonomySource": "https://powo.science.kew.org/taxon/55993-2",
+        "vietnamLocalIdentitySource": "https://luanvan.co/luan-van/danh-gia-thuc-trang-khai-thac-su-dung-va-de-xuat-giai-phap-bao-ton-phat-trien-cac-loai-cay-lam-san-ngoai-go-co-gia-tri-12224/",
+        "notes": "Nguồn Cù Lao Chàm ghi Cây muối = Chenopodium album và dùng làm thực phẩm; Kew xác nhận accepted taxon và food use."
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

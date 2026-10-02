@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "purpose": "Kho tên để tìm kiếm và tạo hồ sơ sau; không đồng nghĩa tất cả tên đã có ảnh/công dụng hoàn chỉnh.",
+  "rules": "Chỉ lưu tên/từ khóa tìm kiếm ở bước này. Củ, quả, hoa và nấm tách sang danh mục riêng.",
+  "groupEntryCount": 137,
+  "uniqueGroupedNameCount": 130,
+  "uniqueSearchNameCountIncludingAliasOnly": 132,
+  "groups": {
+    "rau_an_la_pho_bien": [
+      "Rau muống","Mồng tơi","Rau ngót","Bồ ngót","Rau má","Rau dền","Rau dền xanh","Rau dền đỏ","Rau dền cơm","Rau dền tía","Rau đay","Rau đay xanh","Rau đay đỏ","Rau càng cua","Rau sam","Rau nhút","Rau đắng","Rau đắng đất","Rau đắng biển","Diếp cá","Rau ngổ","Cần nước","Cần tây","Cải xoong","Chùm ngây"
+    ],
+    "nhom_cai": [
+      "Cải xanh","Cải bẹ xanh","Cải ngọt","Cải thìa","Cải chíp","Cải thảo","Cải bắp","Bắp cải trắng","Bắp cải tím","Bắp cải trái tim","Cải bó xôi","Rau bina","Cải chân vịt","Cải xoăn","Cải kale","Cải cúc","Tần ô","Cải ngồng","Cải làn","Cải bẹ","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ","Cải cầu vồng","Cải rocket"
+    ],
+    "xa_lach_salad": [
+      "Xà lách","Xà lách búp","Xà lách mỡ","Xà lách romaine","Xà lách cos","Xà lách iceberg","Xà lách xoăn xanh","Xà lách xoăn đỏ","Lô lô xanh","Lô lô tím","Xà lách oakleaf xanh","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée"
+    ],
+    "rau_thom_gia_vi": [
+      "Tía tô","Kinh giới","Húng quế","Húng lủi","Húng cây","Húng chanh","Húng láng","Rau răm","Rau mùi","Ngò rí","Ngò gai","Mùi tàu","Thì là","Hành","Hành lá","Hẹ","Lá lốt","Lá mơ","Lá é","É trắng","É tía","Ngò om","Cần tàu","Mùi tây","Hương thảo","Xạ hương","Bạc hà","Sả","Sả chanh","Lá nếp","Lá dứa"
+    ],
+    "rau_thuy_sinh_am": [
+      "Rau muống nước","Rau muống cạn","Rau nhút","Cần nước","Rau ngổ","Ngò om","Cải xoong","Rau bợ","Rau trai","Rau má nước","Rau đắng biển","Rau đắng đất"
+    ],
+    "dot_choi_rau_rung": [
+      "Ngọn su su","Đọt bí","Đọt mướp","Đọt choại","Rau choại","Rau dớn","Rau sắng","Rau bò khai","Rau ngót rừng","Rau tàu bay","Rau lạc tiên","Rau chùm bao","Rau cải trời","Rau sam biển","Lá giang","Lá cách","Đọt mây","Đọt song","Măng tre","Ngọn đậu Hà Lan"
+    ],
+    "rau_mam_gia": [
+      "Giá đỗ xanh","Giá đậu nành","Rau mầm cải xanh","Rau mầm cải củ","Rau mầm hướng dương","Rau mầm đậu Hà Lan","Rau mầm súp lơ xanh"
+    ]
+  },
+  "aliasGroups": [
+    ["Rau ngót","Bồ ngót"],
+    ["Rau mùi","Ngò rí"],
+    ["Diếp cá","Giấp cá"],
+    ["Cải bó xôi","Cải chân vịt","Rau bina"],
+    ["Cải cúc","Tần ô"],
+    ["Ngò gai","Mùi tàu"],
+    ["Ngò om","Rau om"],
+    ["Cải chíp","Cải thìa"],
+    ["Hành","Hành lá"]
+  ],
+  "sourceNotes": [
+    "Cục Bảo vệ thực vật - Danh mục cây trồng và mã định danh 2026: dùng làm nguồn lõi cho các tên rau/gia vị chính thức.",
+    "Phụ lục chứng nhận VietGAP Lâm Đồng: bổ sung tên thương mại/giống phổ biến như bắp cải tím, lô lô, xà lách búp mỡ, ngọn su su, húng lủi, cần tàu.",
+    "Các tên vùng/địa phương còn lại được lưu như từ khóa tìm kiếm và phải resolve identity trước khi tạo hồ sơ chính thức."
+  ],
+  "state": "NAME_SEED_ONLY"
+}

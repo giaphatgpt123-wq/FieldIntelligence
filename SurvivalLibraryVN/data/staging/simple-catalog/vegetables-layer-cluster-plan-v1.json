@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "purpose": "Chia kho tên Rau thành lớp và cụm để lần lượt bổ sung đúng 4 trường: tên, danh mục, ảnh nhận biết, ứng dụng.",
+  "sourceSeed": "SurvivalLibraryVN/data/staging/simple-catalog/vegetables-name-seed-v1.json",
+  "processingRule": {
+    "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+    "priorityOrder": ["P1", "P2", "P3"],
+    "profileStateOrder": ["NAME_ONLY", "IMAGE_ADDED", "APPLICATION_ADDED", "READY_FOR_APP"],
+    "doNotAdd": ["kỹ thuật trồng", "phân bón", "sâu bệnh", "năng suất", "quy trình canh tác", "dinh dưỡng chi tiết"],
+    "aliasRule": "Tên đồng nghĩa là từ khóa tìm kiếm, không tạo hồ sơ trùng nếu cùng một đối tượng."
+  },
+  "layers": [
+    {
+      "layerId": "L1",
+      "nameVi": "Rau ăn lá phổ biến",
+      "priority": "P1",
+      "clusters": [
+        {
+          "clusterId": "L1-C1",
+          "nameVi": "Rau lá quen thuộc",
+          "names": ["Rau muống","Mồng tơi","Rau ngót","Rau má","Rau càng cua","Rau sam","Chùm ngây"],
+          "nextAction": "Bổ sung ảnh + ứng dụng trước"
+        },
+        {
+          "clusterId": "L1-C2",
+          "nameVi": "Rau dền",
+          "names": ["Rau dền","Rau dền xanh","Rau dền đỏ","Rau dền cơm","Rau dền tía"],
+          "nextAction": "Resolve tên chung/loài trước, sau đó bổ sung ảnh + ứng dụng"
+        },
+        {
+          "clusterId": "L1-C3",
+          "nameVi": "Rau đay và rau đắng",
+          "names": ["Rau đay","Rau đay xanh","Rau đay đỏ","Rau đắng","Rau đắng đất","Rau đắng biển"],
+          "nextAction": "Tách đúng đối tượng rồi bổ sung ảnh + ứng dụng"
+        }
+      ]
+    },
+    {
+      "layerId": "L2",
+      "nameVi": "Nhóm cải",
+      "priority": "P1",
+      "clusters": [
+        {
+          "clusterId": "L2-C1",
+          "nameVi": "Cải ăn lá phổ biến",
+          "names": ["Cải xanh","Cải bẹ xanh","Cải ngọt","Cải thìa","Cải chíp","Cải thảo","Cải ngồng","Cải làn"],
+          "nextAction": "Chuẩn hóa alias Cải thìa/Cải chíp rồi bổ sung ảnh + ứng dụng"
+        },
+        {
+          "clusterId": "L2-C2",
+          "nameVi": "Bắp cải và cải bẹ",
+          "names": ["Cải bắp","Bắp cải trắng","Bắp cải tím","Bắp cải trái tim","Cải bẹ","Cải bẹ trắng","Cải bẹ đỏ","Cải bẹ dún","Cải sậy","Cải Đông Dư","Cải mơ"],
+          "nextAction": "Phân biệt loại/giống thương mại, sau đó bổ sung ảnh + ứng dụng"
+        },
+        {
+          "clusterId": "L2-C3",
+          "nameVi": "Cải đặc thù",
+          "names": ["Cải bó xôi","Rau bina","Cải chân vịt","Cải xoăn","Cải kale","Cải cúc","Tần ô","Cải cầu vồng","Cải rocket"],
+          "nextAction": "Gộp alias đúng đối tượng, bổ sung ảnh + ứng dụng"
+        }
+      ]
+    },
+    {
+      "layerId": "L3",
+      "nameVi": "Xà lách và rau salad",
+      "priority": "P1",
+      "clusters": [
+        {
+          "clusterId": "L3-C1",
+          "nameVi": "Xà lách nền",
+          "names": ["Xà lách","Xà lách búp","Xà lách mỡ","Xà lách romaine","Xà lách cos","Xà lách iceberg"],
+          "nextAction": "Chuẩn hóa tên thương mại/cultivar, bổ sung ảnh + ứng dụng"
+        },
+        {
+          "clusterId": "L3-C2",
+          "nameVi": "Xà lách màu và lá xoăn",
+          "names": ["Xà lách xoăn xanh","Xà lách xoăn đỏ","Lô lô xanh","Lô lô tím","Xà lách oakleaf xanh","Xà lách oakleaf đỏ","Xà lách butterhead","Xà lách frisée"],
+          "nextAction": "Bổ sung ảnh so sánh để tránh nhầm giữa các cultivar"
+        }
+      ]
+    },
+    {
+      "layerId": "L4",
+      "nameVi": "Rau thơm và gia vị",
+      "priority": "P1",
+      "clusters": [
+        {
+          "clusterId": "L4-C1",
+          "nameVi": "Rau thơm Việt Nam phổ biến",
+          "names": ["Tía tô","Kinh giới","Húng quế","Húng lủi","Húng cây","Húng chanh","Húng láng","Rau răm","Rau mùi","Ngò rí","Ngò gai","Mùi tàu","Thì là","Hẹ","Lá lốt","Lá mơ","Lá é","É trắng","É tía","Ngò om","Cần tàu"],
+          "nextAction": "Ưu tiên ảnh lá/toàn cây + ứng dụng làm rau/gia vị"
+        },
+        {
+          "clusterId": "L4-C2",
+          "nameVi": "Gia vị lá và thân thơm",
+          "names": ["Hành","Hành lá","Mùi tây","Hương thảo","Xạ hương","Bạc hà","Sả","Sả chanh","Lá nếp","Lá dứa"],
+          "nextAction": "Chuẩn hóa alias và xác nhận đúng danh mục Rau/gia vị trước khi hoàn thiện"
+        }
+      ]
+    },
+    {
+      "layerId": "L5",
+      "nameVi": "Rau thủy sinh và ưa ẩm",
+      "priority": "P2",
+      "clusters": [
+        {
+          "clusterId": "L5-C1",
+          "nameVi": "Rau thủy sinh quen thuộc",
+          "names": ["Rau muống nước","Rau nhút","Cần nước","Rau ngổ","Ngò om","Cải xoong"],
+          "nextAction": "Bổ sung ảnh môi trường sống + ảnh toàn cây + ứng dụng"
+        },
+        {
+          "clusterId": "L5-C2",
+          "nameVi": "Rau ưa ẩm và tên vùng",
+          "names": ["Rau muống cạn","Rau bợ","Rau trai","Rau má nước","Rau đắng biển","Rau đắng đất"],
+          "nextAction": "Resolve identity/tên vùng trước, sau đó bổ sung ảnh + ứng dụng"
+        }
+      ]
+    },
+    {
+      "layerId": "L6",
+      "nameVi": "Đọt, chồi và rau rừng",
+      "priority": "P2",
+      "clusters": [
+        {
+          "clusterId": "L6-C1",
+          "nameVi": "Đọt và ngọn cây trồng",
+          "names": ["Ngọn su su","Đọt bí","Đọt mướp","Ngọn đậu Hà Lan"],
+          "nextAction": "Bổ sung ảnh phần non được sử dụng + ứng dụng"
+        },
+        {
+          "clusterId": "L6-C2",
+          "nameVi": "Rau rừng và đọt rừng",
+          "names": ["Đọt choại","Rau choại","Rau dớn","Rau sắng","Rau bò khai","Rau ngót rừng","Rau tàu bay","Rau lạc tiên","Rau chùm bao","Rau cải trời","Rau sam biển","Lá giang","Lá cách","Đọt mây","Đọt song","Măng tre"],
+          "nextAction": "Ưu tiên xác định đúng loài và ảnh so sánh vì nguy cơ nhầm tên địa phương"
+        }
+      ]
+    },
+    {
+      "layerId": "L7",
+      "nameVi": "Rau mầm và giá",
+      "priority": "P2",
+      "clusters": [
+        {
+          "clusterId": "L7-C1",
+          "nameVi": "Giá",
+          "names": ["Giá đỗ xanh","Giá đậu nành"],
+          "nextAction": "Ảnh sản phẩm/đối tượng + ứng dụng thực phẩm"
+        },
+        {
+          "clusterId": "L7-C2",
+          "nameVi": "Rau mầm",
+          "names": ["Rau mầm cải xanh","Rau mầm cải củ","Rau mầm hướng dương","Rau mầm đậu Hà Lan","Rau mầm súp lơ xanh"],
+          "nextAction": "Bổ sung ảnh mầm đặc trưng + ứng dụng thực phẩm"
+        }
+      ]
+    }
+  ],
+  "processingQueue": [
+    {
+      "batchId": "VEG-P1-B001",
+      "priority": "P1",
+      "clusterIds": ["L1-C1"],
+      "targetNames": ["Rau muống","Mồng tơi","Rau ngót","Rau má","Rau càng cua","Rau sam","Chùm ngây"],
+      "goal": "Đủ ảnh + ứng dụng"
+    },
+    {
+      "batchId": "VEG-P1-B002",
+      "priority": "P1",
+      "clusterIds": ["L4-C1"],
+      "targetNames": ["Tía tô","Kinh giới","Húng quế","Húng lủi","Rau răm","Rau mùi","Ngò gai","Thì là","Hẹ","Lá lốt","Lá mơ","Ngò om"],
+      "goal": "Đủ ảnh + ứng dụng"
+    },
+    {
+      "batchId": "VEG-P1-B003",
+      "priority": "P1",
+      "clusterIds": ["L2-C1"],
+      "targetNames": ["Cải xanh","Cải bẹ xanh","Cải ngọt","Cải thìa","Cải thảo","Cải ngồng","Cải làn"],
+      "goal": "Chuẩn hóa alias + đủ ảnh + ứng dụng"
+    },
+    {
+      "batchId": "VEG-P1-B004",
+      "priority": "P1",
+      "clusterIds": ["L3-C1"],
+      "targetNames": ["Xà lách","Xà lách búp","Xà lách mỡ","Xà lách romaine","Xà lách iceberg"],
+      "goal": "Chuẩn hóa tên/cultivar + đủ ảnh + ứng dụng"
+    }
+  ],
+  "state": "LAYER_CLUSTER_READY"
+}

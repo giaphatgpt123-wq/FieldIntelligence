@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-ageratum-conyzoides",
+      "nameVi": "Cỏ hôi",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh Cỏ hôi để nhận biết",
+          "fileName": "Ageratum conyzoides (52508).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Ageratum_conyzoides_(52508).jpg",
+          "creator": "Nativeplants garden",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh Cỏ hôi để so sánh",
+          "fileName": "Ageratum conyzoides (4149366881).jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Ageratum_conyzoides_(4149366881).jpg",
+          "creator": "Dinesh Valke",
+          "license": "CC BY-SA 2.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và ngọn non có thể luộc, xào hoặc nấu canh sau khi sơ chế.",
+      "internalEvidence": {
+        "scientificName": "Ageratum conyzoides L.",
+        "searchAliases": ["Cỏ cứt lợn", "Cỏ cứt heo", "Bù xích", "Bù xít"],
+        "identityAndUseSource": "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Ageratum+conyzoides",
+        "cualaochamSource": "https://www.thuvientailieu.vn/tai-lieu/da-dang-sinh-hoc-cac-loai-rau-rung-co-gia-tri-tai-khu-du-tru-sinh-quyen-dao-cu-lao-cham-thanh-pho-hoi-an-pham-thi-kim-50326/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

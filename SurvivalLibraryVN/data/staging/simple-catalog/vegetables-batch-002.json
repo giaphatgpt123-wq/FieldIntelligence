@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "batchId": "VEG-P1-B002-A",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-ipomoea-batatas-leaves",
+      "nameVi": "Rau lang",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","fileName":"Ipomoea batatas leaf.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Ipomoea_batatas_leaf.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Ipomoea%20batatas%20leaf.jpg","creator":"Themium","license":"CC0 1.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","fileName":"Leaves of Ipomoea batatas.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Leaves_of_Ipomoea_batatas.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Leaves%20of%20Ipomoea%20batatas.jpg","creator":"Soramimi","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — lá và ngọn non dùng làm rau thực phẩm.",
+      "internalEvidence": {"scientificName":"Ipomoea batatas (L.) Lam.","taxonomyAndUseSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1101088-2/general-information"},
+      "state":"READY_FOR_APP_CANDIDATE"
+    },
+    {
+      "id": "vegetables-portulaca-oleracea",
+      "nameVi": "Rau sam",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","fileName":"Portulaca oleracea plant.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Portulaca_oleracea_plant.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Portulaca%20oleracea%20plant.jpg","creator":"Ethel Aardvark","license":"CC BY 3.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","fileName":"Portulaca Oleracea plant.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Portulaca_Oleracea_plant.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Portulaca%20Oleracea%20plant.jpg","creator":"Abbie David","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — dùng làm rau, salad hoặc thực phẩm nấu chín.",
+      "internalEvidence": {"scientificName":"Portulaca oleracea L.","taxonomyAndUseSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:323270-2/general-information"},
+      "state":"READY_FOR_APP_CANDIDATE"
+    },
+    {
+      "id": "vegetables-peperomia-pellucida",
+      "nameVi": "Rau càng cua",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","fileName":"Peperomia pellucida.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Peperomia_pellucida.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Peperomia%20pellucida.jpg","creator":"Obsidian Soul","license":"CC0 1.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","fileName":"Peperomia pellucida (70096).jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Peperomia_pellucida_(70096).jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Peperomia%20pellucida%20%2870096%29.jpg","creator":"Nativeplants garden","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — dùng làm rau/thực phẩm.",
+      "internalEvidence": {"scientificName":"Peperomia pellucida (L.) Kunth","taxonomyAndUseSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:679378-1/general-information"},
+      "state":"READY_FOR_APP_CANDIDATE"
+    },
+    {
+      "id": "vegetables-moringa-oleifera",
+      "nameVi": "Chùm ngây",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","fileName":"Moringa leaves.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Moringa_leaves.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Moringa%20leaves.jpg","creator":"Salil Kumar Mukherjee","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","fileName":"Flourishing moringa leaves.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Flourishing_moringa_leaves.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Flourishing%20moringa%20leaves.jpg","creator":"R-paths","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — lá non dùng làm rau thực phẩm.",
+      "internalEvidence": {"scientificName":"Moringa oleifera Lam.","taxonomyAndUseSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:584736-1/general-information"},
+      "state":"READY_FOR_APP_CANDIDATE"
+    },
+    {
+      "id": "vegetables-alternanthera-sessilis",
+      "nameVi": "Rau dệu",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","fileName":"Alternanthera sessilis (L.) DC. (52707790591).jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Alternanthera_sessilis_(L.)_DC._(52707790591).jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Alternanthera%20sessilis%20%28L.%29%20DC.%20%2852707790591%29.jpg","creator":"Dinesh Valke","license":"CC BY-SA 2.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","fileName":"Alternanthera sessilis (46264).jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Alternanthera_sessilis_(46264).jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Alternanthera%20sessilis%20%2846264%29.jpg","creator":"Nativeplants garden","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — dùng làm rau/thực phẩm.",
+      "internalEvidence": {"scientificName":"Alternanthera sessilis (L.) DC.","taxonomyAndUseSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1069792-2/general-information","vietnameseNameSource":"KHO_BIDOUP_NUIBA"},
+      "state":"READY_FOR_APP_CANDIDATE"
+    },
+    {
+      "id": "vegetables-amaranthus-spinosus",
+      "nameVi": "Dền gai",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","fileName":"Amaranth spinosus.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Amaranth_spinosus.jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Amaranth%20spinosus.jpg","creator":"Waran R Samay","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","fileName":"Amaranthus spinosus (3166488280).jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Amaranthus_spinosus_(3166488280).jpg","url":"https://commons.wikimedia.org/wiki/Special:Redirect/file/Amaranthus%20spinosus%20%283166488280%29.jpg","creator":"Dinesh Valke","license":"CC BY-SA 2.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — dùng làm rau/thực phẩm.",
+      "internalEvidence": {"scientificName":"Amaranthus spinosus L.","taxonomyAndUseSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:10711-2/general-information","vietnameseNameSource":"KHO_BIDOUP_NUIBA"},
+      "state":"READY_FOR_APP_CANDIDATE"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 4,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "scanDate": "2026-09-30",
+  "state": "DEEP_SCAN_ACTIVE",
+  "purpose": "Quét sâu nguồn học thuật, cơ quan nhà nước, dữ liệu thực vật, thực vật dân tộc học và nguồn địa phương để mở rộng kho tên Rau toàn Việt Nam. Không cộng cơ học số loài giữa các nguồn; mọi tên phải giữ provenance và chờ khử trùng/resolve identity.",
+  "displayRule": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "scanPolicy": {
+    "collectNameBeforeProfile": true,
+    "keepRegionalAliasSearchable": true,
+    "doNotAutoMergeHomonyms": true,
+    "doNotAutoMergeAliasesUntilTaxonResolved": true,
+    "scientificCandidateIsInternalMetadata": true,
+    "lowAuthoritySourcesDiscoveryOnly": true,
+    "publishedProfileRequiresImageAndApplication": true,
+    "excludeFromUserFacingPriority": ["kỹ thuật trồng", "phân bón", "sâu bệnh", "năng suất", "dinh dưỡng chi tiết"]
+  },
+  "sourceRegistry": [
+    {
+      "sourceId": "ALUOI_WILD_VEGETABLES_2014",
+      "title": "Wild vegetable resources in A Luoi district, Thua Thien Hue",
+      "sourceType": "PEER_REVIEWED_ACADEMIC",
+      "authorityTier": "A",
+      "recordedSpecies": 107,
+      "recordedUseGroups": {"vegetable":73,"spice":27,"sourVegetable":15},
+      "note": "Các nhóm công dụng có thể chồng lấn; không cộng thành tổng mới.",
+      "url": "https://jos.hueuni.edu.vn/index.php/hujos-ard/article/view/3000",
+      "doi": "10.26459/jard.v94i6.3000"
+    },
+    {
+      "sourceId": "CIL_DAMRONG4_2026",
+      "title": "Tri thức bản địa về thực vật ăn được của người Cil ở xã Đam Rông 4, tỉnh Lâm Đồng",
+      "sourceType": "PEER_REVIEWED_ACADEMIC",
+      "authorityTier": "A",
+      "recordedSpecies": 67,
+      "recordedGenera": 58,
+      "recordedFamilies": 39,
+      "url": "https://vjfs.vafs.gov.vn/js/article/view/1259",
+      "doi": "10.70169/VJFS.1259"
+    },
+    {
+      "sourceId": "KHO_BIDOUP_NUIBA",
+      "title": "Diversity and indigenous knowledge about the use of wild edible plants as food by the K'ho community in Bidoup-Nui Ba National Park, South Vietnam",
+      "sourceType": "PEER_REVIEWED_ETHNOBOTANY",
+      "authorityTier": "A",
+      "recordedSpecies": 73,
+      "note": "Bảng loài có tên địa phương/tên Việt, bộ phận sử dụng và cách dùng; dùng làm nguồn tên vùng + identity candidate.",
+      "url": "https://www.researchgate.net/publication/355033371_Diversity_And_Indigenous_Knowledge_About_The_Use_Of_Wild_Edible_Plants_As_Food_By_The_K%27ho_Community_In_Bidoup-Nui_Ba_National_Park_South_Vietnam"
+    },
+    {
+      "sourceId": "KHO_NAMBAN_2020",
+      "title": "Thành phần loài thực vật ăn được sử dụng làm thực phẩm của cộng đồng K'ho: nghiên cứu điểm tại Rừng phòng hộ Nam Ban, tỉnh Lâm Đồng",
+      "sourceType": "PEER_REVIEWED_ETHNOBOTANY",
+      "authorityTier": "A",
+      "recordedSpecies": 93,
+      "note": "Nguồn bổ sung độc lập cho hệ thực vật ăn được K'Ho; cần trích bảng loài riêng trước khi merge.",
+      "url": "PENDING_CANONICAL_URL"
+    },
+    {
+      "sourceId": "STIENG_CATTien_2019",
+      "title": "Tri thức bản địa về sử dụng thực vật rừng ăn được của đồng bào S'tiêng ở Vườn quốc gia Cát Tiên",
+      "sourceType": "PEER_REVIEWED_ACADEMIC",
+      "authorityTier": "A",
+      "recordedSpecies": 94,
+      "vegetableUsePercent": 59.6,
+      "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/view/3236",
+      "doi": "10.22144/ctu.jvn.2019.071"
+    },
+    {
+      "sourceId": "PULUONG_WILD_EDIBLES_2021",
+      "title": "Edible wild plants in the flora of Pu Luong Nature Reserve, Thanh Hoa Province, northern Vietnam",
+      "sourceType": "PEER_REVIEWED_ACADEMIC",
+      "authorityTier": "A",
+      "recordedSpecies": 52,
+      "license": "CC BY 3.0",
+      "url": "https://www.researchgate.net/publication/355728022_Edible_wild_plants_in_the_flora_of_Pu_Luong_Nature_Reserve_Thanh_Hoa_Province_northern_Vietnam"
+    },
+    {
+      "sourceId": "NAMDONG_EDIBLES_2020",
+      "title": "The diversity of dicotyledonous edible plants in Nam Dong Conservation Area, Thanh Hoa Province, northern Vietnam",
+      "sourceType": "PEER_REVIEWED_ACADEMIC",
+      "authorityTier": "A",
+      "recordedSpecies": 49,
+      "license": "CC BY 3.0",
+      "url": "https://www.researchgate.net/publication/345286875_The_diversity_of_dicotyledonous_edible_plants_in_Nam_Dong_Conservation_Area_Thanh_Hoa_Province_northern_Vietnam"
+    },
+    {
+      "sourceId": "CULAOC_HAM_BVNGROUP",
+      "title": "Điều tra và trồng thử một số loài rau dại ăn được tại đảo Cù Lao Chàm",
+      "sourceType": "VIETNAM_BOTANICAL_DATA_CENTER",
+      "authorityTier": "B",
+      "recordedSpecies": 36,
+      "url": "https://www.botanyvn.com/cnt.asp?newsid=1326&param=news"
+    },
+    {
+      "sourceId": "CULAOC_HAM_ACADEMIC",
+      "title": "Ethnobotanical / edible wild plant study at Cu Lao Cham",
+      "sourceType": "ACADEMIC",
+      "authorityTier": "A",
+      "recordedSpecies": 43,
+      "note": "Dùng song song với nguồn BVNGroup để đối chiếu tên và taxon; không cộng hai danh sách thành 79 loài."
+    },
+    {
+      "sourceId": "MUONG_DAO_CHIENGYEN",
+      "title": "Điều tra các nhóm cây có ích trong cộng đồng dân tộc Mường và Dao Tiền tại xã Chiềng Yên, Mộc Châu, Sơn La",
+      "sourceType": "VIETNAM_BOTANICAL_DATA_CENTER",
+      "authorityTier": "B",
+      "recordedVegetableSpecies": {"Muong":34,"DaoTien":22},
+      "url": "https://www.botanyvn.com/cnt.asp?newsid=686&param=news"
+    },
+    {
+      "sourceId": "PPD_CROP_IDENTIFIERS_2026",
+      "title": "Danh mục cây trồng và mã định danh phục vụ truy xuất nguồn gốc 2026",
+      "sourceType": "VIETNAM_GOVERNMENT",
+      "authorityTier": "A",
+      "recordedSpecies": null,
+      "note": "Nguồn tên cây trồng/rau/gia vị chính thức; không coi các tên ghép trong danh mục là synonym taxonomy nếu chưa kiểm chứng."
+    },
+    {
+      "sourceId": "WORLD_VEGETABLE_CENTER_VIETNAM",
+      "title": "The Vegetable Sector in Tropical Asia: Vietnam",
+      "sourceType": "INTERNATIONAL_RESEARCH_INSTITUTE",
+      "authorityTier": "A",
+      "recordedSpecies": null,
+      "note": "Có bảng tên khoa học và tên Việt/Mekong hữu ích để phát hiện tên đồng âm: Rau om, Rau mác, Rau muống và các Limnophila/Monochoria/Ludwigia."
+    },
+    {
+      "sourceId": "FAO_FOOD_PLANTS_VIETNAM",
+      "title": "Food Plants for Healthy Diets in Vietnam / Potentially Important Food Plants of Vietnam",
+      "sourceType": "FAO_FOOD_PLANT_RESOURCE",
+      "authorityTier": "A",
+      "recordedSpecies": null,
+      "note": "Dùng để mở rộng cây thực phẩm địa phương và đối chiếu bộ phận ăn được; không tự biến mọi cây thực phẩm thành danh mục Rau."
+    },
+    {
+      "sourceId": "LOCAL_OFFICIAL_AND_CULTURAL_PORTALS",
+      "title": "Cổng thông tin địa phương, bảo tàng, khuyến nông và tài liệu ẩm thực vùng",
+      "sourceType": "REGIONAL_DISCOVERY",
+      "authorityTier": "B_C",
+      "recordedSpecies": null,
+      "note": "Chỉ dùng tìm tên ứng viên/tên vùng nếu thiếu danh lục học thuật; phải resolve với nguồn taxonomy trước khi tạo hồ sơ."
+    }
+  ],
+  "collisionWatchlist": [
+    {"searchNames":["Rau ngổ","Ngổ","Rau om","Ngò om","Ngổ ôm"],"possibleTaxa":["Enydra fluctuans","Limnophila aromatica","Limnophila repens","Limnophila chinensis","Limnophila sessiliflora"],"rule":"NEVER_AUTO_MERGE"},
+    {"searchNames":["Rau mát","Mác bao","Rau mác bao","Mác thon","Rau mác thon","Cùi dìa"],"possibleTaxa":["Monochoria vaginalis","Monochoria hastata"],"rule":"NEVER_AUTO_MERGE"},
+    {"searchNames":["Rau má","Rau má rừng","Rau má chuột","Rau má mỡ","Rau má núi"],"possibleTaxa":["Centella asiatica","Hydrocotyle spp.","Glechoma spp.","Gymnotheca chinensis","Emilia sonchifolia"],"rule":"RESOLVE_EACH_REGIONAL_NAME"},
+    {"searchNames":["Rau dớn","Dớn","Rau dớt","Dương xỉ ăn được"],"possibleTaxa":["Diplazium esculentum","Stenochlaena palustris","other edible fern taxa"],"rule":"RESOLVE_BY_REGION_AND_IMAGE"},
+    {"searchNames":["Bạc hà"],"possibleTaxa":["Mentha spp.","Colocasia/Alocasia culinary petiole group"],"rule":"REGIONAL_SEMANTIC_COLLISION"},
+    {"searchNames":["Rau muống"],"possibleTaxa":["Ipomoea aquatica","Ludwigia adscendens as regional/common-name collision"],"rule":"TAXON_REQUIRED_BEFORE_IMAGE"}
+  ],
+  "nextScanLayers": [
+    "Tây Bắc và Đông Bắc: Tày, Nùng, Thái, Mường, Dao, H'Mông",
+    "Bắc Trung Bộ và Trường Sơn: A Lưới, Pù Luông, Phong Nha-Kẻ Bàng, Nam Đông",
+    "Tây Nguyên: K'Ho, Cil, Mạ, Ê Đê, Jrai, Bahnar",
+    "Đông Nam Bộ: S'Tiêng, Chơ Ro, Tây Ninh, Đồng Nai",
+    "Tây Nam Bộ: kênh rạch, đất ngập nước, rau đồng mùa nước nổi",
+    "Duyên hải và hải đảo: rau cát, rau mặn, rau dại ven biển",
+    "Rau chợ/cây trồng: đối chiếu danh mục nhà nước và World Vegetable Center"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-coriandrum-sativum",
+      "nameVi": "Rau mùi",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","labelVi":"Ảnh nhận biết","fileName":"Coriandrum sativum L. (AM AK33195).jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Coriandrum_sativum_L._(AM_AK33195).jpg","creator":"Auckland Museum","license":"CC BY 4.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","labelVi":"Ảnh toàn cây để so sánh","fileName":"Coriandrum sativum sl4.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Coriandrum_sativum_sl4.jpg","creator":"Stefan.lefnaer","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — dùng làm rau thơm và gia vị.",
+      "internalEvidence": {"scientificName":"Coriandrum sativum L.","applicationSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:840760-1/general-information"},
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-eryngium-foetidum",
+      "nameVi": "Ngò gai",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","labelVi":"Ảnh nhận biết","fileName":"Eryngium foetidum (18933722178).jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Eryngium_foetidum_(18933722178).jpg","creator":"Dick Culbert","license":"CC BY 2.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","labelVi":"Ảnh toàn cây để so sánh","fileName":"Eryngium foetidum kz03.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Eryngium_foetidum_kz03.jpg","creator":"Krzysztof Ziarnek, Kenraiz","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau thơm/gia vị.",
+      "internalEvidence": {"scientificName":"Eryngium foetidum L.","applicationSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:841793-1/general-information"},
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-anethum-graveolens",
+      "nameVi": "Thì là",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","labelVi":"Ảnh nhận biết","fileName":"Dill Anethum graveolens.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Dill_Anethum_graveolens.jpg","creator":"Markus Hagenlocher","license":"CC BY-SA 3.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","labelVi":"Ảnh toàn cây để so sánh","fileName":"Anethum graveolens 4zz.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Anethum_graveolens_4zz.jpg","creator":"David Stang","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — lá dùng làm rau gia vị, quả/hạt dùng làm gia vị.",
+      "internalEvidence": {"scientificName":"Anethum graveolens L.","applicationSource":"https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:837530-1/general-information"},
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-allium-tuberosum",
+      "nameVi": "Hẹ",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","labelVi":"Ảnh nhận biết","fileName":"Allium Tuberosum.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Allium_Tuberosum.jpg","creator":"Camila EsBa","license":"CC BY 4.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","labelVi":"Ảnh hoa để so sánh","fileName":"Allium tuberosum A.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Allium_tuberosum_A.jpg","creator":"Wouter Hagens","license":"CC BY-SA 3.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — lá và hoa dùng làm rau/gia vị.",
+      "internalEvidence": {"scientificName":"Allium tuberosum Rottler ex Spreng.","identitySource":"https://powo.science.kew.org/taxon/529062-1","applicationSource":"https://www.echocommunity.org/en/resources/ac2adcd8-567a-454d-ba93-42c7ca6836c1"},
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-piper-sarmentosum",
+      "nameVi": "Lá lốt",
+      "categoryNameVi": "Rau",
+      "images": [
+        {"role":"PRIMARY","labelVi":"Ảnh nhận biết","fileName":"Piper sarmentosum.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:Piper_sarmentosum.jpg","creator":"Sam P Mathew","license":"CC BY-SA 3.0","verifiedTaxon":true,"verifiedLicense":true},
+        {"role":"COMPARE","labelVi":"Ảnh lá để so sánh","fileName":"20180527-161758Piper sarmentosum.jpg","sourcePage":"https://commons.wikimedia.org/wiki/File:20180527-161758Piper_sarmentosum.jpg","creator":"Boom Jayson","license":"CC BY-SA 4.0","verifiedTaxon":true,"verifiedLicense":true}
+      ],
+      "applicationVi": "Ăn được — lá non và chồi dùng làm rau/gia vị, lá dùng để cuốn món ăn.",
+      "internalEvidence": {"scientificName":"Piper sarmentosum Roxb.","applicationSource":"https://www.nparks.gov.sg/florafaunaweb/flora/2/3/2342"},
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

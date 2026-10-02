@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-zanthoxylum-nitidum-sang-do",
+      "nameVi": "Sâng đỏ",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá và thân Sâng đỏ để nhận biết",
+          "fileName": "Zanthoxylum-nitidum-SF23282-05.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Zanthoxylum-nitidum-SF23282-05.jpg",
+          "creator": "Junglenut",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá Sâng đỏ để so sánh",
+          "fileName": "Zanthoxylum-nitidum-SF23282-03.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Zanthoxylum-nitidum-SF23282-03.jpg",
+          "creator": "Junglenut",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non dùng làm rau gia vị, có mùi thơm đặc trưng.",
+      "internalEvidence": {
+        "scientificName": "Zanthoxylum nitidum (Roxb.) DC.",
+        "searchAliases": ["Xâng", "Sâng", "Sưng", "Rau Xâng"],
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:775896-1/general-information",
+        "applicationSources": [
+          "https://www.thuvientailieu.vn/tai-lieu/da-dang-sinh-hoc-cac-loai-rau-rung-co-gia-tri-tai-khu-du-tru-sinh-quyen-dao-cu-lao-cham-thanh-pho-hoi-an-pham-thi-kim-50326/",
+          "https://www.botanyvn.com/cnt.asp?newsid=1326&param=news"
+        ]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

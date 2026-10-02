@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-acronychia-pedunculata",
+      "nameVi": "Bí bái",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá non nhận biết Bí bái",
+          "fileName": "Acronychia pedunculata.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Acronychia_pedunculata.jpg",
+          "creator": "Abhirami C",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá và quả để so sánh",
+          "fileName": "Acronychia pedunculata Fruits 1.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Acronychia_pedunculata_Fruits_1.jpg",
+          "creator": "Nyanatusita",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá non dùng làm rau gia vị.",
+      "internalEvidence": {
+        "scientificName": "Acronychia pedunculata (L.) Miq.",
+        "identitySources": [
+          "https://ojs.tapchicongthuong.vn/vi/ojs-post/nghien-cuu-dac-diem-thuc-vat-va-so-bo-thanh-phan-hoa-hoc-loai-bi-bai-acronychia-pedunculata--l-miq-140193.htm",
+          "https://vjfs.vafs.gov.vn/js/article/download/507/456"
+        ],
+        "applicationSource": "https://thuocdongduoc.vn/bi-bai-chua-thap-khop-dau-da-day-acronychia-pedunculata"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

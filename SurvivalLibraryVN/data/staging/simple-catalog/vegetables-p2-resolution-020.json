@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "resolutionDate": "2026-09-30",
+  "items": [
+    {
+      "nameVi": "Lá bứa",
+      "scientificName": "Garcinia oblongifolia Champ. ex Benth.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "LEAF_USE_CONFIRMED",
+      "mediaState": "WAITING_FOR_TWO_INDEPENDENT_VERIFIED_OPEN_IMAGES",
+      "evidence": [
+        "https://vuonquocgiavietnam.ifee.edu.vn/thucvat/439",
+        "https://vqgphongnhakebang.ifee.edu.vn/ddsh/thucvat/show/1318",
+        "https://commons.wikimedia.org/wiki/Category:Garcinia_oblongifolia"
+      ]
+    },
+    {
+      "nameVi": "Rau săng máu",
+      "scientificName": "Horsfieldia amygdalina (Wall.) Warb.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "LOCAL_EDIBLE_LEAF_USE_RECORDED",
+      "mediaState": "INSUFFICIENT_FIELD_IDENTIFICATION_IMAGES",
+      "evidence": [
+        "https://sunworld.vn/vi/ba-den/an-choi/rau-rung-tay-ninh",
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:585696-1/general-information",
+        "https://commons.wikimedia.org/wiki/File:Horsfieldia_amygdalina_seeds_-_Kunming_Botanical_Garden_-_DSC03231.JPG"
+      ],
+      "note": "Ảnh hạt không đủ thay cho ảnh lá/cành dùng nhận biết thực địa."
+    },
+    {
+      "nameVi": "Lá trâm sắn",
+      "scientificName": "Syzygium cinereum",
+      "identityState": "REGIONAL_IDENTITY_STRONGLY_SUPPORTED_NEEDS_TAXON_BACKBONE_CHECK",
+      "foodUseState": "LOCAL_USE_RECORDED",
+      "mediaState": "WAITING_FOR_VERIFIED_OPEN_IMAGES",
+      "evidence": [
+        "https://sunworld.vn/vi/ba-den/an-choi/rau-rung-tay-ninh"
+      ]
+    },
+    {
+      "nameVi": "Lá lộc vừng",
+      "scientificName": "Barringtonia acutangula (L.) Gaertn.",
+      "identityState": "IDENTITY_CONFIRMED",
+      "foodUseState": "TRADITIONAL_USE_CONFIRMED_SAFETY_REVIEW_REQUIRED",
+      "mediaState": "MEDIA_AVAILABLE",
+      "evidence": [
+        "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Barringtonia+acutangula",
+        "https://nhandan.vn/vi-thuoc-tu-cay-loc-vung-post585833.html",
+        "https://commons.wikimedia.org/wiki/File:Barringtonia_acutangula_(2478086883).jpg",
+        "https://commons.wikimedia.org/wiki/File:Barringtonia_acutangula_(41885).jpg"
+      ],
+      "note": "Có nguồn ghi lá/chồi non dùng làm rau nhưng cũng có cảnh báo về saponin; không xuất bản dạng 'ăn được' đơn giản trước khi khóa quy tắc an toàn."
+    },
+    {
+      "nameVi": "Đọt sộp",
+      "identityState": "NEEDS_IDENTITY_RESOLUTION",
+      "mediaState": "BLOCKED_UNTIL_IDENTITY_RESOLVED"
+    },
+    {
+      "nameVi": "Đọt mọt",
+      "identityState": "NEEDS_IDENTITY_RESOLUTION",
+      "mediaState": "BLOCKED_UNTIL_IDENTITY_RESOLVED"
+    }
+  ],
+  "state": "RESOLUTION_RECORDED"
+}

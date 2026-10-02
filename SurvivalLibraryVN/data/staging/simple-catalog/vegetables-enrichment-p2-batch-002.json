@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-acmella-oleracea",
+      "nameVi": "Nút áo",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết nút áo",
+          "fileName": "Acmella oleracea 001.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Acmella_oleracea_001.JPG",
+          "creator": "H. Zell",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cụm hoa để so sánh",
+          "fileName": "Acmella oleracea 002.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Acmella_oleracea_002.JPG",
+          "creator": "H. Zell",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá/chồi non và cụm hoa được dùng trong thực phẩm, rau hoặc gia vị.",
+      "internalEvidence": {
+        "scientificName": "Acmella oleracea (L.) R.K.Jansen",
+        "oldNameNote": "Spilanthes oleracea là tên cũ thường gặp trong tài liệu địa phương.",
+        "identitySource": "KHO_BIDOUP_NUIBA source candidate in vegetables-source-candidates-v4.json",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:914778-1/general-information",
+        "applicationSource": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12942783/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-emilia-sonchifolia",
+      "nameVi": "Cỏ chua lè",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết cỏ chua lè",
+          "fileName": "Emilia sonchifolia 01.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Emilia_sonchifolia_01.jpg",
+          "creator": "Krish Dulal",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh cây/hoa để so sánh",
+          "fileName": "Emilia sonchifolia-Silent Valley-2016-08-13-001.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Emilia_sonchifolia-Silent_Valley-2016-08-13-001.jpg",
+          "creator": "Jee & Rani Nature Photography",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — chồi/lá non hoặc toàn cây non có nơi dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Emilia sonchifolia (L.) DC.",
+        "identitySource": "KHO_BIDOUP_NUIBA source candidate in vegetables-source-candidates-v4.json",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:203080-1/general-information",
+        "applicationSource": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13312615/"
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ],
+  "deferredSafetyReview": [
+    {
+      "nameVi": "Lu lu đực",
+      "identityHint": "Solanum nigrum L.",
+      "reason": "Có dùng làm thực phẩm nhưng glycoalkaloid cao hơn ở lá non và quả xanh; lá chỉ nên coi là thực phẩm sau xử lý/nấu phù hợp. Cần thiết kế cảnh báo trước khi xuất bản hồ sơ đơn giản.",
+      "state": "SAFETY_CONFLICT_REVIEW"
+    }
+  ],
+  "deferredIdentityReview": [
+    {
+      "nameVi": "Mã đề",
+      "reason": "Tên Việt có thể được dùng cho nhiều loài Plantago theo vùng; cần xác định taxon của nguồn Việt Nam trước khi gắn ảnh.",
+      "state": "IDENTITY_REVIEW"
+    }
+  ]
+}

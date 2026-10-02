@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "displayFields": ["nameVi", "categoryNameVi", "images", "applicationVi"],
+  "records": [
+    {
+      "id": "vegetables-melientha-suavis",
+      "nameVi": "Rau sắng",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh lá và hoa để nhận biết",
+          "fileName": "Melientha suavis.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Melientha_suavis.jpg",
+          "creator": "Viethavvh / derivative Phó Nháy",
+          "license": "CC BY-SA 3.0 / GFDL",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh toàn cây/lá để so sánh",
+          "fileName": "Melientha suavis 1 - Chiang Mai.jpg",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Melientha_suavis_1_-_Chiang_Mai.jpg",
+          "creator": "Lannafolium",
+          "license": "CC0 1.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá, ngọn non và hoa non dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Melientha suavis Pierre",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:608041-1",
+        "vietnamNameSource": "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Melientha+suavis",
+        "applicationSource": "https://vjol.info.vn/tnu/vi/article/view/158583/",
+        "aliases": ["Rau ngót rừng", "Rau ngót núi", "Ngót rừng", "Phắc van"]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    },
+    {
+      "id": "vegetables-erythropalum-scandens",
+      "nameVi": "Rau bò khai",
+      "categoryNameVi": "Rau",
+      "images": [
+        {
+          "role": "PRIMARY",
+          "labelVi": "Ảnh nhận biết",
+          "fileName": "Erythropalum scandens.png",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Erythropalum_scandens.png",
+          "creator": "Nativeplants garden",
+          "license": "CC BY-SA 4.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        },
+        {
+          "role": "COMPARE",
+          "labelVi": "Ảnh lá và quả để so sánh",
+          "fileName": "Bo khai (Erythropalum scandens) leaves and fruits.JPG",
+          "sourcePage": "https://commons.wikimedia.org/wiki/File:Bo_khai_(Erythropalum_scandens)_leaves_and_fruits.JPG",
+          "creator": "NusHub",
+          "license": "CC BY-SA 3.0",
+          "verifiedTaxon": true,
+          "verifiedLicense": true
+        }
+      ],
+      "applicationVi": "Ăn được — lá và ngọn non dùng làm rau.",
+      "internalEvidence": {
+        "scientificName": "Erythropalum scandens Blume",
+        "taxonomySource": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:607794-1/general-information",
+        "vietnamNameSource": "https://www.botanyvn.com/cnt.asp?list=species&param=edir&v=Erythropalum+scandens",
+        "applicationSource": "https://sokhcn.langson.gov.vn/upload/105367/20231214/6367519803f80cc88d6696dec5c13b99B_C3_A1o_20c_C3_A1o_20t_C3_B3m_20t_E1_BA_AFt.pdf",
+        "aliases": ["Bò khai", "Dây bò khai", "Dạ hiến", "Dã hiến", "Rau ngót leo", "Rau nghiến", "Khau hương"]
+      },
+      "state": "VISIBLE_CANDIDATE"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 3,
+  "categoryId": "vegetables",
+  "categoryNameVi": "Rau",
+  "purpose": "Mở rộng quá trình thu thập để bao quát rau chợ, rau đồng, rau nước, rau dại, rau rừng, rau vùng núi, đọt/chồi và tên địa phương; lưu tên trước, ảnh và ứng dụng bổ sung sau.",
+  "rules": {
+    "nameFirst": true,
+    "keepCanonicalAndAliasSeparateDuringDiscovery": true,
+    "mergeOnlyAfterIdentityResolution": true,
+    "sameVietnameseNameMayMapToMultipleTaxa": true,
+    "sameTaxonMayHaveMultipleRegionalNames": true,
+    "candidateNameCanBeStoredBeforeProfileReady": true,
+    "noFixedMaximumNameCount": true,
+    "appDisplayStillLimitedTo": ["nameVi", "categoryNameVi", "images", "applicationVi"]
+  },
+  "sourcePools": [
+    {"source":"Nghiên cứu rau rừng A Lưới - Đại học Huế","recordedSpecies":107,"note":"73 loài rau ăn, 27 loài gia vị, 15 loài vị chua; có chồng lấn nhóm sử dụng"},
+    {"source":"Tri thức thực vật ăn được người Cil - Đam Rông 4, Lâm Đồng","recordedSpecies":67,"note":"Nguồn 2026, phân bố nhiều ở bờ suối, sình lầy và rừng"},
+    {"source":"Thực vật ăn được người K'Ho - Bidoup Núi Bà","recordedSpecies":73,"note":"Nguồn dân tộc học thực vật Nam Việt Nam"},
+    {"source":"Thực vật rừng ăn được người S'Tiêng - VQG Cát Tiên","recordedSpecies":94,"note":"59,6% số loài được sử dụng dưới dạng rau"},
+    {"source":"Cộng đồng Mường - Chiềng Yên, Mộc Châu","recordedVegetableSpecies":34,"note":"Rau ăn sử dụng thường xuyên"},
+    {"source":"Cộng đồng Dao Tiền - Chiềng Yên, Mộc Châu","recordedVegetableSpecies":22,"note":"Rau ăn sử dụng thường xuyên"},
+    {"source":"Rau rừng Cù Lao Chàm - nguồn di sản/địa phương","recordedVegetableNamesApprox":35,"note":"Dùng để thu tên địa phương rồi resolve danh tính"},
+    {"source":"Vietnam Plant Data Center / BVNGroup","recordedSpecies":null,"note":"Dùng để resolve tên Việt, synonym và taxon cho các tên rau"},
+    {"source":"Food Plants for Healthy Diets in Vietnam / FAO link","recordedSpecies":null,"note":"Nguồn bổ sung thực vật thực phẩm địa phương"}
+  ],
+  "mandatoryMissingExamplesAdded": [
+    {"nameVi":"Rau lang","identityHint":"Ipomoea batatas - ngọn và lá non","state":"EDIBLE_CONFIRMED"},
+    {"nameVi":"Rau khoai lang","aliasOfCandidate":"Rau lang","state":"SEARCH_ALIAS"},
+    {"nameVi":"Rau ngổ","identityHint":"Enydra fluctuans","state":"EDIBLE_CONFIRMED_EXISTING_NAME"},
+    {"nameVi":"Rau mát","identityHint":"Monochoria vaginalis / có khả năng trùng tên vùng với Monochoria hastata","state":"NAME_COLLISION_REQUIRES_RESOLUTION"}
+  ],
+  "newDiscoveryKeywords": [
+    "Rau lang","Rau khoai lang",
+    "Rau mát","Rau mát bao","Cây cùi dìa","Cùi dừa",
+    "Rau ngổ trâu","Ngổ nước","Ngổ đất","Ngổ hương","Rau ngổ thơm",
+    "Ngò om","Rau om","Ngổ ôm","Ngò ôm","Mò om","Ngổ điếc",
+    "Rau dệu","Dệu","Rau diếc bò",
+    "Rau muối","Kinh giới trắng","Rau muối dại",
+    "Rau khúc tẻ","Rau khúc vàng","Khúc tẻ","Rau khúc nếp","Khúc nếp",
+    "Rau cần trời","Rau cần trôi",
+    "Rau chóc","Rau mác","Rau chốc","Từ cô","Hèo nèo",
+    "Kèo nèo","Cù nèo","Tai tượng","Nê thảo",
+    "Rau nhúc","Rau ngúc","Rau quyết",
+    "Rau bầu đất","Bầu đất","Rau lưỡi","Rau lúi","Dây chua lè",
+    "Rau chua lè","Rau mặt trời",
+    "Diếp dại","Rau diếp trời","Rau bao","Rau cúc sữa","Rau diếp đắng",
+    "Rau má mỡ","Rau má chuột","Rau má họ",
+    "Rau má lá to","Rau má rừng","Rau má núi","Rau má lông","Rau má thìa",
+    "Rau mương","Rau mương hoa nhỏ","Rau rút dại","Rau ráu","Dây chè",
+    "Rau mác bao","Rau bèo",
+    "Rau chua me","Chua me đất hoa vàng","Rau bo chua me","Rau cúc đắng",
+    "Rau ngổ ăn","Rau ngổ lá đối","Om bò",
+    "Rau giền xanh","Rau giền tía","Rau rền",
+    "Rau cải mèo","Cải mèo",
+    "Rau thối","Rau thối rừng",
+    "Lá lồm","Lá nồm","Dây dang","Lá chua",
+    "Măng nứa","Măng vầu","Măng mai","Măng le","Măng giang","Măng lồ ô","Măng tầm vông",
+    "Đọt cóc","Đọt bứa","Rau tập tàng","Rau củ khởi",
+    "Rau bác bác","Rau đậu","Mã đề","Mè đất","Rau nho","Thành ngành","Thông đất","Rau sân"
+  ],
+  "collisionGroups": [
+    {
+      "searchName":"Rau ngổ / ngổ / rau om",
+      "doNotMergeAutomatically": true,
+      "possibleTargets":["Enydra fluctuans","Limnophila aromatica","Limnophila repens"]
+    },
+    {
+      "searchName":"Rau mát / rau mác bao / cùi dìa",
+      "doNotMergeAutomatically": true,
+      "possibleTargets":["Monochoria vaginalis","Monochoria hastata"]
+    },
+    {
+      "searchName":"Rau má",
+      "doNotMergeAutomatically": true,
+      "possibleTargets":["Centella asiatica","Hydrocotyle spp.","Glechoma spp.","Gymnotheca chinensis","Emilia sonchifolia"]
+    },
+    {
+      "searchName":"Rau dớn / dương xỉ ăn được",
+      "doNotMergeAutomatically": true,
+      "possibleTargets":["nhiều taxon dương xỉ; phải resolve từng vùng"]
+    },
+    {
+      "searchName":"Bạc hà",
+      "doNotMergeAutomatically": true,
+      "possibleTargets":["nhóm Mentha","dọc mùng/bạc hà dùng trong ẩm thực Nam Bộ"]
+    }
+  ],
+  "discoveryLayers": [
+    {"layerId":"D1","nameVi":"Rau chợ và rau ăn lá quen thuộc","coverage":"toàn quốc"},
+    {"layerId":"D2","nameVi":"Rau gia vị và rau thơm","coverage":"toàn quốc + tên vùng"},
+    {"layerId":"D3","nameVi":"Rau đồng, bờ ruộng, ven đường","coverage":"đồng bằng + trung du"},
+    {"layerId":"D4","nameVi":"Rau nước, ao hồ, kênh rạch, đầm lầy","coverage":"Bắc-Trung-Nam"},
+    {"layerId":"D5","nameVi":"Rau ven suối, khe ẩm và dương xỉ ăn được","coverage":"miền núi"},
+    {"layerId":"D6","nameVi":"Rau rừng lá/ngọn","coverage":"Tây Bắc, Đông Bắc, Bắc Trung Bộ, Trường Sơn, Tây Nguyên, Đông Nam Bộ"},
+    {"layerId":"D7","nameVi":"Đọt, chồi, dây leo, măng","coverage":"rừng và nương rẫy"},
+    {"layerId":"D8","nameVi":"Rau dân tộc và tên địa phương","coverage":"Tày, Nùng, Thái, Mường, Dao, H'Mông, Cil, K'Ho, S'Tiêng, Chơ Ro và cộng đồng khác"},
+    {"layerId":"D9","nameVi":"Rau vùng cát, ven biển, đất mặn","coverage":"duyên hải"},
+    {"layerId":"D10","nameVi":"Rau đảo và hệ sinh thái biệt lập","coverage":"Cù Lao Chàm và các đảo có tri thức rau địa phương"},
+    {"layerId":"D11","nameVi":"Tên đồng âm/dễ nhầm cần resolve","coverage":"toàn quốc"}
+  ],
+  "processing": {
+    "phase1":"Thu toàn bộ tên Việt/tên địa phương từ từng bộ nguồn và giữ provenance.",
+    "phase2":"Khử trùng theo alias nhưng không gộp tên đồng âm trước khi resolve taxon.",
+    "phase3":"Xác nhận đối tượng có được dùng như rau/thực phẩm hay chỉ là cây thuốc/cỏ.",
+    "phase4":"Chỉ sau đó bổ sung ảnh nhận biết và ứng dụng ngắn gọn.",
+    "phase5":"Đưa hồ sơ đủ 4 trường vào app theo từng cụm nhỏ.",
+    "continuousRule":"Mỗi nghiên cứu vùng mới phải được quét toàn bộ bảng tên; không dừng khi đã đạt một số lượng cố định."
+  },
+  "metrics": {
+    "baseSearchKeywords":132,
+    "newDiscoveryKeywordsThisSweep":106,
+    "rawSearchKeywordFloorAfterThisSweep":238,
+    "note":"238 là mức sàn từ seed cũ + lô từ khóa mới, chưa cộng đầy đủ regional expansion v2 sau khử trùng. Số hồ sơ loài cuối cùng sẽ thấp hơn hoặc cao hơn tùy alias và tên đồng âm."
+  },
+  "state":"DISCOVERY_EXPANDED_NOT_YET_DEDUPED"
+}

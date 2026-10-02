@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 2,
+  "categoryId": "vegetables",
+  "purpose": "Bổ sung lớp/cụm cho rau hoang dại và rau rừng để AI xử lý theo vùng và sinh cảnh.",
+  "extends": "SurvivalLibraryVN/data/staging/simple-catalog/vegetables-layer-cluster-plan-v1.json",
+  "sourceExpansion": "SurvivalLibraryVN/data/staging/simple-catalog/vegetables-wild-regional-expansion-v2.json",
+  "layers": [
+    {
+      "layerId":"L8",
+      "nameVi":"Rau hoang dại đồng ruộng, bờ bãi và trung du",
+      "priority":"P2",
+      "clusters":[
+        {"clusterId":"L8-C1","nameVi":"Rau dại dùng làm rau","names":["Tầm bóp","Rau tiến vua"],"nextAction":"Resolve identity → ảnh → ứng dụng"},
+        {"clusterId":"L8-C2","nameVi":"Tên vùng cần xác định thêm","names":["Rau pắc khỉ","Rau ngó xuân","Rau tập tàng rừng","Cây vón vén"],"nextAction":"Giữ tên tìm kiếm; chưa tạo hồ sơ chính thức cho tới khi định danh"}
+      ]
+    },
+    {
+      "layerId":"L9",
+      "nameVi":"Rau vùng núi, khe suối và rừng phía Bắc",
+      "priority":"P2",
+      "clusters":[
+        {"clusterId":"L9-C1","nameVi":"Rau núi đã quen thuộc","names":["Rau dớn","Rau bò khai","Rau sắng","Rau ngót rừng","Tầm bóp","Mầm đá"],"nextAction":"Ưu tiên ảnh nhận biết và alias vùng"},
+        {"clusterId":"L9-C2","nameVi":"Măng rừng","names":["Măng tre","Măng đắng","Măng sặt"],"nextAction":"Tách đúng nhóm măng; ảnh phần non + ứng dụng"},
+        {"clusterId":"L9-C3","nameVi":"Đặc thù suối đá","names":["Rêu đá"],"nextAction":"Kiểm tra danh mục sinh học trước khi hiển thị như Rau"}
+      ]
+    },
+    {
+      "layerId":"L10",
+      "nameVi":"Rau rừng Tây Nguyên và Trung Trung Bộ",
+      "priority":"P2",
+      "clusters":[
+        {"clusterId":"L10-C1","nameVi":"Lá và đọt rừng Tây Nguyên","names":["Lá bép","Rau lủi","Đọt mây","Đọt song"],"nextAction":"Alias consolidation + ảnh so sánh + ứng dụng"},
+        {"clusterId":"L10-C2","nameVi":"Alias tìm kiếm lá bép","names":["Rau nhíp","Rau bét","Rau lá bướm","Rau danh","Rau gắm"],"nextAction":"Map về Lá bép nếu định danh trùng; không tạo hồ sơ rời"},
+        {"clusterId":"L10-C3","nameVi":"Alias tìm kiếm rau lủi","names":["Rau lúi","Rau lũi"],"nextAction":"Map về Rau lủi; không tạo hồ sơ rời"}
+      ]
+    },
+    {
+      "layerId":"L11",
+      "nameVi":"Rau rừng Đông Nam Bộ và Tây Ninh",
+      "priority":"P2",
+      "clusters":[
+        {"clusterId":"L11-C1","nameVi":"Lá/đọt ăn kèm và rau rừng","names":["Rau mặt trăng","Rau quế vị","Lá bứa","Lá trâm ổi","Rau sao nhái","Rau săng máu","Bí bái","Chòi mòi","Lá cách","Đọt sộp","Lá trâm sắn","Đọt mọt","Lá lộc vừng","Lá cóc"],"nextAction":"Resolve identity cho từng tên → ảnh → ứng dụng"},
+        {"clusterId":"L11-C2","nameVi":"Alias Tây Ninh/Đông Nam Bộ","names":["Rau xá xị","Xá xị","Quế đất","Hồi nước","Hồi đất","Om sần","Chùm mồi","Trâu cổ","Lá lụa","Cây mót","Lá chiếc"],"nextAction":"Map alias về hồ sơ chính"}
+      ]
+    },
+    {
+      "layerId":"L12",
+      "nameVi":"Rau rừng ngập nước và đất phèn Tây Nam Bộ",
+      "priority":"P2",
+      "clusters":[
+        {"clusterId":"L12-C1","nameVi":"Choại và dương xỉ dây","names":["Đọt choại","Rau choại","Rau chạy","Đọt chạy","Dây choại"],"nextAction":"Một hồ sơ chính + nhiều alias; ưu tiên ảnh đọt non và toàn cây"},
+        {"clusterId":"L12-C2","nameVi":"Rau ẩm/ngập nước đã có trong seed","names":["Rau nhút","Rau bợ","Rau trai","Rau ngổ","Ngò om","Cải xoong","Rau đắng đất","Rau đắng biển"],"nextAction":"Ảnh môi trường sống + ứng dụng"}
+      ]
+    },
+    {
+      "layerId":"L13",
+      "nameVi":"Tên địa phương và alias cần hợp nhất",
+      "priority":"P3",
+      "clusters":[
+        {"clusterId":"L13-C1","nameVi":"Alias bò khai","names":["Dạ hiến","Dây dương","Rau ngót leo","Rau nghiến","Dã hiến","Khau hương"],"nextAction":"Chỉ là từ khóa tìm kiếm cho tới khi xác minh trùng taxon với Rau bò khai"}
+      ]
+    }
+  ],
+  "processingQueue": [
+    {"batchId":"VEG-WILD-B001","clusterIds":["L10-C1","L12-C1"],"goal":"Lá bép + Rau lủi + Đọt choại: chuẩn hóa alias, sau đó ảnh + ứng dụng"},
+    {"batchId":"VEG-WILD-B002","clusterIds":["L9-C1"],"goal":"Rau dớn + Bò khai + Sắng + Tầm bóp + Mầm đá: ảnh + ứng dụng"},
+    {"batchId":"VEG-WILD-B003","clusterIds":["L11-C1"],"goal":"Rau rừng Tây Ninh/Đông Nam Bộ: định danh từng tên rồi ảnh + ứng dụng"},
+    {"batchId":"VEG-WILD-B004","clusterIds":["L8-C2","L13-C1"],"goal":"Chỉ resolve tên vùng/alias, chưa xuất bản hồ sơ"}
+  ],
+  "state":"WILD_LAYER_EXPANSION_READY"
+}
