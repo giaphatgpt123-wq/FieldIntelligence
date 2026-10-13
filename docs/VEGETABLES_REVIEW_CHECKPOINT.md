@@ -9,8 +9,9 @@ The repository did not contain a Rau queue or goal row at review start. This que
 
 4. **Sâng trắng — HOLD_NAME_VARIANT_UNRESOLVED.** Exact search for “Sâng trắng” did not establish a matching taxon. Search results for near-spellings “Sang trắng” include *Drypetes perreticulata* (listed as “Sang trắng mạng”) and sources using “Sang trắng” for *Drypetes roxburghii* / *Putranjiva roxburghii*; another source discusses “hạt sang trắng” in relation to *Strychnos nux-blanda*. These are distinct referents or name usages, so none can be assigned to the queue label “Sâng trắng”. No image selected and no food-use claim made.
 
+5. **Rau đậu — HOLD_GENERIC_NAME.** Exact-name searches did not identify a single accepted taxon matching the bare label “Rau đậu”. Results point to specific, separately named legumes such as đậu rựa (*Canavalia ensiformis*) and đậu rồng (*Psophocarpus tetragonolobus*), but neither source supports equating its species with “Rau đậu”. No taxon, image, or use claim assigned.
+
 ## Queue remaining
-5. Rau đậu
 6. Rau nho
 7. Cánh ngạnh
 8. Rau bìm bìm
@@ -19,14 +20,15 @@ The repository did not contain a Rau queue or goal row at review start. This que
 
 ## Gate and progress
 - Names reviewed in the initial checkpoint: 3
-- Additional queue entries reviewed in this update: 1 (Sâng trắng)
-- Total queue entries reviewed: 4/10
+- Additional queue entries reviewed in this update: 2 (Sâng trắng; Rau đậu)
+- Total queue entries reviewed: 5/10
 - Complete records added: 0
 - Images passed: 0
-- Remaining queue entries not yet reviewed: 6
+- Remaining queue entries not yet reviewed: 5
 - App visibility: not claimed; this checkpoint is review staging only.
 
 ## Sources
+- “Rau đậu” ambiguity check: https://tracuuduoclieu.vn/canavalia-ensiformis-l-dc.html (specific species listed as đậu dao/đậu kiếm/đậu rựa, not “Rau đậu”); https://hodinhhai.blogspot.com/2012/08/au-rong.html (specific species đậu rồng, *Psophocarpus tetragonolobus*). Neither establishes a match for the queue label.
 - Exact/near-spelling checks for Sâng trắng: https://tracuuduoclieu.vn/drypetes-perreticulata-gagnep.html (lists “Sang trắng mạng”); https://duocthaothucdung.blogspot.com/2014/11/v-behaviorurldefaultvmlo.html (uses “Sang trắng” for *Drypetes roxburghii* / *Putranjiva roxburghii*); https://trungtamthuoc.com/duoc-lieu/hat-sang (uses “hạt sang trắng” for *Strychnos nux-blanda*). These do not establish that any referent matches “Sâng trắng”.
 - POWO: https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:433057-1
 - POWO: https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77173136-1
