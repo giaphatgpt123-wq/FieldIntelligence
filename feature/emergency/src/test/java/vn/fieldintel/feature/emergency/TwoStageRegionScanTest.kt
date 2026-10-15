@@ -37,7 +37,6 @@ class TwoStageRegionScanTest {
         assertEquals("a", result[0].trackHint)
         assertEquals("Centella asiatica", result[0].scientificName)
         assertEquals(proposals[0].box, result[0].box)
-        assertTrue(result[0].confidence > result[1].confidence)
     }
 
     @Test
@@ -84,7 +83,7 @@ class TwoStageRegionScanTest {
     }
 
     @Test
-    fun keepsOnlyBestCandidatePerRegionByDefault() {
+    fun keepsTopThreeCandidatesPerRegionByDefault() {
         val coordinator = TwoStageRegionScanCoordinator(
             proposer = object : RegionProposalRunner {
                 override fun propose(frame: LiveVisualFrameData) = listOf(
@@ -93,14 +92,40 @@ class TwoStageRegionScanTest {
             },
             classifier = object : RegionCropClassifier {
                 override fun classify(frame: LiveVisualFrameData, proposal: RegionProposal) = listOf(
-                    RegionClassification("Candidate B", "Beta species", 0.61f),
-                    RegionClassification("Candidate A", "Alpha species", 0.91f)
+                    RegionClassification("Candidate D", "Delta species", 0.41f),
+                    RegionClassification("Candidate B", "Beta species", 0.72f),
+                    RegionClassification("Candidate C", "Gamma species", 0.58f),
+                    RegionClassification("Candidate A", "Alpha species", 0.83f)
                 )
             }
         )
 
         val result = coordinator.scan(frame())
-        assertEquals(1, result.size)
-        assertEquals("Alpha species", result.single().scientificName)
+        assertEquals(3, result.size)
+        assertEquals(listOf("Alpha species", "Beta species", "Gamma species"), result.map { it.scientificName })
+        assertTrue(result.all { it.trackHint == "a" })
+        assertTrue(result.all { it.box == NormalizedBox(0f, 0f, 0.5f, 0.5f) })
+    }
+
+    @Test
+    fun removesDuplicateTaxonCandidatesWithinOneRegion() {
+        val coordinator = TwoStageRegionScanCoordinator(
+            proposer = object : RegionProposalRunner {
+                override fun propose(frame: LiveVisualFrameData) = listOf(
+                    RegionProposal("a", 0.95f, NormalizedBox(0f, 0f, 1f, 1f))
+                )
+            },
+            classifier = object : RegionCropClassifier {
+                override fun classify(frame: LiveVisualFrameData, proposal: RegionProposal) = listOf(
+                    RegionClassification("Rau má", "Centella asiatica", 0.84f),
+                    RegionClassification("Gotu kola", "Centella asiatica", 0.80f),
+                    RegionClassification("Khác", "Hydrocotyle vulgaris", 0.52f)
+                )
+            }
+        )
+
+        val result = coordinator.scan(frame())
+        assertEquals(2, result.size)
+        assertEquals("Centella asiatica", result.first().scientificName)
     }
 }

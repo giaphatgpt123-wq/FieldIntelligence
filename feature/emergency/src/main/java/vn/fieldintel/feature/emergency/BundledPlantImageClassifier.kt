@@ -16,8 +16,13 @@ import java.security.MessageDigest
 internal object BundledPlantImageClassifier {
     private const val MODEL_ASSET = "visual-model/aiy-plants-v1.tflite"
     private const val EXPECTED_SHA256 = "9ff2cc02d066fc266045ce299f04fb76907d9313d576881b61c255aa19433521"
-    private const val MIN_SCORE = 0.70f
-    data class Candidate(val scientificName: String, val score: Float)
+    private const val RAW_MODEL_FLOOR = 0.20f
+
+    data class Candidate(
+        val scientificName: String,
+        val score: Float,
+        val verdict: RecognitionVerdict
+    )
 
     fun classify(context: Context, bitmap: Bitmap): List<Candidate> {
         val model = File(context.cacheDir, "aiy-plants-v1.tflite")
@@ -37,12 +42,12 @@ internal object BundledPlantImageClassifier {
             channel.map(java.nio.channels.FileChannel.MapMode.READ_ONLY, 0, channel.size())
         }
         val options = ImageClassifier.ImageClassifierOptions.builder()
-            .setMaxResults(3)
-            .setScoreThreshold(MIN_SCORE)
+            .setMaxResults(PlantRecognitionPolicy.MAX_CANDIDATES)
+            .setScoreThreshold(RAW_MODEL_FLOOR)
             .build()
         val classifier = ImageClassifier.createFromBufferAndOptions(mapped, options)
         try {
-            return classifier.classify(TensorImage.fromBitmap(bitmap))
+            val raw = classifier.classify(TensorImage.fromBitmap(bitmap))
                 .flatMap { it.categories }
                 .mapNotNull { category ->
                     // The raw category label is a /m/... identifier; the en display name is
@@ -51,12 +56,18 @@ internal object BundledPlantImageClassifier {
                     val words = label.split(Regex("\\s+"))
                     if (words.size < 2 ||
                         words[0].firstOrNull()?.isUpperCase() != true ||
-                        words[1].firstOrNull()?.isLowerCase() != true ||
-                        category.score < MIN_SCORE
-                    ) null else Candidate(label, category.score)
+                        words[1].firstOrNull()?.isLowerCase() != true
+                    ) null else RecognitionScore(label, category.score.coerceIn(0f, 1f))
                 }
-                .distinctBy { it.scientificName }
-                .sortedByDescending { it.score }
+
+            val decision = PlantRecognitionPolicy.evaluate(raw)
+            return decision.candidates.map {
+                Candidate(
+                    scientificName = it.scientificName,
+                    score = it.score,
+                    verdict = decision.verdict
+                )
+            }
         } finally {
             classifier.close()
         }

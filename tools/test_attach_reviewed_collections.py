@@ -50,6 +50,45 @@ class ReviewedCollectionsTest(unittest.TestCase):
             with sqlite3.connect(db_path) as db:
                 self.assertEqual(db.execute("SELECT COUNT(*) FROM reviewed_collection").fetchone()[0], 1)
 
+    def test_reviewed_vegetables_are_supported_and_replace_prior_batch(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            db_path = Path(temporary) / "taxonomy.sqlite"
+            csv_path = Path(temporary) / "reviewed.csv"
+            goals_path = Path(temporary) / "goals.csv"
+            with sqlite3.connect(db_path) as db:
+                db.execute("CREATE TABLE taxon (source_id TEXT, source_record_id TEXT, scientific_name_search TEXT, library_group TEXT, taxonomic_status TEXT)")
+                db.executemany(
+                    "INSERT INTO taxon VALUES ('wfo',?,?,'Thực vật','accepted')",
+                    [
+                        ("1", "acronychia pedunculata"),
+                        ("2", "garcinia oblongifolia"),
+                    ],
+                )
+            goals_path.write_text("collection_id,target_count\nvegetables,50\n")
+            csv_path.write_text(
+                "collection_id,scientific_name,vietnamese_name,source_url,reviewed_by\n"
+                "vegetables,Acronychia pedunculata (L.) Miq.,Bí bái,https://example.org/bi-bai,reviewer\n"
+                "vegetables,Garcinia oblongifolia Champ. ex Benth.,Lá bứa,https://example.org/la-bua,reviewer\n"
+            )
+            result = attach(db_path, csv_path, goals_path)
+            self.assertEqual(result["vegetables"], 2)
+            with sqlite3.connect(db_path) as db:
+                names = db.execute(
+                    "SELECT vietnamese_name FROM reviewed_collection WHERE collection_id='vegetables' ORDER BY vietnamese_name"
+                ).fetchall()
+                self.assertEqual(names, [("Bí bái",), ("Lá bứa",)])
+
+            csv_path.write_text(
+                "collection_id,scientific_name,vietnamese_name,source_url,reviewed_by\n"
+                "vegetables,Garcinia oblongifolia Champ. ex Benth.,Lá bứa,https://example.org/la-bua,reviewer\n"
+            )
+            self.assertEqual(attach(db_path, csv_path, goals_path)["vegetables"], 1)
+            with sqlite3.connect(db_path) as db:
+                self.assertEqual(
+                    db.execute("SELECT COUNT(*) FROM reviewed_collection WHERE collection_id='vegetables'").fetchone()[0],
+                    1,
+                )
+
 
 if __name__ == "__main__":
     unittest.main()

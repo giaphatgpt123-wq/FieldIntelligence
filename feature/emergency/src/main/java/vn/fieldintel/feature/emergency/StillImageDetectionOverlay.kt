@@ -32,13 +32,14 @@ internal fun stillImageHitTest(
     val ny = (tapY - offsetY) / renderedHeight
     if (nx !in 0f..1f || ny !in 0f..1f) return null
 
-    return detections
+    return buildRegionRecognitionGroups(detections)
         .asSequence()
         .filter { nx >= it.box.left && nx <= it.box.right && ny >= it.box.top && ny <= it.box.bottom }
         .minByOrNull { (it.box.right - it.box.left) * (it.box.bottom - it.box.top) }
+        ?.primary
 }
 
-/** Draws normalized model candidates over a ContentScale.Fit still image and supports box selection. */
+/** Draws one box per detected region over a ContentScale.Fit still image. */
 @Composable
 fun StillImageDetectionOverlay(
     detections: List<VisualDetection>,
@@ -48,7 +49,12 @@ fun StillImageDetectionOverlay(
     selected: VisualDetection? = null,
     onDetectionTap: (VisualDetection) -> Unit = {}
 ) {
-    if (imageWidth <= 0 || imageHeight <= 0 || detections.isEmpty()) return
+    if (imageWidth <= 0 || imageHeight <= 0 || detections.isEmpty()) {
+        RegionRecognitionSelectionRegistry.clear()
+        return
+    }
+    val groups = buildRegionRecognitionGroups(detections)
+    RegionRecognitionSelectionRegistry.publish(groups)
 
     Canvas(
         modifier = modifier.pointerInput(detections, imageWidth, imageHeight) {
@@ -71,16 +77,21 @@ fun StillImageDetectionOverlay(
         val offsetX = (size.width - renderedWidth) / 2f
         val offsetY = (size.height - renderedHeight) / 2f
 
-        detections.forEach { detection ->
-            val left = offsetX + detection.box.left * renderedWidth
-            val top = offsetY + detection.box.top * renderedHeight
-            val width = (detection.box.right - detection.box.left) * renderedWidth
-            val height = (detection.box.bottom - detection.box.top) * renderedHeight
-            val isSelected = detection === selected || detection == selected
+        groups.forEach { group ->
+            val detection = group.primary ?: return@forEach
+            val left = offsetX + group.box.left * renderedWidth
+            val top = offsetY + group.box.top * renderedHeight
+            val width = (group.box.right - group.box.left) * renderedWidth
+            val height = (group.box.bottom - group.box.top) * renderedHeight
+            val isSelected = selected?.let { candidate ->
+                candidate.trackHint?.takeIf { it.isNotBlank() } == detection.trackHint?.takeIf { it.isNotBlank() } ||
+                    candidate.box == detection.box
+            } ?: false
             val color = when {
                 isSelected -> Color(0xFF78DCE8)
-                detection.confidence >= 0.70f -> Color(0xFF45E58C)
-                else -> Color(0xFFFFD166)
+                group.verdict == RecognitionVerdict.STRONG_CANDIDATE -> Color(0xFF45E58C)
+                group.verdict == RecognitionVerdict.AMBIGUOUS -> Color(0xFFFFD166)
+                else -> Color(0xFFFF8A80)
             }
 
             drawRect(
@@ -90,8 +101,13 @@ fun StillImageDetectionOverlay(
                 style = Stroke(width = if (isSelected) 8f else 5f)
             )
 
-            val name = detection.scientificName?.takeIf { it.isNotBlank() } ?: detection.label
-            val label = "$name ${(detection.confidence * 100).toInt()}%"
+            val candidateCount = group.candidates.size
+            val label = if (candidateCount > 1) {
+                "${recognitionVerdictLabel(group.verdict)} • $candidateCount ứng viên"
+            } else {
+                val name = detection.scientificName?.takeIf { it.isNotBlank() } ?: detection.label
+                "$name ${(detection.confidence * 100).toInt()}%"
+            }
             val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 textSize = 28f
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
